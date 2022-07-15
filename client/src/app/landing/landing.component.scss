@@ -1,0 +1,148 @@
+.create {
+    display: grid;
+    grid-template-areas:
+        'grid1 grid1 grid2 grid3'
+        'grid1 grid1 grid4 grid5';
+    grid-template-columns: 25% 25% 25% 25%;
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+    position: relative;
+    z-index: 1;
+
+    .leftSide {
+        grid-area: grid1;
+        background-image: linear-gradient(rgba(#272736, 0.3), rgba(#272736, 0.3)), url("/assets/img/search_bkg.jpg");
+        background-size: cover;
+        text-align: center;
+        font-size: xx-large;
+        max-width: 100%;
+
+        height: 60vh;
+        text-align: center;
+        position: relative;
+
+        .deco {
+            display: inline-flex;
+            position: relative;
+            background-color: #272736;
+            padding: 20px 20px 20px 20px;
+            margin-bottom: 10px;
+            text-align: left;
+            width: fit-content;
+            float: left;
+
+            .dc1 {
+                position: absolute;
+                right: 0;
+                top: 0;
+                min-height: 100%;
+                min-width: 5px;
+                background-color: #316B83;
+            }
+        }
+
+        .btn {
+            background-color: rgba(#316B83, 0.8);
+            border: 2px solid white;
+        }
+
+        .btn:hover {
+            transform: scale(1.05);
+            animation-name: fill;
+            animation-duration: 300ms;
+            animation-timing-function: linear;
+            animation-fill-mode: forwards;
+        }
+
+        @keyframes fill {
+            100% {
+                background-color: #316B83;
+            }
+        }
+    }
+
+    .block1 {
+        grid-area: grid2;
+        background-color: #316B83;
+    }
+
+    .block2 {
+        grid-area: grid3;
+        background-color: #6D8299;
+    }
+
+    .block3 {
+        grid-area: grid4;
+        background-color: #8CA1A5;
+    }
+
+    .block4 {
+        grid-area: grid5;
+        background-color: #D5BFBF;
+    }
+
+    .block1,
+    .block2,
+    .block3,
+    .block4 {
+        height: 30vh;
+        text-align: center;
+        position: relative;
+        font-size: x-large;
+        overflow: hidden;
+
+    }
+
+    .inner_block {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        display: table;
+        top: 0;
+        left: 0;
+
+        .square {
+            vertical-align: middle;
+            display: table-cell;
+        }
+    }
+}
+
+.search {
+    background-color: #ffffff;
+    color: #272736;
+    min-height: 80vh;
+    position: relative;
+    text-align: center;
+    overflow: hidden;
+
+    .searchBlock {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        display: table;
+        top: 0;
+        left: 0;
+
+        .searchBar {
+            vertical-align: middle;
+            display: table-cell;
+
+            input[type=search] {
+                border: solid 3px #fff;
+                box-sizing: border-box;
+                font-size: 2em;
+                height: 2em;
+                outline: solid rgb(119, 170, 218) 0;
+                padding: .5em;
+                transition: all 1s ease-in;
+                width: 30vw;
+                z-index: 1;
+
+                &:focus {
+                    border: solid 3px #09f;
+                    outline: solid rgb(119, 170, 218) 2000px;
+                }
+            }
+        }
+    }
+}

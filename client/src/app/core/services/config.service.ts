@@ -16,6 +16,7 @@ export class ConfigService {
     }
 
     public static getUser() {
+
     }
 
     static getDataExpira() {
