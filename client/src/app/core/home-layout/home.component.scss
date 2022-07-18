@@ -1,5 +1,4 @@
 .main {
-    width: 100%;
     position: absolute;
     background-color: #272736;
     color: aliceblue;
@@ -29,28 +28,27 @@
 
     .toolbar_user {
         grid-area: grid5;
-        text-align: right;
+        text-align: right;  
 
-        .btn1,
-        .btn1:after {
-            padding: 1vh 1vh 1vh 3vh;
-            width: 18vh;
-            text-align: left;
-            font-size: medium;
-            border-radius: 3vh 0 0 3vh;
-            background: linear-gradient(-45deg, transparent 50%, #FF013C 5%);
-            color: #fff;
+        .btn{
+            margin: 0 0 0 2vh;
         }
 
-        .btn2,
-        .btn2:after {
-            padding: 1vh 1vh 1vh 3vh;
-            width: 18vh;
-            text-align: right;
-            font-size: medium;
-            border-radius: 0 3vh 3vh 0;
-            background: linear-gradient(135deg, transparent 50%, #FF013C 5%);
-            color: #fff;
+        .btn2{
+           background-color: rgba(#6D8299, 0.8);
+        }
+        .btn:hover {
+            transform: scale(1.05);
+            animation-name: fill;
+            animation-duration: 300ms;
+            animation-timing-function: linear;
+            animation-fill-mode: forwards;
+        }
+
+        @keyframes fill {
+            100% {
+                background-color: #316B83;
+            }
         }
     }
 }
@@ -60,6 +58,7 @@
     position: relative;
     min-height: 30vh;
     display: grid;
+    overflow: hidden;
     grid-template-areas:
         'left middle right';
 

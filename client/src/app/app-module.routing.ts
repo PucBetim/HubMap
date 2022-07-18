@@ -9,6 +9,7 @@ export const AppRoutes: Routes = [
     children: [
       { path: '', component: LandingComponent },
       { path: 'user', loadChildren: () => import('./user/user.module').then(m => m.UserModule) },
+      { path: 'creator', loadChildren: () => import('./map-creator/map-creator.module').then(m => m.MapCreatorModule) },
       { path: '**', component: PageNotFoundComponent }
     ],
   },

@@ -17,7 +17,7 @@ import { PageNotFoundComponent } from './core/page-not-found/page-not-found.comp
     HomeComponent,
     LandingComponent,
     LoginComponent,
-    PageNotFoundComponent
+    PageNotFoundComponent,
   ],
   imports: [
     BrowserModule,

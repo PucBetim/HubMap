@@ -12,7 +12,10 @@ export class HomeComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  button(){
-    console.log('apertou')
+  fazerLogin(){
+
+  }
+
+  criarConta(){
   }
 }
