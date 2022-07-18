@@ -5,8 +5,13 @@ import java.time.LocalDateTime;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 
+import br.com.pucminas.hubmap.domain.post.Post;
 import br.com.pucminas.hubmap.domain.user.AppUser;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,10 +23,14 @@ import lombok.NoArgsConstructor;
 public class Comment implements Serializable{
 	
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	
 	private String content;
+	
+	@ManyToOne
+	@JoinColumn(name = "POST_ID")
+	private Post post;
 	
 	private int likes;
 	
@@ -29,6 +38,8 @@ public class Comment implements Serializable{
 	
 	private int views;
 	
+	@OneToOne
+	@JoinColumn(name = "REPLIED_TO", referencedColumnName = "id")
 	private Comment repliedTo;
 	
 	private AppUser author;

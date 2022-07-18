@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 
 @SuppressWarnings("serial")
 @Entity
-@Table(name = "USER")
+@Table(name = "APP_USER")
 @Getter
 @NoArgsConstructor
 public class AppUser implements Serializable {

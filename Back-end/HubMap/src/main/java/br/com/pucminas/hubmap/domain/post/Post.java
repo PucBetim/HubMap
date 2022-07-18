@@ -2,10 +2,17 @@ package br.com.pucminas.hubmap.domain.post;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.PrimaryKeyJoinColumn;
 
 import br.com.pucminas.hubmap.domain.comment.Comment;
 import br.com.pucminas.hubmap.domain.map.Map;
@@ -17,34 +24,42 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor
-public class Post implements Serializable{
+public class Post implements Serializable {
 
 	@Id
 	@GeneratedValue
 	private int id;
-	
+
 	private String title;
-	
+
 	private String description;
-	
+
+	@OneToOne(mappedBy = "post")
+	@PrimaryKeyJoinColumn
 	private Map map;
-	
+
 	private int likes;
-	
+
 	private int dislikes;
-	
+
 	private int views;
-	
+
 	private boolean isPrivate;
-	
+
+	@ManyToOne
+	@JoinColumn(name = "AUTHOR_ID")
 	private AppUser author;
-	
+
 	private LocalDateTime timestamp;
-	
-	private Comment[] comments;
+
+	@OneToMany(mappedBy = "post")
+	private List<Comment> comments = new ArrayList<>();
+
+	@OneToMany(mappedBy = "id.post")
+	private List<NGram> ngrams = new ArrayList<>();
 
 	public Post(String title, String description, Map map, int likes, int dislikes, int views, boolean isPrivate,
-			AppUser author, LocalDateTime timestamp, Comment[] comments) {
+			AppUser author, LocalDateTime timestamp, List<Comment> comments, List<NGram> ngrams) {
 		this.title = title;
 		this.description = description;
 		this.map = map;
@@ -55,6 +70,7 @@ public class Post implements Serializable{
 		this.author = author;
 		this.timestamp = timestamp;
 		this.comments = comments;
+		this.ngrams = ngrams;
 	}
 
 	public void setTitle(String title) {
@@ -93,8 +109,11 @@ public class Post implements Serializable{
 		this.timestamp = timestamp;
 	}
 
-	public void setComments(Comment[] comments) {
+	public void setComments(List<Comment> comments) {
 		this.comments = comments;
 	}
 	
+	public void setNgrams(List<NGram> ngrams) {
+		this.ngrams = ngrams;
+	}
 }
