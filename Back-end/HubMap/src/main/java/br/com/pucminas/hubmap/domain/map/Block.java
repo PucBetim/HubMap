@@ -45,12 +45,12 @@ public class Block implements Serializable {
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "POST_BLOCK_LINKED", 
 	joinColumns = {
-		@JoinColumn(name = "LINKED_BLOCK_ID", referencedColumnName = "post_id"),
-		@JoinColumn(name = "LINKED_BLOCK_SEQUENCE", referencedColumnName = "sequence")
+		@JoinColumn(name = "BLOCK_ID", referencedColumnName = "post_id"),
+		@JoinColumn(name = "BLOCK_SEQUENCE", referencedColumnName = "sequence")
 	}, 
 	inverseJoinColumns = {
-		@JoinColumn(name = "MY_LINKED_BLOCK_ID", referencedColumnName = "post_id"),
-		@JoinColumn(name = "MY_LINKED_BLOCK_SEQUENCE", referencedColumnName = "sequence")
+		@JoinColumn(name = "LINKED_BLOCK_ID", referencedColumnName = "post_id"),
+		@JoinColumn(name = "LINKED_BLOCK_SEQUENCE", referencedColumnName = "sequence")
 	})
 	@ToString.Exclude
 	private List<Block> myBlocksLinked = new ArrayList<>();
