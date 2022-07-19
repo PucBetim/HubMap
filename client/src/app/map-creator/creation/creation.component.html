@@ -1,1 +1,9 @@
-<p>creation works!</p>
+<div class="main">
+    <div class="canvas">
+        <button (click)="x()"></button>
+        <div type="text" *ngFor="let block of map.blocks" class="block" cdkDragBoundary=".canvas" (dblclick)="onDblClick($event)"
+            cdkDrag>
+            <input value=" {{block.content}}">
+        </div>
+    </div>
+</div>

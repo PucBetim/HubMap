@@ -2,17 +2,19 @@
     position: absolute;
     background-color: #272736;
     color: aliceblue;
-
+    width: 100%;
+    
     .container {
         position: relative;
-        margin: 3%;
+        min-height: 96vh;
+        padding: 4vh;
     }
 }
 
 .toolbar {
     position: relative;
-    margin: 2% 0 2% 0;
     display: grid;
+    min-height: 10vh;
     grid-template-areas:
         'grid1 grid2 grid3 grid4 grid5';
 

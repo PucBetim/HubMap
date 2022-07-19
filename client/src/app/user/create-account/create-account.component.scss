@@ -1,0 +1,53 @@
+.container {
+    min-width: 100%;
+    min-height: 80vh;
+}
+
+.login {
+    position: relative;
+    background-color: #272736;
+    max-width: 45vh;
+    height: 50%;
+    margin: auto;
+    top: 15%;
+    z-index: 1;
+    text-align: center;
+
+    .deco {
+        position: relative;
+        font-size: 1.5em;
+        font-weight: bolder;
+        color: #77aada;
+        float: left;
+    }
+
+    input {
+        border: solid 3px #fff;
+        box-sizing: border-box;
+        font-size: 1.5em;
+        height: 2em;
+        width: 100%;
+        padding: .5em;
+    }
+
+    .link {
+        text-decoration: none;
+        color: inherit;
+        float: left;
+    }
+
+    .link:hover {
+        color: #77aada;
+    }
+
+    button {
+        font-size: x-large;
+        padding: 1vh 3vh 1vh 3vh;
+    }
+
+    @keyframes fill {
+        100% {
+            background-color: #316B83;
+        }
+    }
+}

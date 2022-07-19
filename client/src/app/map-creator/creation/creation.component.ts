@@ -1,3 +1,4 @@
+import { map, block } from './../models/map';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
@@ -7,9 +8,22 @@ import { Component, OnInit } from '@angular/core';
 })
 export class CreationComponent implements OnInit {
 
-  constructor() { }
+  public map = new map;
+
+  constructor() {
+  }
 
   ngOnInit(): void {
+    let bloc = new block;
+    bloc.content = "Texto";
+    this.map.blocks = [bloc];
+
+
+  }
+
+  x() {
+    var bc = document.getElementsByClassName("block");
+    console.log(bc)
   }
 
 }

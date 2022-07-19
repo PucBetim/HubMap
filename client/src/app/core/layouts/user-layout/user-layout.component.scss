@@ -1,0 +1,25 @@
+.main {
+    position: absolute;
+    background-color: #272736;
+    color: aliceblue;
+    width: 100%;
+    
+    .container {
+        position: relative;
+        min-height: 96vh;
+        padding: 4vh;
+    }
+
+    .toolbar {
+        position: relative;
+        .toolbar_title {
+            grid-area: grid1;
+            font-size: 5vh;
+
+            a {
+                text-decoration: none;
+                color: inherit;
+            }
+        }
+    }
+}
