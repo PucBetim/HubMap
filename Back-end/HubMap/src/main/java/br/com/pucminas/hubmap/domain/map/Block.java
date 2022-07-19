@@ -1,16 +1,19 @@
 package br.com.pucminas.hubmap.domain.map;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.validation.constraints.Size;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -23,24 +26,26 @@ import lombok.ToString;
 @NoArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Block implements Serializable {
-
+	
 	@EqualsAndHashCode.Include
 	@EmbeddedId
 	private BlockPK id;
-
+	
+	@Size(max = 300, message = "O bloco não pode conter mais que 300 caracteres.")
 	private String content;
 
 	private int coordX;
 
 	private int coordY;
 
+	@Column(length = 30)
 	private String image;
 
 	private Color color;
-
+	
 	private int fontSize;
 
-	private String fontStyle;
+	private Font fontStyle;
 
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "POST_BLOCK_LINKED", 
@@ -58,17 +63,17 @@ public class Block implements Serializable {
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "POST_BLOCK_LINKED", 
 		joinColumns = {
-			@JoinColumn(name = "MY_LINKED_BLOCK_ID", referencedColumnName = "post_id"),
-			@JoinColumn(name = "MY_LINKED_BLOCK_SEQUENCE", referencedColumnName = "sequence")
-		}, 
-		inverseJoinColumns = {
 			@JoinColumn(name = "LINKED_BLOCK_ID", referencedColumnName = "post_id"),
 			@JoinColumn(name = "LINKED_BLOCK_SEQUENCE", referencedColumnName = "sequence")
+		}, 
+		inverseJoinColumns = {
+			@JoinColumn(name = "BLOCK_ID", referencedColumnName = "post_id"),
+			@JoinColumn(name = "BLOCK_SEQUENCE", referencedColumnName = "sequence")
 		})
 	@ToString.Exclude
 	private List<Block> blocksLinkedMe = new ArrayList<>();
 
-	public Block(String content, int coordX, int coordY, String image, Color color, int fontSize, String fontStyle,
+	public Block(String content, int coordX, int coordY, String image, Color color, int fontSize, Font fontStyle,
 			List<Block> myBlocksLinked, List<Block> blocksLinkedMe) {
 		this.content = content;
 		this.coordX = coordX;
@@ -105,7 +110,7 @@ public class Block implements Serializable {
 		this.fontSize = fontSize;
 	}
 
-	public void setFontStyle(String fontStyle) {
+	public void setFontStyle(Font fontStyle) {
 		this.fontStyle = fontStyle;
 	}
 

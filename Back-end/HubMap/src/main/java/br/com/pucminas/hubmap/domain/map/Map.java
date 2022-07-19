@@ -13,6 +13,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 import br.com.pucminas.hubmap.domain.post.Post;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -20,11 +21,13 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 //TODO Check if this class will have just one attribute, if the case, remove and use just Post
 public class Map implements Serializable{
 	
 	@Id
 	@Column(name = "POST_ID")
+	@EqualsAndHashCode.Include
 	private int id;
 	
 	@OneToOne

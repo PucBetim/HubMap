@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 import javax.persistence.Embeddable;
 import javax.persistence.ManyToOne;
+import javax.validation.constraints.NotNull;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -18,8 +19,10 @@ import lombok.NoArgsConstructor;
 @Embeddable
 public class NGramPK implements Serializable{
 	
+	@NotNull
 	@ManyToOne
 	private Post post;
 	
+	@NotNull
 	private Integer sequence;
 }

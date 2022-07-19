@@ -5,18 +5,24 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import br.com.pucminas.hubmap.domain.comment.Comment;
 import br.com.pucminas.hubmap.domain.map.Map;
 import br.com.pucminas.hubmap.domain.user.AppUser;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -24,16 +30,24 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Post implements Serializable {
 
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@EqualsAndHashCode.Include
 	private int id;
-
+	
+	@NotBlank(message = "Por favor, informe o título do post.")
+	@Size(max = 30, message = "O título é muito grande.")
+	@Column(length = 30, nullable = false)
 	private String title;
 
+	@Size(max = 200, message = "A descrição é muito grande.")
+	@Column(length = 200)
 	private String description;
 
+	@NotNull
 	@OneToOne(mappedBy = "post")
 	@PrimaryKeyJoinColumn
 	private Map map;
@@ -45,16 +59,18 @@ public class Post implements Serializable {
 	private int views;
 
 	private boolean isPrivate;
-
+	
+	@NotNull(message = "O autor deve ser informado.")
 	@ManyToOne
 	@JoinColumn(name = "AUTHOR_ID")
 	private AppUser author;
-
+	
+	@NotNull(message = "A data deve ser informada.")
 	private LocalDateTime timestamp;
-
+	
 	@OneToMany(mappedBy = "post")
 	private List<Comment> comments = new ArrayList<>();
-
+	
 	@OneToMany(mappedBy = "id.post")
 	private List<NGram> ngrams = new ArrayList<>();
 
