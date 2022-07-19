@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -47,7 +48,7 @@ public class Post implements Serializable {
 	@Column(length = 200)
 	private String description;
 
-	@NotNull
+	//TODO @NotNull add this anotation 
 	@OneToOne(mappedBy = "post")
 	@PrimaryKeyJoinColumn
 	private Map map;
@@ -68,25 +69,22 @@ public class Post implements Serializable {
 	@NotNull(message = "A data deve ser informada.")
 	private LocalDateTime timestamp;
 	
-	@OneToMany(mappedBy = "post")
+	@OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
 	private List<Comment> comments = new ArrayList<>();
 	
-	@OneToMany(mappedBy = "id.post")
+	@OneToMany(mappedBy = "id.post", cascade = CascadeType.ALL)
 	private List<NGram> ngrams = new ArrayList<>();
 
-	public Post(String title, String description, Map map, int likes, int dislikes, int views, boolean isPrivate,
-			AppUser author, LocalDateTime timestamp, List<Comment> comments, List<NGram> ngrams) {
+	public Post(String title, String description, Map map, boolean isPrivate, AppUser author) {
 		this.title = title;
 		this.description = description;
 		this.map = map;
-		this.likes = likes;
-		this.dislikes = dislikes;
-		this.views = views;
 		this.isPrivate = isPrivate;
 		this.author = author;
-		this.timestamp = timestamp;
-		this.comments = comments;
-		this.ngrams = ngrams;
+		likes = 0;
+		dislikes = 0;
+		views = 0;
+		setTimestampNow();
 	}
 
 	public void setTitle(String title) {
@@ -101,16 +99,16 @@ public class Post implements Serializable {
 		this.map = map;
 	}
 
-	public void setLikes(int likes) {
-		this.likes = likes;
+	public void changeLikes(boolean positive) {
+		likes += positive ? 1 : -1;
 	}
 
-	public void setDislikes(int dislikes) {
-		this.dislikes = dislikes;
+	public void changeDislikes(boolean positive) {
+		dislikes += positive ? 1 : -1;
 	}
 
-	public void setViews(int views) {
-		this.views = views;
+	public void addViews() {
+		views++;
 	}
 
 	public void setPrivate(boolean isPrivate) {
@@ -121,8 +119,8 @@ public class Post implements Serializable {
 		this.author = author;
 	}
 
-	public void setTimestamp(LocalDateTime timestamp) {
-		this.timestamp = timestamp;
+	public void setTimestampNow() {
+		timestamp = LocalDateTime.now();
 	}
 
 	public void setComments(List<Comment> comments) {

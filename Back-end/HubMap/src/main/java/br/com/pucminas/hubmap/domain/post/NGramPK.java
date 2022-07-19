@@ -2,6 +2,7 @@ package br.com.pucminas.hubmap.domain.post;
 
 import java.io.Serializable;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Embeddable;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
@@ -20,7 +21,7 @@ import lombok.NoArgsConstructor;
 public class NGramPK implements Serializable{
 	
 	@NotNull
-	@ManyToOne
+	@ManyToOne(cascade = CascadeType.ALL)
 	private Post post;
 	
 	@NotNull

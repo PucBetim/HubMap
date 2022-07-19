@@ -30,7 +30,6 @@ public class AppUser implements Serializable {
 	@Size(max = 80, message = "O nome é muito grande.")
 	private String name;
 	
-	//TODO Substring the name in case of not send the nickname
 	@Column(length = 15)
 	private String nick;
 	
@@ -52,6 +51,26 @@ public class AppUser implements Serializable {
 		this.nick = nick;
 		this.profilePicture = profilePicture;
 		this.email = email;
+		this.password = password;
+	}
+	
+	public AppUser(String name, String email, String password) {
+		
+		StringBuilder sb = new StringBuilder();
+		sb.append(name.substring(0, name.indexOf(" ")).trim());
+		
+		if(!(sb.toString().length() > 0)) {
+			if(name.length() <= 15) {
+				sb.append(name.substring(0, name.length() - 1));
+			} else {
+				sb.append(name.substring(0, 15));
+			}
+		}
+		
+		nick = sb.toString();
+		this.name = name;
+		this.email = email;
+		//TODO Encrypt password
 		this.password = password;
 	}
 	
