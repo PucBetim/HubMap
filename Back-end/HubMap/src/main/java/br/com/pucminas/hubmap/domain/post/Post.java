@@ -66,7 +66,6 @@ public class Post implements Serializable {
 	@JoinColumn(name = "AUTHOR_ID")
 	private AppUser author;
 	
-	@NotNull(message = "A data deve ser informada.")
 	private LocalDateTime timestamp;
 	
 	@OneToMany(mappedBy = "post", cascade = CascadeType.ALL)

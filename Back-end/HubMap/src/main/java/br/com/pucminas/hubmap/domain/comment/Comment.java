@@ -59,7 +59,6 @@ public class Comment implements Serializable {
 	@JoinColumn(name = "AUTHOR_ID", referencedColumnName = "id")
 	private AppUser author;
 
-	@NotNull
 	private LocalDateTime timestamp;
 
 	public Comment(Post post, String content, AppUser author, Comment repliedTo) {
