@@ -16,14 +16,9 @@ export class CreationComponent implements OnInit {
   ngOnInit(): void {
     let bloc = new block;
     bloc.content = "Texto";
-    this.map.blocks = [bloc];
-
-
-  }
-
-  x() {
-    var bc = document.getElementsByClassName("block");
-    console.log(bc)
+    let bloc2 = new block;
+    bloc2.content = "Texto 2 texto maior pra teste";
+    this.map.blocks = [bloc, bloc2];
   }
 
 }
