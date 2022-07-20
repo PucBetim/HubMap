@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -11,11 +12,13 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
+import br.com.pucminas.hubmap.utils.StringUtils;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @SuppressWarnings("serial")
 @Entity
+@EntityListeners(AppUserListener.class)
 @Table(name = "APP_USER")
 @Getter
 @NoArgsConstructor
@@ -54,7 +57,7 @@ public class AppUser implements Serializable {
 		this.password = password;
 	}
 	
-	public AppUser(String name, String email, String password) {
+	public void createNickFromName() {
 		
 		StringBuilder sb = new StringBuilder();
 		sb.append(name.substring(0, name.indexOf(" ")).trim());
@@ -67,11 +70,7 @@ public class AppUser implements Serializable {
 			}
 		}
 		
-		nick = sb.toString();
-		this.name = name;
-		this.email = email;
-		//TODO Encrypt password
-		this.password = password;
+		this.nick = sb.toString();
 	}
 	
 	public void setNick(String nick) {
@@ -92,5 +91,9 @@ public class AppUser implements Serializable {
 	
 	public void setName(String name) {
 		this.name = name;
+	}
+	
+	public void encryptPassword() {	
+		this.password = StringUtils.encrypt(password);
 	}
 }

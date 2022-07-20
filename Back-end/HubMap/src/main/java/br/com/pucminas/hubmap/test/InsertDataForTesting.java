@@ -27,8 +27,14 @@ public class InsertDataForTesting {
 	public void onApplicationEvent(ContextRefreshedEvent event) {
 		
 		AppUser u1 = new AppUser("John D Jackson", "Jonny", "1jonny.jpg" , "john@teste.com", "abc");
+		u1.encryptPassword();
+		
 		AppUser u2 = new AppUser("Margaret Johnson", "Meggy", "2meggy.jpg" , "margaret@teste.com", "abc");
-		AppUser u3 = new AppUser("Giovan del Silva", "giovan@teste.com", "abc");
+		u2.encryptPassword();
+		
+		AppUser u3 = new AppUser("Giovan del Silva", null, null, "giovan@teste.com", "abc");
+		u3.encryptPassword();
+		u3.createNickFromName();
 		
 		//USER 1
 		Post p1 = new Post("Arquitetura de Computadores", "Mapa mental sobre arquitetura de computadores", null, true, u1);
