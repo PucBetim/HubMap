@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -24,6 +25,7 @@ import lombok.NoArgsConstructor;
 
 @SuppressWarnings("serial")
 @Entity
+@EntityListeners(CommentListener.class)
 @Getter
 @NoArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
@@ -66,14 +68,18 @@ public class Comment implements Serializable {
 		this.content = content;
 		this.repliedTo = repliedTo;
 		this.author = author;
-		likes = 0;
-		dislikes = 0;
-		views = 0;
-		setTimestampNow();
+		initializeComment();
 	}
 
 	public Comment(Post post, String content, AppUser author) {
 		this(post, content, author, null);
+	}
+	
+	public void initializeComment() {
+		likes = 0;
+		dislikes = 0;
+		views = 0;
+		setTimestampNow();
 	}
 
 	public void setContent(String content) {

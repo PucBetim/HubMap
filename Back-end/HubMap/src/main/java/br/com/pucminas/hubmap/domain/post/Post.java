@@ -8,6 +8,7 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -29,6 +30,7 @@ import lombok.NoArgsConstructor;
 
 @SuppressWarnings("serial")
 @Entity
+@EntityListeners(PostListener.class)
 @Getter
 @NoArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
@@ -73,13 +75,17 @@ public class Post implements Serializable {
 	
 	@OneToMany(mappedBy = "id.post", cascade = CascadeType.ALL)
 	private List<NGram> ngrams = new ArrayList<>();
-
+	
 	public Post(String title, String description, Map map, boolean isPrivate, AppUser author) {
 		this.title = title;
 		this.description = description;
 		this.map = map;
 		this.isPrivate = isPrivate;
 		this.author = author;
+		initializePost();
+	}
+	
+	public void initializePost() {
 		likes = 0;
 		dislikes = 0;
 		views = 0;
