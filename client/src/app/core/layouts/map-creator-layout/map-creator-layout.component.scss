@@ -2,11 +2,12 @@
     position: absolute;
     background-color: #272736;
     color: aliceblue;
-    width: 100%;
-    
+    min-width: 100vw;
+
     .container {
         position: relative;
         min-height: 96vh;
         padding: 2vh;
+
     }
 }

@@ -28,21 +28,3 @@ export const AppRoutes: Routes = [
     ]
   }
 ]
-
-// export const AppRoutes: Routes = [
-//   {
-//     path: '', component: HomeComponent,
-//     children: [
-//       { path: '', component: LandingComponent },
-//       { path: 'user', loadChildren: () => import('./user/user.module').then(m => m.UserModule) },
-//       { path: '**', component: PageNotFoundComponent }
-//     ], 
-//   },
-//   {
-//     path: 'creator', component: MapCreatorComponent,
-//     children: [
-//       { path: '', loadChildren: () => import('./map-creator/map-creator.module').then(m => m.MapCreatorModule) },
-//     ]
-//   },
-
-// ]

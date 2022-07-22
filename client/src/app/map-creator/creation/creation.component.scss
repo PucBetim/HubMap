@@ -4,12 +4,22 @@
     max-height: 96vh;
     display: grid;
     grid-template: "sidenav gap canvas";
-    grid-template-columns: 3em 0.5em auto;
+    grid-template-columns: 5em 0.5em auto;
 }
 
 .sideBar{
     grid-area: sidenav;
     background-color: #ccc;
+
+    .container{
+        position: relative;
+        text-align: center;
+        padding: 0.5em;
+
+        button{
+            margin: 0.5em;
+        }
+    }
 }
 .canvas {
     grid-area: canvas;
