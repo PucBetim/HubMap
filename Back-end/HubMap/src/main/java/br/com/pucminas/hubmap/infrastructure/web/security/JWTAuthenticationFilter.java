@@ -1,5 +1,7 @@
 package br.com.pucminas.hubmap.infrastructure.web.security;
 
+import static br.com.pucminas.hubmap.utils.LoggerUtils.getLoggerFromClass;
+
 import java.io.IOException;
 import java.util.Date;
 
@@ -33,16 +35,18 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 			throws AuthenticationException {
 		
 		ObjectMapper mapper = new ObjectMapper();
-		AppUser appUser;
+		AppUser appUser = null;
 		
 		try {
 			appUser = mapper.readValue(request.getInputStream(), AppUser.class);
+			UsernamePasswordAuthenticationToken upat = new UsernamePasswordAuthenticationToken(appUser.getEmail(), appUser.getPassword());
+			return authenticationManager.authenticate(upat);
 		} catch (IOException e) {
 			throw new RuntimeException(e);
-		} 
-		
-		UsernamePasswordAuthenticationToken upat = new UsernamePasswordAuthenticationToken(appUser.getEmail(), appUser.getPassword());
-		return authenticationManager.authenticate(upat);
+		} catch (AuthenticationException e) {
+			getLoggerFromClass(JWTAuthenticationFilter.class).warn("Authentication Failed. User E-mail: " + appUser.getEmail());
+			throw new RuntimeException(e);
+		}
 	}
 	
 	@Override

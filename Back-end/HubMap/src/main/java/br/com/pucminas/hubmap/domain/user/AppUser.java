@@ -12,6 +12,10 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import br.com.pucminas.hubmap.utils.StringUtils;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,6 +24,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @EntityListeners(AppUserListener.class)
 @Table(name = "APP_USER")
+@JsonIgnoreProperties({"profilePicture", "id"})
 @Getter
 @NoArgsConstructor
 public class AppUser implements Serializable {
@@ -73,6 +78,11 @@ public class AppUser implements Serializable {
 		this.nick = sb.toString();
 	}
 	
+	@JsonIgnore
+	public String getPassword() {
+		return this.password;
+	}
+	
 	public void setNick(String nick) {
 		this.nick = nick;
 	}
@@ -85,6 +95,7 @@ public class AppUser implements Serializable {
 		this.email = email;
 	}
 
+	@JsonProperty
 	public void setPassword(String password) {
 		this.password = password;
 	}

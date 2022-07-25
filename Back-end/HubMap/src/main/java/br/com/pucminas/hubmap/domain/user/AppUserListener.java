@@ -14,6 +14,6 @@ public class AppUserListener {
 			appUser.createNickFromName();
 		}
 		
-		//TODO appUser.encryptPassword();
+		appUser.encryptPassword();
 	}
 }
