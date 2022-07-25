@@ -17,6 +17,8 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import br.com.pucminas.hubmap.domain.post.Post;
 import br.com.pucminas.hubmap.domain.user.AppUser;
 import lombok.EqualsAndHashCode;
@@ -26,6 +28,7 @@ import lombok.NoArgsConstructor;
 @SuppressWarnings("serial")
 @Entity
 @EntityListeners(CommentListener.class)
+@JsonIgnoreProperties("post")
 @Getter
 @NoArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
@@ -55,6 +58,7 @@ public class Comment implements Serializable {
 	@OneToOne
 	@JoinColumn(name = "REPLIED_TO", referencedColumnName = "id")
 	private Comment repliedTo;
+	//TODO Think about a better way to do it
 
 	@NotNull
 	@ManyToOne
