@@ -4,6 +4,6 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface BlockRepository extends CrudRepository<Block, Integer>{
+public interface BlockRepository extends CrudRepository<Block, BlockPK>{
 //TODO Check if this class will really inherit from CrudRepository	
 }
