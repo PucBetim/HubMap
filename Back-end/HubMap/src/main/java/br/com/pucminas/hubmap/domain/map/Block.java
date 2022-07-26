@@ -1,7 +1,6 @@
 package br.com.pucminas.hubmap.domain.map;
 
 import java.awt.Color;
-import java.awt.Font;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -45,7 +44,7 @@ public class Block implements Serializable {
 	
 	private int fontSize;
 
-	private Font fontStyle;
+	private String fontStyle;
 
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "POST_BLOCK_LINKED", 
@@ -73,7 +72,7 @@ public class Block implements Serializable {
 	@ToString.Exclude
 	private List<Block> blocksLinkedMe = new ArrayList<>();
 
-	public Block(String content, int coordX, int coordY, String image, Color color, int fontSize, Font fontStyle,
+	public Block(String content, int coordX, int coordY, String image, Color color, int fontSize, String fontStyle,
 			List<Block> myBlocksLinked, List<Block> blocksLinkedMe) {
 		this.content = content;
 		this.coordX = coordX;
@@ -110,7 +109,7 @@ public class Block implements Serializable {
 		this.fontSize = fontSize;
 	}
 
-	public void setFontStyle(Font fontStyle) {
+	public void setFontStyle(String fontStyle) {
 		this.fontStyle = fontStyle;
 	}
 
