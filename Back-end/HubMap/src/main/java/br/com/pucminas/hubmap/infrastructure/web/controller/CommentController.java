@@ -19,8 +19,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.pucminas.hubmap.application.Service.CommentRepliedToException;
-import br.com.pucminas.hubmap.application.Service.CommentService;
+import br.com.pucminas.hubmap.application.service.CommentRepliedToException;
+import br.com.pucminas.hubmap.application.service.CommentService;
 import br.com.pucminas.hubmap.domain.comment.Comment;
 import br.com.pucminas.hubmap.domain.comment.CommentRepository;
 import br.com.pucminas.hubmap.domain.post.Post;

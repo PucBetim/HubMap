@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.pucminas.hubmap.application.Service.PostService;
+import br.com.pucminas.hubmap.application.service.PostService;
 import br.com.pucminas.hubmap.domain.post.Post;
 import br.com.pucminas.hubmap.domain.post.PostRepository;
 

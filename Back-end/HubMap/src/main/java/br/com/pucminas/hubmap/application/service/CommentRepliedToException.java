@@ -1,4 +1,4 @@
-package br.com.pucminas.hubmap.application.Service;
+package br.com.pucminas.hubmap.application.service;
 
 import java.util.List;
 
