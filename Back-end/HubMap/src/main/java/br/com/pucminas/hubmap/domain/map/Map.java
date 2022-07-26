@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -30,12 +31,12 @@ public class Map implements Serializable{
 	@EqualsAndHashCode.Include
 	private int id;
 	
-	@OneToOne
+	@OneToOne(cascade = CascadeType.ALL)
 	@MapsId
 	@JoinColumn(name = "POST_ID")
 	private Post post;
 	
-	@OneToMany(mappedBy = "id.block")
+	@OneToMany(mappedBy = "id.block", cascade = CascadeType.ALL)
 	private List<Block> roots = new ArrayList<>();
 
 	public Map(List<Block> roots) {
