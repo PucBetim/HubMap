@@ -2,13 +2,14 @@ package br.com.pucminas.hubmap.domain.post;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -18,9 +19,9 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import br.com.pucminas.hubmap.domain.comment.Comment;
@@ -33,7 +34,7 @@ import lombok.NoArgsConstructor;
 @SuppressWarnings("serial")
 @Entity
 @EntityListeners(PostListener.class)
-@JsonIgnoreProperties({"author"})
+@JsonIgnoreProperties({"author", "ngrams", "comments"})
 @Getter
 @NoArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
@@ -44,19 +45,14 @@ public class Post implements Serializable {
 	@EqualsAndHashCode.Include
 	private int id;
 	
-	@NotBlank(message = "Por favor, informe o título do post.")
-	@Size(max = 30, message = "O título é muito grande.")
+	@NotBlank(message = "Por favor, informe o título do post")
+	@Size(max = 30, message = "O título é muito grande")
 	@Column(length = 30, nullable = false)
 	private String title;
 
-	@Size(max = 200, message = "A descrição é muito grande.")
+	@Size(max = 200, message = "A descrição é muito grande")
 	@Column(length = 200)
 	private String description;
-
-	//TODO @NotNull add this anotation 
-	@OneToOne(mappedBy = "post")
-	@PrimaryKeyJoinColumn
-	private Map map;
 
 	private int likes;
 
@@ -66,19 +62,27 @@ public class Post implements Serializable {
 
 	private boolean isPrivate;
 	
-	@NotNull(message = "O autor deve ser informado.")
+	//TODO @NotNull add this annotation 
+	@OneToOne(mappedBy = "post")
+	@PrimaryKeyJoinColumn
+	private Map map;
+	
 	@ManyToOne
-	@JoinColumn(name = "AUTHOR_ID")
+	@JoinColumn(name = "AUTHOR_ID", referencedColumnName = "id")
 	private AppUser author;
 	
-	private LocalDateTime timestamp;
+	@JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss")
+	private LocalDateTime created;
 	
-	@OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
-	private List<Comment> comments = new ArrayList<>();
+	@JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss")
+	private LocalDateTime modified;
 	
-	@OneToMany(mappedBy = "id.post", cascade = CascadeType.ALL)
-	private List<NGram> ngrams = new ArrayList<>();
+	@OneToMany(mappedBy = "post", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	private Set<Comment> comments = new HashSet<>();
 	
+	@OneToMany(mappedBy = "id.post", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	private Set<NGram> ngrams = new HashSet<>();
+
 	public Post(String title, String description, Map map, boolean isPrivate, AppUser author) {
 		this.title = title;
 		this.description = description;
@@ -92,7 +96,8 @@ public class Post implements Serializable {
 		likes = 0;
 		dislikes = 0;
 		views = 0;
-		setTimestampNow();
+		created = LocalDateTime.now();
+		setModifiedNow();
 	}
 
 	public void setTitle(String title) {
@@ -126,16 +131,16 @@ public class Post implements Serializable {
 	public void setAuthor(AppUser author) {
 		this.author = author;
 	}
-
-	public void setTimestampNow() {
-		timestamp = LocalDateTime.now();
+	
+	public void setModifiedNow() {
+		this.modified = LocalDateTime.now();
 	}
-
-	public void setComments(List<Comment> comments) {
+	
+	public void setComments(Set<Comment> comments) {
 		this.comments = comments;
 	}
 	
-	public void setNgrams(List<NGram> ngrams) {
+	public void setNgrams(Set<NGram> ngrams) {
 		this.ngrams = ngrams;
 	}
 }
