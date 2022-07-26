@@ -113,11 +113,21 @@ public class Post implements Serializable {
 	}
 
 	public void changeLikes(boolean positive) {
-		likes += positive ? 1 : -1;
+
+		if (likes > 0) {
+			likes += positive ? 1 : -1;
+		} else if (likes == 0 && positive) {
+			likes += 1;
+		}
 	}
 
 	public void changeDislikes(boolean positive) {
-		dislikes += positive ? 1 : -1;
+		
+		if(dislikes > 0) {
+			dislikes += positive ? 1 : -1;
+		} else if(dislikes == 0 && positive){
+			dislikes += 1;
+		}
 	}
 
 	public void addViews() {

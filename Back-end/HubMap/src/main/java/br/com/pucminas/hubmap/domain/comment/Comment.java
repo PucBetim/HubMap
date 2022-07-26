@@ -27,7 +27,7 @@ import lombok.NoArgsConstructor;
 @SuppressWarnings("serial")
 @Entity
 @EntityListeners(CommentListener.class)
-@JsonIgnoreProperties({"post"})
+@JsonIgnoreProperties({ "post" })
 @Getter
 @NoArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
@@ -35,7 +35,7 @@ public class Comment implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@EqualsAndHashCode.Include 
+	@EqualsAndHashCode.Include
 	private int id;
 
 	@Column(nullable = false)
@@ -56,7 +56,7 @@ public class Comment implements Serializable {
 	@OneToOne
 	@JoinColumn(name = "REPLIED_TO", referencedColumnName = "id")
 	private Comment repliedTo;
-	//TODO Think about a better way to do it
+	// TODO Think about a better way to do it
 
 	@ManyToOne
 	@JoinColumn(name = "AUTHOR_ID", referencedColumnName = "id")
@@ -76,7 +76,7 @@ public class Comment implements Serializable {
 	public Comment(Post post, String content, AppUser author) {
 		this(post, content, author, null);
 	}
-	
+
 	public void initializeComment() {
 		likes = 0;
 		dislikes = 0;
@@ -89,21 +89,31 @@ public class Comment implements Serializable {
 	}
 
 	public void changeLikes(boolean positive) {
-		likes += positive ? 1 : -1;
+
+		if (likes > 0) {
+			likes += positive ? 1 : -1;
+		} else if (likes == 0 && positive) {
+			likes += 1;
+		}
 	}
 
 	public void changeDislikes(boolean positive) {
-		dislikes += positive ? 1 : -1;
+		
+		if(dislikes > 0) {
+			dislikes += positive ? 1 : -1;
+		} else if(likes == 0 && positive){
+			dislikes += 1;
+		}
 	}
 
 	public void addViews() {
 		views++;
 	}
-	
+
 	public void setPost(Post post) {
 		this.post = post;
 	}
-	
+
 	public void setRepliedTo(Comment repliedTo) {
 		this.repliedTo = repliedTo;
 	}
