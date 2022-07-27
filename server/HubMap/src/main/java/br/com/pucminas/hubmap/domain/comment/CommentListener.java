@@ -3,12 +3,12 @@ package br.com.pucminas.hubmap.domain.comment;
 import javax.persistence.PrePersist;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
 import br.com.pucminas.hubmap.domain.user.AppUser;
 import br.com.pucminas.hubmap.domain.user.AppUserRepository;
+import br.com.pucminas.hubmap.utils.SecurityUtils;
 
 @Component
 public class CommentListener {
@@ -22,7 +22,8 @@ public class CommentListener {
 		if(comment.getAuthor() == null) {
 			comment.initializeComment();
 			
-			String email = SecurityContextHolder.getContext().getAuthentication().getName();
+			String email = SecurityUtils.getLoggedUserEmail();
+			
 			AppUser appUser = appUserRepository.findByEmail(email);
 			
 			if(appUser == null) {
