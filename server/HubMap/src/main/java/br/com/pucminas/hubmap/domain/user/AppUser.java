@@ -4,7 +4,6 @@ import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -22,7 +21,7 @@ import lombok.NoArgsConstructor;
 
 @SuppressWarnings("serial")
 @Entity
-@EntityListeners(AppUserListener.class)
+//@EntityListeners(AppUserListener.class)
 @Table(name = "APP_USER")
 @JsonIgnoreProperties({"profilePicture", "id"})
 @Getter
@@ -65,11 +64,15 @@ public class AppUser implements Serializable {
 	public void createNickFromName() {
 		
 		StringBuilder sb = new StringBuilder();
-		sb.append(name.substring(0, name.indexOf(" ")).trim());
 		
-		if(!(sb.toString().length() > 0)) {
+		int endIndex = name.indexOf(" ") == -1 ? 0 : name.indexOf(" ");
+		
+		sb.append(name.substring(0, endIndex).trim());
+		
+		if(!(sb.length() > 0)) {
 			if(name.length() <= 15) {
 				sb.append(name.substring(0, name.length() - 1));
+				sb.append(name.charAt(name.length() - 1));
 			} else {
 				sb.append(name.substring(0, 15));
 			}
@@ -81,6 +84,10 @@ public class AppUser implements Serializable {
 	@JsonIgnore
 	public String getPassword() {
 		return this.password;
+	}
+	
+	public void setId(int id) {
+		this.id = id;
 	}
 	
 	public void setNick(String nick) {

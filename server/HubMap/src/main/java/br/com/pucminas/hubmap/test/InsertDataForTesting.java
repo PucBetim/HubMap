@@ -4,36 +4,37 @@ import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
+import br.com.pucminas.hubmap.application.service.AppUserService;
+import br.com.pucminas.hubmap.application.service.DuplicatedEmailException;
 import br.com.pucminas.hubmap.domain.comment.Comment;
 import br.com.pucminas.hubmap.domain.comment.CommentRepository;
 import br.com.pucminas.hubmap.domain.post.Post;
 import br.com.pucminas.hubmap.domain.post.PostRepository;
 import br.com.pucminas.hubmap.domain.user.AppUser;
-import br.com.pucminas.hubmap.domain.user.AppUserRepository;
 
 @Component
 public class InsertDataForTesting {
 	
-	private AppUserRepository appUserRepository;
+	private AppUserService appUserService;
 	private PostRepository postRepository;
 	private CommentRepository commentRepository;
 
-	public InsertDataForTesting(AppUserRepository appUserRepository, PostRepository postRepository, CommentRepository commentRepository) {
-		this.appUserRepository = appUserRepository;
+	public InsertDataForTesting(AppUserService appUserService, PostRepository postRepository, CommentRepository commentRepository) {
+		this.appUserService = appUserService;
 		this.postRepository = postRepository;
 		this.commentRepository = commentRepository;
 	}
 
 	@EventListener
-	public void onApplicationEvent(ContextRefreshedEvent event) {
+	public void onApplicationEvent(ContextRefreshedEvent event) throws DuplicatedEmailException {
 		
 		AppUser u1 = new AppUser("John D Jackson", "Jonny", "1jonny.jpg" , "john@teste.com", "abc");
 		AppUser u2 = new AppUser("Margaret Johnson", "Meggy", "2meggy.jpg" , "margaret@teste.com", "abc");
 		AppUser u3 = new AppUser("Giovan del Silva", null, null, "giovan@teste.com", "abc");
 		
-		appUserRepository.save(u1);
-		appUserRepository.save(u2);
-		appUserRepository.save(u3);
+		appUserService.save(u1);
+		appUserService.save(u2);
+		appUserService.save(u3);
 		
 		//USER 1
 		Post p1 = new Post("Arquitetura de Computadores", "Mapa mental sobre arquitetura de computadores", null, true, u1);
