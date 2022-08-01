@@ -13,7 +13,7 @@
     </div>
 
     <div class="canvas" id="canvas">
-        <div type="text" *ngFor="let block of map.blocks" class="block" cdkDragBoundary=".canvas" cdkDrag
+        <div type="text" #block *ngFor="let block of map.blocks" class="block" cdkDragBoundary=".canvas" cdkDrag
             [cdkDragFreeDragPosition]="block.position">
             <div class="handle" cdkDragHandle (click)="changePosition($event, block)">
                 <svg width="24px" fill="currentColor" viewBox="0 0 24 24">
@@ -23,7 +23,7 @@
                     <path d="M0 0h24v24H0z" fill="none"></path>
                 </svg>
             </div>
-            <textarea name="message" [(ngModel)]="block.content">{{block.content}}</textarea>
+            <textarea (click)="resize($event, block)" [style.width.px]="block.size.width" [style.height.px]="block.size.height" [(ngModel)]="block.content">{{block.content}}</textarea>
         </div>
 
     </div>
