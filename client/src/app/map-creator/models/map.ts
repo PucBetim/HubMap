@@ -4,14 +4,20 @@ export class map {
 }
 export class block {
     id: number;
+    blocks: block[];
     content: string;
     position: position = new position;
     size: size = new size;
-    //img: ImageBitmap;
+    backgroundColor: string = "white";
     color: number;
     fontSize: number;
-    fontStyle: string;
-    blocks: block[];
+    fontStyle: string = "normal";
+    fontWeight: string = "normal";
+    textDecoration: string = "none";
+
+
+    //img: ImageBitmap;
+    //selectedColor: string = "white";
 }
 
 export class position {
@@ -19,7 +25,7 @@ export class position {
     y: number = 0;
 }
 
-export class size{
+export class size {
     width: number = 0;
     height: number = 0;
 }

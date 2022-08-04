@@ -5,10 +5,13 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatMenuModule } from '@angular/material/menu';
+import { FormsModule } from '@angular/forms';
+import {MatButtonToggleModule} from '@angular/material/button-toggle';
 
 import { CreationComponent } from './creation/creation.component';
 import { CreatorRoutes } from './map-creator.routing';
-import { FormsModule } from '@angular/forms';
+import { ClickOutsideModule } from 'ng-click-outside';
 
 @NgModule({
   declarations: [
@@ -21,9 +24,12 @@ import { FormsModule } from '@angular/forms';
     MatIconModule,
     MatButtonModule,
     MatTooltipModule,
-    FormsModule
+    FormsModule,
+    MatMenuModule,
+    MatButtonToggleModule,
+    ClickOutsideModule
   ],
-  providers:[
+  providers: [
   ]
 })
 export class MapCreatorModule { }

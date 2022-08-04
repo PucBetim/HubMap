@@ -2,10 +2,10 @@
     <div class="sideBar">
 
         <div class="container">
-            <button matTooltip="Adicionar bloco" (click)="addNewBlock()" mat-mini-fab>
+            <button class="sidebarOption" matTooltip="Adicionar bloco" (click)="addNewBlock()" mat-mini-fab>
                 <mat-icon>add_circle</mat-icon>
             </button>
-            <button matTooltip="Adicionar bloco" (click)="save()" mat-mini-fab>
+            <button class="sidebarOption" matTooltip="Salvar" (click)="save()" mat-mini-fab>
                 <mat-icon>save</mat-icon>
             </button>
         </div>
@@ -15,16 +15,21 @@
     <div class="canvas" id="canvas">
         <div type="text" #block *ngFor="let block of map.blocks" class="block" cdkDragBoundary=".canvas" cdkDrag
             [cdkDragFreeDragPosition]="block.position">
-            <div class="handle" cdkDragHandle (click)="changePosition($event, block)">
-                <svg width="24px" fill="currentColor" viewBox="0 0 24 24">
-                    <path
-                        d="M10 9h4V6h3l-5-5-5 5h3v3zm-1 1H6V7l-5 5 5 5v-3h3v-4zm14 2l-5-5v3h-3v4h3v3l5-5zm-9 3h-4v3H7l5 5 5-5h-3v-3z">
-                    </path>
-                    <path d="M0 0h24v24H0z" fill="none"></path>
-                </svg>
-            </div>
-            <textarea (click)="resize($event, block)" [style.width.px]="block.size.width" [style.height.px]="block.size.height" [(ngModel)]="block.content">{{block.content}}</textarea>
-        </div>
 
+            <div class="textSide">
+                <textarea  (click)="resize($event, block)" [(ngModel)]="block.content"
+                    [style.width.px]="block.size.width" [style.height.px]="block.size.height"
+                    [style.background-color]="block.backgroundColor" [style.font-style]="block.fontStyle"
+                    [style.font-weight]="block.fontWeight"
+                    [style.text-decoration]="block.textDecoration">{{block.content}}</textarea>
+
+            </div>
+            <div class="controlSide">
+                <mat-icon cdkDragHandle (click)="changePosition($event, block)">drag_indicator</mat-icon>
+                <mat-icon [matMenuTriggerFor]="editMenu">edit</mat-icon>
+            </div>
+
+            
+        </div>
     </div>
 </div>
