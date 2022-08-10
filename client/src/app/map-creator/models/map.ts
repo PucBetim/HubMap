@@ -8,8 +8,10 @@ export class block {
     content: string;
     position: position = new position;
     size: size = new size;
-    backgroundColor: string = "white";
-    color: number;
+
+    backgroundColor: string = "#ffffff";
+    fontColor: string = "#000000";
+
     fontSize: number;
     fontStyle: string = "normal";
     fontWeight: string = "normal";

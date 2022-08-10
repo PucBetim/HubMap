@@ -1,5 +1,4 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
 import { MatMenuTrigger } from '@angular/material/menu';
 
 import { map, block } from './../models/map';
@@ -15,6 +14,9 @@ export class CreationComponent implements OnInit {
 
   public map = new map;
   public selected: block[] = [];
+  public editMode: boolean = true;
+  public displayEditStyle: boolean = false;
+  public blockEdit: block;
 
   constructor() { }
 
@@ -22,24 +24,9 @@ export class CreationComponent implements OnInit {
     this.map = JSON.parse(localStorage.getItem('mapa') || '{}');
   }
 
-  // select(block: block) {
-  //   if (!this.selected.includes(block)) {
-  //     this.selected.push(block)
-  //     block.selectedColor = "#316B83";
-  //   }
-  //   else {
-  //     const index = this.selected.indexOf(block);
-  //     if (index !== -1)
-  //       this.selected.splice(index, 1);
-  //     block.selectedColor = "white";
-  //   }
-
-  // }
-
   changePosition(event: any, block: block) {
-    console.log(event)
-    block.position.x = event.layerX - event.offsetX ;
-    block.position.y = event.layerY - event.offsetY;
+    block.position.x = event.layerX - event.offsetX - 5;
+    block.position.y = event.layerY - event.offsetY - 5;
   }
 
   resize(event: any, block: block) {
@@ -65,37 +52,35 @@ export class CreationComponent implements OnInit {
   }
 
   save() {
-    // this.selected.forEach(e => {
-    //   e.selectedColor = "white"
-    // });
     localStorage.setItem('mapa', JSON.stringify(this.map));
   }
 
-  style(style: string, block: block, event: any) {
-
+  stopPropagation(event: any) {
     if (event) event.stopPropagation();
-    
-    switch (style) {
-      case "bold":
-        block.fontWeight = block.fontWeight === "normal" ? "bold" : "normal"
-        break;
-      case "italic":
-        block.fontStyle = block.fontStyle === "normal" ? "italic" : "normal"
-        break;
-      case "underline":
-        block.textDecoration = block.textDecoration == "none" ? "underline" : "none"
-        break;
-      default:
-        break;
-    }
   }
 
-  // unselect() {
-  //   console.log('outside')
-  //   this.selected.forEach(e => {
-  //     e.selectedColor = "white"
-  //   });
-  //   this.selected = [];
+  // style(style: string, block: block, event: any) {
+
+  //   if (event) event.stopPropagation();
+
+  //   switch (style) {
+  //     case "bold":
+  //       block.fontWeight = block.fontWeight === "normal" ? "bold" : "normal"
+  //       break;
+  //     case "italic":
+  //       block.fontStyle = block.fontStyle === "normal" ? "italic" : "normal"
+  //       break;
+  //     case "underline":
+  //       block.textDecoration = block.textDecoration == "none" ? "underline" : "none"
+  //       break;
+  //     default:
+  //       break;
+  //   }
   // }
 
+
+  editStyle(block: block) {
+    this.displayEditStyle = true;
+    this.blockEdit = block;
+  }
 }

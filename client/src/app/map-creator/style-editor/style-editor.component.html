@@ -1,0 +1,28 @@
+<div class="main">
+
+    <button class="matEditGridItem" mat-icon-button matTooltip="Negrito" (click)="style('bold',block, $event)">
+        <mat-icon>format_bold</mat-icon>
+    </button>
+    <button class="matEditGridItem" mat-icon-button matTooltip="Itálico" (click)="style('italic',block, $event)">
+        <mat-icon>format_italic</mat-icon>
+    </button>
+    <button class="matEditGridItem" mat-icon-button matTooltip="Sublinhado" (click)="style('underline',block, $event)">
+        <mat-icon>format_underlined</mat-icon>
+    </button>
+    <div class="matEditGridItem">
+        <button mat-icon-button [cpPosition]="'bottom'" [cpPositionOffset]="'50%'" [cpPositionRelativeToArrow]="true"
+            [(colorPicker)]="block.fontColor" (click)="stopPropagation($event)">
+            <mat-icon> format_color_text</mat-icon>
+            <div class="colorShowcase" [style.background-color]="block.fontColor"></div>
+        </button>
+    </div>
+    <div class="matEditGridItem">
+        <button class="matEditGridItem" mat-icon-button [cpPosition]="'bottom'" [cpPositionOffset]="'50%'"
+            [cpPositionRelativeToArrow]="true" [(colorPicker)]="block.backgroundColor"
+            (click)="stopPropagation($event)">
+            <mat-icon> format_color_fill</mat-icon>
+            <div class="colorShowcase" [style.background-color]="block.backgroundColor"></div>
+        </button>
+    </div> 
+    
+</div>

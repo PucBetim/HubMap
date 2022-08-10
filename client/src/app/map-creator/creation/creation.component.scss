@@ -31,14 +31,12 @@
     background-color: rgb(240, 255, 241);
     width: 100%;
     min-height: 100%;
-
+    
 
     .block {
         height: fit-content;
         width: fit-content;
         padding: 5px;
-        width: fit-content;
-        height: fit-content;
         border: solid 1px #ccc;
         color: rgba(0, 0, 0, 0.87);
         display: flex;
@@ -55,41 +53,180 @@
             0 2px 2px 0 rgba(0, 0, 0, 0.14),
             0 1px 5px 0 rgba(0, 0, 0, 0.12);
 
-        :active {
-            box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2),
-                0 8px 10px 1px rgba(0, 0, 0, 0.14),
-                0 3px 14px 2px rgba(0, 0, 0, 0.12);
-        }
 
 
-
-        display: grid;
-        grid-template: "textSide controlSide";
-        grid-template-columns: auto 24px;
-
-
-        .textSide {
-            textarea {
-                min-height: 53px;
-                min-width: 93px;
-                padding: 0;
-                text-align: center;
-                justify-content: center;
-                background: transparent;
-                border: none;
-                outline: none;
-                text-align: center;
-                overflow: hidden;
-            }
-        }
-
-        .controlSide {
-            height: 100%;
-            mat-icon{
-                padding-bottom: 4px;
-                color: rgba(0, 0, 0, 0.75);
-            }
-        }
-
+        // display: grid;
+        // grid-template: "controlSide gap textSide";
+        // grid-template-columns: 24px 3px auto;
     }
+
+    textarea {
+        min-height: 53px;
+        min-width: 93px;
+        padding: 0;
+        text-align: center;
+        justify-content: center;
+        background: transparent;
+        border: none;
+        outline: none;
+        text-align: center;
+        overflow: hidden;
+    }
+
+    // .textSide {
+    //     grid-area: textSide;
+
+        // textarea {
+        //     min-height: 53px;
+        //     min-width: 93px;
+        //     padding: 0;
+        //     text-align: center;
+        //     justify-content: center;
+        //     background: transparent;
+        //     border: none;
+        //     outline: none;
+        //     text-align: center;
+        //     overflow: hidden;
+        // }
+
+        // .textareaNoEdit {
+        //     resize: none;
+        // }
+
+        // :active {
+        //     box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2),
+        //         0 8px 10px 1px rgba(0, 0, 0, 0.14),
+        //         0 3px 14px 2px rgba(0, 0, 0, 0.12);
+        // }
+    }
+
+    // .controlSide {
+    //     grid-area: controlSide;
+    //     height: 100%;
+
+    //     mat-icon {
+    //         padding-bottom: 4px;
+    //         color: rgba(0, 0, 0, 0.75);
+    //     }
+    // }
+//}
+
+// .canvasNoEdit {
+//     grid-area: canvas;
+//     background-color: rgb(240, 255, 241);
+//     width: 100%;
+//     min-height: 100%;
+
+
+//     .block {
+//         height: fit-content;
+//         width: fit-content;
+//         padding: 5px;
+//         width: fit-content;
+//         height: fit-content;
+//         border: solid 1px #ccc;
+//         color: rgba(0, 0, 0, 0.87);
+//         display: flex;
+//         justify-content: center;
+//         align-items: center;
+//         text-align: center;
+//         background: #fff;
+//         border-radius: 4px;
+//         position: absolute;
+//         z-index: 1;
+//         border: 0;
+//         transition: box-shadow 200ms cubic-bezier(0, 0, 0.2, 1);
+//         box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2),
+//             0 2px 2px 0 rgba(0, 0, 0, 0.14),
+//             0 1px 5px 0 rgba(0, 0, 0, 0.12);
+//     }
+
+//     textarea {
+//         min-height: 53px;
+//         min-width: 93px;
+//         padding: 0;
+//         text-align: center;
+//         justify-content: center;
+//         background: transparent;
+//         border: none;
+//         outline: none;
+//         text-align: center;
+//         overflow: hidden;
+//     }
+
+//     .textareaNoEdit {
+//         resize: none;
+//     }
+// }
+
+// .matEditGrid {
+//     display: grid;
+//     grid-template-columns: auto auto auto;
+
+//     .colorShowcase {
+//         transform: translate(9px, -11px);
+//         width: 22px;
+//         height: 2px;
+//         background-color: blue;
+//         z-index: 2;
+//     }
+
+//     .matEditGridItem{
+//         overflow: hidden;;
+//     }
+// }
+
+// .color-picker {
+//     position: absolute;
+// }
+
+
+
+.resize {
+    display: block;
+    width: 100px;
+    height: 100px;
+    background: #ccc;
+    position: absolute;
+}
+.resize .border {
+    position: absolute;
+    background: red;
+}
+.resize .border-top,
+.resize .border-bottom {
+    left: 0;
+    right: 0;
+    height: 6px;
+    cursor: row-resize;
+}
+.resize .border-left,
+.resize .border-right {
+    top: 0;
+    bottom: 0;
+    width: 6px;
+    cursor: col-resize;
+}
+.resize .border-left {
+    left: 0;
+}
+.resize .border-right {
+    right: 0;
+}
+.resize .border-top {
+    top: 0;
+}
+
+.resize .border-bottom {
+    bottom: 0;
+}
+
+
+.dragabble .handler {
+    position: absolute;
+    width: calc(100% - 12px);
+    height: calc(100% - 12px);
+    left: 6px;
+    top: 6px;
+    user-select: none;
 }
