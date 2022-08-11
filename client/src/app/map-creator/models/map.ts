@@ -11,15 +11,10 @@ export class block {
 
     backgroundColor: string = "#ffffff";
     fontColor: string = "#000000";
-
-    fontSize: number;
+    fontSize: string = "12px";
     fontStyle: string = "normal";
     fontWeight: string = "normal";
     textDecoration: string = "none";
-
-
-    //img: ImageBitmap;
-    //selectedColor: string = "white";
 }
 
 export class position {

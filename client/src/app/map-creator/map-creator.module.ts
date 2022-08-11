@@ -7,13 +7,13 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatTooltipDefaultOptions, MatTooltipModule, MAT_TOOLTIP_DEFAULT_OPTIONS } from '@angular/material/tooltip';
 import { MatMenuModule } from '@angular/material/menu';
 import { FormsModule } from '@angular/forms';
-import {MatButtonToggleModule} from '@angular/material/button-toggle';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { MatSelectModule } from '@angular/material/select';
 
 import { CreationComponent } from './creation/creation.component';
 import { CreatorRoutes } from './map-creator.routing';
-import { ClickOutsideModule } from 'ng-click-outside';
-import { ColorPickerModule } from 'ngx-color-picker';
 import { StyleEditorComponent } from './style-editor/style-editor.component';
+import { BlockComponent } from './block/block.component';
 
 export const OtherOptions: MatTooltipDefaultOptions = {
   showDelay: 0,
@@ -27,7 +27,8 @@ export const OtherOptions: MatTooltipDefaultOptions = {
 @NgModule({
   declarations: [
     CreationComponent,
-    StyleEditorComponent
+    StyleEditorComponent,
+    BlockComponent
   ],
   imports: [
     CommonModule,
@@ -39,11 +40,10 @@ export const OtherOptions: MatTooltipDefaultOptions = {
     FormsModule,
     MatMenuModule,
     MatButtonToggleModule,
-    ClickOutsideModule,
-    ColorPickerModule
+    MatSelectModule,
   ],
   providers: [
-    {provide: MAT_TOOLTIP_DEFAULT_OPTIONS, useValue: OtherOptions}
+    { provide: MAT_TOOLTIP_DEFAULT_OPTIONS, useValue: OtherOptions }
   ]
 })
 export class MapCreatorModule { }

@@ -1,0 +1,20 @@
+<style-editor [clickInside]="clickInside" [block]="block" *ngIf="displayEditStyle"
+    (closeEvent)="displayEditStyle = false"></style-editor>
+
+<div type="text" class="block" cdkDragBoundary=".canvas" cdkDrag [cdkDragFreeDragPosition]="block.position"
+    [style.background-color]="block.backgroundColor" (mousedown)="editStyle()">
+
+    <textarea (click)="resize($event, block)" [(ngModel)]="block.content" [style.width.px]="block.size.width"
+        [style.height.px]="block.size.height" [style.font-style]="block.fontStyle"
+        [style.font-weight]="block.fontWeight" [style.text-decoration]="block.textDecoration"
+        [style.color]="block.fontColor" [style.font-size]="block.fontSize">{{block.content}}
+    </textarea>
+
+    <div class="dragHandle" cdkDragHandle>
+        <mat-icon [style.color]="block.backgroundColor" width="24px">drag_indicator</mat-icon>
+    </div>
+    <div (click)="changePosition($event, block)" class="dragHandle darker" cdkDragHandle>
+        <mat-icon width="24px">drag_indicator</mat-icon>
+    </div>
+
+</div>

@@ -15,8 +15,7 @@ export class CreationComponent implements OnInit {
   public map = new map;
   public selected: block[] = [];
   public editMode: boolean = true;
-  public displayEditStyle: boolean = false;
-  public blockEdit: block;
+  public disableDrag: boolean = false;
 
   constructor() { }
 
@@ -29,10 +28,6 @@ export class CreationComponent implements OnInit {
     block.position.y = event.layerY - event.offsetY - 5;
   }
 
-  resize(event: any, block: block) {
-    block.size.width = event.target.clientWidth;
-    block.size.height = event.target.clientHeight;
-  }
 
   addNewBlock() {
     let _block = new block;
@@ -53,34 +48,5 @@ export class CreationComponent implements OnInit {
 
   save() {
     localStorage.setItem('mapa', JSON.stringify(this.map));
-  }
-
-  stopPropagation(event: any) {
-    if (event) event.stopPropagation();
-  }
-
-  // style(style: string, block: block, event: any) {
-
-  //   if (event) event.stopPropagation();
-
-  //   switch (style) {
-  //     case "bold":
-  //       block.fontWeight = block.fontWeight === "normal" ? "bold" : "normal"
-  //       break;
-  //     case "italic":
-  //       block.fontStyle = block.fontStyle === "normal" ? "italic" : "normal"
-  //       break;
-  //     case "underline":
-  //       block.textDecoration = block.textDecoration == "none" ? "underline" : "none"
-  //       break;
-  //     default:
-  //       break;
-  //   }
-  // }
-
-
-  editStyle(block: block) {
-    this.displayEditStyle = true;
-    this.blockEdit = block;
   }
 }

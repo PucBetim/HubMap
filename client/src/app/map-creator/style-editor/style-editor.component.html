@@ -1,5 +1,4 @@
 <div class="main">
-
     <button class="matEditGridItem" mat-icon-button matTooltip="Negrito" (click)="style('bold',block, $event)">
         <mat-icon>format_bold</mat-icon>
     </button>
@@ -9,20 +8,59 @@
     <button class="matEditGridItem" mat-icon-button matTooltip="Sublinhado" (click)="style('underline',block, $event)">
         <mat-icon>format_underlined</mat-icon>
     </button>
-    <div class="matEditGridItem">
-        <button mat-icon-button [cpPosition]="'bottom'" [cpPositionOffset]="'50%'" [cpPositionRelativeToArrow]="true"
-            [(colorPicker)]="block.fontColor" (click)="stopPropagation($event)">
-            <mat-icon> format_color_text</mat-icon>
-            <div class="colorShowcase" [style.background-color]="block.fontColor"></div>
-        </button>
-    </div>
-    <div class="matEditGridItem">
-        <button class="matEditGridItem" mat-icon-button [cpPosition]="'bottom'" [cpPositionOffset]="'50%'"
-            [cpPositionRelativeToArrow]="true" [(colorPicker)]="block.backgroundColor"
-            (click)="stopPropagation($event)">
-            <mat-icon> format_color_fill</mat-icon>
-            <div class="colorShowcase" [style.background-color]="block.backgroundColor"></div>
-        </button>
-    </div> 
-    
+
+    <!-- <mat-form-field class="matEditGridItem" appearance="fill">
+        <mat-label><strong>Tamanho</strong></mat-label>
+        <mat-select [(value)]="block.fontSize" class="matEditGridItem" matTooltip="Tamanho da Fonte">
+            <mat-option *ngFor="let fontSize of fontSizes" [value]="fontSize.value">
+                {{fontSize.value}}
+            </mat-option>
+        </mat-select>
+    </mat-form-field> -->
+
+    <button class="matEditGridItem" #triggerSize="matMenuTrigger" matTooltip="Tamanho da Fonte"
+        [matMenuTriggerFor]="fontsizeMenu" mat-icon-button>
+        <mat-icon> format_size</mat-icon>
+        <small>{{block.fontSize}}</small>
+    </button>
+
+    <button class="matEditGridItem" #triggerFont="matMenuTrigger" matTooltip="Cor do Texto"
+        [matMenuTriggerFor]="colorMenuText" mat-icon-button>
+        <mat-icon> format_color_text</mat-icon>
+        <div class="colorShowcase" [style.background-color]="block.fontColor"></div>
+    </button>
+    <button class="matEditGridItem" #triggerBckg="matMenuTrigger" matTooltip="Cor do Bloco"
+        [matMenuTriggerFor]="colorMenuBackground" mat-icon-button>
+        <mat-icon> format_color_fill</mat-icon>
+        <div class="colorShowcase" [style.background-color]="block.backgroundColor"></div>
+    </button>
+
+
 </div>
+
+
+<!-- Angular Material Menus -->
+<mat-menu hasBackdrop="false" #fontsizeMenu="matMenu">
+    <div class="fontSizeMenu" (click)="$event.stopPropagation()" (mouseleave)="closeMenu('fontSize')">
+        
+        <div class="fontSizeMenuItem" *ngFor="let fontSize of fontSizes" (click)="block.fontSize = fontSize.value">
+            {{fontSize.value}}
+        </div>
+    </div>
+</mat-menu>
+
+<mat-menu hasBackdrop="false" #colorMenuText="matMenu">
+    <div class="colorGrid" (click)="$event.stopPropagation()" (mouseleave)="closeMenu('fontColor')">
+        <div class="colorSelector" (click)="block.fontColor = color.hexValue" *ngFor="let color of colors"
+            [style.background-color]="color.hexValue">
+        </div>
+    </div>
+</mat-menu>
+<mat-menu hasBackdrop="false" #colorMenuBackground="matMenu">
+    <div class="colorGrid" (click)="$event.stopPropagation()" (mouseleave)="closeMenu('bckgColor')">
+        <div class="colorSelector" (click)="block.backgroundColor = color.hexValue" *ngFor="let color of colors"
+            [style.background-color]="color.hexValue">
+        </div>
+    </div>
+</mat-menu>
+<!-- Angular Material Menus Fim -->
