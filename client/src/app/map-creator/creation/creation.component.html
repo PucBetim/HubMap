@@ -1,15 +1,18 @@
 <div class="main">
     <div class="sideBar">
         <div class="container">
-            <button class="sidebarOption" matTooltip="Adicionar bloco" (click)="addNewBlock()" mat-mini-fab>
+            <button class="sidebarOption" matTooltipClass="tooltip"  matTooltip="Adicionar Bloco" (click)="addNewBlock()" mat-mini-fab>
                 <mat-icon>add_circle</mat-icon>
             </button>
-            <button class="sidebarOption" matTooltip="Salvar" (click)="save()" mat-mini-fab>
+            <button class="sidebarOption" matTooltipClass="tooltip" matTooltip="Deletar Bloco" (click)="deleteBlock(this.map.blocks)" mat-mini-fab>
+                <mat-icon>delete</mat-icon>
+            </button>
+            <button class="sidebarOption" matTooltipClass="tooltip" matTooltip="Salvar" (click)="save()" mat-mini-fab>
                 <mat-icon>save</mat-icon>
             </button>
         </div>
     </div>
-    <div class="canvas" id="canvas" *ngIf="editMode">
-        <block *ngFor="let block of map.blocks" [block]="block"></block>
+    <div class="canvas" id="canvas">
+        <block (selectBlockEvent)="selectBlock($event)" *ngFor="let block of map.blocks" [block]="block"></block>
     </div>
 </div>

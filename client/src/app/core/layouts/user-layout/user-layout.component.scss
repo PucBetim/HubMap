@@ -3,7 +3,7 @@
     background-color: #272736;
     color: aliceblue;
     width: 100%;
-    
+
     .container {
         position: relative;
         min-height: 96vh;
@@ -12,14 +12,17 @@
 
     .toolbar {
         position: relative;
-        .toolbar_title {
+        min-height: fit-content;
+        margin-bottom: 50px;
+        
+        h1 {
             grid-area: grid1;
             font-size: 5vh;
-
-            a {
-                text-decoration: none;
-                color: inherit;
-            }
         }
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
     }
 }

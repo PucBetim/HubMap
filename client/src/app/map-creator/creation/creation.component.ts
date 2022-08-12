@@ -13,9 +13,7 @@ export class CreationComponent implements OnInit {
   @ViewChild('editTrigger') editTrigger: MatMenuTrigger;
 
   public map = new map;
-  public selected: block[] = [];
-  public editMode: boolean = true;
-  public disableDrag: boolean = false;
+  public selectedBlock: block;
 
   constructor() { }
 
@@ -27,7 +25,6 @@ export class CreationComponent implements OnInit {
     block.position.x = event.layerX - event.offsetX - 5;
     block.position.y = event.layerY - event.offsetY - 5;
   }
-
 
   addNewBlock() {
     let _block = new block;
@@ -44,6 +41,23 @@ export class CreationComponent implements OnInit {
       return
     }
     this.map.blocks.push(_block);
+  }
+
+  selectBlock(block: block) {
+    this.selectedBlock = block;
+  }
+
+  deleteBlock(blocks: block[]) {
+    for (let i = 0; i < blocks.length; i++) {
+      if (blocks[i] == this.selectedBlock) {
+        const index = blocks.indexOf(this.selectedBlock, 0);
+        if (index > -1) {
+          blocks.splice(index, 1);
+        }
+      }
+      else
+        this.deleteBlock(blocks[i].blocks)
+    }
   }
 
   save() {

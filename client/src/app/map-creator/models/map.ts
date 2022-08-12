@@ -4,8 +4,8 @@ export class map {
 }
 export class block {
     id: number;
-    blocks: block[];
-    content: string;
+    blocks: block[] = [];
+    content: string = "Default";
     position: position = new position;
     size: size = new size;
 
@@ -15,6 +15,7 @@ export class block {
     fontStyle: string = "normal";
     fontWeight: string = "normal";
     textDecoration: string = "none";
+    textAlign:string = "center";
 }
 
 export class position {
@@ -23,6 +24,6 @@ export class position {
 }
 
 export class size {
-    width: number = 0;
-    height: number = 0;
+    width: number = 200;
+    height: number = 100;
 }

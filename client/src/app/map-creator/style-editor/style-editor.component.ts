@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, HostListener, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, HostListener, Input, OnInit, Output, ViewChild, ViewEncapsulation } from '@angular/core';
 
 import { block } from './../models/map';
 import { fontSizes } from 'src/app/core/shared/font-sizes';
@@ -41,19 +41,31 @@ export class StyleEditorComponent implements OnInit {
     if (event) event.stopPropagation();
   }
 
-  style(style: string, block: block, event: any) {
+  style(style: string, event: any) {
 
     if (event) event.stopPropagation();
 
     switch (style) {
       case "bold":
-        block.fontWeight = block.fontWeight === "normal" ? "bold" : "normal"
+        this.block.fontWeight = this.block.fontWeight === "normal" ? "bold" : "normal"
         break;
       case "italic":
-        block.fontStyle = block.fontStyle === "normal" ? "italic" : "normal"
+        this.block.fontStyle = this.block.fontStyle === "normal" ? "italic" : "normal"
         break;
       case "underline":
-        block.textDecoration = block.textDecoration == "none" ? "underline" : "none"
+        this.block.textDecoration = this.block.textDecoration == "none" ? "underline" : "none"
+        break;
+      case "alignLeft":
+        this.block.textAlign = "left";
+        break;
+      case "alignCenter":
+        this.block.textAlign = "center";
+        break;
+      case "alignRight":
+        this.block.textAlign = "right";
+        break;
+      case "justify":
+        this.block.textAlign = "justify";
         break;
       default:
         break;

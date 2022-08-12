@@ -1,20 +1,47 @@
+<block (selectBlockEvent)="emitSelect($event)" (click)="displayEditStyle = false" *ngFor="let childBlock of this.block.blocks"
+    [block]="childBlock"></block>
+
 <style-editor [clickInside]="clickInside" [block]="block" *ngIf="displayEditStyle"
     (closeEvent)="displayEditStyle = false"></style-editor>
 
 <div type="text" class="block" cdkDragBoundary=".canvas" cdkDrag [cdkDragFreeDragPosition]="block.position"
-    [style.background-color]="block.backgroundColor" (mousedown)="editStyle()">
+    (mousedown)="editStyle()" [style.background-color]="block.backgroundColor">
 
-    <textarea (click)="resize($event, block)" [(ngModel)]="block.content" [style.width.px]="block.size.width"
+
+    <div [style.border-color]="block.backgroundColor" class="highlighted" *ngIf="displayEditStyle"></div>
+
+    <div class="highlighted darker" *ngIf="displayEditStyle">
+        <button [style.color]="block.backgroundColor" matTooltip="Adicionar Bloco Acima" [matTooltipPosition]="'above'"
+            class="addBlockUpIcon" matTooltipClass="tooltip" mat-icon-button (click)="addBlock('above')">
+            <mat-icon>keyboard_arrow_up</mat-icon>
+        </button>
+        <button [style.color]="block.backgroundColor" matTooltip="Adicionar Bloco a Direita"
+            [matTooltipPosition]="'right'" class="addBlockRightIcon" matTooltipClass="tooltip" mat-icon-button
+            (click)="addBlock('right')">
+            <mat-icon>keyboard_arrow_right</mat-icon>
+        </button>
+        <button [style.color]="block.backgroundColor" matTooltip="Adicionar Bloco Abaixo" [matTooltipPosition]="'below'"
+            class="addBlockBelowIcon" matTooltipClass="tooltip" mat-icon-button (click)="addBlock('below')">
+            <mat-icon>keyboard_arrow_down</mat-icon>
+        </button>
+        <button [style.color]="block.backgroundColor" matTooltip="Adicionar Bloco a Esquerda"
+            [matTooltipPosition]="'left'" class="addBlockLeftIcon" matTooltipClass="tooltip" mat-icon-button
+            (click)="addBlock('left')">
+            <mat-icon>keyboard_arrow_left</mat-icon>
+        </button>
+    </div>
+
+    <textarea (click)="resize($event)" [(ngModel)]="block.content" [style.width.px]="block.size.width"
         [style.height.px]="block.size.height" [style.font-style]="block.fontStyle"
         [style.font-weight]="block.fontWeight" [style.text-decoration]="block.textDecoration"
-        [style.color]="block.fontColor" [style.font-size]="block.fontSize">{{block.content}}
+        [style.color]="block.fontColor" [style.font-size]="block.fontSize" [style.text-align]="block.textAlign">
+        {{block.content}}
     </textarea>
 
     <div class="dragHandle" cdkDragHandle>
         <mat-icon [style.color]="block.backgroundColor" width="24px">drag_indicator</mat-icon>
     </div>
-    <div (click)="changePosition($event, block)" class="dragHandle darker" cdkDragHandle>
+    <div (click)="changePosition($event)" class="dragHandle darker" cdkDragHandle>
         <mat-icon width="24px">drag_indicator</mat-icon>
     </div>
-
 </div>
