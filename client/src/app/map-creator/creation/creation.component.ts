@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatMenuTrigger } from '@angular/material/menu';
+import { line } from '../models/line';
 
 import { map, block } from './../models/map';
 
@@ -14,6 +15,7 @@ export class CreationComponent implements OnInit {
 
   public map = new map;
   public selectedBlock: block;
+  public lines: line[] = [];
 
   constructor() { }
 
@@ -64,4 +66,5 @@ export class CreationComponent implements OnInit {
   save() {
     localStorage.setItem('mapa', JSON.stringify(this.map));
   }
+
 }

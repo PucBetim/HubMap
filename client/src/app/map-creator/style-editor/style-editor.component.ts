@@ -19,20 +19,10 @@ export class StyleEditorComponent implements OnInit {
   constructor(private eRef: ElementRef) { }
 
   @Input() block: block;
-  @Input() clickedInside: boolean;
-  @Output() closeEvent = new EventEmitter<string>();
 
   @ViewChild('triggerBckg', { static: false }) triggerBkg: MatMenuTrigger;
   @ViewChild('triggerFont', { static: false }) triggerFont: MatMenuTrigger;
   @ViewChild('triggerSize', { static: false }) triggerSize: MatMenuTrigger;
-
-  @HostListener('document:click', ['$event'])
-  clickout(event: any) {
-    if (!this.eRef.nativeElement.contains(event.target) && this.loaded && !this.clickedInside)
-      this.closeEvent.emit()
-
-    this.loaded = true
-  }
 
   ngOnInit(): void {
   }

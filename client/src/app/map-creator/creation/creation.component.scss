@@ -32,4 +32,7 @@
     background-color: #ffffff;
     width: 100%;
     min-height: 100%;
+    height: fit-content;
+    position: relative;
+    overflow: auto;
 }

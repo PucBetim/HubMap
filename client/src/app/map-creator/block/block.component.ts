@@ -1,6 +1,6 @@
-import { size } from './../models/map';
 import { Component, ElementRef, EventEmitter, HostListener, Input, OnInit, Output } from '@angular/core';
-import { block, position } from '../models/map';
+import { block } from '../models/map';
+import { line } from '../models/line';
 
 @Component({
   selector: 'block',
@@ -10,13 +10,23 @@ import { block, position } from '../models/map';
 export class BlockComponent implements OnInit {
 
   public blockSelected: boolean = false;
+  public line: line = new line;
 
   @Input() block: block;
-  @Output() selectBlockEvent = new EventEmitter<block>();;
+  @Input() parentBlock: block;
+  @Output() selectBlockEvent = new EventEmitter<block>();
 
-  constructor() { }
+  @HostListener('document:click', ['$event'])
+  clickout(event: any) {
+    if (!this.eRef.nativeElement.contains(event.target)) {
+      if (this.blockSelected) this.blockSelected = false;
+    }
+  }
+
+  constructor(private eRef: ElementRef) { }
 
   ngOnInit(): void {
+    console.log(this.parentBlock)
   }
 
   clickInside() {
@@ -37,7 +47,6 @@ export class BlockComponent implements OnInit {
     this.block.size.width = event.target.clientWidth;
     this.block.size.height = event.target.clientHeight;
   }
-
 
 
   addBlock(location: string) {
