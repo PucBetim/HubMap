@@ -1,16 +1,16 @@
-<block (selectBlockEvent)="emitSelect($event)" (click)="displayEditStyle = false" *ngFor="let childBlock of this.block.blocks"
+<block (selectBlockEvent)="emitSelect($event)" (click)="blockSelected = false" *ngFor="let childBlock of this.block.blocks"
     [block]="childBlock"></block>
 
-<style-editor [clickInside]="clickInside" [block]="block" *ngIf="displayEditStyle"
-    (closeEvent)="displayEditStyle = false"></style-editor>
+<style-editor [clickInside]="clickInside" [block]="block" *ngIf="blockSelected"
+    (closeEvent)="blockSelected = false"></style-editor>
 
 <div type="text" class="block" cdkDragBoundary=".canvas" cdkDrag [cdkDragFreeDragPosition]="block.position"
-    (mousedown)="editStyle()" [style.background-color]="block.backgroundColor">
+    (mousedown)="clickInside()" [style.background-color]="block.backgroundColor">
 
 
-    <div [style.border-color]="block.backgroundColor" class="highlighted" *ngIf="displayEditStyle"></div>
+    <div [style.border-color]="block.backgroundColor" class="highlighted" *ngIf="blockSelected"></div>
 
-    <div class="highlighted darker" *ngIf="displayEditStyle">
+    <div class="highlighted darker" *ngIf="blockSelected">
         <button [style.color]="block.backgroundColor" matTooltip="Adicionar Bloco Acima" [matTooltipPosition]="'above'"
             class="addBlockUpIcon" matTooltipClass="tooltip" mat-icon-button (click)="addBlock('above')">
             <mat-icon>keyboard_arrow_up</mat-icon>

@@ -19,7 +19,7 @@ export class StyleEditorComponent implements OnInit {
   constructor(private eRef: ElementRef) { }
 
   @Input() block: block;
-  @Input() clickInside: boolean;
+  @Input() clickedInside: boolean;
   @Output() closeEvent = new EventEmitter<string>();
 
   @ViewChild('triggerBckg', { static: false }) triggerBkg: MatMenuTrigger;
@@ -28,7 +28,7 @@ export class StyleEditorComponent implements OnInit {
 
   @HostListener('document:click', ['$event'])
   clickout(event: any) {
-    if (!this.eRef.nativeElement.contains(event.target) && this.loaded && !this.clickInside)
+    if (!this.eRef.nativeElement.contains(event.target) && this.loaded && !this.clickedInside)
       this.closeEvent.emit()
 
     this.loaded = true

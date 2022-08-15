@@ -8,32 +8,22 @@ import { block, position } from '../models/map';
 })
 export class BlockComponent implements OnInit {
 
-  public clickInside: boolean = true;
-  public displayEditStyle: boolean = false;
+  public blockSelected: boolean = false;
 
   @Input() block: block;
   @Output() selectBlockEvent = new EventEmitter<block>();;
 
-  @HostListener('document:click', ['$event'])
-  clickout(event: any) {
-    if (this.eRef.nativeElement.contains(event.target))
-      this.clickInside = true;
-    else
-      this.clickInside = false;
-  }
-
-  constructor(private eRef: ElementRef) { }
+  constructor() { }
 
   ngOnInit(): void {
   }
 
-  editStyle() {
-    this.displayEditStyle = true;
+  clickInside() {
+    this.blockSelected = true;
     this.emitSelect(this.block);
   }
 
   emitSelect(block: block) {
-    this.displayEditStyle
     this.selectBlockEvent.emit(block);
   }
 
@@ -78,3 +68,11 @@ export class BlockComponent implements OnInit {
   }
 
 }
+//
+//
+//
+//
+//
+//
+//
+//
