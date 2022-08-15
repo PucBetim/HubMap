@@ -48,6 +48,7 @@ export class CreationComponent implements OnInit {
   }
 
   deleteBlock(blocks: block[]) {
+    console.log(blocks)
     for (let i = 0; i < blocks.length; i++) {
       if (blocks[i] == this.selectedBlock) {
         const index = blocks.indexOf(this.selectedBlock, 0);

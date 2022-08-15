@@ -1,3 +1,4 @@
+import { size } from './../models/map';
 import { Component, ElementRef, EventEmitter, HostListener, Input, OnInit, Output } from '@angular/core';
 import { block, position } from '../models/map';
 
@@ -37,42 +38,41 @@ export class BlockComponent implements OnInit {
     this.block.size.height = event.target.clientHeight;
   }
 
+
+
   addBlock(location: string) {
     let dislocation = 50;
-    let newBlock = new block;
 
-    newBlock.content = "Digite seu texto aqui!"
-    newBlock.size = this.block.size
-    newBlock.backgroundColor = this.block.backgroundColor;
-    newBlock.fontColor = this.block.fontColor;
-
-
-    let newPosition = this.block.position;
+    let newHeight = this.block.size.height;
+    let newWidth = this.block.size.width;
+    let newBackgroundColor = this.block.backgroundColor;
+    let newFontColor = this.block.fontColor;
+    let newPositionX = this.block.position.x;
+    let newPositionY = this.block.position.y;
     switch (location) {
       case 'above':
-        newPosition.y -= dislocation;
+        newPositionY -= newHeight + dislocation;
         break;
       case 'right':
-        newPosition.x += dislocation;
+        newPositionX += newWidth + dislocation;
         break;
       case 'below':
-        newPosition.y += dislocation;
+        newPositionY += newHeight + dislocation;
         break;
       case 'left':
-        newPosition.x -= dislocation;
+        newPositionX -= newWidth + dislocation;
         break;
     }
 
-    newBlock.position = newPosition;
+    let newBlock: block = new block;
+    newBlock.content = "Digite seu texto aqui!";
+    newBlock.size.height = newHeight;
+    newBlock.size.width = newWidth;
+    newBlock.backgroundColor = newBackgroundColor;
+    newBlock.fontColor = newFontColor
+    newBlock.position.x = newPositionX;
+    newBlock.position.y = newPositionY;
+
     this.block.blocks.push(newBlock);
   }
-
 }
-//
-//
-//
-//
-//
-//
-//
-//
