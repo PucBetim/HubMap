@@ -10,7 +10,7 @@ import { block } from "../models/map";
 export class TextareaComponent {
   @Output() resize = new EventEmitter();
   @Input() block: block;
-  
+
   width: number;
   height: number;
 

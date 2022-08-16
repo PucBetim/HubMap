@@ -14,7 +14,7 @@
 </style-editor>
 
 <div type="text" class="block" cdkDragBoundary=".canvas" cdkDrag [cdkDragFreeDragPosition]="block.position"
-    (click)="clickInside()" [style.background-color]="block.backgroundColor">
+    (click)="clickInside()" [style.background-color]="block.backgroundColor" (cdkDragMoved)="onDrag($event)">
 
     <div [style.border-color]="block.backgroundColor" class="highlighted" *ngIf="blockSelected"></div>
 
@@ -41,10 +41,10 @@
 
     <app-textarea (resize)="resize($event)" [block]="block"></app-textarea>
 
-    <div class="dragHandle" cdkDragHandle>
-        <mat-icon [style.color]="block.backgroundColor" width="24px">drag_indicator</mat-icon>
+    <div class="dragHandle">
+        <mat-icon [style.color]="block.backgroundColor">drag_indicator</mat-icon>
     </div>
-    <div (click)="changePosition($event)" class="dragHandle darker" cdkDragHandle>
-        <mat-icon width="24px">drag_indicator</mat-icon>
+    <div class="dragHandle darker" cdkDragHandle>
+        <mat-icon>drag_indicator</mat-icon>
     </div>
 </div>
