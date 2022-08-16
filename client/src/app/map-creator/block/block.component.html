@@ -1,8 +1,8 @@
 <svg class="lineSvg" *ngIf="this.parentBlock">
     <line [attr.x1]="this.block.position.x + (this.block.size.width / 2)"
         [attr.y1]="this.block.position.y  + (this.block.size.height / 2)"
-        [attr.x2]="this.parentBlock.position.x  + (this.block.size.width / 2)"
-        [attr.y2]="this.parentBlock.position.y + (this.block.size.height / 2)"
+        [attr.x2]="this.parentBlock.position.x  + (this.parentBlock.size.width / 2)"
+        [attr.y2]="this.parentBlock.position.y + (this.parentBlock.size.height / 2)"
         [style.stroke]="this.block.backgroundColor" />
 </svg>
 
@@ -15,7 +15,6 @@
 
 <div type="text" class="block" cdkDragBoundary=".canvas" cdkDrag [cdkDragFreeDragPosition]="block.position"
     (click)="clickInside()" [style.background-color]="block.backgroundColor">
-
 
     <div [style.border-color]="block.backgroundColor" class="highlighted" *ngIf="blockSelected"></div>
 
@@ -40,12 +39,7 @@
         </button>
     </div>
 
-    <textarea (click)="resize($event)" [(ngModel)]="block.content" [style.width.px]="block.size.width"
-        [style.height.px]="block.size.height" [style.font-style]="block.fontStyle"
-        [style.font-weight]="block.fontWeight" [style.text-decoration]="block.textDecoration"
-        [style.color]="block.fontColor" [style.font-size]="block.fontSize" [style.text-align]="block.textAlign">
-        {{block.content}}
-    </textarea>
+    <app-textarea (resize)="resize($event)" [block]="block"></app-textarea>
 
     <div class="dragHandle" cdkDragHandle>
         <mat-icon [style.color]="block.backgroundColor" width="24px">drag_indicator</mat-icon>

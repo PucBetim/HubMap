@@ -15,7 +15,7 @@
         </div>
     </div>
     <div class="canvas" id="canvas">
-        <block (selectBlockEvent)="selectBlock($event)" *ngFor="let block of map.blocks"
-            [block]="block"></block>
+
+        <block (selectBlockEvent)="selectBlock($event)" *ngFor="let block of map.blocks" [block]="block"></block>
     </div>
 </div>

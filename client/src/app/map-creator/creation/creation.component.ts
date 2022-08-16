@@ -67,4 +67,8 @@ export class CreationComponent implements OnInit {
     localStorage.setItem('mapa', JSON.stringify(this.map));
   }
 
+
+  resizeEvent(event: any){
+    console.log('x')
+  }
 }

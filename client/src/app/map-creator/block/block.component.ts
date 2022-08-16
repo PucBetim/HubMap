@@ -26,7 +26,6 @@ export class BlockComponent implements OnInit {
   constructor(private eRef: ElementRef) { }
 
   ngOnInit(): void {
-    console.log(this.parentBlock)
   }
 
   clickInside() {
@@ -44,10 +43,9 @@ export class BlockComponent implements OnInit {
   }
 
   resize(event: any) {
-    this.block.size.width = event.target.clientWidth;
-    this.block.size.height = event.target.clientHeight;
+    this.block.size.width = event.width;
+    this.block.size.height = event.height;
   }
-
 
   addBlock(location: string) {
     let dislocation = 50;
