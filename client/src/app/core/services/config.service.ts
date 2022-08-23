@@ -1,11 +1,11 @@
 
 export class ConfigService {
-    static urlBase: string = 'notUrl';
-    static versaoLocal: string = 'notVersao';
+    static urlBase: string = 'https://hub-map-server.herokuapp.com/';
 
     constructor() { }
 
     public static getUrlApi() {
+        return this.urlBase;
     }
 
     public static getUlrAvatar() {

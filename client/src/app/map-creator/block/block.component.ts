@@ -38,8 +38,10 @@ export class BlockComponent implements OnInit {
   }
 
   onDrag(event: any) {
-      this.block.position.x = event.event.layerX - event.event.offsetX;
-      this.block.position.y = event.event.layerY - event.event.offsetY;
+    console.log(event)
+
+      this.block.position.x = event.layerX - event.offsetX;
+      this.block.position.y = event.layerY - event.offsetY;
   }
 
   resize(event: any) {

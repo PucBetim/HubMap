@@ -1,0 +1,34 @@
+<div class="container">
+    <div class="login">
+        <div class="deco">
+            Login
+        </div>
+        <br>
+        <div>
+            <form [formGroup]="form" (ngSubmit)="login()">
+                <div fxLayout="column" fxLayoutAlign="space-around">
+                    <div class="pb-1">
+                        <mat-form-field>
+                            <input autofocus matInput placeholder="E-mail" [formControl]="form.controls['email']">
+                        </mat-form-field>
+
+                    </div>
+                    <div class="pb-1">
+                        <mat-form-field>
+                            <input autocomplete="off" matInput type="password" placeholder="Senha"
+                                [formControl]="form.controls['password']">
+                        </mat-form-field>
+                    </div>
+
+                    <button mat-raised-button color="primary" type="submit" [disabled]="!form.valid">Login</button>
+                </div>
+            </form>
+        </div>
+        <br>
+        <p><a class="link" routerLink="/user/password-reset">Esqueceu a senha?</a></p>
+        <br><br><br>
+        <button>Entrar</button>
+        <br><br><br>
+        <a class="link" href="/user/create-account">Ainda não tem conta? Registre-se</a>
+    </div>
+</div>

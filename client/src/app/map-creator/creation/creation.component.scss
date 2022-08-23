@@ -5,6 +5,7 @@
     display: grid;
     grid-template: "sidenav gap canvas";
     grid-template-columns: 5em 0.5em auto;
+    position: relative;
 }
 
 .sideBar {
@@ -30,9 +31,11 @@
 .canvas {
     grid-area: canvas;
     background-color: #ffffff;
-    width: 100%;
+    min-width: 100%;
     min-height: 100%;
-    height: fit-content;
     position: relative;
     overflow: auto;
+
+    background-image: repeating-linear-gradient(to bottom, transparent, transparent 5.9em, #e4e4e4 5.9em, #e4e4e4 6em),
+        repeating-linear-gradient(to right, #ffffff, #ffffff 5.9em, #e4e4e4 5.9em, #e4e4e4 6em);
 }

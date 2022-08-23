@@ -13,14 +13,14 @@
 <style-editor [clickInside]="clickInside" [block]="block" *ngIf="blockSelected">
 </style-editor>
 
-<div type="text" class="block" cdkDragBoundary=".canvas" cdkDrag [cdkDragFreeDragPosition]="block.position"
-    (click)="clickInside()" [style.background-color]="block.backgroundColor" (cdkDragMoved)="onDrag($event)">
+<div class="block" cdkDragBoundary=".canvas" cdkDrag [cdkDragFreeDragPosition]="block.position" 
+    (click)="clickInside()" [style.background-color]="block.backgroundColor">
 
     <div [style.border-color]="block.backgroundColor" class="highlighted" *ngIf="blockSelected"></div>
 
-    <div class="highlighted darker" *ngIf="blockSelected">
+    <div class="highlighted" *ngIf="blockSelected">
         <button [style.color]="block.backgroundColor" matTooltip="Adicionar Bloco Acima" [matTooltipPosition]="'above'"
-            class="addBlockUpIcon" matTooltipClass="tooltip" mat-icon-button (click)="addBlock('above')">
+            class="addBlockUpIcon" matTooltipClass="tooltip" mat-icon-button>
             <mat-icon>keyboard_arrow_up</mat-icon>
         </button>
         <button [style.color]="block.backgroundColor" matTooltip="Adicionar Bloco a Direita"
@@ -29,12 +29,29 @@
             <mat-icon>keyboard_arrow_right</mat-icon>
         </button>
         <button [style.color]="block.backgroundColor" matTooltip="Adicionar Bloco Abaixo" [matTooltipPosition]="'below'"
-            class="addBlockBelowIcon" matTooltipClass="tooltip" mat-icon-button (click)="addBlock('below')">
+            class="addBlockBelowIcon" matTooltipClass="tooltip" mat-icon-button>
             <mat-icon>keyboard_arrow_down</mat-icon>
         </button>
         <button [style.color]="block.backgroundColor" matTooltip="Adicionar Bloco a Esquerda"
-            [matTooltipPosition]="'left'" class="addBlockLeftIcon" matTooltipClass="tooltip" mat-icon-button
-            (click)="addBlock('left')">
+            [matTooltipPosition]="'left'" class="addBlockLeftIcon" matTooltipClass="tooltip" mat-icon-button>
+            <mat-icon>keyboard_arrow_left</mat-icon>
+        </button>
+    </div>
+    <div class="highlighted darker" *ngIf="blockSelected">
+        <button matTooltip="Adicionar Bloco Acima" [matTooltipPosition]="'above'" class="addBlockUpIcon"
+            matTooltipClass="tooltip" mat-icon-button (click)="addBlock('above')">
+            <mat-icon>keyboard_arrow_up</mat-icon>
+        </button>
+        <button matTooltip="Adicionar Bloco a Direita" [matTooltipPosition]="'right'" class="addBlockRightIcon"
+            matTooltipClass="tooltip" mat-icon-button (click)="addBlock('right')">
+            <mat-icon>keyboard_arrow_right</mat-icon>
+        </button>
+        <button matTooltip="Adicionar Bloco Abaixo" [matTooltipPosition]="'below'" class="addBlockBelowIcon"
+            matTooltipClass="tooltip" mat-icon-button (click)="addBlock('below')">
+            <mat-icon>keyboard_arrow_down</mat-icon>
+        </button>
+        <button matTooltip="Adicionar Bloco a Esquerda" [matTooltipPosition]="'left'" class="addBlockLeftIcon"
+            matTooltipClass="tooltip" mat-icon-button (click)="addBlock('left')">
             <mat-icon>keyboard_arrow_left</mat-icon>
         </button>
     </div>
@@ -44,7 +61,7 @@
     <div class="dragHandle">
         <mat-icon [style.color]="block.backgroundColor">drag_indicator</mat-icon>
     </div>
-    <div class="dragHandle darker" cdkDragHandle>
+    <div class="dragHandle darker" (click)="onDrag($event)" cdkDragHandle>
         <mat-icon>drag_indicator</mat-icon>
     </div>
 </div>

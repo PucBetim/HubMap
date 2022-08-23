@@ -9,9 +9,9 @@ import { MainLayoutComponent } from './core/layouts/main-layout/main-layout.comp
 
 export const AppRoutes: Routes = [
   {
-    path: 'user', component: UserLayoutComponent,
+    path: 'session', component: UserLayoutComponent,
     children: [
-      { path: '', loadChildren: () => import('./user/user.module').then(m => m.UserModule) },
+      { path: '', loadChildren: () => import('./session/session.module').then(m => m.UserModule) },
     ]
   },
   {
