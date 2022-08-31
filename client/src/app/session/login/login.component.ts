@@ -1,3 +1,4 @@
+import { HttpHeaders, HttpClient } from '@angular/common/http';
 import { Login } from './../models/login';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -27,7 +28,6 @@ export class LoginComponent implements OnInit {
   }
 
   login() {
-    console.log("x")
     if (this.form.dirty && this.form.valid) {
       let p = Object.assign({}, this.loginForm, this.form.value);
       this.sessionService.login(p)

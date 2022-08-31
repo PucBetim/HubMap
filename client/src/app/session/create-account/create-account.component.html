@@ -1,15 +1,49 @@
 <div class="container">
-    <div class="login">
+    <div class="createAccount">
         <div class="deco">
             Criar uma Conta
         </div>
-        <br><br><br><br>
-        <input placeholder="Email">
-        <br><br>
-        <input placeholder="Senha">
-        <br><br>
-        <input placeholder="Confirme a Senha">
-        <br><br><br>
-        <button>Registrar</button>
+        <br>
+        <form [formGroup]="form" (ngSubmit)="createUser()">
+            <div fxLayout="column" fxLayoutAlign="space-around">
+                <div class="pb-1">
+                    <mat-form-field>
+                        <input autofocus matInput placeholder="Nome" [formControl]="form.controls['name']">
+                    </mat-form-field>
+                </div>
+                <div class="pb-1">
+                    <mat-form-field>
+                        <input autofocus matInput placeholder="Apelido" [formControl]="form.controls['nick']">
+                    </mat-form-field>
+                </div>
+                <div class="pb-1">
+                    <mat-form-field>
+                        <input autofocus matInput placeholder="E-mail" [formControl]="form.controls['email']">
+                    </mat-form-field>
+                </div>
+                <div class="pb-1">
+                    <mat-form-field>
+                        <input autofocus matInput placeholder="Confirme seu E-mail"
+                            [formControl]="form.controls['confirmEmail']">
+                    </mat-form-field>
+                </div>
+                <div class="pb-1">
+                    <mat-form-field>
+                        <input autocomplete="off" matInput type="password" placeholder="Senha"
+                            [formControl]="form.controls['password']">
+                    </mat-form-field>
+                </div>
+                <div class="pb-1">
+                    <mat-form-field>
+                        <input autocomplete="off" matInput type="password" placeholder="Confirme sua Senha"
+                            [formControl]="form.controls['confirmPassword']">
+                    </mat-form-field>
+                </div>
+                <button mat-raised-button color="primary" type="submit" [disabled]="!form.valid">Login</button>
+            </div>
+            
+        </form>
+        
     </div>
-</div>
+
+</div>               

@@ -1,7 +1,6 @@
 .main {
     position: absolute;
     background-color: #272736;
-    color: aliceblue;
     width: 100%;
 
     .container {
@@ -14,7 +13,8 @@
         position: relative;
         min-height: fit-content;
         margin-bottom: 50px;
-        
+        color: aliceblue;
+
         h1 {
             grid-area: grid1;
             font-size: 5vh;

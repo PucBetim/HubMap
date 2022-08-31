@@ -12,6 +12,9 @@
     top: 15%;
     z-index: 1;
     text-align: center;
+    background-color: #fff;
+    padding: 2em;
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
 
     .deco {
         position: relative;
@@ -31,9 +34,9 @@
     }
 
     .link {
-        text-decoration: none;
         color: inherit;
         float: left;
+        color: #236099;
     }
 
     .link:hover {

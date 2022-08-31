@@ -3,7 +3,7 @@
     min-height: 80vh;
 }
 
-.login {
+.createAccount {
     position: relative;
     background-color: #272736;
     max-width: 45vh;
@@ -12,6 +12,9 @@
     top: 15%;
     z-index: 1;
     text-align: center;
+    background-color: #fff;
+    padding: 2em;
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
 
     .deco {
         position: relative;
@@ -43,6 +46,7 @@
     button {
         font-size: x-large;
         padding: 1vh 3vh 1vh 3vh;
+        background-color: rgba(#316B83, 0.8);
     }
 
     @keyframes fill {
