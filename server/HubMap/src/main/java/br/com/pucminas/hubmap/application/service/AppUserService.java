@@ -5,7 +5,6 @@ import org.springframework.stereotype.Service;
 
 import br.com.pucminas.hubmap.domain.user.AppUser;
 import br.com.pucminas.hubmap.domain.user.AppUserRepository;
-import br.com.pucminas.hubmap.utils.LoggerUtils;
 import br.com.pucminas.hubmap.utils.StringUtils;
 
 @Service
