@@ -16,8 +16,6 @@ public class AppUserService {
 
 	public AppUser save(AppUser appUser) throws DuplicatedEmailException {
 		
-		LoggerUtils.getLoggerFromClass(AppUserService.class).info("Service. User: " + appUser.getEmail() + "; " + appUser.getId());
-		
 		if (!validateEmail(appUser.getEmail(), appUser.getId())) {
 			throw new DuplicatedEmailException("O email informado já está sendo utilizado");
 		}
