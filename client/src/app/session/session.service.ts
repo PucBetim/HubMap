@@ -1,6 +1,6 @@
 import { User } from './models/user';
 import { BaseService } from './../core/services/base.service';
-import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError, Observable } from 'rxjs';
 import { ConfigService } from '../core/services/config.service';
@@ -17,11 +17,11 @@ export class SessionService extends BaseService {
     headers: new HttpHeaders({
       'Content-Type': 'application/json',
     }),
-    observe: "response" as "body",
-  };
+    observe: "response" as 'body',
+  }
 
   login(login: Login): Observable<Login> {
-    return this.http.post<Login>(ConfigService.getUrlApi() + "login", login, this.options).pipe(catchError(super.serviceError));
+    return this.http.post<Login>((ConfigService.getUrlApi() + "login"), login, this.options).pipe(catchError(super.serviceError));
   };
 
   createUser(user: User): Observable<User> {

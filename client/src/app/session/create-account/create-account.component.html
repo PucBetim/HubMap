@@ -3,7 +3,7 @@
         <div class="deco">
             Criar uma Conta
         </div>
-        <br>
+        <br><br>
         <form [formGroup]="form" (ngSubmit)="createUser()">
             <div fxLayout="column" fxLayoutAlign="space-around">
                 <div class="pb-1">
@@ -39,7 +39,7 @@
                             [formControl]="form.controls['confirmPassword']">
                     </mat-form-field>
                 </div>
-                <button mat-raised-button color="primary" type="submit" [disabled]="!form.valid">Login</button>
+                <button mat-raised-button color="primary" type="submit" [disabled]="!form.valid">Criar</button>
             </div>
             
         </form>
