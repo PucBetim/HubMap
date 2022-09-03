@@ -38,6 +38,7 @@ public class WebSecurityConfigurer implements WebMvcConfigurer{
 			.authorizeRequests()
 				.antMatchers("/h2-console/**").permitAll()
 				.antMatchers(HttpMethod.POST, "/hubmap/appUsers").permitAll()
+				.antMatchers(HttpMethod.POST, "/hubmap/appusers").permitAll()
 				.anyRequest().authenticated()
 		.and()
 			.addFilter(new JWTAuthenticationFilter(authManager))
@@ -56,5 +57,14 @@ public class WebSecurityConfigurer implements WebMvcConfigurer{
 			.allowedOrigins("*")
 			.allowedMethods("POST")
 			.exposedHeaders(SecurityConstants.AUTHORIZATION_HEADER);
+		
+			
+		registry.addMapping("/hubmap/appUsers")
+			.allowedOrigins("*")
+			.allowedMethods("POST");
+		
+		registry.addMapping("/hubmap/appusers")
+		.allowedOrigins("*")
+		.allowedMethods("POST");
 	}
 }
