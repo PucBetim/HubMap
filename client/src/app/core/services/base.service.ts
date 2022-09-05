@@ -17,9 +17,9 @@ export class BaseService {
         errMsg = error.error.errors ? error.error : { errors: [`${error.status} - ${error.statusText}`] };
       }
       else {
-        if (error.status == 401) {
-          ConfigService.resetaLogin();
-        }
+        // if (error.status == 401) {
+        //   ConfigService.resetaLogin();
+        // }
         errMsg = error.message ? `${error.status} - ${error.statusText}` : error.toString();
       }
     } else {

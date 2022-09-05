@@ -14,6 +14,7 @@ import { LandingComponent } from './landing/landing.component';
 import { PageNotFoundComponent } from './core/page-not-found/page-not-found.component';
 import { UserLayoutComponent } from './core/layouts/user-layout/user-layout.component';
 import { MapCreatorLayoutComponent } from './core/layouts/map-creator-layout/map-creator-layout.component';
+import { SharedModule } from './core/shared/shared.module';
 
 @NgModule({
   declarations: [
@@ -31,7 +32,8 @@ import { MapCreatorLayoutComponent } from './core/layouts/map-creator-layout/map
     BrowserAnimationsModule,
     FlexLayoutModule,
     DragDropModule,
-    HttpClientModule
+    HttpClientModule,
+    SharedModule
   ],
   providers: [],
   bootstrap: [AppComponent]

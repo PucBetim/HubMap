@@ -20,6 +20,10 @@
                         </mat-form-field>
                     </div>
 
+                    <br>
+                    <form-error [errors]="errors"></form-error>
+                    <br>
+
                     <button mat-raised-button color="primary" type="submit" [disabled]="!form.valid">Login</button>
                 </div>
             </form>

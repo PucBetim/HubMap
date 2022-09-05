@@ -1,15 +1,16 @@
-import { HttpHeaders, HttpClient } from '@angular/common/http';
-import { Login } from './../models/login';
+import { Login } from '../models/login';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SessionService } from '../session.service';
+import { Router } from '@angular/router';
+import { ConfigService } from 'src/app/core/services/config.service';
 
 @Component({
-  selector: 'app-login',
-  templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss']
+  selector: 'app-signin',
+  templateUrl: './signin.component.html',
+  styleUrls: ['./signin.component.scss']
 })
-export class LoginComponent implements OnInit {
+export class SigninComponent implements OnInit {
 
   public form: FormGroup;
   public errors: any[] = [];
@@ -17,10 +18,12 @@ export class LoginComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private sessionService: SessionService
+    private sessionService: SessionService,
+    private router: Router,
   ) { }
 
   ngOnInit(): void {
+    sessionStorage.clear();
     this.form = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(100)]]
@@ -36,13 +39,14 @@ export class LoginComponent implements OnInit {
             this.onLogin(result);
           },
           error: error => {
-            console.log(error.error);
+            this.errors = ["E-mail ou senha inválidos!"];
           }
         });
     }
   }
 
   onLogin(result: any) {
-    console.log(result)
+    sessionStorage.setItem('hubmap.jwt', result.headers.get('Authorization'));
+    this.router.navigate(['/']);
   }
 }

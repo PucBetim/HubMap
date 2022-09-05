@@ -1,5 +1,5 @@
 import { HttpClientModule } from '@angular/common/http';
-import { LoginComponent } from './login/login.component';
+import { SigninComponent } from './singin/signin.component';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
@@ -11,12 +11,13 @@ import { CreateAccountComponent } from './create-account/create-account.componen
 import { PasswordResetComponent } from './password-reset/password-reset.component';
 import { SessionService } from './session.service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { SharedModule } from '../core/shared/shared.module';
 
 @NgModule({
   declarations: [
     CreateAccountComponent,
     PasswordResetComponent,
-    LoginComponent
+    SigninComponent
   ],
   imports: [
     CommonModule,
@@ -25,7 +26,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     FormsModule,
     MatFormFieldModule,
     MatInputModule,
-    HttpClientModule
+    HttpClientModule,
+    SharedModule
   ],
   providers:[
     SessionService

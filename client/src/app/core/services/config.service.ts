@@ -12,14 +12,15 @@ export class ConfigService {
     }
 
     public static getToken() {
-
+        let token = localStorage.getItem('hubmap.jwt');        
+        if (token) return token;
+        return;
     }
 
     public static getUser() {
-
-    }
-
-    static getDataExpira() {
+        let user = localStorage.getItem('hubmap.user')
+        if(user) return user;
+        return;
     }
 
     public static resetaLogin() {
