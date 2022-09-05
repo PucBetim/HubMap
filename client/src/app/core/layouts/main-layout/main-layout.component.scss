@@ -3,7 +3,7 @@
     background-color: #272736;
     color: aliceblue;
     width: 100%;
-    
+
     .container {
         position: relative;
         min-height: 96vh;
@@ -17,6 +17,7 @@
     min-height: 10vh;
     grid-template-areas:
         'grid1 grid2 grid3 grid4 grid5';
+    grid-template-columns: 25% 15% 15% 15% 30%;
 
     .toolbar_title {
         grid-area: grid1;
@@ -30,15 +31,16 @@
 
     .toolbar_user {
         grid-area: grid5;
-        text-align: right;  
+        text-align: right;
 
-        .btn{
+        .btn {
             margin: 0 0 0 2vh;
         }
 
-        .btn2{
-           background-color: rgba(#6D8299, 0.8);
+        .btn2 {
+            background-color: rgba(#6D8299, 0.8);
         }
+
         .btn:hover {
             transform: scale(1.05);
             animation-name: fill;
@@ -52,6 +54,47 @@
                 background-color: #316B83;
             }
         }
+    }
+
+    .link {
+        color: inherit;
+        color: #236099;
+    }
+
+    .link:hover {
+        color: #77aada;
+    }
+
+    .userLoggedOptions {
+        position: relative;
+        display: grid;
+        grid-template-areas:
+            'grid1 grid2';
+        grid-template-columns: 90% 10%;
+        width: 100%;
+    }
+
+    .grid1 {
+        grid-area: grid1;
+        overflow: hidden;
+        max-width: 50vw;
+    }
+
+    .grid2 {
+        grid-area: grid2;
+        position: relative;
+    }
+}
+
+::ng-deep .userMenu {
+    background-color: #272736;
+
+    ::ng-deep .mat-icon {
+        color: #236099 
+    }
+
+    span {
+        color: #ffffff;
     }
 }
 

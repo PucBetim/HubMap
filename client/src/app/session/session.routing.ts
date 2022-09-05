@@ -10,5 +10,5 @@ export const SessionRoutes: Routes = [
   { path: 'signin', component: SigninComponent },
   { path: 'create-account', component: CreateAccountComponent },
   { path: 'password-reset', component: PasswordResetComponent },
-  { path: 'settings/:id', component: UserSettingsComponent }
+  { path: 'settings', component: UserSettingsComponent }
 ];

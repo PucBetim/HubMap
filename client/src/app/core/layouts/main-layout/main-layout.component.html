@@ -1,10 +1,22 @@
-<div class="main layoutDefaulStyle">
+<div class="main">
     <div class="container">
         <div class="toolbar">
-            <div class="toolbar_title"> <a href="">HubMap</a></div>
+            <div class="toolbar_title layoutDefaultStyle"> <a href="">HubMap</a></div>
             <div class="toolbar_user">
-                <button class="btn" routerLink="session/signin">Login</button>
-                <button class="btn btn2" routerLink="session/create-account">Criar Conta</button>
+                <div #userNotLogged class="layoutDefaultStyle" *ngIf="!user">
+                    <button class="btn" routerLink="session/signin">Login</button>
+                    <button class="btn btn2" routerLink="session/create-account">Criar Conta</button>
+                </div>
+                <div #userLogged class="userLoggedOptions" *ngIf="user">
+                    <div class="grid1">
+                        <h2> Bem vindo(a) {{user.nick}}</h2>
+                    </div>
+                    <div class="grid2">
+                        <button mat-icon-button [matMenuTriggerFor]="userMenu">
+                            <mat-icon>keyboard_arrow_down</mat-icon>
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
         <router-outlet></router-outlet>
@@ -26,3 +38,14 @@
         </div>
     </div>
 </div>
+
+<mat-menu class="userMenu" #userMenu="matMenu" xPosition="before">
+    <button mat-menu-item (click)="configUser()" >
+        <mat-icon class="mat-icon">settings</mat-icon>
+        <span>Configurações de Usuário</span>
+    </button>
+    <button mat-menu-item (click)="logout()">
+        <mat-icon class="mat-icon">exit_to_app</mat-icon>
+        <span>Sair</span>
+    </button>
+</mat-menu>

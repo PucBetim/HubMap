@@ -15,6 +15,8 @@ import { PageNotFoundComponent } from './core/page-not-found/page-not-found.comp
 import { UserLayoutComponent } from './core/layouts/user-layout/user-layout.component';
 import { MapCreatorLayoutComponent } from './core/layouts/map-creator-layout/map-creator-layout.component';
 import { SharedModule } from './core/shared/shared.module';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatButtonModule } from '@angular/material/button';
 
 @NgModule({
   declarations: [
@@ -33,7 +35,9 @@ import { SharedModule } from './core/shared/shared.module';
     FlexLayoutModule,
     DragDropModule,
     HttpClientModule,
-    SharedModule
+    SharedModule,
+    MatMenuModule,
+    MatButtonModule
   ],
   providers: [],
   bootstrap: [AppComponent]

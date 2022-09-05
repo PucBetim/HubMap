@@ -18,7 +18,7 @@ export class ConfigService {
     }
 
     public static getUser() {
-        let user = localStorage.getItem('hubmap.user')
+        let user = JSON.parse(localStorage.getItem('hubmap.user')!);
         if(user) return user;
         return;
     }

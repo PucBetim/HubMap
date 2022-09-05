@@ -1,1 +1,40 @@
-<p>user-settings works!</p>
+<loading *ngIf="carregando"></loading>
+<div class="container">
+    <div class="editAccount">
+        <div class="deco">
+            Configuração de Conta
+        </div>
+        <br><br>
+        <form [formGroup]="form" (ngSubmit)="editUser()">
+            <div fxLayout="column" fxLayoutAlign="space-around">
+                <div class="pb-1">
+                    <mat-form-field>
+                        <input autofocus matInput placeholder="Nome" [formControl]="form.controls['name']">
+                    </mat-form-field>
+                </div>
+                <div class="pb-1">
+                    <mat-form-field>
+                        <input autofocus matInput placeholder="Apelido" [formControl]="form.controls['nick']">
+                    </mat-form-field>
+                </div>
+ 
+                <div class="pb-1">
+                    <mat-form-field>
+                        <input autocomplete="off" matInput type="password" placeholder="Senha"
+                            [formControl]="form.controls['password']">
+                    </mat-form-field>
+                </div>
+                <div class="pb-1">
+                    <mat-form-field>
+                        <input autocomplete="off" matInput type="password" placeholder="Confirme sua Senha"
+                            [formControl]="form.controls['confirmPassword']">
+                    </mat-form-field>
+                </div>
+                <button mat-raised-button color="primary" type="submit" [disabled]="!form.valid">Criar</button>
+            </div>
+            
+        </form>
+        
+    </div>
+
+</div>               

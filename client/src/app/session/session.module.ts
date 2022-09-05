@@ -1,3 +1,4 @@
+import { UserSettingsComponent } from './user-settings/user-settings.component';
 import { HttpClientModule } from '@angular/common/http';
 import { SigninComponent } from './singin/signin.component';
 import { NgModule } from '@angular/core';
@@ -17,7 +18,8 @@ import { SharedModule } from '../core/shared/shared.module';
   declarations: [
     CreateAccountComponent,
     PasswordResetComponent,
-    SigninComponent
+    SigninComponent,
+    UserSettingsComponent
   ],
   imports: [
     CommonModule,

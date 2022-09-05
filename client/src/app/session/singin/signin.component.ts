@@ -3,7 +3,6 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SessionService } from '../session.service';
 import { Router } from '@angular/router';
-import { ConfigService } from 'src/app/core/services/config.service';
 
 @Component({
   selector: 'app-signin',
@@ -15,6 +14,7 @@ export class SigninComponent implements OnInit {
   public form: FormGroup;
   public errors: any[] = [];
   public loginForm: Login;
+  public carregando: boolean = false;
 
   constructor(
     private fb: FormBuilder,
@@ -31,22 +31,34 @@ export class SigninComponent implements OnInit {
   }
 
   login() {
+    this.carregando = true;
     if (this.form.dirty && this.form.valid) {
       let p = Object.assign({}, this.loginForm, this.form.value);
       this.sessionService.login(p)
         .subscribe({
           next: result => {
             this.onLogin(result);
+            this.carregando = false;
           },
           error: error => {
             this.errors = ["E-mail ou senha inválidos!"];
+            this.carregando = false;
           }
         });
     }
   }
 
   onLogin(result: any) {
-    sessionStorage.setItem('hubmap.jwt', result.headers.get('Authorization'));
-    this.router.navigate(['/']);
+    sessionStorage.setItem('hubmap.token', result.headers.get('Authorization'));
+    this.sessionService.getUserLogado().subscribe(
+      {
+        next: result => {
+          sessionStorage.setItem('hubmap.user', JSON.stringify(result.body));
+          this.router.navigate(['/']);
+        },
+        error: error => {
+          console.log(error)
+        }
+      })
   }
 }
