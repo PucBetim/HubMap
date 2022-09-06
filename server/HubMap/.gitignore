@@ -39,3 +39,7 @@ out/
 
 ### JAVA Binary Files ###
 /bin/*
+
+
+### PyDev ###
+/.pydevproject
