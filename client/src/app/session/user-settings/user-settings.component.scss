@@ -1,19 +1,25 @@
 .container {
     min-width: 100%;
     min-height: 80vh;
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+
+    background-image: linear-gradient(rgba(#272736, 0.3), rgba(#272736, 0.3)), url("/assets/img/account_settings_bkg.jpg");
+    background-size: cover;
+
+    display: grid;
+    grid-template-areas:
+        'grid1 grid2';
+    grid-template-columns: 35% 65%;
 }
 
 .editAccount {
     position: relative;
-    background-color: #272736;
-    max-width: 45vh;
-    height: 50%;
-    margin: auto;
-    top: 15%;
-    z-index: 1;
-    text-align: center;
-    background-color: #fff;
     padding: 2em;
+    margin: 1em;
+    grid-area: grid1;
+    background-color: #272736;
+    text-align: center;
+    background-color: rgba(255, 255, 255, 0.9);
     box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
 
     .deco {
@@ -24,29 +30,38 @@
         float: left;
     }
 
-    input {
-        border: solid 3px #fff;
-        box-sizing: border-box;
-        font-size: 1.5em;
-        height: 2em;
+
+    .inputfield {
         width: 100%;
-        padding: .5em;
+        text-align: left;
+
+        mat-form-field {
+            width: 100%;
+
+            ::ng-deep input {
+                color: #316B83;
+                font-size: 2em;
+            }
+
+            .icon {
+                color: #316B83;
+            }
+        }
     }
 
-    .link {
-        text-decoration: none;
-        color: inherit;
-        float: left;
-    }
 
-    .link:hover {
-        color: #77aada;
-    }
-
-    button {
+    .btn {
         font-size: x-large;
         padding: 1vh 3vh 1vh 3vh;
         background-color: rgba(#316B83, 0.8);
+    }
+
+    .btn:hover {
+        transform: scale(1.05);
+        animation-name: fill;
+        animation-duration: 300ms;
+        animation-timing-function: linear;
+        animation-fill-mode: forwards;
     }
 
     @keyframes fill {
@@ -54,4 +69,5 @@
             background-color: #316B83;
         }
     }
+
 }

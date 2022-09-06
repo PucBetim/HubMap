@@ -1,5 +1,7 @@
+import { HttpHeaders } from "@angular/common/http";
 
 export class ConfigService {
+
     static urlBase: string = 'https://hub-map-server.herokuapp.com/';
 
     constructor() { }
@@ -8,24 +10,30 @@ export class ConfigService {
         return this.urlBase;
     }
 
-    public static getUlrAvatar() {
+    public static getOptions() {
+        return {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json',
+                'Authorization': this.getToken()
+            }),
+            observe: "response" as 'body',
+        }
     }
 
     public static getToken() {
-        let token = localStorage.getItem('hubmap.jwt');        
+        let token = sessionStorage.getItem('hubmap.token');
         if (token) return token;
-        return;
+        return "";
     }
 
     public static getUser() {
-        let user = JSON.parse(localStorage.getItem('hubmap.user')!);
-        if(user) return user;
+        let user = JSON.parse(sessionStorage.getItem('hubmap.user')!);
+        if (user) return user;
         return;
     }
 
-    public static resetaLogin() {
-        localStorage.clear();
+    public static resetLogin() {
+        sessionStorage.clear();
         window.location.href = "/session/signin";
     }
-
 }

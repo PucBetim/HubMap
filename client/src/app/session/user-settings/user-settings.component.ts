@@ -1,3 +1,4 @@
+import { ConfigService } from 'src/app/core/services/config.service';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { PasswordValidator } from 'src/app/core/shared/validators/password-validator.component';
@@ -23,7 +24,6 @@ export class UserSettingsComponent implements OnInit {
   ngOnInit(): void {
     var _user = JSON.parse(sessionStorage.getItem('hubmap.user')!);
     if (_user) {
-      console.log(_user)
       this.user.name = _user.name;
       this.user.email = _user.email;
       this.user.nick = _user.nick;
@@ -32,8 +32,6 @@ export class UserSettingsComponent implements OnInit {
     this.form = this.fb.group({
       name: ['', [Validators.required]],
       nick: ['', [Validators.required]],
-      password: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(100)]],
-      confirmPassword: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(100), PasswordValidator('password')]]
     });
 
     this.preencherFormEvento()
@@ -42,12 +40,12 @@ export class UserSettingsComponent implements OnInit {
   preencherFormEvento(): void {
     this.form.patchValue({
       name: this.user.name,
-      nick: this.user.email,
+      nick: this.user.nick,
     });
   }
 
   editUser() {
-    if (this.form.dirty && this.form.valid) {
+    if (this.form.dirty && this.form.valid && this.form.dirty) {
       var user = JSON.parse(sessionStorage.getItem('hubmap.user')!)
       if (user) {
         this.carregando = true;
@@ -55,13 +53,13 @@ export class UserSettingsComponent implements OnInit {
         let p = new User;
         p.name = form.name;
         p.nick = form.nick;
-        p.password = form.password;
         p.email = user.email!;
-
-        this.sessionService.createUser(p)
+        console.log(p)
+        this.sessionService.updateUser(p)
           .subscribe({
             next: result => {
               this.carregando = false;
+              ConfigService.resetLogin();
             },
             error: error => {
               this.carregando = false;
