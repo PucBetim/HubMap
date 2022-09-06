@@ -54,3 +54,8 @@ clean {
     	project.file('hubmap.jar').delete()
     }
 }
+
+tasks.withType(Test) {
+    scanForTestClasses = false
+    include "**/*Tests.class"
+}
