@@ -15,18 +15,21 @@ export class BlockComponent implements OnInit {
   @Input() block: block;
   @Input() parentBlock: block;
   @Output() selectBlockEvent = new EventEmitter<block>();
+  @Output() unselectBlockEvent = new EventEmitter<any>();
 
   @HostListener('document:click', ['$event'])
   clickout(event: any) {
     if (!this.eRef.nativeElement.contains(event.target)) {
-      if (this.blockSelected) this.blockSelected = false;
+      if (this.blockSelected) { 
+        this.blockSelected = false ;
+        this.emitUnselect();
+      };
     }
   }
 
   constructor(private eRef: ElementRef) { }
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void { }
 
   clickInside() {
     this.blockSelected = true;
@@ -37,11 +40,13 @@ export class BlockComponent implements OnInit {
     this.selectBlockEvent.emit(block);
   }
 
-  onDrag(event: any) {
-    console.log(event)
+  emitUnselect(){
+    this.unselectBlockEvent.emit();
+  }
 
-      this.block.position.x = event.layerX - event.offsetX;
-      this.block.position.y = event.layerY - event.offsetY;
+  onDrag(event: any) {
+    this.block.position.x = event.layerX - event.offsetX;
+    this.block.position.y = event.layerY - event.offsetY;
   }
 
   resize(event: any) {

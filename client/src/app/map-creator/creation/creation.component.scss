@@ -2,16 +2,16 @@
     height: 100%;
     width: 100%;
     display: grid;
-    grid-template: "sidenav gap canvas";
-    grid-template-columns: 5em 0.5em auto;
+    grid-template: "sidebar gap canvas";
+    grid-template-columns: 75px 10px auto;
     position: relative;
 }
 
 .sideBar {
-    grid-area: sidenav;
+    grid-area: sidebar;
     background-color: #316b83;
 
-    .container {
+    .containerSideBar {
         position: relative;
         text-align: center;
         padding: 0.5em;
@@ -27,18 +27,17 @@
     }
 }
 
-.outro{
-    min-width: 93vw;
-    min-height: 93vh;
-    overflow: scroll;
-    position: relative;
-}
-.canvas {
+.containerCanvas {
     grid-area: canvas;
-    background-color: #ffffff;
-    width: 3000px;
-    height: 2000px;
 
-    background-image: repeating-linear-gradient(to bottom, transparent, transparent 5.9em, #e4e4e4 5.9em, #e4e4e4 6em),
-        repeating-linear-gradient(to right, #ffffff, #ffffff 5.9em, #e4e4e4 5.9em, #e4e4e4 6em);
+    position: relative;
+
+    .canvas {
+        background-color: #ffffff;
+        width: 3840px;
+        height: 2160px;
+        position: relative;
+        background-image: repeating-linear-gradient(to bottom, transparent, transparent 5.9em, #e4e4e4 5.9em, #e4e4e4 6em),
+            repeating-linear-gradient(to right, #ffffff, #ffffff 5.9em, #e4e4e4 5.9em, #e4e4e4 6em);
+    }
 }

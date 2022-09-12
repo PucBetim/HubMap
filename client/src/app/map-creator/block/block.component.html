@@ -1,20 +1,20 @@
 <svg class="lineSvg" *ngIf="this.parentBlock">
-    <line [attr.x1]="this.block.position.x + (this.block.size.width / 2)"
+    <line class="ln" [attr.x1]="this.block.position.x + (this.block.size.width / 2)"
         [attr.y1]="this.block.position.y  + (this.block.size.height / 2)"
         [attr.x2]="this.parentBlock.position.x  + (this.parentBlock.size.width / 2)"
         [attr.y2]="this.parentBlock.position.y + (this.parentBlock.size.height / 2)"
         [style.stroke]="this.block.backgroundColor" />
-</svg>
+</svg> 
 
-<block (selectBlockEvent)="emitSelect($event)" (click)="blockSelected = false"
+<block (selectBlockEvent)="emitSelect($event)" (unselectBlockEvent)="emitUnselect()" (click)="blockSelected = false"
     *ngFor="let childBlock of this.block.blocks" [block]="childBlock" [parentBlock]="this.block">
 </block>
 
 <style-editor [clickInside]="clickInside" [block]="block" *ngIf="blockSelected">
 </style-editor>
 
-<div class="block" cdkDragBoundary=".canvas" cdkDrag [cdkDragFreeDragPosition]="block.position" 
-    (click)="clickInside()" [style.background-color]="block.backgroundColor">
+<div class="block" cdkDragBoundary=".canvas" cdkDrag [cdkDragFreeDragPosition]="block.position" (mousedown)="clickInside()"
+    [style.background-color]="block.backgroundColor">
 
     <div [style.border-color]="block.backgroundColor" class="highlighted" *ngIf="blockSelected"></div>
 

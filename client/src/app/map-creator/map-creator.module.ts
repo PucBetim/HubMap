@@ -15,6 +15,7 @@ import { CreatorRoutes } from './map-creator.routing';
 import { StyleEditorComponent } from './style-editor/style-editor.component';
 import { BlockComponent } from './block/block.component';
 import { TextareaComponent } from './textarea/textarea.component';
+import { DragScrollModule } from 'ngx-drag-scroll';
 
 export const OtherOptions: MatTooltipDefaultOptions = {
   showDelay: 0,
@@ -43,6 +44,7 @@ export const OtherOptions: MatTooltipDefaultOptions = {
     MatMenuModule,
     MatButtonToggleModule,
     MatSelectModule,
+    DragScrollModule
   ],
   providers: [
     { provide: MAT_TOOLTIP_DEFAULT_OPTIONS, useValue: OtherOptions }

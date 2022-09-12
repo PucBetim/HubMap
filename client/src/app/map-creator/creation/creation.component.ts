@@ -16,6 +16,7 @@ export class CreationComponent implements OnInit {
   public map = new map;
   public selectedBlock: block;
   public lines: line[] = [];
+  public blockSelected: boolean = false;
 
   constructor() { }
 
@@ -47,6 +48,11 @@ export class CreationComponent implements OnInit {
 
   selectBlock(block: block) {
     this.selectedBlock = block;
+    this.blockSelected = true;
+  }
+
+  unselectBlock() {
+    this.blockSelected = false;
   }
 
   deleteBlock(blocks: block[]) {
@@ -68,7 +74,7 @@ export class CreationComponent implements OnInit {
   }
 
 
-  resizeEvent(event: any){
+  resizeEvent(event: any) {
     console.log('x')
   }
 }

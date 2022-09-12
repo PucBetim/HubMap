@@ -1,6 +1,6 @@
 <div class="main">
     <div class="sideBar">
-        <div class="container">
+        <div class="containerSideBar">
             <button class="sidebarOption" matTooltipClass="tooltip" matTooltip="Adicionar Bloco" (click)="addNewBlock()"
                 mat-mini-fab>
                 <mat-icon>add_circle</mat-icon>
@@ -14,9 +14,11 @@
             </button>
         </div>
     </div>
-    <div class="outro">
-        <div class="canvas">
-            <block (selectBlockEvent)="selectBlock($event)" *ngFor="let block of map.blocks" [block]="block"></block>
-        </div>
-    </div>
+    <drag-scroll [drag-scroll-disabled]="this.blockSelected" scrollbar-hidden="true" class="containerCanvas">
+            <div class="canvas">
+                <block (selectBlockEvent)="selectBlock($event)" (unselectBlockEvent)="unselectBlock()" *ngFor="let block of map.blocks" [block]="block">
+                </block>
+            </div>
+    </drag-scroll>
+
 </div>
