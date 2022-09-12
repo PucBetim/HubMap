@@ -17,17 +17,15 @@ export class CreationComponent implements OnInit {
   public selectedBlock: block;
   public lines: line[] = [];
   public blockSelected: boolean = false;
+  public savedProgress: [block[]] = [[]];
 
   constructor() { }
 
   ngOnInit(): void {
     this.map = JSON.parse(localStorage.getItem('mapa') || '{}');
+    this.savedProgress = [JSON.parse(JSON.stringify(this.map.blocks))];
   }
 
-  changePosition(event: any, block: block) {
-    block.position.x = event.layerX - event.offsetX - 5;
-    block.position.y = event.layerY - event.offsetY - 5;
-  }
 
   addNewBlock() {
     let _block = new block;
@@ -44,6 +42,7 @@ export class CreationComponent implements OnInit {
       return
     }
     this.map.blocks.push(_block);
+    this.saveProgress();
   }
 
   selectBlock(block: block) {
@@ -56,25 +55,37 @@ export class CreationComponent implements OnInit {
   }
 
   deleteBlock(blocks: block[]) {
-    console.log(blocks)
+    this.blockSelected = false;
     for (let i = 0; i < blocks.length; i++) {
       if (blocks[i] == this.selectedBlock) {
         const index = blocks.indexOf(this.selectedBlock, 0);
         if (index > -1) {
           blocks.splice(index, 1);
         }
+        this.saveProgress();
       }
       else
         this.deleteBlock(blocks[i].blocks)
     }
   }
 
+  undo() {
+    if (this.savedProgress.length > 1) {
+      this.map.blocks = JSON.parse(JSON.stringify(this.savedProgress[this.savedProgress.length - 2]));
+      this.savedProgress.splice(-1)
+    }
+  }
+
+  saveProgress() {
+    if (this.savedProgress.length < 15) {
+      const blocks = JSON.parse(JSON.stringify(this.map.blocks));
+      this.savedProgress.push(blocks)
+    }
+    console.log(this.savedProgress)
+  }
+
   save() {
     localStorage.setItem('mapa', JSON.stringify(this.map));
   }
 
-
-  resizeEvent(event: any) {
-    console.log('x')
-  }
 }

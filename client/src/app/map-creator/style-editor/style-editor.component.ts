@@ -19,6 +19,7 @@ export class StyleEditorComponent implements OnInit {
   constructor(private eRef: ElementRef) { }
 
   @Input() block: block;
+  @Output() saveProgressEvent = new EventEmitter<any>();
 
   @ViewChild('triggerBckg', { static: false }) triggerBkg: MatMenuTrigger;
   @ViewChild('triggerFont', { static: false }) triggerFont: MatMenuTrigger;
@@ -29,6 +30,10 @@ export class StyleEditorComponent implements OnInit {
 
   stopPropagation(event: any) {
     if (event) event.stopPropagation();
+  }
+
+  saveProgress(){
+    this.saveProgressEvent.emit()
   }
 
   style(style: string, event: any) {
@@ -60,10 +65,12 @@ export class StyleEditorComponent implements OnInit {
       default:
         break;
     }
+    this.saveProgress();
   }
 
   changeColor(color: string) {
     this.block.backgroundColor = color;
+    this.saveProgress();
   }
 
   closeMenu(menu: string) {
@@ -80,5 +87,6 @@ export class StyleEditorComponent implements OnInit {
       default:
         break;
     }
+    this.saveProgress();
   }
 }

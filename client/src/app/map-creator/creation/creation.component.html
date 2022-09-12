@@ -12,13 +12,17 @@
             <button class="sidebarOption" matTooltipClass="tooltip" matTooltip="Salvar" (click)="save()" mat-mini-fab>
                 <mat-icon>save</mat-icon>
             </button>
+            <button class="sidebarOption" matTooltipClass="tooltip" matTooltip="Desfazer" (click)="undo()" mat-mini-fab>
+                <mat-icon>keyboard_backspace</mat-icon>
+            </button>
         </div>
     </div>
     <drag-scroll [drag-scroll-disabled]="this.blockSelected" scrollbar-hidden="true" class="containerCanvas">
-            <div class="canvas">
-                <block (selectBlockEvent)="selectBlock($event)" (unselectBlockEvent)="unselectBlock()" *ngFor="let block of map.blocks" [block]="block">
-                </block>
-            </div>
+        <div class="canvas">
+            <block (selectBlockEvent)="selectBlock($event)" (unselectBlockEvent)="unselectBlock()"
+                (saveProgressEvent)="saveProgress()" *ngFor="let block of map.blocks" [block]="block">
+            </block>
+        </div>
     </drag-scroll>
 
 </div>

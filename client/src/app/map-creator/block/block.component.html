@@ -6,11 +6,11 @@
         [style.stroke]="this.block.backgroundColor" />
 </svg> 
 
-<block (selectBlockEvent)="emitSelect($event)" (unselectBlockEvent)="emitUnselect()" (click)="blockSelected = false"
+<block (selectBlockEvent)="emitSelect($event)" (unselectBlockEvent)="emitUnselect()" (saveProgressEvent)="emitSaveProgress()" (click)="blockSelected = false"
     *ngFor="let childBlock of this.block.blocks" [block]="childBlock" [parentBlock]="this.block">
 </block>
 
-<style-editor [clickInside]="clickInside" [block]="block" *ngIf="blockSelected">
+<style-editor (saveProgressEvent)="emitSaveProgress()" [clickInside]="clickInside" [block]="block" *ngIf="blockSelected">
 </style-editor>
 
 <div class="block" cdkDragBoundary=".canvas" cdkDrag [cdkDragFreeDragPosition]="block.position" (mousedown)="clickInside()"

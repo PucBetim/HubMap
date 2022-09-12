@@ -16,12 +16,13 @@ export class BlockComponent implements OnInit {
   @Input() parentBlock: block;
   @Output() selectBlockEvent = new EventEmitter<block>();
   @Output() unselectBlockEvent = new EventEmitter<any>();
+  @Output() saveProgressEvent = new EventEmitter<any>();
 
   @HostListener('document:click', ['$event'])
   clickout(event: any) {
     if (!this.eRef.nativeElement.contains(event.target)) {
-      if (this.blockSelected) { 
-        this.blockSelected = false ;
+      if (this.blockSelected) {
+        this.blockSelected = false;
         this.emitUnselect();
       };
     }
@@ -40,18 +41,24 @@ export class BlockComponent implements OnInit {
     this.selectBlockEvent.emit(block);
   }
 
-  emitUnselect(){
+  emitUnselect() {
     this.unselectBlockEvent.emit();
+  }
+
+  emitSaveProgress() {
+    this.saveProgressEvent.emit();
   }
 
   onDrag(event: any) {
     this.block.position.x = event.layerX - event.offsetX;
     this.block.position.y = event.layerY - event.offsetY;
+    this.emitSaveProgress();
   }
 
   resize(event: any) {
     this.block.size.width = event.width;
     this.block.size.height = event.height;
+    this.emitSaveProgress();
   }
 
   addBlock(location: string) {
@@ -88,5 +95,6 @@ export class BlockComponent implements OnInit {
     newBlock.position.y = newPositionY;
 
     this.block.blocks.push(newBlock);
+    this.emitSaveProgress();
   }
 }
