@@ -6,7 +6,7 @@
         [style.stroke]="this.block.backgroundColor" />
 </svg> 
 
-<block (selectBlockEvent)="emitSelect($event)" (unselectBlockEvent)="emitUnselect()" (saveProgressEvent)="emitSaveProgress()" (click)="blockSelected = false"
+<block (setDragEvent)="setDrag($event)" (selectBlockEvent)="emitSelect($event)" (saveProgressEvent)="emitSaveProgress()" (click)="blockSelected = false"
     *ngFor="let childBlock of this.block.blocks" [block]="childBlock" [parentBlock]="this.block">
 </block>
 
@@ -56,7 +56,7 @@
         </button>
     </div>
 
-    <app-textarea (resize)="resize($event)" [block]="block"></app-textarea>
+    <app-textarea (resizeFinishedEvent)="resizedFinished($event)" (onResizeEvent)="onResize($event)" [block]="block"></app-textarea>
 
     <div class="dragHandle">
         <mat-icon [style.color]="block.backgroundColor">drag_indicator</mat-icon>

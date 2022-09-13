@@ -8,13 +8,14 @@ import { block } from "../models/map";
   styleUrls: ['./textarea.component.scss']
 })
 export class TextareaComponent {
-  @Output() resize = new EventEmitter();
+  @Output() onResizeEvent = new EventEmitter();
+  @Output() resizeFinishedEvent = new EventEmitter();
   @Input() block: block;
 
   width: number;
   height: number;
-
   mouseMoveListener: Function;
+
 
   @HostListener('mousedown', ['$event.target'])
   onMouseDown(el: any) {
@@ -22,9 +23,17 @@ export class TextareaComponent {
     this.height = el.offsetHeight;
     this.mouseMoveListener = this.renderer.listen('document', 'mousemove', () => {
       if (this.width !== el.offsetWidth || this.height !== el.offsetHeight) {
-        this.resize.emit({ width: el.offsetWidth, height: el.offsetHeight });
+        this.onResizeEvent.emit({ width: el.offsetWidth, height: el.offsetHeight });
       }
     });
+  }
+
+  @HostListener('mouseup', ['$event.target'])
+  resizeFinished(el: any) {
+    if (this.width != el.offsetWidth
+      || this.height != el.offsetHeight) {
+      this.resizeFinishedEvent.emit({ width: el.offsetWidth, height: el.offsetHeight });
+    }
   }
 
   @HostListener('document:mouseup')

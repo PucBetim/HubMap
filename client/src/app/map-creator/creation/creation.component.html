@@ -6,20 +6,22 @@
                 <mat-icon>add_circle</mat-icon>
             </button>
             <button class="sidebarOption" matTooltipClass="tooltip" matTooltip="Deletar Bloco"
-                (click)="deleteBlock(this.map.blocks)" mat-mini-fab>
+                (mousedown)="onDeleteBlock(this.map.blocks)" mat-mini-fab [ngClass]="{'disabled' : !blockSelected}"
+                [disabled]="!blockSelected">
                 <mat-icon>delete</mat-icon>
             </button>
             <button class="sidebarOption" matTooltipClass="tooltip" matTooltip="Salvar" (click)="save()" mat-mini-fab>
                 <mat-icon>save</mat-icon>
             </button>
-            <button class="sidebarOption" matTooltipClass="tooltip" matTooltip="Desfazer" (click)="undo()" mat-mini-fab>
+            <button class="sidebarOption" matTooltipClass="tooltip" matTooltip="Desfazer" (click)="undo()" mat-mini-fab
+                [ngClass]="{'disabled': savedProgress.length < 2}" [disabled]="savedProgress.length < 2">
                 <mat-icon>keyboard_backspace</mat-icon>
             </button>
         </div>
     </div>
     <drag-scroll [drag-scroll-disabled]="this.blockSelected" scrollbar-hidden="true" class="containerCanvas">
         <div class="canvas">
-            <block (selectBlockEvent)="selectBlock($event)" (unselectBlockEvent)="unselectBlock()"
+            <block (setDragEvent)="setDrag($event)" (selectBlockEvent)="selectBlock($event)" (unselectBlockEvent)="unselectBlock()"
                 (saveProgressEvent)="saveProgress()" *ngFor="let block of map.blocks" [block]="block">
             </block>
         </div>

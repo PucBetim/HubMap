@@ -21,10 +21,8 @@ export class BlockComponent implements OnInit {
   @HostListener('document:click', ['$event'])
   clickout(event: any) {
     if (!this.eRef.nativeElement.contains(event.target)) {
-      if (this.blockSelected) {
-        this.blockSelected = false;
-        this.emitUnselect();
-      };
+      this.blockSelected = false;
+      this.emitUnselect();
     }
   }
 
@@ -55,9 +53,13 @@ export class BlockComponent implements OnInit {
     this.emitSaveProgress();
   }
 
-  resize(event: any) {
+  onResize(event: any) {
     this.block.size.width = event.width;
     this.block.size.height = event.height;
+  }
+
+  resizedFinished(event: any) {
+    console.log("dsads")
     this.emitSaveProgress();
   }
 

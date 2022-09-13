@@ -1,4 +1,6 @@
+import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { line } from '../models/line';
 
@@ -19,7 +21,7 @@ export class CreationComponent implements OnInit {
   public blockSelected: boolean = false;
   public savedProgress: [block[]] = [[]];
 
-  constructor() { }
+  constructor(public dialog: MatDialog) { }
 
   ngOnInit(): void {
     this.map = JSON.parse(localStorage.getItem('mapa') || '{}');
@@ -54,22 +56,45 @@ export class CreationComponent implements OnInit {
     this.blockSelected = false;
   }
 
-  deleteBlock(blocks: block[]) {
+
+  confirmDeleteConfig = {
+    disableClose: false,
+    width: 'auto',
+    data: {
+      titulo: "Deletar Bloco",
+      texto: "Tem certeza que deseja deletar o bloco selecionado? Todos os blocos filhos também serão excluídos."
+    }
+  };
+
+  onDeleteBlock(blocks: block[]) {
+    if (this.blockSelected) {
+      const dialogRef = this.dialog.open(ConfirmDialogComponent, this.confirmDeleteConfig);
+      dialogRef.afterClosed().subscribe(result => {
+        if (result) {
+          this.deleteBlockRecursive(blocks)
+          console.log('x')
+          this.saveProgress();
+        }
+      });
+    }
     this.blockSelected = false;
+  }
+
+  deleteBlockRecursive(blocks: block[]) {
     for (let i = 0; i < blocks.length; i++) {
       if (blocks[i] == this.selectedBlock) {
         const index = blocks.indexOf(this.selectedBlock, 0);
         if (index > -1) {
           blocks.splice(index, 1);
         }
-        this.saveProgress();
       }
       else
-        this.deleteBlock(blocks[i].blocks)
+        this.deleteBlockRecursive(blocks[i].blocks)
     }
   }
 
   undo() {
+    this.unselectBlock();
     if (this.savedProgress.length > 1) {
       this.map.blocks = JSON.parse(JSON.stringify(this.savedProgress[this.savedProgress.length - 2]));
       this.savedProgress.splice(-1)
@@ -81,11 +106,9 @@ export class CreationComponent implements OnInit {
       const blocks = JSON.parse(JSON.stringify(this.map.blocks));
       this.savedProgress.push(blocks)
     }
-    console.log(this.savedProgress)
   }
 
   save() {
     localStorage.setItem('mapa', JSON.stringify(this.map));
   }
-
 }
