@@ -32,7 +32,7 @@ export class StyleEditorComponent implements OnInit {
     if (event) event.stopPropagation();
   }
 
-  saveProgress(){
+  saveProgress() {
     this.saveProgressEvent.emit()
   }
 
@@ -61,6 +61,9 @@ export class StyleEditorComponent implements OnInit {
         break;
       case "justify":
         this.block.textAlign = "justify";
+        break;
+      case "borderStyle":
+        this.block.circle = !this.block.circle;
         break;
       default:
         break;

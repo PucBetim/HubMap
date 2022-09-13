@@ -2,7 +2,6 @@ import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.compone
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatMenuTrigger } from '@angular/material/menu';
-import { line } from '../models/line';
 
 import { map, block } from './../models/map';
 
@@ -17,7 +16,6 @@ export class CreationComponent implements OnInit {
 
   public map = new map;
   public selectedBlock: block;
-  public lines: line[] = [];
   public blockSelected: boolean = false;
   public savedProgress: [block[]] = [[]];
 
@@ -36,7 +34,7 @@ export class CreationComponent implements OnInit {
     _block.position.y = 100;
     _block.size.width = 150;
     _block.size.height = 75;
-
+    
     if (this.map.blocks == null) {
       let _map = new map;
       _map.blocks[0] = _block;

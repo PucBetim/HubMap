@@ -18,6 +18,7 @@ import { TextareaComponent } from './textarea/textarea.component';
 import { DragScrollModule } from 'ngx-drag-scroll';
 import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
 import { MatDialogModule } from '@angular/material/dialog';
+import { LineSvgComponent } from './line-svg/line-svg.component';
 
 export const OtherOptions: MatTooltipDefaultOptions = {
   showDelay: 0,
@@ -34,7 +35,8 @@ export const OtherOptions: MatTooltipDefaultOptions = {
     StyleEditorComponent,
     BlockComponent,
     TextareaComponent,
-    ConfirmDialogComponent
+    ConfirmDialogComponent,
+    LineSvgComponent,
   ],
   imports: [
     CommonModule,

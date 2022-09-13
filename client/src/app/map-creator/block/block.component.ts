@@ -1,6 +1,5 @@
 import { Component, ElementRef, EventEmitter, HostListener, Input, OnInit, Output } from '@angular/core';
 import { block } from '../models/map';
-import { line } from '../models/line';
 
 @Component({
   selector: 'block',
@@ -10,7 +9,6 @@ import { line } from '../models/line';
 export class BlockComponent implements OnInit {
 
   public blockSelected: boolean = false;
-  public line: line = new line;
 
   @Input() block: block;
   @Input() parentBlock: block;
@@ -56,6 +54,14 @@ export class BlockComponent implements OnInit {
   onResize(event: any) {
     this.block.size.width = event.width;
     this.block.size.height = event.height;
+  }
+
+  refresh() {
+    this.block.position.x = this.block.position.x;
+    this.block.position.y = this.block.position.y;
+
+    this.block.size.width = this.block.size.width;
+    this.block.size.height = this.block.size.height;
   }
 
   resizedFinished(event: any) {

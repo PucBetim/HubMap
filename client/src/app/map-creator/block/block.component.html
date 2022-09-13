@@ -1,24 +1,30 @@
-<svg class="lineSvg" *ngIf="this.parentBlock">
+<!-- <svg class="lineSvg" *ngIf="this.parentBlock">
     <line class="ln" [attr.x1]="this.block.position.x + (this.block.size.width / 2)"
         [attr.y1]="this.block.position.y  + (this.block.size.height / 2)"
         [attr.x2]="this.parentBlock.position.x  + (this.parentBlock.size.width / 2)"
         [attr.y2]="this.parentBlock.position.y + (this.parentBlock.size.height / 2)"
         [style.stroke]="this.block.backgroundColor" />
-</svg> 
+</svg>  -->
 
-<block (setDragEvent)="setDrag($event)" (selectBlockEvent)="emitSelect($event)" (saveProgressEvent)="emitSaveProgress()" (click)="blockSelected = false"
-    *ngFor="let childBlock of this.block.blocks" [block]="childBlock" [parentBlock]="this.block">
+<line-svg [block]="this.block" [parentBlock]="this.parentBlock" *ngIf="this.parentBlock"></line-svg>
+<line-svg darker="true" [block]="this.block" [parentBlock]="this.parentBlock" *ngIf="this.parentBlock"></line-svg>
+
+<block (setDragEvent)="setDrag($event)" (selectBlockEvent)="emitSelect($event)" (saveProgressEvent)="emitSaveProgress()"
+    (click)="blockSelected = false" *ngFor="let childBlock of this.block.blocks" [block]="childBlock"
+    [parentBlock]="this.block">
 </block>
 
-<style-editor (saveProgressEvent)="emitSaveProgress()" [clickInside]="clickInside" [block]="block" *ngIf="blockSelected">
+<style-editor (saveProgressEvent)="emitSaveProgress()" [clickInside]="clickInside" [block]="block"
+    *ngIf="blockSelected">
 </style-editor>
 
-<div class="block" cdkDragBoundary=".canvas" cdkDrag [cdkDragFreeDragPosition]="block.position" (mousedown)="clickInside()"
-    [style.background-color]="block.backgroundColor">
+<div class="block" cdkDragBoundary=".canvas" cdkDrag [cdkDragFreeDragPosition]="block.position"
+    (mousedown)="clickInside()" [style.background-color]="block.backgroundColor"
+    [style.border-radius]="block.circle == true ? '50%' : '4px'">
 
-    <div [style.border-color]="block.backgroundColor" class="highlighted" *ngIf="blockSelected"></div>
+    <div [style.border-color]="block.backgroundColor" class="highlighted" *ngIf="blockSelected" [style.border-radius]="block.circle == true ? '50%' : '4px'"></div>
 
-    <div class="highlighted" *ngIf="blockSelected">
+    <div class="highlighted" *ngIf="blockSelected" [style.border-radius]="block.circle == true ? '50%' : '4px'">
         <button [style.color]="block.backgroundColor" matTooltip="Adicionar Bloco Acima" [matTooltipPosition]="'above'"
             class="addBlockUpIcon" matTooltipClass="tooltip" mat-icon-button>
             <mat-icon>keyboard_arrow_up</mat-icon>
@@ -37,7 +43,7 @@
             <mat-icon>keyboard_arrow_left</mat-icon>
         </button>
     </div>
-    <div class="highlighted darker" *ngIf="blockSelected">
+    <div class="highlighted darker" *ngIf="blockSelected" [style.border-radius]="block.circle == true ? '50%' : '4px'">
         <button matTooltip="Adicionar Bloco Acima" [matTooltipPosition]="'above'" class="addBlockUpIcon"
             matTooltipClass="tooltip" mat-icon-button (click)="addBlock('above')">
             <mat-icon>keyboard_arrow_up</mat-icon>
@@ -56,7 +62,8 @@
         </button>
     </div>
 
-    <app-textarea (resizeFinishedEvent)="resizedFinished($event)" (onResizeEvent)="onResize($event)" [block]="block"></app-textarea>
+    <app-textarea (resizeFinishedEvent)="resizedFinished($event)" (onResizeEvent)="onResize($event)" [block]="block">
+    </app-textarea>
 
     <div class="dragHandle">
         <mat-icon [style.color]="block.backgroundColor">drag_indicator</mat-icon>
