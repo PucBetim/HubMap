@@ -30,7 +30,8 @@
             "styles": [
               "src/styles.scss"
             ],
-            "scripts": []
+            "scripts": ["../node_modules/html2canvas/dist/html2canvas.min.js"
+          ]
           },
           "configurations": {
             "production": {
@@ -98,7 +99,8 @@
             "styles": [
               "src/styles.scss"
             ],
-            "scripts": []
+            "scripts": ["../node_modules/html2canvas/dist/html2canvas.min.js"
+          ]
           }
         }
       }

@@ -1,4 +1,4 @@
-import { position, block, size } from './../models/map';
+import { position, block } from './../models/map';
 import { Component, ElementRef, EventEmitter, HostListener, Input, OnInit, Output } from '@angular/core';
 
 @Component({

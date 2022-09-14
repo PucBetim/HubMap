@@ -10,14 +10,46 @@
 .sideBar {
     grid-area: sidebar;
     background-color: #316b83;
+    position: relative;
+    overflow: hidden;
 
     .containerSideBar {
-        position: relative;
+        position: absolute;
         text-align: center;
-        padding: 0.5em;
+
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        width: 100%;
 
         .sidebarOption {
+            flex: 1;
             margin: 0.5em;
+            align-self: center;
+            height: fit-content;
+        }
+
+        .iconOption {
+            max-height: 40px;
+        }
+
+        .bottom {
+            position: relative;
+            text-align: center;
+
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            width: 100%;
+            min-height: 100%;
+            justify-content: flex-end;
+
+            .sidebarEndOption {
+                flex: 1;
+                margin: 0.5em;
+                align-self: center;
+                max-height: 40px;
+            }
         }
     }
 

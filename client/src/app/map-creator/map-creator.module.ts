@@ -11,7 +11,7 @@ import { FormsModule } from '@angular/forms';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatSelectModule } from '@angular/material/select';
 
-import { CreationComponent } from './creation/creation.component';
+import { CreationComponent } from './main/creation.component';
 import { CreatorRoutes } from './map-creator.routing';
 import { StyleEditorComponent } from './style-editor/style-editor.component';
 import { BlockComponent } from './block/block.component';
@@ -20,6 +20,9 @@ import { DragScrollModule } from 'ngx-drag-scroll';
 import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { LineSvgComponent } from './line-svg/line-svg.component';
+import { ExportImageComponent } from './export-image/export-image.component';
+import { VisualBlockComponent } from './export-image/visual-block/visual-block.component';
+import { TextDivComponent } from './export-image/text-div/text-div.component';
 
 export const OtherOptions: MatTooltipDefaultOptions = {
   showDelay: 0,
@@ -38,6 +41,9 @@ export const OtherOptions: MatTooltipDefaultOptions = {
     TextareaComponent,
     ConfirmDialogComponent,
     LineSvgComponent,
+    ExportImageComponent,
+    VisualBlockComponent,
+    TextDivComponent,
   ],
   imports: [
     CommonModule,

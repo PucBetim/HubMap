@@ -1,11 +1,3 @@
-<!-- <svg class="lineSvg" *ngIf="this.parentBlock">
-    <line class="ln" [attr.x1]="this.block.position.x + (this.block.size.width / 2)"
-        [attr.y1]="this.block.position.y  + (this.block.size.height / 2)"
-        [attr.x2]="this.parentBlock.position.x  + (this.parentBlock.size.width / 2)"
-        [attr.y2]="this.parentBlock.position.y + (this.parentBlock.size.height / 2)"
-        [style.stroke]="this.block.backgroundColor" />
-</svg>  -->
-
 <line-svg [block]="this.block" [parentBlock]="this.parentBlock" *ngIf="this.parentBlock"></line-svg>
 
 <block (setDragEvent)="setDrag($event)" (selectBlockEvent)="emitSelect($event)" (saveProgressEvent)="emitSaveProgress()"

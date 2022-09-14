@@ -1,9 +1,10 @@
+import { ExportImageComponent } from './../export-image/export-image.component';
 import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatMenuTrigger } from '@angular/material/menu';
 
-import { map, block } from './../models/map';
+import { map, block } from '../models/map';
 
 @Component({
   selector: 'app-creation',
@@ -53,19 +54,18 @@ export class CreationComponent implements OnInit {
     this.blockSelected = false;
   }
 
-
-  confirmDeleteConfig = {
-    disableClose: false,
-    width: 'auto',
-    data: {
-      titulo: "Deletar Bloco",
-      texto: "Tem certeza que deseja deletar o bloco selecionado? Todos os blocos filhos também serão excluídos."
-    }
-  };
-
   onDeleteBlock(blocks: block[]) {
+    var confirmDeleteConfig = {
+      disableClose: false,
+      width: 'auto',
+      data: {
+        titulo: "Deletar Bloco",
+        texto: "Tem certeza que deseja deletar o bloco selecionado? Todos os blocos filhos também serão excluídos."
+      }
+    };
+
     if (this.blockSelected) {
-      const dialogRef = this.dialog.open(ConfirmDialogComponent, this.confirmDeleteConfig);
+      const dialogRef = this.dialog.open(ConfirmDialogComponent, confirmDeleteConfig);
       dialogRef.afterClosed().subscribe(result => {
         if (result) {
           this.deleteBlockRecursive(blocks)
@@ -100,12 +100,31 @@ export class CreationComponent implements OnInit {
   saveProgress() {
     if (this.savedProgress.length > 15)
       this.savedProgress.splice(0, 1);
-      console.log('salvo')
+    console.log('salvo')
     const blocks = JSON.parse(JSON.stringify(this.map.blocks));
     this.savedProgress.push(blocks)
   }
 
   save() {
     localStorage.setItem('mapa', JSON.stringify(this.map));
+  }
+
+
+  downloadImage() {
+    var exportImageConfig = {
+      disableClose: false,
+      width: '90%',
+      height: '90%',
+      data: {
+        blocks: this.map.blocks
+      }
+    };
+
+    const dialogRef = this.dialog.open(ExportImageComponent, exportImageConfig);
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        console.log('Imagem Salva')
+      }
+    });
   }
 }

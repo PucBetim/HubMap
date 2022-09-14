@@ -1,0 +1,12 @@
+<button (click)="downloadImage()">dowload</button>
+
+<div class="canvas" #canvas>
+    <visual-block (setDragEvent)="setDrag($event)" (selectBlockEvent)="selectBlock($event)"
+        (unselectBlockEvent)="unselectBlock()" (saveProgressEvent)="saveProgress()" *ngFor="let block of blocks"
+        [block]="block">
+    </visual-block>
+</div>
+<div id="download">
+    <img #canvas>
+    <a #downloadLink></a>
+</div>

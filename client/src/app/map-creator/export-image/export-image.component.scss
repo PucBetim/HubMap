@@ -1,0 +1,8 @@
+    .canvas {
+        background-color: #ffffff;
+        width: 3840px;
+        height: 2160px;
+        position: relative;
+        background-image: repeating-linear-gradient(to bottom, transparent, transparent 5.9em, #e4e4e4 5.9em, #e4e4e4 6em),
+            repeating-linear-gradient(to right, #ffffff, #ffffff 5.9em, #e4e4e4 5.9em, #e4e4e4 6em);
+    }
