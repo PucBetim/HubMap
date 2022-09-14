@@ -113,8 +113,8 @@ export class CreationComponent implements OnInit {
   downloadImage() {
     var exportImageConfig = {
       disableClose: false,
-      width: '90%',
-      height: '90%',
+      width: 'auto',
+      height: 'auto',
       data: {
         blocks: this.map.blocks
       }

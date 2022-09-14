@@ -9,10 +9,6 @@ import { block } from '../../models/map';
 export class TextDivComponent implements OnInit {
   @Input() block: block;
 
-  width: number;
-  height: number;
-  mouseMoveListener: Function;
-
   constructor() { }
 
   ngOnInit(): void {

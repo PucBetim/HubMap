@@ -1,4 +1,4 @@
-import { block } from './../models/map';
+import { block, position } from './../models/map';
 import { Component, ElementRef, Inject, OnInit, ViewChild } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import html2canvas from 'html2canvas';
@@ -14,6 +14,10 @@ export class ExportImageComponent implements OnInit {
   @ViewChild('downloadLink') downloadLink: ElementRef;
 
   public blocks: block[] = [];
+  public closesPoint = new position;
+  public farestPoint = new position;
+  public width: number = 0;
+  public height: number = 0;
 
   constructor(public dialogRef: MatDialogRef<ExportImageComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any) {
@@ -21,7 +25,7 @@ export class ExportImageComponent implements OnInit {
 
   ngOnInit(): void {
     this.blocks = this.data.blocks;
-    this.downloadImage();
+    this.getClosestFartest(this.blocks);
   }
 
   downloadImage() {
@@ -31,6 +35,35 @@ export class ExportImageComponent implements OnInit {
       this.downloadLink.nativeElement.download = 'mapa-mental.png';
       this.downloadLink.nativeElement.click();
     });
+  }
 
+  getClosestFartest(block: block[]) {
+
+    block.forEach(b => {
+      //Closest
+      if (!this.closesPoint.x) { this.closesPoint.x = b.position.x }
+      else
+        this.closesPoint.x = this.closesPoint.x < b.position.x ? this.closesPoint.x : b.position.x;
+
+      if (!this.closesPoint.y) { this.closesPoint.y = b.position.y }
+      else
+        this.closesPoint.y = this.closesPoint.y < b.position.y ? this.closesPoint.y : b.position.y;
+      //Closest end
+
+      //Farest
+      if (!this.farestPoint.x) { this.farestPoint.x = (b.position.x + b.size.width) }
+      else
+        this.farestPoint.x = this.farestPoint.x > (b.position.x + b.size.width) ? this.farestPoint.x : (b.position.x + b.size.width);
+
+      if (!this.farestPoint.y) { this.farestPoint.y = (b.position.y + b.size.height) }
+      else
+        this.farestPoint.y = this.farestPoint.y > (b.position.y + b.size.height) ? this.farestPoint.y : (b.position.y + b.size.height);
+      //Farest End
+
+      this.getClosestFartest(b.blocks)
+    });
+     this.width = this.farestPoint.x + this.closesPoint.x;
+     this.height = this.farestPoint.y + this.closesPoint.y;
+    return;
   }
 }

@@ -1,4 +1,4 @@
-textarea {
+.container {
     min-height: 53px;
     min-width: 93px;
     padding: 0;
@@ -10,4 +10,8 @@ textarea {
     overflow: hidden;
     text-overflow: hidden;
     resize: none;
+
+    line-height: 120%;
+    word-wrap:break-word;
+
 }

@@ -10,6 +10,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { FormsModule } from '@angular/forms';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatSelectModule } from '@angular/material/select';
+import { MatCardModule } from '@angular/material/card';
 
 import { CreationComponent } from './main/creation.component';
 import { CreatorRoutes } from './map-creator.routing';
@@ -58,6 +59,7 @@ export const OtherOptions: MatTooltipDefaultOptions = {
     MatSelectModule,
     DragScrollModule,
     MatDialogModule,
+    MatCardModule,
     SharedModule
   ],
   providers: [
