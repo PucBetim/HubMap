@@ -10,7 +10,6 @@ export class LineSvgComponent implements OnInit {
 
   @Input() block: block;
   @Input() parentBlock: block;
-  @Input() darker: boolean;
 
   blockCenter = new position;
   parentBlockCenter = new position;
@@ -23,7 +22,6 @@ export class LineSvgComponent implements OnInit {
 
     this.parentBlockCenter.x = this.parentBlock.position.x + (this.parentBlock.size.width / 2);
     this.parentBlockCenter.y = this.parentBlock.position.y + (this.parentBlock.size.height / 2);
-
   }
 
 }

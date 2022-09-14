@@ -19,7 +19,7 @@ export class StyleEditorComponent implements OnInit {
   constructor(private eRef: ElementRef) { }
 
   @Input() block: block;
-  @Output() saveProgressEvent = new EventEmitter<any>();
+  @Output() styleAndSaveEvent = new EventEmitter<block>();
 
   @ViewChild('triggerBckg', { static: false }) triggerBkg: MatMenuTrigger;
   @ViewChild('triggerFont', { static: false }) triggerFont: MatMenuTrigger;
@@ -32,8 +32,8 @@ export class StyleEditorComponent implements OnInit {
     if (event) event.stopPropagation();
   }
 
-  saveProgress() {
-    this.saveProgressEvent.emit()
+  styleAndSave() {
+    this.styleAndSaveEvent.emit(this.block)
   }
 
   style(style: string, event: any) {
@@ -51,16 +51,24 @@ export class StyleEditorComponent implements OnInit {
         this.block.textDecoration = this.block.textDecoration == "none" ? "underline" : "none"
         break;
       case "alignLeft":
+        if(this.block.textAlign != "left")
         this.block.textAlign = "left";
+        else return;
         break;
       case "alignCenter":
+        if(this.block.textAlign != "center")
         this.block.textAlign = "center";
+        else return;
         break;
       case "alignRight":
+        if(this.block.textAlign != "right")
         this.block.textAlign = "right";
+        else return;
         break;
       case "justify":
+        if(this.block.textAlign != "justify")
         this.block.textAlign = "justify";
+        else return;
         break;
       case "borderStyle":
         this.block.circle = !this.block.circle;
@@ -68,12 +76,12 @@ export class StyleEditorComponent implements OnInit {
       default:
         break;
     }
-    this.saveProgress();
+    this.styleAndSave();
   }
 
   changeColor(color: string) {
     this.block.backgroundColor = color;
-    this.saveProgress();
+    this.styleAndSave();
   }
 
   closeMenu(menu: string) {
@@ -90,6 +98,5 @@ export class StyleEditorComponent implements OnInit {
       default:
         break;
     }
-    this.saveProgress();
   }
 }

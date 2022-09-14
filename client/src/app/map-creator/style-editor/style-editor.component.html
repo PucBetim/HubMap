@@ -69,7 +69,8 @@
 <mat-menu hasBackdrop="false" #fontsizeMenu="matMenu">
     <div class="fontSizeMenu" (click)="$event.stopPropagation()" (mouseleave)="closeMenu('fontSize')">
 
-        <div class="fontSizeMenuItem" *ngFor="let fontSize of fontSizes" (click)="block.fontSize = fontSize.value">
+        <div class="fontSizeMenuItem" *ngFor="let fontSize of fontSizes" (click)="block.fontSize = fontSize.value"
+            (click)="styleAndSave()">
             {{fontSize.value}}
         </div>
     </div>
@@ -77,15 +78,15 @@
 
 <mat-menu hasBackdrop="false" #colorMenuText="matMenu">
     <div class="colorGrid" (click)="$event.stopPropagation()" (mouseleave)="closeMenu('fontColor')">
-        <div class="colorSelector" (click)="block.fontColor = color.hexValue" *ngFor="let color of colors"
-            [style.background-color]="color.hexValue">
+        <div class="colorSelector" (click)="block.fontColor = color.hexValue" (click)="styleAndSave()"
+            *ngFor="let color of colors" [style.background-color]="color.hexValue">
         </div>
     </div>
 </mat-menu>
 <mat-menu hasBackdrop="false" #colorMenuBackground="matMenu">
     <div class="colorGrid" (click)="$event.stopPropagation()" (mouseleave)="closeMenu('bckgColor')">
-        <div class="colorSelector" (click)="block.backgroundColor = color.hexValue" *ngFor="let color of colors"
-            [style.background-color]="color.hexValue">
+        <div class="colorSelector" (click)="block.backgroundColor = color.hexValue" (click)="styleAndSave()"
+            *ngFor="let color of colors" [style.background-color]="color.hexValue">
         </div>
     </div>
 </mat-menu>

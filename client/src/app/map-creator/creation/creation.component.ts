@@ -26,7 +26,6 @@ export class CreationComponent implements OnInit {
     this.savedProgress = [JSON.parse(JSON.stringify(this.map.blocks))];
   }
 
-
   addNewBlock() {
     let _block = new block;
     _block.content = "Editar";
@@ -34,7 +33,7 @@ export class CreationComponent implements OnInit {
     _block.position.y = 100;
     _block.size.width = 150;
     _block.size.height = 75;
-    
+
     if (this.map.blocks == null) {
       let _map = new map;
       _map.blocks[0] = _block;
@@ -70,7 +69,6 @@ export class CreationComponent implements OnInit {
       dialogRef.afterClosed().subscribe(result => {
         if (result) {
           this.deleteBlockRecursive(blocks)
-          console.log('x')
           this.saveProgress();
         }
       });
@@ -100,10 +98,11 @@ export class CreationComponent implements OnInit {
   }
 
   saveProgress() {
-    if (this.savedProgress.length < 15) {
-      const blocks = JSON.parse(JSON.stringify(this.map.blocks));
-      this.savedProgress.push(blocks)
-    }
+    if (this.savedProgress.length > 15)
+      this.savedProgress.splice(0, 1);
+      console.log('salvo')
+    const blocks = JSON.parse(JSON.stringify(this.map.blocks));
+    this.savedProgress.push(blocks)
   }
 
   save() {

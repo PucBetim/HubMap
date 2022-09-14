@@ -1,5 +1,5 @@
 <svg *ngIf="this.parentBlock && this.block">
-    <path [style.stroke]="!darker ? this.block.backgroundColor : 'rgba(0, 0, 0, 0.2)'" [attr.d]="
+    <path [style.stroke]="this.block.backgroundColor | toneHexColor: -30" [attr.d]="
         'M '+
         (this.block.position.x + (this.block.size.width / 2)) 
         + ' ' +
@@ -19,6 +19,5 @@
         + ',' +
          (this.parentBlock.position.x  + (this.parentBlock.size.width / 2)) 
         + ' ' + 
-        (this.parentBlock.position.y + (this.parentBlock.size.height / 2))"
-        fill="transparent"/>
+        (this.parentBlock.position.y + (this.parentBlock.size.height / 2))" fill="transparent" />
 </svg>

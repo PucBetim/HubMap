@@ -1,3 +1,4 @@
+import { SharedModule } from './../core/shared/shared.module';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
@@ -50,7 +51,8 @@ export const OtherOptions: MatTooltipDefaultOptions = {
     MatButtonToggleModule,
     MatSelectModule,
     DragScrollModule,
-    MatDialogModule
+    MatDialogModule,
+    SharedModule
   ],
   providers: [
     { provide: MAT_TOOLTIP_DEFAULT_OPTIONS, useValue: OtherOptions }

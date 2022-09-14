@@ -4,9 +4,12 @@ import { FormErrorComponent } from './form-error/form-error.component';
 import { LoadingComponent } from './loading/loading.component';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatIconModule } from '@angular/material/icon';
+import { ToneHexColorPipe } from './pipe/tone-hex-color.pipe';
 
 @NgModule({
-  declarations: [FormErrorComponent, LoadingComponent],
+  declarations: [
+    FormErrorComponent, LoadingComponent, ToneHexColorPipe
+  ],
   imports: [
     CommonModule,
     MatProgressSpinnerModule
@@ -14,7 +17,8 @@ import { MatIconModule } from '@angular/material/icon';
   exports: [
     FormErrorComponent,
     LoadingComponent,
-    MatIconModule
+    MatIconModule,
+    ToneHexColorPipe
   ]
 })
 export class SharedModule { }

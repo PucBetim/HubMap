@@ -1,5 +1,5 @@
+import { position, block, size } from './../models/map';
 import { Component, ElementRef, EventEmitter, HostListener, Input, OnInit, Output } from '@angular/core';
-import { block } from '../models/map';
 
 @Component({
   selector: 'block',
@@ -9,6 +9,8 @@ import { block } from '../models/map';
 export class BlockComponent implements OnInit {
 
   public blockSelected: boolean = false;
+  public afterImagePosition: position = { x: 0, y: 0 };
+  public afterImageSize: number;
 
   @Input() block: block;
   @Input() parentBlock: block;
@@ -26,7 +28,10 @@ export class BlockComponent implements OnInit {
 
   constructor(private eRef: ElementRef) { }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {
+    this.afterImageSize = (this.block.size.width + this.block.size.height) / 10
+    this.afterImagePosition = { x: (this.block.position.x + (this.block.size.width / 2) - this.afterImageSize / 2), y: (this.block.position.y + (this.block.size.height / 2) - this.afterImageSize / 2) };
+  }
 
   clickInside() {
     this.blockSelected = true;
@@ -48,24 +53,25 @@ export class BlockComponent implements OnInit {
   onDrag(event: any) {
     this.block.position.x = event.layerX - event.offsetX;
     this.block.position.y = event.layerY - event.offsetY;
+
+    this.afterImagePosition = { x: (this.block.position.x + (this.block.size.width / 2) - this.afterImageSize / 2), y: (this.block.position.y + (this.block.size.height / 2) - this.afterImageSize / 2) };
     this.emitSaveProgress();
   }
 
   onResize(event: any) {
     this.block.size.width = event.width;
     this.block.size.height = event.height;
-  }
 
-  refresh() {
-    this.block.position.x = this.block.position.x;
-    this.block.position.y = this.block.position.y;
-
-    this.block.size.width = this.block.size.width;
-    this.block.size.height = this.block.size.height;
+    this.afterImagePosition = { x: (this.block.position.x + (this.block.size.width / 2) - this.afterImageSize / 2), y: (this.block.position.y + (this.block.size.height / 2) - this.afterImageSize / 2) };
+    this.afterImageSize = (this.block.size.width + this.block.size.height) / 10
   }
 
   resizedFinished(event: any) {
-    console.log("dsads")
+    this.emitSaveProgress();
+  }
+
+  onStyleAndSave(block: block) {
+    this.block = block;
     this.emitSaveProgress();
   }
 
