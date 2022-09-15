@@ -1,4 +1,3 @@
-import { SharedModule } from './../core/shared/shared.module';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
@@ -11,6 +10,8 @@ import { FormsModule } from '@angular/forms';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatSelectModule } from '@angular/material/select';
 import { MatCardModule } from '@angular/material/card';
+import { MatSliderModule } from '@angular/material/slider';
+import { MatDialogModule } from '@angular/material/dialog';
 
 import { CreationComponent } from './main/creation.component';
 import { CreatorRoutes } from './map-creator.routing';
@@ -19,11 +20,11 @@ import { BlockComponent } from './block/block.component';
 import { TextareaComponent } from './textarea/textarea.component';
 import { DragScrollModule } from 'ngx-drag-scroll';
 import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
-import { MatDialogModule } from '@angular/material/dialog';
 import { LineSvgComponent } from './line-svg/line-svg.component';
 import { ExportImageComponent } from './export-image/export-image.component';
 import { VisualBlockComponent } from './export-image/visual-block/visual-block.component';
 import { TextDivComponent } from './export-image/text-div/text-div.component';
+import { SharedModule } from './../core/shared/shared.module';
 
 export const OtherOptions: MatTooltipDefaultOptions = {
   showDelay: 0,
@@ -60,6 +61,7 @@ export const OtherOptions: MatTooltipDefaultOptions = {
     DragScrollModule,
     MatDialogModule,
     MatCardModule,
+    MatSliderModule,
     SharedModule
   ],
   providers: [

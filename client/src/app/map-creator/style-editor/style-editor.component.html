@@ -44,8 +44,8 @@
     <!-- Fim Tamanho da Fonte -->
 
     <!-- Tipo de Borda -->
-    <button class="matEditGridItem" mat-icon-button matTooltipClass="tooltip" matTooltip="Tipo de borda"
-        (click)="style('borderStyle', $event)">
+    <button class="matEditGridItem" #triggerRadius="matMenuTrigger" matTooltipClass="tooltip"
+        matTooltip="Circunferência da Borda" [matMenuTriggerFor]="borderRadiusMenu" mat-icon-button>
         <mat-icon>rounded_corner</mat-icon>
     </button>
     <!-- Fim Tipo de Borda -->
@@ -68,11 +68,19 @@
 <!-- Angular Material Menus -->
 <mat-menu hasBackdrop="false" #fontsizeMenu="matMenu">
     <div class="fontSizeMenu" (click)="$event.stopPropagation()" (mouseleave)="closeMenu('fontSize')">
-
         <div class="fontSizeMenuItem" *ngFor="let fontSize of fontSizes" (click)="block.fontSize = fontSize.value"
             (click)="styleAndSave()">
             {{fontSize.value}}
         </div>
+    </div>
+</mat-menu>
+
+<mat-menu hasBackdrop="false" #borderRadiusMenu="matMenu">
+    <div class="borderRadius" (click)="$event.stopPropagation()" (mouseleave)="closeMenu('borderRadius')">
+        <mat-slider class="slider" (input)="block.borderRadius = radiusValue.value + 'px'" #radiusValue
+            [value]="this.block.borderRadius.replace('px', '')" [tickInterval]="1" [step]="1" min="0"
+            [max]="this.block.size.height / 2">
+        </mat-slider>
     </div>
 </mat-menu>
 

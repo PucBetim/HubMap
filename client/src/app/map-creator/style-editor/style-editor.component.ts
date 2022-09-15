@@ -21,6 +21,7 @@ export class StyleEditorComponent implements OnInit {
   @Input() block: block;
   @Output() styleAndSaveEvent = new EventEmitter<block>();
 
+  @ViewChild('triggerRadius', { static: false }) triggerRadius: MatMenuTrigger;
   @ViewChild('triggerBckg', { static: false }) triggerBkg: MatMenuTrigger;
   @ViewChild('triggerFont', { static: false }) triggerFont: MatMenuTrigger;
   @ViewChild('triggerSize', { static: false }) triggerSize: MatMenuTrigger;
@@ -51,27 +52,27 @@ export class StyleEditorComponent implements OnInit {
         this.block.textDecoration = this.block.textDecoration == "none" ? "underline" : "none"
         break;
       case "alignLeft":
-        if(this.block.textAlign != "left")
-        this.block.textAlign = "left";
+        if (this.block.textAlign != "left")
+          this.block.textAlign = "left";
         else return;
         break;
       case "alignCenter":
-        if(this.block.textAlign != "center")
-        this.block.textAlign = "center";
+        if (this.block.textAlign != "center")
+          this.block.textAlign = "center";
         else return;
         break;
       case "alignRight":
-        if(this.block.textAlign != "right")
-        this.block.textAlign = "right";
+        if (this.block.textAlign != "right")
+          this.block.textAlign = "right";
         else return;
         break;
       case "justify":
-        if(this.block.textAlign != "justify")
-        this.block.textAlign = "justify";
+        if (this.block.textAlign != "justify")
+          this.block.textAlign = "justify";
         else return;
         break;
       case "borderStyle":
-        this.block.circle = !this.block.circle;
+
         break;
       default:
         break;
@@ -86,6 +87,9 @@ export class StyleEditorComponent implements OnInit {
 
   closeMenu(menu: string) {
     switch (menu) {
+      case "borderRadius":
+        this.triggerRadius.closeMenu();
+        break;
       case "fontSize":
         this.triggerSize.closeMenu();
         break;

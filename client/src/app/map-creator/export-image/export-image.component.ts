@@ -24,8 +24,13 @@ export class ExportImageComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.blocks = this.data.blocks;
+    this.blocks = JSON.parse(JSON.stringify(this.data.blocks));
+
     this.getClosestFartest(this.blocks);
+    this.repositionBlock(this.blocks)
+    this.width = this.farestPoint.x - this.closesPoint.x + 60;
+    this.height = this.farestPoint.y - this.closesPoint.y + 60;
+
   }
 
   downloadImage() {
@@ -37,9 +42,9 @@ export class ExportImageComponent implements OnInit {
     });
   }
 
-  getClosestFartest(block: block[]) {
+  getClosestFartest(blocks: block[]) {
 
-    block.forEach(b => {
+    blocks.forEach(b => {
       //Closest
       if (!this.closesPoint.x) { this.closesPoint.x = b.position.x }
       else
@@ -62,8 +67,16 @@ export class ExportImageComponent implements OnInit {
 
       this.getClosestFartest(b.blocks)
     });
-     this.width = this.farestPoint.x + this.closesPoint.x;
-     this.height = this.farestPoint.y + this.closesPoint.y;
+    return;
+  }
+
+  repositionBlock(blocks: block[]) {
+    blocks.forEach(b => {
+      b.position.x -= this.closesPoint.x - 30;
+      b.position.y -= this.closesPoint.y - 30;
+
+      this.repositionBlock(b.blocks);
+    });
     return;
   }
 }

@@ -1,7 +1,6 @@
 <textarea [(ngModel)]="block.content" [style.width.px]="block.size.width" [style.height.px]="block.size.height"
     [style.font-style]="block.fontStyle" [style.font-weight]="block.fontWeight"
     [style.text-decoration]="block.textDecoration" [style.color]="block.fontColor" [style.font-size]="block.fontSize"
-    [style.text-align]="block.textAlign" [style.border-radius]="block.circle == true ? '50%' : '4px'"
-    [style.padding]="block.circle == true ? '25px' : 0">
+    [style.text-align]="block.textAlign" [style.border-radius]="block.borderRadius">
 {{block.content}}
 </textarea>
