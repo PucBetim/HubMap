@@ -1,7 +1,7 @@
 <loading *ngIf="carregando"></loading>
 <div class="container">
     <div class="login">
-        <div class="deco">
+        <div class="title-deco">
             Login
         </div>
         <br><br>
@@ -25,7 +25,7 @@
                     <form-error [errors]="errors"></form-error>
                     <br>
 
-                    <button mat-raised-button color="primary" type="submit" [disabled]="!form.valid">Login</button>
+                    <button  type="submit" [disabled]="!form.valid">Login</button>
                 </div>
             </form>
         </div>

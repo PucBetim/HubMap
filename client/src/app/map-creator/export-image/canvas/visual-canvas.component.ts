@@ -1,46 +1,62 @@
-import { block, position } from './../models/map';
-import { Component, ElementRef, Inject, OnInit, ViewChild } from '@angular/core';
+import { block, position } from '../../models/map';
+import { AfterViewInit, Component, ElementRef, Inject, OnInit, ViewChild } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import html2canvas from 'html2canvas';
 
 @Component({
-  selector: 'export-image',
-  templateUrl: './export-image.component.html',
-  styleUrls: ['./export-image.component.scss']
+  selector: 'visual-canvas',
+  templateUrl: './visual-canvas.component.html',
+  styleUrls: ['./visual-canvas.component.scss']
 })
-export class ExportImageComponent implements OnInit {
+export class VisualCanvasComponent implements OnInit, AfterViewInit {
 
   @ViewChild('canvas') canvas: ElementRef;
+  @ViewChild('showcase') showcase: ElementRef;
   @ViewChild('downloadLink') downloadLink: ElementRef;
 
+  public carregando: boolean = false;
   public blocks: block[] = [];
   public closesPoint = new position;
   public farestPoint = new position;
   public width: number = 0;
   public height: number = 0;
+  public spacingImageBorder: number = 60;
 
-  constructor(public dialogRef: MatDialogRef<ExportImageComponent>,
+  constructor(public dialogRef: MatDialogRef<VisualCanvasComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any) {
   }
+
 
   ngOnInit(): void {
     this.blocks = JSON.parse(JSON.stringify(this.data.blocks));
 
     this.getClosestFartest(this.blocks);
     this.repositionBlock(this.blocks)
-    this.width = this.farestPoint.x - this.closesPoint.x + 60;
-    this.height = this.farestPoint.y - this.closesPoint.y + 60;
+    this.width = this.farestPoint.x - this.closesPoint.x + this.spacingImageBorder + 14; // 14 = Considerar padding e borda
+    this.height = this.farestPoint.y - this.closesPoint.y + this.spacingImageBorder + 14; // 14 = Considerar padding e borda
+  }
 
+  ngAfterViewInit(): void {
+    this.generateImage()
+  }
+
+  generateImage() {
+    this.carregando = true;
+    setTimeout(() => {
+      html2canvas(this.canvas.nativeElement).then(canvas => {
+        this.showcase.nativeElement.src = canvas.toDataURL();
+        this.canvas.nativeElement.src = canvas.toDataURL();
+        this.downloadLink.nativeElement.href = canvas.toDataURL('image/png');
+        this.downloadLink.nativeElement.download = 'mapa-mental.png';
+      });
+      this.carregando = false
+    }, 1000)
   }
 
   downloadImage() {
-    html2canvas(this.canvas.nativeElement).then(canvas => {
-      this.canvas.nativeElement.src = canvas.toDataURL();
-      this.downloadLink.nativeElement.href = canvas.toDataURL('image/png');
-      this.downloadLink.nativeElement.download = 'mapa-mental.png';
-      this.downloadLink.nativeElement.click();
-    });
+    this.downloadLink.nativeElement.click();
   }
+
 
   getClosestFartest(blocks: block[]) {
 
@@ -72,11 +88,10 @@ export class ExportImageComponent implements OnInit {
 
   repositionBlock(blocks: block[]) {
     blocks.forEach(b => {
-      b.position.x -= this.closesPoint.x - 30;
-      b.position.y -= this.closesPoint.y - 30;
-
+      b.position.x -= this.closesPoint.x - this.spacingImageBorder / 2;
+      b.position.y -= this.closesPoint.y - this.spacingImageBorder / 2;
       this.repositionBlock(b.blocks);
+      return;
     });
-    return;
   }
 }

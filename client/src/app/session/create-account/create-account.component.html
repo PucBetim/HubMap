@@ -1,7 +1,7 @@
 <loading *ngIf="carregando"></loading>
 <div class="container">
     <div class="createAccount">
-        <div class="deco">
+        <div class="title-deco">
             Criar uma Conta
         </div>
         <br><br>
@@ -40,7 +40,7 @@
                             [formControl]="form.controls['confirmPassword']">
                     </mat-form-field>
                 </div>
-                <button mat-raised-button color="primary" type="submit" [disabled]="!form.valid">Criar</button>
+                <button type="submit" [disabled]="!form.valid">Criar</button>
             </div>
             
         </form>

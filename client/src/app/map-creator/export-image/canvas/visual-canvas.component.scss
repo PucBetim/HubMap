@@ -2,12 +2,22 @@
        position: relative;
        width: fit-content;
 
+       .margin {
+           margin: 20px;
+       }
+
        .content {
-           width: 250px;
-           height: 250px;
-           border: solid 3px #316b83;
-           position: relative;
            overflow: hidden;
+
+           mat-spinner {
+               margin: auto;
+               position: relative;
+           }
+
+           img {
+               height: 350px;
+               border: solid 3px #316b83;
+           }
        }
    }
 

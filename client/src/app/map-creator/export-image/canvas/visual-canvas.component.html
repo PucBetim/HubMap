@@ -1,0 +1,25 @@
+<div class="container layoutDefaultStyle">
+    <div class="title-deco"> Baixar Mapa Mental </div>
+    <div class="margin">
+        <div mat-dialog-content class="content">
+            <mat-spinner *ngIf="carregando"></mat-spinner>
+            <img #showcase *ngIf="!carregando">
+        </div>
+    </div>
+    <div mat-dialog-actions *ngIf="!carregando">
+        <button  (click)="downloadImage()">Download</button>
+    </div>
+</div>
+
+<div class="hidden">
+    <div class="canvas" #canvas [style.width]="width + 'px'" [style.height]="height + 'px'">
+        <visual-block (setDragEvent)="setDrag($event)" (selectBlockEvent)="selectBlock($event)"
+            (unselectBlockEvent)="unselectBlock()" (saveProgressEvent)="saveProgress()" *ngFor="let block of blocks"
+            [block]="block">
+        </visual-block>
+    </div>
+    <div id="download">
+        <img #canvas>
+        <a #downloadLink></a>
+    </div>
+</div>

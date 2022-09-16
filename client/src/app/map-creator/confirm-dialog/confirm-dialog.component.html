@@ -1,14 +1,18 @@
-<h1 mat-dialog-title *ngIf="!titulo">Confirmar</h1>
-<h1 mat-dialog-title *ngIf="titulo">{{titulo}}</h1>
+<div class="layoutDefaultStyle">
+    <div class="title-deco">
+        <h1 mat-dialog-title *ngIf="!titulo">Confirmar</h1>
+        <h1 mat-dialog-title *ngIf="titulo">{{titulo}}</h1>
+    </div>
+    
+    <div mat-dialog-content *ngIf="!texto">
+        Deseja confirmar a ação?
+    </div>
+    <div mat-dialog-content *ngIf="texto">
+        {{texto}}
+    </div>
 
-<div mat-dialog-content *ngIf="!texto">
-    Deseja confirmar a ação?
+    <mat-dialog-actions align="center">
+        <button class="btn-light" cdkFocusInitial (click)="dialogRef.close()">Cancelar</button>
+        <button (click)="dialogRef.close(true)">Sim</button>
+    </mat-dialog-actions>
 </div>
-<div mat-dialog-content *ngIf="texto">
-    {{texto}}
-</div>
-
-<mat-dialog-actions align="center">
-    <button mat-button cdkFocusInitial (click)="dialogRef.close()">Cancelar</button>
-    <button mat-button (click)="dialogRef.close(true)">Sim</button>
-</mat-dialog-actions>

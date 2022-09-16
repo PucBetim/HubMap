@@ -1,6 +1,6 @@
-import { ExportImageComponent } from './../export-image/export-image.component';
+import { VisualCanvasComponent } from '../export-image/canvas/visual-canvas.component';
 import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatMenuTrigger } from '@angular/material/menu';
 
@@ -120,7 +120,7 @@ export class CreationComponent implements OnInit {
       }
     };
 
-    const dialogRef = this.dialog.open(ExportImageComponent, exportImageConfig);
+    const dialogRef = this.dialog.open(VisualCanvasComponent, exportImageConfig);
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         console.log('Imagem Salva')

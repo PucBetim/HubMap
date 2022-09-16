@@ -12,6 +12,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatCardModule } from '@angular/material/card';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatDialogModule } from '@angular/material/dialog';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 
 import { CreationComponent } from './main/creation.component';
 import { CreatorRoutes } from './map-creator.routing';
@@ -21,7 +22,7 @@ import { TextareaComponent } from './textarea/textarea.component';
 import { DragScrollModule } from 'ngx-drag-scroll';
 import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
 import { LineSvgComponent } from './line-svg/line-svg.component';
-import { ExportImageComponent } from './export-image/export-image.component';
+import { VisualCanvasComponent } from './export-image/canvas/visual-canvas.component';
 import { VisualBlockComponent } from './export-image/visual-block/visual-block.component';
 import { TextDivComponent } from './export-image/text-div/text-div.component';
 import { SharedModule } from './../core/shared/shared.module';
@@ -43,7 +44,7 @@ export const OtherOptions: MatTooltipDefaultOptions = {
     TextareaComponent,
     ConfirmDialogComponent,
     LineSvgComponent,
-    ExportImageComponent,
+    VisualCanvasComponent,
     VisualBlockComponent,
     TextDivComponent,
   ],
@@ -62,7 +63,8 @@ export const OtherOptions: MatTooltipDefaultOptions = {
     MatDialogModule,
     MatCardModule,
     MatSliderModule,
-    SharedModule
+    SharedModule,
+    MatProgressSpinnerModule
   ],
   providers: [
     { provide: MAT_TOOLTIP_DEFAULT_OPTIONS, useValue: OtherOptions }

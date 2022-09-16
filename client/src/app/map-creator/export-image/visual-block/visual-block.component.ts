@@ -18,4 +18,5 @@ export class VisualBlockComponent implements OnInit {
 
   ngOnInit(): void {
   }
+
 }

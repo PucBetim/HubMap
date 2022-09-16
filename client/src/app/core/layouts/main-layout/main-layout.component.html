@@ -1,11 +1,11 @@
-<div class="main">
+<div class="main layoutDefaultStyle">
     <div class="container">
         <div class="toolbar">
-            <div class="toolbar_title layoutDefaultStyle"> <a href="">HubMap</a></div>
+            <div class="toolbar_title"> <a href="">HubMap</a></div>
             <div class="toolbar_user">
-                <div #userNotLogged class="layoutDefaultStyle" *ngIf="!user">
-                    <button class="btn" routerLink="session/signin">Login</button>
-                    <button class="btn btn2" routerLink="session/create-account">Criar Conta</button>
+                <div #userNotLogged *ngIf="!user">
+                    <button routerLink="session/signin">Login</button>
+                    <button class="btn-light" routerLink="session/create-account">Criar Conta</button>
                 </div>
                 <div #userLogged class="userLoggedOptions" *ngIf="user">
                     <div class="grid1">
@@ -19,9 +19,10 @@
                 </div>
             </div>
         </div>
+        
         <router-outlet></router-outlet>
-
     </div>
+
     <div class="footer">
         <div class="ft ft_left">
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc id sem lacus. Duis sed molestie turpis.
@@ -40,7 +41,7 @@
 </div>
 
 <mat-menu class="userMenu" #userMenu="matMenu" xPosition="before">
-    <button mat-menu-item (click)="configUser()" >
+    <button mat-menu-item (click)="configUser()">
         <mat-icon class="mat-icon">settings</mat-icon>
         <span>Configurações de Usuário</span>
     </button>

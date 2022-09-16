@@ -42,10 +42,13 @@ $client-theme: mat.define-light-theme((color: (primary: $client-primary,
 
     button {
         font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-        background-color: rgba(#272736, 0.8);
+        background-color: rgba(#316b83, 0.8);
         color: #f0f8ff;
         border: solid white 2px;
         padding: 1vh;
+        margin: 0 1vh;
+        min-width: 5em;
+
     }
 
     button:hover {
@@ -54,6 +57,22 @@ $client-theme: mat.define-light-theme((color: (primary: $client-primary,
         animation-duration: 300ms;
         animation-timing-function: linear;
         animation-fill-mode: forwards;
+    }
+
+    @keyframes fill {
+        100% {
+            background-color: #234f63;
+        }
+    }
+
+    .btn-light{
+        background-color: rgba(#6D8299, 0.8);
+    }
+
+    .title-deco {
+        font-size: 1.5em;
+        font-weight: bolder;
+        color: #77aada;
     }
 }
 

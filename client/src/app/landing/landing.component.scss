@@ -41,23 +41,8 @@
         }
 
         .btn {
-            background-color: rgba(#316B83, 0.8);
             padding: 30px;
             font-size: xx-large;
-        }
-
-        .btn:hover {
-            transform: scale(1.05);
-            animation-name: fill;
-            animation-duration: 300ms;
-            animation-timing-function: linear;
-            animation-fill-mode: forwards;
-        }
-
-        @keyframes fill {
-            100% {
-                background-color: #316B83;
-            }
         }
     }
 
