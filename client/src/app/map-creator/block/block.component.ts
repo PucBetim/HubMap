@@ -1,4 +1,4 @@
-import { position, block } from './../models/map';
+import { position, block, size } from './../models/map';
 import { Component, ElementRef, EventEmitter, HostListener, Input, OnInit, Output } from '@angular/core';
 
 @Component({
@@ -77,36 +77,24 @@ export class BlockComponent implements OnInit {
 
   addBlock(location: string) {
     let dislocation = 50;
+    let newBlock = JSON.parse(JSON.stringify(this.block))
+    newBlock.blocks = [];
+    newBlock.content = "Clique duplo para editar";
 
-    let newHeight = this.block.size.height;
-    let newWidth = this.block.size.width;
-    let newBackgroundColor = this.block.backgroundColor;
-    let newFontColor = this.block.fontColor;
-    let newPositionX = this.block.position.x;
-    let newPositionY = this.block.position.y;
     switch (location) {
       case 'above':
-        newPositionY -= newHeight + dislocation;
+        newBlock.position.y -= newBlock.size.height + dislocation;
         break;
       case 'right':
-        newPositionX += newWidth + dislocation;
+        newBlock.position.x += newBlock.size.width + dislocation;
         break;
       case 'below':
-        newPositionY += newHeight + dislocation;
+        newBlock.position.y += newBlock.size.height + dislocation;
         break;
       case 'left':
-        newPositionX -= newWidth + dislocation;
+        newBlock.position.x -= newBlock.size.width + dislocation;
         break;
     }
-
-    let newBlock: block = new block;
-    newBlock.content = "Digite seu texto aqui!";
-    newBlock.size.height = newHeight;
-    newBlock.size.width = newWidth;
-    newBlock.backgroundColor = newBackgroundColor;
-    newBlock.fontColor = newFontColor
-    newBlock.position.x = newPositionX;
-    newBlock.position.y = newPositionY;
 
     this.block.blocks.push(newBlock);
     this.emitSaveProgress();

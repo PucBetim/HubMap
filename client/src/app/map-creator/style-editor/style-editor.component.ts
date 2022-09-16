@@ -85,6 +85,10 @@ export class StyleEditorComponent implements OnInit {
     this.styleAndSave();
   }
 
+  formatLabel(value: number) {
+    return value + ' %';
+  }
+
   closeMenu(menu: string) {
     switch (menu) {
       case "borderRadius":

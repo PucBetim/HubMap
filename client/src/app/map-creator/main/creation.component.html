@@ -1,8 +1,9 @@
-<div class="main">
+<div class="main" #main>
     <div class="sideBar">
         <div class="containerSideBar">
             <button class="sidebarOption iconOption" matTooltipClass="tooltip" matTooltip="Adicionar Bloco"
-                (click)="addNewBlock()" mat-mini-fab>
+                (click)="addNewBlock()" mat-mini-fab [ngClass]="{'disabled' : this.map.blocks.length > 0}"
+                [disabled]="this.map.blocks.length > 0">
                 <mat-icon>add_circle</mat-icon>
             </button>
             <button class="sidebarOption iconOption" matTooltipClass="tooltip" matTooltip="Deletar Bloco"
@@ -16,8 +17,8 @@
             </button>
             <div class="sidebarOption">
                 <div class="bottom">
-                    <button class="sidebarEndOption" matTooltipClass="tooltip" matTooltip="Exportar para imagem" (click)="downloadImage()"
-                        mat-mini-fab>
+                    <button class="sidebarEndOption" matTooltipClass="tooltip" matTooltip="Exportar para imagem"
+                        (click)="downloadImage()" mat-mini-fab>
                         <mat-icon>save_alt</mat-icon>
                     </button>
                     <button class="sidebarEndOption" matTooltipClass="tooltip" matTooltip="Salvar" (click)="save()"
@@ -29,11 +30,13 @@
         </div>
     </div>
     <drag-scroll [drag-scroll-disabled]="this.blockSelected" scrollbar-hidden="true" class="containerCanvas">
-        <div class="canvas" #canvas>
-            <block (setDragEvent)="setDrag($event)" (selectBlockEvent)="selectBlock($event)"
-                (unselectBlockEvent)="unselectBlock()" (saveProgressEvent)="saveProgress()"
-                *ngFor="let block of map.blocks" [block]="block">
-            </block>
+        <div >
+            <div class="canvas">
+                <block (setDragEvent)="setDrag($event)" (selectBlockEvent)="selectBlock($event)"
+                    (unselectBlockEvent)="unselectBlock()" (saveProgressEvent)="saveProgress()"
+                    *ngFor="let block of map.blocks" [block]="block">
+                </block>
+            </div>
         </div>
     </drag-scroll>
 </div>

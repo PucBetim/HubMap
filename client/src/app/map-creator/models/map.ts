@@ -16,7 +16,7 @@ export class block {
     fontWeight: string = "normal";
     textDecoration: string = "none";
     textAlign:string = "center";
-    borderRadius: string = "4px";
+    borderRadiusPerc: string = "4";
 }
 
 export class position {

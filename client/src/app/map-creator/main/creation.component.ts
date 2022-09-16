@@ -1,6 +1,6 @@
 import { VisualCanvasComponent } from '../export-image/canvas/visual-canvas.component';
 import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatMenuTrigger } from '@angular/material/menu';
 
@@ -14,6 +14,7 @@ import { map, block } from '../models/map';
 export class CreationComponent implements OnInit {
 
   @ViewChild('editTrigger') editTrigger: MatMenuTrigger;
+  @ViewChild('main') main: ElementRef;
 
   public map = new map;
   public selectedBlock: block;
@@ -23,17 +24,31 @@ export class CreationComponent implements OnInit {
   constructor(public dialog: MatDialog) { }
 
   ngOnInit(): void {
-    this.map = JSON.parse(localStorage.getItem('mapa') || '{}');
+    var _map = JSON.parse(localStorage.getItem('mapa') || '{}');
+
+    if (_map.blocks)
+      this.map = _map;
+
     this.savedProgress = [JSON.parse(JSON.stringify(this.map.blocks))];
+
   }
 
   addNewBlock() {
+    if (this.map.blocks?.length > 0)
+      return;
+
+    console.log(this.main.nativeElement.clientHeight)
+
     let _block = new block;
+    _block.backgroundColor = "#64b5f6"
+    _block.fontColor = "#ffffff"
+    _block.fontSize = "24px"
     _block.content = "Editar";
-    _block.position.x = 100;
-    _block.position.y = 100;
-    _block.size.width = 150;
-    _block.size.height = 75;
+    _block.size.width = 250;
+    _block.size.height = 100;
+    _block.position.x = (this.main.nativeElement.clientWidth / 2) - (_block.size.width / 2);
+    _block.position.y = (this.main.nativeElement.clientHeight / 2) - (_block.size.height / 2);
+
 
     if (this.map.blocks == null) {
       let _map = new map;
@@ -44,6 +59,7 @@ export class CreationComponent implements OnInit {
     this.map.blocks.push(_block);
     this.saveProgress();
   }
+
 
   selectBlock(block: block) {
     this.selectedBlock = block;

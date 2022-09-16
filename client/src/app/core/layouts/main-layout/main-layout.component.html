@@ -1,9 +1,9 @@
-<div class="main layoutDefaultStyle">
+<div class="main">
     <div class="container">
         <div class="toolbar">
-            <div class="toolbar_title"> <a href="">HubMap</a></div>
+            <div class="toolbar_title layoutDefaultStyle"> <a href="">HubMap</a></div>
             <div class="toolbar_user">
-                <div #userNotLogged *ngIf="!user">
+                <div class="layoutDefaultStyle" #userNotLogged *ngIf="!user">
                     <button routerLink="session/signin">Login</button>
                     <button class="btn-light" routerLink="session/create-account">Criar Conta</button>
                 </div>
@@ -19,7 +19,7 @@
                 </div>
             </div>
         </div>
-        
+
         <router-outlet></router-outlet>
     </div>
 

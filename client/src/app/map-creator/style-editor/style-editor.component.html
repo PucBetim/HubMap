@@ -77,9 +77,9 @@
 
 <mat-menu hasBackdrop="false" #borderRadiusMenu="matMenu">
     <div class="borderRadius" (click)="$event.stopPropagation()" (mouseleave)="closeMenu('borderRadius')">
-        <mat-slider class="slider" (input)="block.borderRadius = radiusValue.value + 'px'" #radiusValue
-            [value]="this.block.borderRadius.replace('px', '')" [tickInterval]="1" [step]="1" min="0"
-            [max]="this.block.size.height / 2">
+        <mat-slider class="slider" (input)="block.borderRadiusPerc = radiusValue.value" #radiusValue thumbLabel="false" [tickInterval]="0"
+            [value]="this.block.borderRadiusPerc" thumbLabel [displayWith]="formatLabel" tickInterval="1" step="1"
+            min="0" max="50">
         </mat-slider>
     </div>
 </mat-menu>
