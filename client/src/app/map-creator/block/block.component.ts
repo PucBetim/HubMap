@@ -1,4 +1,5 @@
-import { position, block, size } from './../models/map';
+import { GetLimitPoints } from './../getLimitPoints';
+import { position, block, map } from './../models/map';
 import { Component, ElementRef, EventEmitter, HostListener, Input, OnInit, Output } from '@angular/core';
 
 @Component({
@@ -11,9 +12,12 @@ export class BlockComponent implements OnInit {
   public blockSelected: boolean = false;
   public afterImagePosition: position = { x: 0, y: 0 };
   public afterImageSize: number;
+  public initialContent: string;
 
   @Input() block: block;
   @Input() parentBlock: block;
+  @Input() rootMap: map;
+
   @Output() selectBlockEvent = new EventEmitter<block>();
   @Output() unselectBlockEvent = new EventEmitter<any>();
   @Output() saveProgressEvent = new EventEmitter<any>();
@@ -23,12 +27,16 @@ export class BlockComponent implements OnInit {
     if (!this.eRef.nativeElement.contains(event.target)) {
       this.blockSelected = false;
       this.emitUnselect();
+
+      if (this.initialContent != this.block.content)
+        this.emitSaveProgress();
     }
   }
 
   constructor(private eRef: ElementRef) { }
 
   ngOnInit(): void {
+    this.initialContent = this.block.content;
     this.afterImageSize = (this.block.size.width + this.block.size.height) / 10
     this.afterImagePosition = { x: (this.block.position.x + (this.block.size.width / 2) - this.afterImageSize / 2), y: (this.block.position.y + (this.block.size.height / 2) - this.afterImageSize / 2) };
   }
@@ -66,7 +74,7 @@ export class BlockComponent implements OnInit {
     this.afterImageSize = (this.block.size.width + this.block.size.height) / 10
   }
 
-  resizedFinished(event: any) {
+  resizedFinished() {
     this.emitSaveProgress();
   }
 
@@ -75,24 +83,39 @@ export class BlockComponent implements OnInit {
     this.emitSaveProgress();
   }
 
+
   addBlock(location: string) {
     let dislocation = 50;
     let newBlock = JSON.parse(JSON.stringify(this.block))
     newBlock.blocks = [];
-    newBlock.content = "Clique duplo para editar";
+    newBlock.content = "Clique para editar";
+
+    var closestGap: position = { x: this.block.position.x, y: this.block.position.y }
+    var farestGap: position = { x: 3840 - (this.block.position.x + this.block.size.width + 10), y: 2160 - (this.block.position.y + this.block.size.height + 10) }
+
+    console.log(closestGap)
+    console.log
+    console.log(farestGap)
 
     switch (location) {
       case 'above':
-        newBlock.position.y -= newBlock.size.height + dislocation;
+        if (closestGap.y > (newBlock.size.height + dislocation))
+          newBlock.position.y -= newBlock.size.height + dislocation; else return;
         break;
       case 'right':
-        newBlock.position.x += newBlock.size.width + dislocation;
+        if (farestGap.x > (newBlock.size.width + dislocation))
+          newBlock.position.x += newBlock.size.width + dislocation; else return;
+
         break;
       case 'below':
-        newBlock.position.y += newBlock.size.height + dislocation;
+        if (farestGap.y > (newBlock.size.height + dislocation))
+          newBlock.position.y += newBlock.size.height + dislocation; else return;
+
         break;
       case 'left':
-        newBlock.position.x -= newBlock.size.width + dislocation;
+        if (closestGap.x > (newBlock.size.width + dislocation))
+          newBlock.position.x -= newBlock.size.width + dislocation; else return;
+
         break;
     }
 

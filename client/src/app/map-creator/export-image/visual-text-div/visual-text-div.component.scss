@@ -1,0 +1,28 @@
+.textContainer {
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    hyphens: auto;
+    overflow: hidden;
+    resize: both;
+  }
+  
+  .textDiv {
+    max-width: 100%;
+    padding: 0;
+    text-align: center;
+    justify-content: center;
+    background: transparent;
+    border: none;
+    outline: none;
+    line-height: 1em;
+  
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    hyphens: auto;
+    white-space: normal;
+  
+    top: 50%;
+    transform: translateY(-50%);
+    position: relative;
+  }
+  

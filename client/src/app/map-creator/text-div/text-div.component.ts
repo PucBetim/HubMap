@@ -1,13 +1,12 @@
-import { Component, EventEmitter, HostListener, Input, Output, Renderer2 } from "@angular/core";
+import { Component, EventEmitter, HostListener, Input, Output, Renderer2, ViewChild } from "@angular/core";
 import { block } from "../models/map";
 
-
 @Component({
-  selector: 'app-textarea',
-  templateUrl: './textarea.component.html',
-  styleUrls: ['./textarea.component.scss']
+  selector: 'app-text-div',
+  templateUrl: './text-div.component.html',
+  styleUrls: ['./text-div.component.scss']
 })
-export class TextareaComponent {
+export class TextDivComponent {
   @Output() onResizeEvent = new EventEmitter();
   @Output() resizeFinishedEvent = new EventEmitter();
   @Input() block: block;
@@ -15,7 +14,6 @@ export class TextareaComponent {
   width: number;
   height: number;
   mouseMoveListener: Function;
-
 
   @HostListener('mousedown', ['$event.target'])
   onMouseDown(el: any) {
@@ -35,6 +33,8 @@ export class TextareaComponent {
       this.resizeFinishedEvent.emit({ width: el.offsetWidth, height: el.offsetHeight });
     }
   }
+
+
 
   @HostListener('document:mouseup')
   onMouseUp(el: any) {

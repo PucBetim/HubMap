@@ -1,4 +1,4 @@
-import { VisualCanvasComponent } from '../export-image/canvas/visual-canvas.component';
+import { VisualCanvasComponent } from '../export-image/visual-canvas/visual-canvas.component';
 import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
@@ -116,7 +116,6 @@ export class CreationComponent implements OnInit {
   saveProgress() {
     if (this.savedProgress.length > 15)
       this.savedProgress.splice(0, 1);
-    console.log('salvo')
     const blocks = JSON.parse(JSON.stringify(this.map.blocks));
     this.savedProgress.push(blocks)
   }

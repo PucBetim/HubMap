@@ -16,9 +16,9 @@
 
 <div class="block" cdkDrag cdkDragBoundary=".canvas" [cdkDragFreeDragPosition]="block.position"
     (mousedown)="clickInside()" [style.background-color]="block.backgroundColor"
-    [style.border-radius]="block.borderRadiusPerc + '%'">
+    [style.border-radius]="block.borderRadius + 'px'">
 
-    <div class="highlighted" *ngIf="blockSelected" [style.border-radius]="block.borderRadiusPerc + '%'"
+    <div class="highlighted" *ngIf="blockSelected" [style.border-radius]="block.borderRadius + 'px'"
         [style.border-color]="block.backgroundColor | toneHexColor: -30">
 
         <button [style.color]="block.backgroundColor | toneHexColor: -30" matTooltip="Adicionar Bloco Acima"
@@ -43,8 +43,8 @@
         </button>
     </div>
 
-    <app-textarea (resizeFinishedEvent)="resizedFinished($event)" (onResizeEvent)="onResize($event)" [block]="block">
-    </app-textarea>
+    <app-text-div (resizeFinishedEvent)="resizedFinished()" (onResizeEvent)="onResize($event)" [block]="block">
+    </app-text-div>
 
     <div class="dragHandle" [style.color]="block.backgroundColor | toneHexColor: -30" (click)="onDrag($event)"
         cdkDragHandle>

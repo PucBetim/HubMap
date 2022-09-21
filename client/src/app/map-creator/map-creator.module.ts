@@ -18,13 +18,13 @@ import { CreationComponent } from './main/creation.component';
 import { CreatorRoutes } from './map-creator.routing';
 import { StyleEditorComponent } from './style-editor/style-editor.component';
 import { BlockComponent } from './block/block.component';
-import { TextareaComponent } from './textarea/textarea.component';
+import { TextDivComponent } from './text-div/text-div.component';
 import { DragScrollModule } from 'ngx-drag-scroll';
 import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
 import { LineSvgComponent } from './line-svg/line-svg.component';
-import { VisualCanvasComponent } from './export-image/canvas/visual-canvas.component';
+import { VisualCanvasComponent } from './export-image/visual-canvas/visual-canvas.component';
 import { VisualBlockComponent } from './export-image/visual-block/visual-block.component';
-import { TextDivComponent } from './export-image/text-div/text-div.component';
+import { VisualTextDivComponent } from './export-image/visual-text-div/visual-text-div.component';
 import { SharedModule } from './../core/shared/shared.module';
 
 export const OtherOptions: MatTooltipDefaultOptions = {
@@ -41,12 +41,12 @@ export const OtherOptions: MatTooltipDefaultOptions = {
     CreationComponent,
     StyleEditorComponent,
     BlockComponent,
-    TextareaComponent,
+    TextDivComponent,
     ConfirmDialogComponent,
     LineSvgComponent,
     VisualCanvasComponent,
     VisualBlockComponent,
-    TextDivComponent,
+    VisualTextDivComponent,
   ],
   imports: [
     CommonModule,

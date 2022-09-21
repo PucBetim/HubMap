@@ -30,11 +30,11 @@
         </div>
     </div>
     <drag-scroll [drag-scroll-disabled]="this.blockSelected" scrollbar-hidden="true" class="containerCanvas">
-        <div >
+        <div>
             <div class="canvas">
                 <block (setDragEvent)="setDrag($event)" (selectBlockEvent)="selectBlock($event)"
                     (unselectBlockEvent)="unselectBlock()" (saveProgressEvent)="saveProgress()"
-                    *ngFor="let block of map.blocks" [block]="block">
+                    *ngFor="let block of map.blocks" [block]="block" [rootMap]="map">
                 </block>
             </div>
         </div>

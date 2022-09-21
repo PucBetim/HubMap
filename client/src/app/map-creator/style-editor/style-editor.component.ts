@@ -82,11 +82,12 @@ export class StyleEditorComponent implements OnInit {
 
   changeColor(color: string) {
     this.block.backgroundColor = color;
+    console.log(color)
     this.styleAndSave();
   }
 
   formatLabel(value: number) {
-    return value + ' %';
+    return value + ' px';
   }
 
   closeMenu(menu: string) {

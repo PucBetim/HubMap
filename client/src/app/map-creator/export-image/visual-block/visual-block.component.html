@@ -8,8 +8,8 @@
 
 <div class="visualBlock" [style.border-color]="this.block.backgroundColor | toneHexColor: -30" cdkDrag
     cdkDragDisabled="true" cdkDragBoundary=".canvas" [cdkDragFreeDragPosition]="block.position"
-    [style.background-color]="block.backgroundColor" [style.border-radius]="block.borderRadiusPerc + '%'">
+    [style.background-color]="block.backgroundColor" [style.border-radius]="block.borderRadius + 'px'">
 
-    <text-div [block]="block">
-    </text-div>
+    <visual-text-div [block]="block">
+    </visual-text-div>
 </div>

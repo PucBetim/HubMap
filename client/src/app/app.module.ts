@@ -1,3 +1,4 @@
+import { GetLimitPoints } from './map-creator/getLimitPoints';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
@@ -39,7 +40,7 @@ import { MatButtonModule } from '@angular/material/button';
     MatMenuModule,
     MatButtonModule
   ],
-  providers: [],
+  providers: [GetLimitPoints],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

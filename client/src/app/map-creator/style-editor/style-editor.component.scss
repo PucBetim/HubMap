@@ -62,9 +62,14 @@ mat-form-field.mat-form-field {
 // Grau da Borda
 .borderRadius {
     width: 200px;
-    padding: 20px;
+    padding: 5px;
     overflow: hidden;
 
+    .borderLabel{
+        margin: 0;
+        text-align: center;
+    }
+    
     .slider {
         width: 100%;
     }

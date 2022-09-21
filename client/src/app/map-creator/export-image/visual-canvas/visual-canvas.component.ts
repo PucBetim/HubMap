@@ -2,6 +2,7 @@ import { block, position } from '../../models/map';
 import { AfterViewInit, Component, ElementRef, Inject, OnInit, ViewChild } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import html2canvas from 'html2canvas';
+import { GetLimitPoints } from '../../getLimitPoints';
 
 @Component({
   selector: 'visual-canvas',
@@ -16,24 +17,26 @@ export class VisualCanvasComponent implements OnInit, AfterViewInit {
 
   public carregando: boolean = false;
   public blocks: block[] = [];
-  public closesPoint = new position;
+  public closestPoint = new position;
   public farestPoint = new position;
   public width: number = 0;
   public height: number = 0;
   public spacingImageBorder: number = 60;
 
   constructor(public dialogRef: MatDialogRef<VisualCanvasComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any) {
+    @Inject(MAT_DIALOG_DATA) public data: any, public getLimitPoints: GetLimitPoints) {
   }
 
 
   ngOnInit(): void {
     this.blocks = JSON.parse(JSON.stringify(this.data.blocks));
 
-    this.getClosestFartest(this.blocks);
+    var points = this.getLimitPoints.getClosestFartest(this.blocks);
+    this.closestPoint = points.closestPoint;
+    this.farestPoint = points.farestPoint;
     this.repositionBlock(this.blocks)
-    this.width = this.farestPoint.x - this.closesPoint.x + this.spacingImageBorder + 14; // 14 = Considerar padding e borda
-    this.height = this.farestPoint.y - this.closesPoint.y + this.spacingImageBorder + 14; // 14 = Considerar padding e borda
+    this.width = this.farestPoint.x - this.closestPoint.x + this.spacingImageBorder + 14; // 14 = Considerar padding e borda
+    this.height = this.farestPoint.y - this.closestPoint.y + this.spacingImageBorder + 14; // 14 = Considerar padding e borda
   }
 
   ngAfterViewInit(): void {
@@ -57,39 +60,10 @@ export class VisualCanvasComponent implements OnInit, AfterViewInit {
     this.downloadLink.nativeElement.click();
   }
 
-
-  getClosestFartest(blocks: block[]) {
-
-    blocks.forEach(b => {
-      //Closest
-      if (!this.closesPoint.x) { this.closesPoint.x = b.position.x }
-      else
-        this.closesPoint.x = this.closesPoint.x < b.position.x ? this.closesPoint.x : b.position.x;
-
-      if (!this.closesPoint.y) { this.closesPoint.y = b.position.y }
-      else
-        this.closesPoint.y = this.closesPoint.y < b.position.y ? this.closesPoint.y : b.position.y;
-      //Closest end
-
-      //Farest
-      if (!this.farestPoint.x) { this.farestPoint.x = (b.position.x + b.size.width) }
-      else
-        this.farestPoint.x = this.farestPoint.x > (b.position.x + b.size.width) ? this.farestPoint.x : (b.position.x + b.size.width);
-
-      if (!this.farestPoint.y) { this.farestPoint.y = (b.position.y + b.size.height) }
-      else
-        this.farestPoint.y = this.farestPoint.y > (b.position.y + b.size.height) ? this.farestPoint.y : (b.position.y + b.size.height);
-      //Farest End
-
-      this.getClosestFartest(b.blocks)
-    });
-    return;
-  }
-
   repositionBlock(blocks: block[]) {
     blocks.forEach(b => {
-      b.position.x -= this.closesPoint.x - this.spacingImageBorder / 2;
-      b.position.y -= this.closesPoint.y - this.spacingImageBorder / 2;
+      b.position.x -= this.closestPoint.x - this.spacingImageBorder / 2;
+      b.position.y -= this.closestPoint.y - this.spacingImageBorder / 2;
       this.repositionBlock(b.blocks);
       return;
     });

@@ -76,10 +76,11 @@
 </mat-menu>
 
 <mat-menu hasBackdrop="false" #borderRadiusMenu="matMenu">
-    <div class="borderRadius" (click)="$event.stopPropagation()" (mouseleave)="closeMenu('borderRadius')">
-        <mat-slider class="slider" (input)="block.borderRadiusPerc = radiusValue.value" #radiusValue thumbLabel="false" [tickInterval]="0"
-            [value]="this.block.borderRadiusPerc" thumbLabel [displayWith]="formatLabel" tickInterval="1" step="1"
-            min="0" max="50">
+    <div class="borderRadius">
+        <h3 class="borderLabel">Grau da borda: {{block.borderRadius}} px</h3>
+        <mat-slider class="slider" (input)="block.borderRadius = radiusValue.value" #radiusValue thumbLabel="false" [tickInterval]="0"
+            [value]="this.block.borderRadius" tickInterval="1" step="1"
+            min="0" max="100">
         </mat-slider>
     </div>
 </mat-menu>
