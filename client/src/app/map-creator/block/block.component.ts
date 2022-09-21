@@ -1,6 +1,6 @@
-import { GetLimitPoints } from './../getLimitPoints';
 import { position, block, map } from './../models/map';
 import { Component, ElementRef, EventEmitter, HostListener, Input, OnInit, Output } from '@angular/core';
+import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'block',
@@ -33,7 +33,7 @@ export class BlockComponent implements OnInit {
     }
   }
 
-  constructor(private eRef: ElementRef) { }
+  constructor(private eRef: ElementRef, private snackBar: MatSnackBar) { }
 
   ngOnInit(): void {
     this.initialContent = this.block.content;
@@ -100,26 +100,42 @@ export class BlockComponent implements OnInit {
     switch (location) {
       case 'above':
         if (closestGap.y > (newBlock.size.height + dislocation))
-          newBlock.position.y -= newBlock.size.height + dislocation; else return;
+          newBlock.position.y -= newBlock.size.height + dislocation; else {
+          this.notifySpace()
+          return
+        };
         break;
       case 'right':
         if (farestGap.x > (newBlock.size.width + dislocation))
-          newBlock.position.x += newBlock.size.width + dislocation; else return;
+          newBlock.position.x += newBlock.size.width + dislocation; else {
+          this.notifySpace()
+          return
+        };
 
         break;
       case 'below':
         if (farestGap.y > (newBlock.size.height + dislocation))
-          newBlock.position.y += newBlock.size.height + dislocation; else return;
+          newBlock.position.y += newBlock.size.height + dislocation; else {
+          this.notifySpace()
+          return
+        };
 
         break;
       case 'left':
         if (closestGap.x > (newBlock.size.width + dislocation))
-          newBlock.position.x -= newBlock.size.width + dislocation; else return;
-
+          newBlock.position.x -= newBlock.size.width + dislocation; else {
+          this.notifySpace()
+          return
+        };
         break;
     }
-
     this.block.blocks.push(newBlock);
     this.emitSaveProgress();
+  }
+
+  notifySpace() {
+    this.snackBar.open("Pouco espaço para colocar novo bloco!", "Ok", {
+      duration: 2000
+    })
   }
 }

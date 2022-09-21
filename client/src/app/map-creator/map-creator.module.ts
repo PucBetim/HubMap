@@ -12,7 +12,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatCardModule } from '@angular/material/card';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatDialogModule } from '@angular/material/dialog';
-import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 import { CreationComponent } from './main/creation.component';
 import { CreatorRoutes } from './map-creator.routing';
@@ -65,7 +65,7 @@ export const OtherOptions: MatTooltipDefaultOptions = {
     MatSliderModule,
     SharedModule,
     MatProgressSpinnerModule
-  ],
+    ],
   providers: [
     { provide: MAT_TOOLTIP_DEFAULT_OPTIONS, useValue: OtherOptions }
   ]
