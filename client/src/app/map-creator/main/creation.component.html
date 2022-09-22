@@ -1,25 +1,33 @@
 <div class="main" #main>
+    <loading *ngIf="carregando"></loading>
     <div class="sideBar">
         <div class="containerSideBar">
-            <button class="sidebarOption iconOption" matTooltipClass="tooltip" matTooltip="Adicionar Bloco"
+            <div class="sidebarGrid layoutDefaultStyle option sidebarTitle">
+                <a href="">HubMap</a>
+            </div>
+            <button class="sidebarGrid option" matTooltipClass="tooltip" matTooltip="Adicionar Bloco"
                 (click)="addNewBlock()" mat-mini-fab [ngClass]="{'disabled' : this.map.blocks.length > 0}"
                 [disabled]="this.map.blocks.length > 0">
                 <mat-icon>add_circle</mat-icon>
             </button>
-            <button class="sidebarOption iconOption" matTooltipClass="tooltip" matTooltip="Deletar Bloco"
+            <button class="sidebarGrid option" matTooltipClass="tooltip" matTooltip="Deletar Bloco"
                 (mousedown)="onDeleteBlock(this.map.blocks)" mat-mini-fab [ngClass]="{'disabled' : !blockSelected}"
                 [disabled]="!blockSelected">
                 <mat-icon>delete</mat-icon>
             </button>
-            <button class="sidebarOption iconOption" matTooltipClass="tooltip" matTooltip="Desfazer" (click)="undo()"
+            <button class="sidebarGrid option" matTooltipClass="tooltip" matTooltip="Desfazer" (click)="undo()"
                 mat-mini-fab [ngClass]="{'disabled': savedProgress.length < 2}" [disabled]="savedProgress.length < 2">
                 <mat-icon>keyboard_backspace</mat-icon>
             </button>
-            <div class="sidebarOption">
+            <div class="sidebarGrid">
                 <div class="bottom">
+                    <button class="sidebarEndOption" matTooltipClass="tooltip" matTooltip="Postar mapa"
+                        (click)="post()" mat-mini-fab>
+                        <mat-icon>save_alt</mat-icon>
+                    </button>
                     <button class="sidebarEndOption" matTooltipClass="tooltip" matTooltip="Exportar para imagem"
                         (click)="downloadImage()" mat-mini-fab>
-                        <mat-icon>save_alt</mat-icon>
+                        <mat-icon>image</mat-icon>
                     </button>
                     <button class="sidebarEndOption" matTooltipClass="tooltip" matTooltip="Salvar" (click)="save()"
                         mat-mini-fab>

@@ -14,7 +14,6 @@ export class MainLayoutComponent implements OnInit {
 
   ngOnInit(): void {
     this.user = JSON.parse(sessionStorage.getItem('hubmap.user')!);
-    console.log(this.user)
   }
 
   configUser(){

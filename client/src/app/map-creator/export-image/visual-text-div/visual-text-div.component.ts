@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { block } from '../../models/map';
+import { Block } from '../../../core/shared/posts/map';
 
 @Component({
   selector: 'visual-text-div',
@@ -7,7 +7,7 @@ import { block } from '../../models/map';
   styleUrls: ['./visual-text-div.component.scss']
 })
 export class VisualTextDivComponent implements OnInit {
-  @Input() block: block;
+  @Input() block: Block;
 
   constructor() { }
 

@@ -1,6 +1,6 @@
 import { Component, ElementRef, EventEmitter, HostListener, Input, OnInit, Output, ViewChild, ViewEncapsulation } from '@angular/core';
 
-import { block } from './../models/map';
+import { Block } from '../../core/shared/posts/map';
 import { fontSizes } from 'src/app/core/shared/font-sizes';
 import { colors } from 'src/app/core/shared/colors';
 import { MatMenuTrigger } from '@angular/material/menu';
@@ -18,8 +18,8 @@ export class StyleEditorComponent implements OnInit {
 
   constructor(private eRef: ElementRef) { }
 
-  @Input() block: block;
-  @Output() styleAndSaveEvent = new EventEmitter<block>();
+  @Input() block: Block;
+  @Output() styleAndSaveEvent = new EventEmitter<Block>();
 
   @ViewChild('triggerRadius', { static: false }) triggerRadius: MatMenuTrigger;
   @ViewChild('triggerBckg', { static: false }) triggerBkg: MatMenuTrigger;

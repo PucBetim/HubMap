@@ -1,5 +1,5 @@
 import { Component, ElementRef, EventEmitter, HostListener, Input, OnInit, Output } from '@angular/core';
-import { block, position } from '../../models/map';
+import { Block, Position } from '../../../core/shared/posts/map';
 
 @Component({
   selector: 'visual-block',
@@ -8,11 +8,11 @@ import { block, position } from '../../models/map';
 })
 export class VisualBlockComponent implements OnInit {
 
-  public afterImagePosition: position = { x: 0, y: 0 };
+  public afterImagePosition: Position = { x: 0, y: 0 };
   public afterImageSize: number;
 
-  @Input() block: block;
-  @Input() parentBlock: block;
+  @Input() block: Block;
+  @Input() parentBlock: Block;
 
   constructor(private eRef: ElementRef) { }
 

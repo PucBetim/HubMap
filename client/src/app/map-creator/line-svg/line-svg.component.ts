@@ -1,4 +1,4 @@
-import { block, position } from './../models/map';
+import { Block, Position } from '../../core/shared/posts/map';
 import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
@@ -8,11 +8,11 @@ import { Component, Input, OnInit } from '@angular/core';
 })
 export class LineSvgComponent implements OnInit {
 
-  @Input() block: block;
-  @Input() parentBlock: block;
+  @Input() block: Block;
+  @Input() parentBlock: Block;
 
-  blockCenter = new position;
-  parentBlockCenter = new position;
+  blockCenter = new Position;
+  parentBlockCenter = new Position;
 
   constructor() { }
 

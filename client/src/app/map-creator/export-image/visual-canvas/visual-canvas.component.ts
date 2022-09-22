@@ -1,4 +1,4 @@
-import { block, position } from '../../models/map';
+import { Block, Position } from '../../../core/shared/posts/map';
 import { AfterViewInit, Component, ElementRef, Inject, OnInit, ViewChild } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import html2canvas from 'html2canvas';
@@ -16,9 +16,9 @@ export class VisualCanvasComponent implements OnInit, AfterViewInit {
   @ViewChild('downloadLink') downloadLink: ElementRef;
 
   public carregando: boolean = false;
-  public blocks: block[] = [];
-  public closestPoint = new position;
-  public farestPoint = new position;
+  public blocks: Block[] = [];
+  public closestPoint = new Position;
+  public farestPoint = new Position;
   public width: number = 0;
   public height: number = 0;
   public spacingImageBorder: number = 60;
@@ -60,7 +60,7 @@ export class VisualCanvasComponent implements OnInit, AfterViewInit {
     this.downloadLink.nativeElement.click();
   }
 
-  repositionBlock(blocks: block[]) {
+  repositionBlock(blocks: Block[]) {
     blocks.forEach(b => {
       b.position.x -= this.closestPoint.x - this.spacingImageBorder / 2;
       b.position.y -= this.closestPoint.y - this.spacingImageBorder / 2;

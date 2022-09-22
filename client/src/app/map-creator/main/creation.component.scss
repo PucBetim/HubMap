@@ -22,15 +22,22 @@
         height: 100%;
         width: 100%;
 
-        .sidebarOption {
+        .sidebarGrid {
             flex: 1;
             margin: 0.5em;
             align-self: center;
             height: fit-content;
         }
 
-        .iconOption {
+        .option {
             max-height: 40px;
+        }
+
+        .sidebarTitle {
+            a {
+                text-decoration: none;
+                color: inherit;
+            }
         }
 
         .bottom {

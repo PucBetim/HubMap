@@ -1,27 +1,41 @@
-import { VisualCanvasComponent } from '../export-image/visual-canvas/visual-canvas.component';
-import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatMenuTrigger } from '@angular/material/menu';
 
-import { map, block } from '../models/map';
+import { Map, Block } from '../../core/shared/posts/map';
+import { Observable } from 'rxjs';
+import { ComponentCanDeactivate } from 'src/app/core/services/guard.service';
+import { PostService } from '../../core/shared/posts/post.service';
+import { VisualCanvasComponent } from '../export-image/visual-canvas/visual-canvas.component';
+import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
+import { Post } from 'src/app/core/shared/posts/post';
 
 @Component({
   selector: 'app-creation',
   templateUrl: './creation.component.html',
   styleUrls: ['./creation.component.scss']
 })
-export class CreationComponent implements OnInit {
+export class CreationComponent implements OnInit, ComponentCanDeactivate {
 
   @ViewChild('editTrigger') editTrigger: MatMenuTrigger;
   @ViewChild('main') main: ElementRef;
 
-  public map = new map;
-  public selectedBlock: block;
-  public blockSelected: boolean = false;
-  public savedProgress: [block[]] = [[]];
+  @HostListener('window:beforeunload')
+  canDeactivate(): Observable<boolean> | boolean {
+    return !this.unsavedChanges
+  }
 
-  constructor(public dialog: MatDialog) { }
+  public map = new Map;
+  public selectedBlock: Block;
+  public blockSelected: boolean = false;
+  public savedProgress: [Block[]] = [[]];
+  public unsavedChanges: boolean = false;
+  public carregando: boolean = false;
+
+  constructor(
+    private dialog: MatDialog,
+    private postService: PostService
+  ) { }
 
   ngOnInit(): void {
     var _map = JSON.parse(localStorage.getItem('mapa') || '{}');
@@ -39,7 +53,7 @@ export class CreationComponent implements OnInit {
 
     console.log(this.main.nativeElement.clientHeight)
 
-    let _block = new block;
+    let _block = new Block;
     _block.backgroundColor = "#64b5f6"
     _block.fontColor = "#ffffff"
     _block.fontSize = "24px"
@@ -51,7 +65,7 @@ export class CreationComponent implements OnInit {
 
 
     if (this.map.blocks == null) {
-      let _map = new map;
+      let _map = new Map;
       _map.blocks[0] = _block;
       this.map = _map
       return
@@ -61,7 +75,7 @@ export class CreationComponent implements OnInit {
   }
 
 
-  selectBlock(block: block) {
+  selectBlock(block: Block) {
     this.selectedBlock = block;
     this.blockSelected = true;
   }
@@ -70,7 +84,7 @@ export class CreationComponent implements OnInit {
     this.blockSelected = false;
   }
 
-  onDeleteBlock(blocks: block[]) {
+  onDeleteBlock(blocks: Block[]) {
     var confirmDeleteConfig = {
       disableClose: false,
       width: 'auto',
@@ -92,7 +106,7 @@ export class CreationComponent implements OnInit {
     this.blockSelected = false;
   }
 
-  deleteBlockRecursive(blocks: block[]) {
+  deleteBlockRecursive(blocks: Block[]) {
     for (let i = 0; i < blocks.length; i++) {
       if (blocks[i] == this.selectedBlock) {
         const index = blocks.indexOf(this.selectedBlock, 0);
@@ -114,6 +128,7 @@ export class CreationComponent implements OnInit {
   }
 
   saveProgress() {
+    this.unsavedChanges = true;
     if (this.savedProgress.length > 15)
       this.savedProgress.splice(0, 1);
     const blocks = JSON.parse(JSON.stringify(this.map.blocks));
@@ -121,7 +136,26 @@ export class CreationComponent implements OnInit {
   }
 
   save() {
+    this.unsavedChanges = false;
     localStorage.setItem('mapa', JSON.stringify(this.map));
+  }
+
+  post() {
+    this.carregando = true;
+
+    var post = new Post;
+
+    let p = Object.assign({}, post)
+
+    this.postService.post(p).subscribe({
+      next: obj => {
+        console.log('postado')
+        this.carregando = false;
+      }, error: error => {
+        console.log('erro na postagem')
+        this.carregando = false;
+      }
+    })
   }
 
 

@@ -26,6 +26,7 @@ import { VisualCanvasComponent } from './export-image/visual-canvas/visual-canva
 import { VisualBlockComponent } from './export-image/visual-block/visual-block.component';
 import { VisualTextDivComponent } from './export-image/visual-text-div/visual-text-div.component';
 import { SharedModule } from './../core/shared/shared.module';
+import { PendingChangesGuard } from '../core/services/guard.service';
 
 export const OtherOptions: MatTooltipDefaultOptions = {
   showDelay: 0,
@@ -65,9 +66,10 @@ export const OtherOptions: MatTooltipDefaultOptions = {
     MatSliderModule,
     SharedModule,
     MatProgressSpinnerModule
-    ],
+  ],
   providers: [
-    { provide: MAT_TOOLTIP_DEFAULT_OPTIONS, useValue: OtherOptions }
+    { provide: MAT_TOOLTIP_DEFAULT_OPTIONS, useValue: OtherOptions },
+    PendingChangesGuard
   ]
 })
 export class MapCreatorModule { }

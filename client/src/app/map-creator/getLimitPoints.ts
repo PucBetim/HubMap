@@ -1,8 +1,8 @@
-import { block, position } from "./models/map";
+import { Block, Position } from "../core/shared/posts/map";
 
 export class GetLimitPoints {
     public points = new limitPoints;
-    getClosestFartest(blocks: block[]) {
+    getClosestFartest(blocks: Block[]) {
 
         blocks.forEach(b => {
             //Closest
@@ -32,6 +32,6 @@ export class GetLimitPoints {
 }
 
 class limitPoints {
-    closestPoint = new position;
-    farestPoint = new position;
+    closestPoint = new Position;
+    farestPoint = new Position;
 }

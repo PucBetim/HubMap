@@ -1,5 +1,5 @@
 import { Component, EventEmitter, HostListener, Input, Output, Renderer2, ViewChild } from "@angular/core";
-import { block } from "../models/map";
+import { Block } from "../../core/shared/posts/map";
 
 @Component({
   selector: 'app-text-div',
@@ -9,7 +9,7 @@ import { block } from "../models/map";
 export class TextDivComponent {
   @Output() onResizeEvent = new EventEmitter();
   @Output() resizeFinishedEvent = new EventEmitter();
-  @Input() block: block;
+  @Input() block: Block;
 
   width: number;
   height: number;

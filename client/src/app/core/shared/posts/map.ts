@@ -1,13 +1,13 @@
-export class map {
+export class Map {
     id: number;
-    blocks: block[] = [];
+    blocks: Block[] = [];
 }
-export class block {
+export class Block {
     id: number;
-    blocks: block[] = [];
+    blocks: Block[] = [];
     content: string = "Default";
-    position: position = new position;
-    size: size = new size;
+    position: Position = new Position;
+    size: Size = new Size;
 
     backgroundColor: string = "#ffffff";
     fontColor: string = "#000000";
@@ -19,12 +19,12 @@ export class block {
     borderRadius: string = "4";
 }
 
-export class position {
+export class Position {
     x: number = 0;
     y: number = 0;
 }
 
-export class size {
+export class Size {
     width: number = 200;
     height: number = 100;
 }

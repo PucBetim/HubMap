@@ -1,4 +1,4 @@
-import { position, block, map } from './../models/map';
+import { Position, Block, Map } from '../../core/shared/posts/map';
 import { Component, ElementRef, EventEmitter, HostListener, Input, OnInit, Output } from '@angular/core';
 import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
 
@@ -10,15 +10,15 @@ import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
 export class BlockComponent implements OnInit {
 
   public blockSelected: boolean = false;
-  public afterImagePosition: position = { x: 0, y: 0 };
+  public afterImagePosition: Position = { x: 0, y: 0 };
   public afterImageSize: number;
   public initialContent: string;
 
-  @Input() block: block;
-  @Input() parentBlock: block;
-  @Input() rootMap: map;
+  @Input() block: Block;
+  @Input() parentBlock: Block;
+  @Input() rootMap: Map;
 
-  @Output() selectBlockEvent = new EventEmitter<block>();
+  @Output() selectBlockEvent = new EventEmitter<Block>();
   @Output() unselectBlockEvent = new EventEmitter<any>();
   @Output() saveProgressEvent = new EventEmitter<any>();
 
@@ -46,7 +46,7 @@ export class BlockComponent implements OnInit {
     this.emitSelect(this.block);
   }
 
-  emitSelect(block: block) {
+  emitSelect(block: Block) {
     this.selectBlockEvent.emit(block);
   }
 
@@ -78,7 +78,7 @@ export class BlockComponent implements OnInit {
     this.emitSaveProgress();
   }
 
-  onStyleAndSave(block: block) {
+  onStyleAndSave(block: Block) {
     this.block = block;
     this.emitSaveProgress();
   }
@@ -90,8 +90,8 @@ export class BlockComponent implements OnInit {
     newBlock.blocks = [];
     newBlock.content = "Clique para editar";
 
-    var closestGap: position = { x: this.block.position.x, y: this.block.position.y }
-    var farestGap: position = { x: 3840 - (this.block.position.x + this.block.size.width + 10), y: 2160 - (this.block.position.y + this.block.size.height + 10) }
+    var closestGap: Position = { x: this.block.position.x, y: this.block.position.y }
+    var farestGap: Position = { x: 3840 - (this.block.position.x + this.block.size.width + 10), y: 2160 - (this.block.position.y + this.block.size.height + 10) }
 
     console.log(closestGap)
     console.log
