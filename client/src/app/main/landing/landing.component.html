@@ -43,8 +43,21 @@
 </div>
 <div class="search">
     <div class="searchBlock">
-        <div class="searchBar">
-            <input placeholder="Pesquisar mapas...">
+        <div [ngClass]="searchBarClass">
+            <form (ngSubmit)="searchMaps()">
+                <input placeholder="Pesquisar mapas...">
+                <button class="searchIcon" type="submit" mat-icon-button>
+                    <mat-icon>search</mat-icon>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <div class="resultBlock">
+        <div [ngClass]="resultDivClass">
+            <div *ngIf="results" class="resultContainer">
+                <display-canvas [map]="map"></display-canvas>
+            </div>
         </div>
     </div>
 </div>

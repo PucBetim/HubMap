@@ -1,0 +1,6 @@
+<div class="canvas" #canvas [style.width]="width + 'px'" [style.height]="height + 'px'">
+    <display-block (setDragEvent)="setDrag($event)" (selectBlockEvent)="selectBlock($event)"
+        (unselectBlockEvent)="unselectBlock()" (saveProgressEvent)="saveProgress()" *ngFor="let block of map.blocks"
+        [block]="block">
+    </display-block>
+</div>

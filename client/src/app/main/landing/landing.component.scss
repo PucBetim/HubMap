@@ -98,6 +98,7 @@
     background-color: #ffffff;
     color: #272736;
     min-height: 80vh;
+    height: fit-content;
     position: relative;
     text-align: center;
     overflow: hidden;
@@ -110,24 +111,70 @@
         top: 0;
         left: 0;
 
+        .sbTop {
+            transition-timing-function: ease-in-out;
+            transition-duration: 1s;
+            transition-property: transform;
+            transform: translateY(-40%);
+        }
+
         .searchBar {
-            vertical-align: middle;
             display: table-cell;
+            transition-timing-function: ease-in-out;
+            transition-duration: 1s;
+            transition-property: transform;
+            vertical-align: middle;
 
             input {
                 border: solid 3px #fff;
                 box-sizing: border-box;
                 font-size: 2em;
                 height: 2em;
-                outline: solid rgb(119, 170, 218) 0;
+                outline: solid #77aada 0;
                 padding: .5em;
                 transition: all 1s ease-in;
-                width: 30vw;
+                min-width: 30vw;
                 z-index: 1;
 
                 &:focus {
                     outline: solid #77aada 2000px;
                 }
+            }
+
+            .searchIcon {
+                transform: translate(-100%, -15%);
+                vertical-align: middle;
+                color: #272736;
+            }
+        }
+    }
+
+    .resultBlock {
+
+        .rdTop {
+            transition-timing-function: ease-in-out;
+            transition-duration: 1s;
+            transition-property: transform;
+            transform: translateY(-100%);
+        }
+
+        .resultDiv {
+            position: absolute;
+            min-width: 96%;
+            height: fit-content;
+            min-height: 80%;
+            padding: 2%;
+            transition-timing-function: ease-in-out;
+            transition-duration: 1s;
+            transition-property: transform;
+
+            top: 100%;
+
+            .resultContainer{
+                min-width: 100%;
+                min-height: 100%;
+                background-color: #6D8299;
+                display: inline-flex;
             }
         }
     }

@@ -1,5 +1,4 @@
 import { Router } from '@angular/router';
-import { User } from './../../../session/models/user';
 import { Component, OnInit } from '@angular/core';
 
 @Component({

@@ -1,9 +1,8 @@
-import { MapCreatorLayoutComponent } from './core/layouts/map-creator-layout/map-creator-layout.component';
-import { UserLayoutComponent } from './core/layouts/user-layout/user-layout.component';
 import { Routes } from '@angular/router';
 
+import { MapCreatorLayoutComponent } from './core/layouts/map-creator-layout/map-creator-layout.component';
+import { UserLayoutComponent } from './core/layouts/user-layout/user-layout.component';
 import { PageNotFoundComponent } from './core/page-not-found/page-not-found.component';
-import { LandingComponent } from './landing/landing.component';
 import { MainLayoutComponent } from './core/layouts/main-layout/main-layout.component';
 
 
@@ -23,8 +22,9 @@ export const AppRoutes: Routes = [
   {
     path: '', component: MainLayoutComponent,
     children: [
-      { path: '', component: LandingComponent },
+      { path: '', loadChildren: () => import('./main/main.module').then(m => m.MainModule) },
       { path: '**', component: PageNotFoundComponent }
     ]
-  }
+  },
+
 ]

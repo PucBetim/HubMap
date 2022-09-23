@@ -1,34 +1,5 @@
-   .container {
-       position: relative;
-       width: fit-content;
-       .margin {
-           margin: 20px;
-       }
-
-       .content {
-           overflow: hidden;
-
-           mat-spinner {
-               margin: auto;
-               position: relative;
-           }
-
-           img {
-               height: 350px;
-               border: solid 3px #316b83;
-           }
-       }
-   }
-
-   .hidden {
-       width: 0px;
-       height: 0px;
-       position: relative;
-       overflow: hidden;
-
-       .canvas {
-           margin: 0 auto;
-           background-color: #ffffff;
-           position: relative;
-       }
-   }
+.canvas {
+    margin: 0 auto;
+    background-color: #ffffff;
+    position: relative;
+}

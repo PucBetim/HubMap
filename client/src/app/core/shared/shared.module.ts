@@ -15,13 +15,14 @@ import { ToneHexColorPipe } from './pipe/tone-hex-color.pipe';
   imports: [
     CommonModule,
     MatProgressSpinnerModule,
-    MatSnackBarModule
+    MatSnackBarModule,
   ],
   exports: [
     FormErrorComponent,
     LoadingComponent,
     MatIconModule,
-    ToneHexColorPipe
+    ToneHexColorPipe,
+    
   ]
 })
 export class SharedModule { }
