@@ -1,5 +1,5 @@
 <svg *ngIf="this.parentBlock && this.block">
-    <path [style.stroke]="this.block.backgroundColor | toneHexColor: -20" [attr.d]="
+    <path [style.stroke-width]="strokeWidth" [style.stroke]="this.block.backgroundColor | toneHexColor: -20" [attr.d]="
         'M '+
         (this.block.position.x + (this.block.size.width / 2)) 
         + ' ' +

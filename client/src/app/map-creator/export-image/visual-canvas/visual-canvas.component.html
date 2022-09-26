@@ -1,13 +1,26 @@
 <div class="container layoutDefaultStyle">
-    <div class="title-deco"> Baixar Mapa Mental </div>
+    <div class="title-deco">Baixar Mapa Mental</div>
     <div class="margin">
         <div mat-dialog-content class="content">
             <mat-spinner *ngIf="carregando"></mat-spinner>
             <img #showcase *ngIf="!carregando">
         </div>
     </div>
-    <div mat-dialog-actions *ngIf="!carregando">
-        <button  (click)="downloadImage()">Download</button>
+    <div class="actions layoutDefaultStyle" mat-dialog-actions>
+
+        <div style="align-self: end; font-weight: bold;">
+            COR DE FUNDO:
+            <button class="btn" #triggerBckg="matMenuTrigger" matTooltipClass="tooltip" matTooltip="Cor do Fundo"
+                [matMenuTriggerFor]="colorMenuBackground">
+                <mat-icon [ngClass]="iconColor"> format_color_fill</mat-icon>
+                <div class="colorShowcase" [style.background-color]="backgroundColor"></div>
+            </button>
+        </div>
+        <br>
+        <div>
+            <button (click)="downloadImage()">Download</button>
+        </div>
+
     </div>
 </div>
 
@@ -23,3 +36,16 @@
         <a #downloadLink></a>
     </div>
 </div>
+
+<mat-menu hasBackdrop="false" #colorMenuBackground="matMenu" class="layoutDefaultStyle">
+    <div class="colorMenu" (click)="$event.stopPropagation()" (mouseleave)="triggerBkg.closeMenu()">
+        <button class="colorSelectorTransparent" (click)="iconColor = ['clear']" (click)="setColor('')">
+            Transparente
+        </button>
+        <div class="colorGrid">
+            <div class="colorSelector" (click)="iconColor = ['']" (click)="setColor(color.hexValue)"
+                *ngFor="let color of colors" [style.background-color]="color.hexValue">
+            </div>
+        </div>
+    </div>
+</mat-menu>

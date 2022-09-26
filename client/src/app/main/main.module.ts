@@ -11,6 +11,8 @@ import { RouterModule } from '@angular/router';
 import { DisplayCanvasComponent } from './display-map/display-canvas/display-canvas.component';
 import { DisplayBlockComponent } from './display-map/display-block/display-block.component';
 import { DragDropModule } from '@angular/cdk/drag-drop';
+import {MatGridListModule} from '@angular/material/grid-list';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 
 @NgModule({
@@ -22,7 +24,8 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
     MatButtonModule,
     MatButtonToggleModule,
     FormsModule,
-    DragDropModule
+    DragDropModule, MatGridListModule,     MatProgressSpinnerModule,
+
   ]
 })
 export class MainModule { }

@@ -70,7 +70,7 @@
     <div class="fontSizeMenu" (click)="$event.stopPropagation()" (mouseleave)="closeMenu('fontSize')">
         <div class="fontSizeMenuItem" *ngFor="let fontSize of fontSizes" (click)="block.fontSize = fontSize.value"
             (click)="styleAndSave()">
-            {{fontSize.value}}
+            {{fontSize.value}}px
         </div>
     </div>
 </mat-menu>

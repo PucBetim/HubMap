@@ -7,10 +7,14 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { FormErrorComponent } from './form-error/form-error.component';
 import { LoadingComponent } from './loading/loading.component';
 import { ToneHexColorPipe } from './pipe/tone-hex-color.pipe';
+import { LineSvgComponent } from './line-svg/line-svg.component';
 
 @NgModule({
   declarations: [
-    FormErrorComponent, LoadingComponent, ToneHexColorPipe
+    FormErrorComponent,
+    LoadingComponent,
+    ToneHexColorPipe,
+    LineSvgComponent
   ],
   imports: [
     CommonModule,
@@ -22,7 +26,7 @@ import { ToneHexColorPipe } from './pipe/tone-hex-color.pipe';
     LoadingComponent,
     MatIconModule,
     ToneHexColorPipe,
-    
+    LineSvgComponent
   ]
 })
 export class SharedModule { }

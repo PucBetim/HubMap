@@ -10,10 +10,10 @@ export class DisplayBlockComponent implements OnInit {
 
   @Input() block: Block;
   @Input() parentBlock: Block;
+  @Input() resizeRatio: number;
 
   constructor() { }
 
   ngOnInit(): void {
   }
-
 }

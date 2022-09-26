@@ -74,9 +74,6 @@ export class BlockComponent implements OnInit {
     this.afterImageSize = (this.block.size.width + this.block.size.height) / 10
   }
 
-  resizedFinished() {
-    this.emitSaveProgress();
-  }
 
   onStyleAndSave(block: Block) {
     this.block = block;

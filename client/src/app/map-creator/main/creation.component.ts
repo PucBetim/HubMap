@@ -56,7 +56,7 @@ export class CreationComponent implements OnInit, ComponentCanDeactivate {
     let _block = new Block;
     _block.backgroundColor = "#64b5f6"
     _block.fontColor = "#ffffff"
-    _block.fontSize = "24px"
+    _block.fontSize = 24;
     _block.content = "Editar";
     _block.size.width = 250;
     _block.size.height = 100;
@@ -141,21 +141,21 @@ export class CreationComponent implements OnInit, ComponentCanDeactivate {
   }
 
   post() {
-    this.carregando = true;
+    // this.carregando = true;
 
-    var post = new Post;
+    // var post = new Post;
 
-    let p = Object.assign({}, post)
+    // let p = Object.assign({}, post)
 
-    this.postService.post(p).subscribe({
-      next: obj => {
-        console.log('postado')
-        this.carregando = false;
-      }, error: error => {
-        console.log('erro na postagem')
-        this.carregando = false;
-      }
-    })
+    // this.postService.post(p).subscribe({
+    //   next: obj => {
+    //     console.log('postado')
+    //     this.carregando = false;
+    //   }, error: error => {
+    //     console.log('erro na postagem')
+    //     this.carregando = false;
+    //   }
+    // })
   }
 
 

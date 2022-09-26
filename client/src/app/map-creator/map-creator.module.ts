@@ -21,7 +21,6 @@ import { BlockComponent } from './block/block.component';
 import { TextDivComponent } from './text-div/text-div.component';
 import { DragScrollModule } from 'ngx-drag-scroll';
 import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
-import { LineSvgComponent } from './line-svg/line-svg.component';
 import { VisualCanvasComponent } from './export-image/visual-canvas/visual-canvas.component';
 import { VisualBlockComponent } from './export-image/visual-block/visual-block.component';
 import { VisualTextDivComponent } from './export-image/visual-text-div/visual-text-div.component';
@@ -44,7 +43,6 @@ export const OtherOptions: MatTooltipDefaultOptions = {
     BlockComponent,
     TextDivComponent,
     ConfirmDialogComponent,
-    LineSvgComponent,
     VisualCanvasComponent,
     VisualBlockComponent,
     VisualTextDivComponent,

@@ -1,4 +1,4 @@
-<line-svg [block]="this.block" [parentBlock]="this.parentBlock" *ngIf="this.parentBlock"></line-svg>
+<line-svg [block]="this.block" [parentBlock]="this.parentBlock" [strokeWidth]="3" *ngIf="this.parentBlock"></line-svg>
 
 <display-block (setDragEvent)="setDrag($event)" (selectBlockEvent)="emitSelect($event)"
     (saveProgressEvent)="emitSaveProgress()" (click)="blockSelected = false"
@@ -6,7 +6,7 @@
 </display-block>
 
 
-<div class="visualBlock" [style.border-color]="this.block.backgroundColor | toneHexColor: -30" cdkDrag
+<div class="displayBlock" [style.border-color]="this.block.backgroundColor | toneHexColor: -30" cdkDrag
     cdkDragDisabled="true" cdkDragBoundary=".canvas" [cdkDragFreeDragPosition]="block.position"
     [style.background-color]="block.backgroundColor" [style.border-radius]="block.borderRadius + 'px'">
 
@@ -14,8 +14,9 @@
         [style.border-radius]="block.borderRadius + 'px'">
         <div class="textDiv" ngDefaultControl [style.font-style]="block.fontStyle"
             [style.font-weight]="block.fontWeight" [style.text-decoration]="block.textDecoration"
-            [style.color]="block.fontColor" [style.font-size]="block.fontSize" [style.text-align]="block.textAlign"
-            [textContent]="block.content" [style.border-radius]="block.borderRadius + 'px'">
+            [style.color]="block.fontColor" [style.font-size]="block.fontSize + 'px'"
+            [style.text-align]="block.textAlign" [textContent]="block.content"
+            [style.border-radius]="block.borderRadius + 'px'">
             {{block.content}}
         </div>
     </div>

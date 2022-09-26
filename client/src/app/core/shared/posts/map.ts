@@ -11,7 +11,7 @@ export class Block {
 
     backgroundColor: string = "#ffffff";
     fontColor: string = "#000000";
-    fontSize: string = "12px";
+    fontSize: number = 12;
     fontStyle: string = "normal";
     fontWeight: string = "normal";
     textDecoration: string = "none";

@@ -34,8 +34,6 @@ export class TextDivComponent {
     }
   }
 
-
-
   @HostListener('document:mouseup')
   onMouseUp(el: any) {
     this.ngOnDestroy();

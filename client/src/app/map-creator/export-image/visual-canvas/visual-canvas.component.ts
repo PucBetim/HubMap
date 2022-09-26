@@ -3,6 +3,8 @@ import { AfterViewInit, Component, ElementRef, Inject, OnInit, ViewChild } from 
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import html2canvas from 'html2canvas';
 import { GetLimitPoints } from '../../getLimitPoints';
+import { colors } from 'src/app/core/shared/colors';
+import { MatMenuTrigger } from '@angular/material/menu';
 
 @Component({
   selector: 'visual-canvas',
@@ -14,6 +16,7 @@ export class VisualCanvasComponent implements OnInit, AfterViewInit {
   @ViewChild('canvas') canvas: ElementRef;
   @ViewChild('showcase') showcase: ElementRef;
   @ViewChild('downloadLink') downloadLink: ElementRef;
+  @ViewChild('triggerBckg', { static: false }) triggerBkg: MatMenuTrigger;
 
   public carregando: boolean = false;
   public blocks: Block[] = [];
@@ -22,6 +25,9 @@ export class VisualCanvasComponent implements OnInit, AfterViewInit {
   public width: number = 0;
   public height: number = 0;
   public spacingImageBorder: number = 60;
+  public colors = colors;
+  public backgroundColor: string;
+  public iconColor: string[];
 
   constructor(public dialogRef: MatDialogRef<VisualCanvasComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any, public getLimitPoints: GetLimitPoints) {
@@ -45,8 +51,11 @@ export class VisualCanvasComponent implements OnInit, AfterViewInit {
 
   generateImage() {
     this.carregando = true;
+    var color = this.backgroundColor == '' ? null : this.backgroundColor;
+
+    console.log(this.backgroundColor)
     setTimeout(() => {
-      html2canvas(this.canvas.nativeElement).then(canvas => {
+      html2canvas(this.canvas.nativeElement, { backgroundColor: color }).then(canvas => {
         this.showcase.nativeElement.src = canvas.toDataURL();
         this.canvas.nativeElement.src = canvas.toDataURL();
         this.downloadLink.nativeElement.href = canvas.toDataURL('image/png');
@@ -56,7 +65,12 @@ export class VisualCanvasComponent implements OnInit, AfterViewInit {
     }, 1000)
   }
 
-  downloadImage() {
+  setColor(color: string) {
+    this.backgroundColor = color;
+    this.generateImage();
+  }
+
+  async downloadImage() {
     this.downloadLink.nativeElement.click();
   }
 

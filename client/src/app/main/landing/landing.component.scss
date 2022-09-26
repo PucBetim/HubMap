@@ -97,7 +97,7 @@
 .search {
     background-color: #ffffff;
     color: #272736;
-    min-height: 80vh;
+    max-height: 80vh;
     height: fit-content;
     position: relative;
     text-align: center;
@@ -129,7 +129,7 @@
                 border: solid 3px #fff;
                 box-sizing: border-box;
                 font-size: 2em;
-                height: 2em;
+                height: 6vh;
                 outline: solid #77aada 0;
                 padding: .5em;
                 transition: all 1s ease-in;
@@ -150,32 +150,46 @@
     }
 
     .resultBlock {
+        background-color: #6D8299;
 
         .rdTop {
             transition-timing-function: ease-in-out;
             transition-duration: 1s;
             transition-property: transform;
-            transform: translateY(-100%);
+            transform: translateY(-105%);
         }
 
         .resultDiv {
             position: absolute;
-            min-width: 96%;
-            height: fit-content;
-            min-height: 80%;
-            padding: 2%;
+            width: 98%;
+            min-height: fit-content;
+            margin: 1%;
             transition-timing-function: ease-in-out;
             transition-duration: 1s;
             transition-property: transform;
-
             top: 100%;
+            overflow-y: hidden;
+            overflow-x: scroll;
+            background-color: #6D8299;
 
-            .resultContainer{
+            .resultContainer {
                 min-width: 100%;
-                min-height: 100%;
+                min-height: fit-content;
                 background-color: #6D8299;
                 display: inline-flex;
             }
         }
     }
+}
+
+::-webkit-scrollbar-track {
+    background: #6D8299;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #3b5069;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #263446;
 }

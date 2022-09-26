@@ -41,7 +41,7 @@
         </div>
     </div>
 </div>
-<div class="search">
+<div class="search" [style.min-height]="(blocksSize + 200) + 'px'">
     <div class="searchBlock">
         <div [ngClass]="searchBarClass">
             <form (ngSubmit)="searchMaps()">
@@ -55,8 +55,9 @@
 
     <div class="resultBlock">
         <div [ngClass]="resultDivClass">
+            <!-- <mat-spinner *ngIf="!results"></mat-spinner> -->
             <div *ngIf="results" class="resultContainer">
-                <display-canvas [map]="map"></display-canvas>
+                <display-canvas [size]="blocksSize" [map]="map" *ngFor="let _ of [].constructor(7)"></display-canvas>
             </div>
         </div>
     </div>
