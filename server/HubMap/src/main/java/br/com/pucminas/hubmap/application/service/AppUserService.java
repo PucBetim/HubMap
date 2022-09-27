@@ -5,7 +5,6 @@ import org.springframework.stereotype.Service;
 
 import br.com.pucminas.hubmap.domain.user.AppUser;
 import br.com.pucminas.hubmap.domain.user.AppUserRepository;
-import br.com.pucminas.hubmap.utils.LoggerUtils;
 import br.com.pucminas.hubmap.utils.StringUtils;
 
 @Service
@@ -15,8 +14,6 @@ public class AppUserService {
 	private AppUserRepository appUserRepository;
 
 	public AppUser save(AppUser appUser) throws DuplicatedEmailException {
-		
-		LoggerUtils.getLoggerFromClass(AppUserService.class).info("Service. User: " + appUser.getEmail() + "; " + appUser.getId());
 		
 		if (!validateEmail(appUser.getEmail(), appUser.getId())) {
 			throw new DuplicatedEmailException("O email informado já está sendo utilizado");

@@ -1,3 +1,6 @@
+### Test Files ###
+/src/test/
+
 HELP.md
 .gradle
 build/
@@ -39,3 +42,7 @@ out/
 
 ### JAVA Binary Files ###
 /bin/*
+
+
+### PyDev ###
+/.pydevproject

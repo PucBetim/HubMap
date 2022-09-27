@@ -56,5 +56,10 @@ public class WebSecurityConfigurer implements WebMvcConfigurer{
 			.allowedOrigins("*")
 			.allowedMethods("POST")
 			.exposedHeaders(SecurityConstants.AUTHORIZATION_HEADER);
+
+		registry.addMapping("/**")
+			.allowedOrigins("*")
+			.allowedMethods("GET", "POST", "PUT", "DELETE");
+		
 	}
 }
