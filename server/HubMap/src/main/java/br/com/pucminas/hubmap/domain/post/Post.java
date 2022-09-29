@@ -44,7 +44,7 @@ public class Post implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@EqualsAndHashCode.Include
-	private int id;
+	private Integer id;
 	
 	@NotBlank(message = "Por favor, informe o título do post")
 	@Size(max = 30, message = "O título é muito grande")
@@ -55,11 +55,11 @@ public class Post implements Serializable {
 	@Column(length = 200)
 	private String description;
 
-	private int likes;
+	private Integer likes;
 
-	private int dislikes;
+	private Integer dislikes;
 
-	private int views;
+	private Integer views;
 
 	private boolean isPrivate;
 	

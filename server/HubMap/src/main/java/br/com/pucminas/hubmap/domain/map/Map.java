@@ -29,7 +29,7 @@ public class Map implements Serializable{
 	@Id
 	@Column(name = "POST_ID")
 	@EqualsAndHashCode.Include
-	private int id;
+	private Integer id;
 	
 	@OneToOne(cascade = CascadeType.ALL)
 	@MapsId

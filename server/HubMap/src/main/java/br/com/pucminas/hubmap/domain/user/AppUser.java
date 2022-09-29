@@ -30,7 +30,7 @@ public class AppUser implements Serializable {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id;
+	private Integer id;
 	
 	@NotBlank(message = "Por favor, informe seu nome.")
 	@Column(length = 80, nullable = false)
@@ -86,7 +86,7 @@ public class AppUser implements Serializable {
 		return this.password;
 	}
 	
-	public void setId(int id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 	

@@ -25,55 +25,47 @@ import lombok.ToString;
 @NoArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Block implements Serializable {
-	
+
 	@EqualsAndHashCode.Include
 	@EmbeddedId
 	private BlockPK id;
-	
+
 	@Size(max = 300, message = "O bloco não pode conter mais que 300 caracteres.")
 	private String content;
 
-	private int coordX;
+	private Integer coordX;
 
-	private int coordY;
+	private Integer coordY;
 
 	@Column(length = 30)
 	private String image;
 
 	private Color color;
-	
-	private int fontSize;
+
+	private Integer fontSize;
 
 	private String fontStyle;
 
 	@ManyToMany(fetch = FetchType.EAGER)
-	@JoinTable(name = "POST_BLOCK_LINKED", 
-	joinColumns = {
-		@JoinColumn(name = "BLOCK_ID", referencedColumnName = "post_id"),
-		@JoinColumn(name = "BLOCK_SEQUENCE", referencedColumnName = "sequence")
-	}, 
-	inverseJoinColumns = {
-		@JoinColumn(name = "LINKED_BLOCK_ID", referencedColumnName = "post_id"),
-		@JoinColumn(name = "LINKED_BLOCK_SEQUENCE", referencedColumnName = "sequence")
-	})
+	@JoinTable(name = "POST_BLOCK_LINKED", joinColumns = {
+			@JoinColumn(name = "BLOCK_ID", referencedColumnName = "post_id"),
+			@JoinColumn(name = "BLOCK_SEQUENCE", referencedColumnName = "sequence") }, inverseJoinColumns = {
+					@JoinColumn(name = "LINKED_BLOCK_ID", referencedColumnName = "post_id"),
+					@JoinColumn(name = "LINKED_BLOCK_SEQUENCE", referencedColumnName = "sequence") })
 	@ToString.Exclude
 	private List<Block> myBlocksLinked = new ArrayList<>();
 
 	@ManyToMany(fetch = FetchType.EAGER)
-	@JoinTable(name = "POST_BLOCK_LINKED", 
-		joinColumns = {
+	@JoinTable(name = "POST_BLOCK_LINKED", joinColumns = {
 			@JoinColumn(name = "LINKED_BLOCK_ID", referencedColumnName = "post_id"),
-			@JoinColumn(name = "LINKED_BLOCK_SEQUENCE", referencedColumnName = "sequence")
-		}, 
-		inverseJoinColumns = {
-			@JoinColumn(name = "BLOCK_ID", referencedColumnName = "post_id"),
-			@JoinColumn(name = "BLOCK_SEQUENCE", referencedColumnName = "sequence")
-		})
+			@JoinColumn(name = "LINKED_BLOCK_SEQUENCE", referencedColumnName = "sequence") }, inverseJoinColumns = {
+					@JoinColumn(name = "BLOCK_ID", referencedColumnName = "post_id"),
+					@JoinColumn(name = "BLOCK_SEQUENCE", referencedColumnName = "sequence") })
 	@ToString.Exclude
 	private List<Block> blocksLinkedMe = new ArrayList<>();
 
-	public Block(String content, int coordX, int coordY, String image, Color color, int fontSize, String fontStyle,
-			List<Block> myBlocksLinked, List<Block> blocksLinkedMe) {
+	public Block(String content, Integer coordX, Integer coordY, String image, Color color, Integer fontSize,
+			String fontStyle, List<Block> myBlocksLinked, List<Block> blocksLinkedMe) {
 		this.content = content;
 		this.coordX = coordX;
 		this.coordY = coordY;
@@ -89,11 +81,11 @@ public class Block implements Serializable {
 		this.content = content;
 	}
 
-	public void setCoordX(int coordX) {
+	public void setCoordX(Integer coordX) {
 		this.coordX = coordX;
 	}
 
-	public void setCoordY(int coordY) {
+	public void setCoordY(Integer coordY) {
 		this.coordY = coordY;
 	}
 
@@ -105,7 +97,7 @@ public class Block implements Serializable {
 		this.color = color;
 	}
 
-	public void setFontSize(int fontSize) {
+	public void setFontSize(Integer fontSize) {
 		this.fontSize = fontSize;
 	}
 
