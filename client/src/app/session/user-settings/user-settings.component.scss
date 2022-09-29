@@ -12,6 +12,14 @@
     grid-template-columns: 35% 65%;
 }
 
+.deco {
+    position: relative;
+    font-size: 1.5em;
+    font-weight: bolder;
+    color: #77aada;
+    float: left;
+}
+
 .editAccount {
     position: relative;
     padding: 2em;
@@ -21,15 +29,6 @@
     text-align: center;
     background-color: rgba(255, 255, 255, 0.9);
     box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
-
-    .deco {
-        position: relative;
-        font-size: 1.5em;
-        font-weight: bolder;
-        color: #77aada;
-        float: left;
-    }
-
 
     .inputfield {
         width: 100%;
@@ -70,4 +69,23 @@
         }
     }
 
+}
+
+.userMaps {
+    position: relative;
+    padding: 2em;
+    margin: 1em;
+    grid-area: grid2;
+    background-color: #272736;
+    text-align: center;
+    background-color: rgba(255, 255, 255, 0.9);
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+
+    .resultContainer {
+        display: flex;
+        background-color: rebeccapurple;
+        width: 100%;
+        max-height: 70vh;
+        overflow: auto;
+    }
 }

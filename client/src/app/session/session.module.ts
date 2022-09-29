@@ -1,6 +1,6 @@
 import { UserSettingsComponent } from './user-settings/user-settings.component';
 import { HttpClientModule } from '@angular/common/http';
-import { SigninComponent } from './singin/signin.component';
+import { SigninComponent } from './signin/signin.component';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';

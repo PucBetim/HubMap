@@ -1,6 +1,6 @@
 <loading *ngIf="carregando"></loading>
 <div class="container">
-    <div class="editAccount">
+    <div class="editAccount layoutDefaultStyle">
         <div class="deco">
             Configuração de Conta
         </div>
@@ -22,10 +22,22 @@
                 </mat-form-field>
             </div>
 
-            <button class="btn" mat-raised-button color="primary" type="submit"
+            <button class="btn btn-disabled" mat-raised-button color="primary" type="submit" disabled="true"
                 [disabled]="!form.valid || !form.dirty">Salvar</button>
         </form>
+        <h2>Indisponível no momento</h2>
 
     </div>
 
+    <div class="userMaps layoutDefaultStyle">
+        <div class="deco">
+            Meus Mapas
+        </div>
+        <br><br>
+        <div *ngIf="results" class="resultContainer">
+            <div class="canvas">
+                <display-canvas [size]="200" [map]="map" *ngFor="let _ of [].constructor(7)"></display-canvas>
+            </div>
+        </div>
+    </div>
 </div>

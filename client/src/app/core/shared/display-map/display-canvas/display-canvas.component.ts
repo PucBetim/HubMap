@@ -1,7 +1,6 @@
-import { Block } from './../../../core/shared/posts/map';
-import { GetLimitPoints } from './../../../map-creator/getLimitPoints';
 import { Component, Input, OnInit } from '@angular/core';
-import { Map, Position } from 'src/app/core/shared/posts/map';
+import { Block, Map, Position } from 'src/app/core/shared/posts/map';
+import { GetLimitPoints } from 'src/app/map-creator/getLimitPoints';
 
 @Component({
   selector: 'display-canvas',
@@ -24,20 +23,25 @@ export class DisplayCanvasComponent implements OnInit {
 
     this.visualMap = JSON.parse(JSON.stringify(this.map))
 
-    var limit = this.getLimitPoints.getClosestFartest(this.visualMap.blocks)
+    console.log(this.visualMap)
+    if (this.visualMap.blocks) {
 
-    this.closestPoint = limit.closestPoint;
-    this.farestPoint = limit.farestPoint;
+      var limit = this.getLimitPoints.getClosestFartest(this.visualMap.blocks)
 
-    var mapOriginalWidth = this.farestPoint.x - this.closestPoint.x;
-    var mapOriginalHeight = this.farestPoint.y - this.closestPoint.y;
+      this.closestPoint = limit.closestPoint;
+      this.farestPoint = limit.farestPoint;
 
-    var widthRatio = (this.size - 10) / mapOriginalWidth;
-    var heightRatio = (this.size - 10) / mapOriginalHeight;
+      var mapOriginalWidth = this.farestPoint.x - this.closestPoint.x;
+      var mapOriginalHeight = this.farestPoint.y - this.closestPoint.y;
 
-    this.resizeRatio = widthRatio < heightRatio ? widthRatio : heightRatio;
+      var widthRatio = (this.size - 10) / mapOriginalWidth;
+      var heightRatio = (this.size - 10) / mapOriginalHeight;
 
-    this.resizeBlocks(this.visualMap.blocks);
+      this.resizeRatio = widthRatio < heightRatio ? widthRatio : heightRatio;
+
+      this.resizeBlocks(this.visualMap.blocks);
+      
+    }
   }
 
   resizeBlocks(blocks: Block[]) {

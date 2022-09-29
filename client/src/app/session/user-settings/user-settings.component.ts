@@ -1,9 +1,11 @@
-import { ConfigService } from 'src/app/core/services/config.service';
+import { PostService } from './../../core/shared/posts/post.service';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { PasswordValidator } from 'src/app/core/shared/validators/password-validator.component';
+
 import { User } from '../models/user';
 import { SessionService } from '../session.service';
+import { ConfigService } from 'src/app/core/services/config.service';
+import { Post } from 'src/app/core/shared/posts/post';
 
 @Component({
   selector: 'app-user-settings',
@@ -15,10 +17,15 @@ export class UserSettingsComponent implements OnInit {
   public form: FormGroup;
   public errors: any[] = [];
   public carregando: boolean = false;
-  public user: User = new User;;
+  public user: User = new User;
+  public posts: Post[];
+
+  //teste
+  public map = new Map;
+  public results: boolean = false;
 
   constructor(private fb: FormBuilder,
-    private sessionService: SessionService,
+    private sessionService: SessionService, private postService: PostService
   ) { }
 
   ngOnInit(): void {
@@ -34,16 +41,35 @@ export class UserSettingsComponent implements OnInit {
       nick: ['', [Validators.required]],
     });
 
-    this.preencherFormEvento()
+    this.fillFormEvent()
+    this.getUserMaps()
   }
 
-  preencherFormEvento(): void {
+  fillFormEvent(): void {
     this.form.patchValue({
       name: this.user.name,
       nick: this.user.nick,
     });
   }
 
+  getUserMaps() {
+    this.postService.getUserPosts().subscribe(
+      {
+        next: result => {
+          this.posts = result.body;
+
+          //momentâneo
+          var _map = JSON.parse(localStorage.getItem('mapa') || '{}');
+          if (_map.blocks){
+            this.map = _map;      
+            this.results = true;
+            }
+        },
+        error: error => {
+          console.log(error)
+        }
+      })
+  }
   editUser() {
     if (this.form.dirty && this.form.valid && this.form.dirty) {
       var user = JSON.parse(sessionStorage.getItem('hubmap.user')!)

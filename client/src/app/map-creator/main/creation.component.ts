@@ -141,21 +141,20 @@ export class CreationComponent implements OnInit, ComponentCanDeactivate {
   }
 
   post() {
-    // this.carregando = true;
+    this.carregando = true;
 
-    // var post = new Post;
+    var post = new Post;
+    let p = Object.assign({}, post)
 
-    // let p = Object.assign({}, post)
-
-    // this.postService.post(p).subscribe({
-    //   next: obj => {
-    //     console.log('postado')
-    //     this.carregando = false;
-    //   }, error: error => {
-    //     console.log('erro na postagem')
-    //     this.carregando = false;
-    //   }
-    // })
+    this.postService.post(p).subscribe({
+      next: obj => {
+        console.log('postado')
+        this.carregando = false;
+      }, error: error => {
+        console.log('erro na postagem')
+        this.carregando = false;
+      }
+    })
   }
 
 

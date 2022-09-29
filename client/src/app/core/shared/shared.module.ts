@@ -8,25 +8,33 @@ import { FormErrorComponent } from './form-error/form-error.component';
 import { LoadingComponent } from './loading/loading.component';
 import { ToneHexColorPipe } from './pipe/tone-hex-color.pipe';
 import { LineSvgComponent } from './line-svg/line-svg.component';
+import { DisplayCanvasComponent } from './display-map/display-canvas/display-canvas.component';
+import { DisplayBlockComponent } from './display-map/display-block/display-block.component';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 
 @NgModule({
   declarations: [
     FormErrorComponent,
     LoadingComponent,
     ToneHexColorPipe,
-    LineSvgComponent
+    LineSvgComponent,
+    DisplayCanvasComponent,
+    DisplayBlockComponent
   ],
   imports: [
     CommonModule,
     MatProgressSpinnerModule,
     MatSnackBarModule,
+    DragDropModule
   ],
   exports: [
     FormErrorComponent,
     LoadingComponent,
     MatIconModule,
     ToneHexColorPipe,
-    LineSvgComponent
+    LineSvgComponent,
+    DisplayCanvasComponent,
+    DisplayBlockComponent
   ]
 })
 export class SharedModule { }

@@ -15,14 +15,18 @@ export class PostService extends BaseService {
 
   constructor(private http: HttpClient,) { super(); }
 
-  post(post: Post): Observable<Post> {
+  post(post: Post): Observable<any> {
 
     post = new Post
     post.title = "teste";
     post.description = "descrição teste";
-    post.map = "mapa teste";
+    post.map = null;
     post.isPrivate = false;
 
-    return this.http.post<Post>((ConfigService.getUrlApi() + this.userUrl), post, ConfigService.getOptions()).pipe(catchError(super.serviceError));
+    return this.http.post<any>((ConfigService.getUrlApi() + this.userUrl), post, ConfigService.getOptions()).pipe(catchError(super.serviceError));
+  };
+
+  getUserPosts(): Observable<any> {
+    return this.http.get<any>((ConfigService.getUrlApi() + this.userUrl), ConfigService.getOptions()).pipe(catchError(super.serviceError));
   };
 }

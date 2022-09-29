@@ -46,4 +46,8 @@ export class TextDivComponent {
       this.mouseMoveListener();
     }
   }
+
+  x(){
+    console.log('x')
+  }
 }
