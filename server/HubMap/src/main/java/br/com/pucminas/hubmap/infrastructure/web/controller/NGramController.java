@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.pucminas.hubmap.domain.post.NGram;
-import br.com.pucminas.hubmap.domain.post.NGramRepository;
+import br.com.pucminas.hubmap.domain.indexing.NGram;
+import br.com.pucminas.hubmap.domain.indexing.NGramRepository;
 
 @RestController
 @RequestMapping(path = "/hubmap/ngrams")

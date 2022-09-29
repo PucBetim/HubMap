@@ -12,7 +12,7 @@ import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 
 import br.com.pucminas.hubmap.domain.comment.Comment;
-import br.com.pucminas.hubmap.domain.post.NGram;
+import br.com.pucminas.hubmap.domain.indexing.NGram;
 import br.com.pucminas.hubmap.domain.post.Post;
 
 @Configuration

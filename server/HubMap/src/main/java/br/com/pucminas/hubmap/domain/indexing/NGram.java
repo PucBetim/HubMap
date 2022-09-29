@@ -1,4 +1,4 @@
-package br.com.pucminas.hubmap.domain.post;
+package br.com.pucminas.hubmap.domain.indexing;
 
 import java.io.Serializable;
 

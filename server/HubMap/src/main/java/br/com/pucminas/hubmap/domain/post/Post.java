@@ -25,6 +25,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import br.com.pucminas.hubmap.domain.comment.Comment;
+import br.com.pucminas.hubmap.domain.indexing.NGram;
 import br.com.pucminas.hubmap.domain.map.Map;
 import br.com.pucminas.hubmap.domain.user.AppUser;
 import lombok.EqualsAndHashCode;

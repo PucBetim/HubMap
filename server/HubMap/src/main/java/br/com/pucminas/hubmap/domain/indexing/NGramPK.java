@@ -1,4 +1,4 @@
-package br.com.pucminas.hubmap.domain.post;
+package br.com.pucminas.hubmap.domain.indexing;
 
 import java.io.Serializable;
 
@@ -7,6 +7,7 @@ import javax.persistence.Embeddable;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
 
+import br.com.pucminas.hubmap.domain.post.Post;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
