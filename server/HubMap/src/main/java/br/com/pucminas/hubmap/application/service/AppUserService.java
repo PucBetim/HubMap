@@ -19,7 +19,7 @@ public class AppUserService {
 			throw new DuplicatedEmailException("O email informado já está sendo utilizado");
 		}
 
-		if(appUser.getId() == 0) {
+		if(appUser.getId() == null) {
 			
 			appUser.encryptPassword();
 			

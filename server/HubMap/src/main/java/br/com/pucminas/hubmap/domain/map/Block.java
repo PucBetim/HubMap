@@ -1,115 +1,76 @@
 package br.com.pucminas.hubmap.domain.map;
 
-import java.awt.Color;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
-import javax.persistence.Column;
-import javax.persistence.EmbeddedId;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.validation.constraints.Size;
 
-import lombok.EqualsAndHashCode;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+import br.com.pucminas.hubmap.domain.post.Post;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.ToString;
 
 @SuppressWarnings("serial")
 @Entity
+@JsonIgnoreProperties("post")
 @Getter
+@Setter
 @NoArgsConstructor
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@AllArgsConstructor
 public class Block implements Serializable {
 
-	@EqualsAndHashCode.Include
-	@EmbeddedId
-	private BlockPK id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Integer id;
 
+	@ManyToOne
+	@JoinColumn(name = "post_id", referencedColumnName = "id")
+	private Post post;
+	
 	@Size(max = 300, message = "O bloco não pode conter mais que 300 caracteres.")
 	private String content;
 
-	private Integer coordX;
+	@Embedded
+	private Position position;
+	
+	@Embedded
+	private BlockSize size;
 
-	private Integer coordY;
-
-	@Column(length = 30)
-	private String image;
-
-	private Color color;
-
+	private String backgroundColor;
+	
+	private String fontColor;
+	
 	private Integer fontSize;
 
 	private String fontStyle;
 
+	private String fontWeight;
+	
+	private String textDecoration;
+	
+	private String textAlign;
+	
+	private String borderRadius;
+		
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "POST_BLOCK_LINKED", joinColumns = {
-			@JoinColumn(name = "BLOCK_ID", referencedColumnName = "post_id"),
-			@JoinColumn(name = "BLOCK_SEQUENCE", referencedColumnName = "sequence") }, inverseJoinColumns = {
-					@JoinColumn(name = "LINKED_BLOCK_ID", referencedColumnName = "post_id"),
-					@JoinColumn(name = "LINKED_BLOCK_SEQUENCE", referencedColumnName = "sequence") })
+			@JoinColumn(name = "BLOCK_ID", referencedColumnName = "id")}, inverseJoinColumns = {
+				@JoinColumn(name = "LINKED_BLOCK_ID", referencedColumnName = "id") })
 	@ToString.Exclude
-	private List<Block> myBlocksLinked = new ArrayList<>();
-
-	@ManyToMany(fetch = FetchType.EAGER)
-	@JoinTable(name = "POST_BLOCK_LINKED", joinColumns = {
-			@JoinColumn(name = "LINKED_BLOCK_ID", referencedColumnName = "post_id"),
-			@JoinColumn(name = "LINKED_BLOCK_SEQUENCE", referencedColumnName = "sequence") }, inverseJoinColumns = {
-					@JoinColumn(name = "BLOCK_ID", referencedColumnName = "post_id"),
-					@JoinColumn(name = "BLOCK_SEQUENCE", referencedColumnName = "sequence") })
-	@ToString.Exclude
-	private List<Block> blocksLinkedMe = new ArrayList<>();
-
-	public Block(String content, Integer coordX, Integer coordY, String image, Color color, Integer fontSize,
-			String fontStyle, List<Block> myBlocksLinked, List<Block> blocksLinkedMe) {
-		this.content = content;
-		this.coordX = coordX;
-		this.coordY = coordY;
-		this.image = image;
-		this.color = color;
-		this.fontSize = fontSize;
-		this.fontStyle = fontStyle;
-		this.myBlocksLinked = myBlocksLinked;
-		this.blocksLinkedMe = blocksLinkedMe;
-	}
-
-	public void setContent(String content) {
-		this.content = content;
-	}
-
-	public void setCoordX(Integer coordX) {
-		this.coordX = coordX;
-	}
-
-	public void setCoordY(Integer coordY) {
-		this.coordY = coordY;
-	}
-
-	public void setImage(String image) {
-		this.image = image;
-	}
-
-	public void setColor(Color color) {
-		this.color = color;
-	}
-
-	public void setFontSize(Integer fontSize) {
-		this.fontSize = fontSize;
-	}
-
-	public void setFontStyle(String fontStyle) {
-		this.fontStyle = fontStyle;
-	}
-
-	public void setMyBlocksLinked(List<Block> myBlocksLinked) {
-		this.myBlocksLinked = myBlocksLinked;
-	}
-
-	public void setBlocksLinkedMe(List<Block> blocksLinkedMe) {
-		this.blocksLinkedMe = blocksLinkedMe;
-	}
+	private Set<Block> blocks = new HashSet<>();
 }

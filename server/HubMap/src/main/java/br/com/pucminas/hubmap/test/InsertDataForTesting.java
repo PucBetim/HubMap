@@ -37,9 +37,9 @@ public class InsertDataForTesting {
 		appUserService.save(u3);
 		
 		//USER 1
-		Post p1 = new Post("Arquitetura de Computadores", "Mapa mental sobre arquitetura de computadores", null, true, u1);
-		Post p2 = new Post("Virtualização", "Mapa mental sobre virtualização", null, false, u1);
-		Post p3 = new Post("Biologia | Plantas", "Mapa mental sobre plantas", null, false, u1);
+		Post p1 = new Post("Arquitetura de Computadores", "Mapa mental sobre arquitetura de computadores", true, u1);
+		Post p2 = new Post("Virtualização", "Mapa mental sobre virtualização", false, u1);
+		Post p3 = new Post("Biologia | Plantas", "Mapa mental sobre plantas", false, u1);
 		
 		postRepository.save(p1);
 		postRepository.save(p2);
@@ -58,9 +58,9 @@ public class InsertDataForTesting {
 		commentRepository.save(c5);
 		
 		//USER 2
-		Post p4 = new Post("Geografia moderna", "Mapa mental sobre geografia moderna", null, false, u2);
-		Post p5 = new Post("Geopolítica da Russia", "Mapa mental sobre geopolítica", null, false, u2);
-		Post p6 = new Post("Biologia | Animais", "Mapa mental sobre animais", null, true, u2);
+		Post p4 = new Post("Geografia moderna", "Mapa mental sobre geografia moderna", false, u2);
+		Post p5 = new Post("Geopolítica da Russia", "Mapa mental sobre geopolítica", false, u2);
+		Post p6 = new Post("Biologia | Animais", "Mapa mental sobre animais", true, u2);
 		
 		postRepository.save(p4);
 		postRepository.save(p5);
@@ -79,9 +79,9 @@ public class InsertDataForTesting {
 		commentRepository.save(c10);
 		
 		//USER 3
-		Post p7 = new Post("Servidores físicos", "Mapa mental sobre servidores", null, true, u3);
-		Post p8 = new Post("Redes de computadores", "Mapa mental sobre redes", null, true, u3);
-		Post p9 = new Post("Business Inteligence", "Mapa mental sobre BI", null, false, u3);
+		Post p7 = new Post("Servidores físicos", "Mapa mental sobre servidores", true, u3);
+		Post p8 = new Post("Redes de computadores", "Mapa mental sobre redes", true, u3);
+		Post p9 = new Post("Business Inteligence", "Mapa mental sobre BI", false, u3);
 		
 		postRepository.save(p7);
 		postRepository.save(p8);
