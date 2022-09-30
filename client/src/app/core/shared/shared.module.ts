@@ -19,13 +19,14 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
     ToneHexColorPipe,
     LineSvgComponent,
     DisplayCanvasComponent,
-    DisplayBlockComponent
+    DisplayBlockComponent,
   ],
   imports: [
     CommonModule,
     MatProgressSpinnerModule,
     MatSnackBarModule,
-    DragDropModule
+    DragDropModule,
+    MatIconModule
   ],
   exports: [
     FormErrorComponent,
@@ -34,7 +35,7 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
     ToneHexColorPipe,
     LineSvgComponent,
     DisplayCanvasComponent,
-    DisplayBlockComponent
+    DisplayBlockComponent,
   ]
 })
 export class SharedModule { }

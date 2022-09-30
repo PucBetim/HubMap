@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Block } from '../../posts/map';
+import { Block } from '../../posts/post';
 
 @Component({
   selector: 'display-block',

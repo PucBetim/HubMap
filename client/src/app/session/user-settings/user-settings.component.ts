@@ -19,9 +19,6 @@ export class UserSettingsComponent implements OnInit {
   public carregando: boolean = false;
   public user: User = new User;
   public posts: Post[];
-
-  //teste
-  public map = new Map;
   public results: boolean = false;
 
   constructor(private fb: FormBuilder,
@@ -57,19 +54,14 @@ export class UserSettingsComponent implements OnInit {
       {
         next: result => {
           this.posts = result.body;
-
-          //momentâneo
-          var _map = JSON.parse(localStorage.getItem('mapa') || '{}');
-          if (_map.blocks){
-            this.map = _map;      
-            this.results = true;
-            }
         },
         error: error => {
           console.log(error)
         }
       })
+      this.results = true;
   }
+
   editUser() {
     if (this.form.dirty && this.form.valid && this.form.dirty) {
       var user = JSON.parse(sessionStorage.getItem('hubmap.user')!)

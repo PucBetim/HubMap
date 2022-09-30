@@ -1,6 +1,7 @@
+import { PostService } from './../../posts/post.service';
 import { Component, Input, OnInit } from '@angular/core';
-import { Block, Map, Position } from 'src/app/core/shared/posts/map';
 import { GetLimitPoints } from 'src/app/map-creator/getLimitPoints';
+import { Block, Position, Post } from '../../posts/post';
 
 @Component({
   selector: 'display-canvas',
@@ -9,38 +10,48 @@ import { GetLimitPoints } from 'src/app/map-creator/getLimitPoints';
 })
 export class DisplayCanvasComponent implements OnInit {
 
-  @Input() map: Map;
+  @Input() post: Post;
   @Input() size: number;
 
-  visualMap: Map;
+  visualPost: Post;
   resizeRatio: number;
   closestPoint = new Position;
   farestPoint = new Position;
+  optionsStyle: string[];
 
-  constructor(private getLimitPoints: GetLimitPoints) { }
+  constructor(
+    private getLimitPoints: GetLimitPoints,
+    private postService: PostService
+  ) { }
 
   ngOnInit(): void {
+    this.visualPost = JSON.parse(JSON.stringify(this.post));
+    this.postService.getPostBlocks(this.post.id).subscribe({
+      next: result => {
+        this.visualPost.blocks = result.body;
+        this.loadCanvas();
+      }, error: erro => {
+        console.log(erro)
+      }
+    })
+  }
 
-    this.visualMap = JSON.parse(JSON.stringify(this.map))
+  loadCanvas() {
+    if (this.visualPost.blocks) {
 
-    console.log(this.visualMap)
-    if (this.visualMap.blocks) {
-
-      var limit = this.getLimitPoints.getClosestFartest(this.visualMap.blocks)
+      var limit = this.getLimitPoints.getClosestFartest(this.visualPost.blocks)
 
       this.closestPoint = limit.closestPoint;
       this.farestPoint = limit.farestPoint;
+      var PostOriginalWidth = this.farestPoint.x - this.closestPoint.x;
+      var PostOriginalHeight = this.farestPoint.y - this.closestPoint.y;
 
-      var mapOriginalWidth = this.farestPoint.x - this.closestPoint.x;
-      var mapOriginalHeight = this.farestPoint.y - this.closestPoint.y;
-
-      var widthRatio = (this.size - 10) / mapOriginalWidth;
-      var heightRatio = (this.size - 10) / mapOriginalHeight;
+      var widthRatio = (this.size - 10) / PostOriginalWidth;
+      var heightRatio = (this.size - 10) / PostOriginalHeight;
 
       this.resizeRatio = widthRatio < heightRatio ? widthRatio : heightRatio;
 
-      this.resizeBlocks(this.visualMap.blocks);
-      
+      this.resizeBlocks(this.visualPost.blocks);
     }
   }
 
@@ -60,3 +71,6 @@ export class DisplayCanvasComponent implements OnInit {
     });
   }
 }
+
+
+

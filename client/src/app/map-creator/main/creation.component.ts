@@ -2,13 +2,12 @@ import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular
 import { MatDialog } from '@angular/material/dialog';
 import { MatMenuTrigger } from '@angular/material/menu';
 
-import { Map, Block } from '../../core/shared/posts/map';
+import { Post, Block } from '../../core/shared/posts/post';
 import { Observable } from 'rxjs';
 import { ComponentCanDeactivate } from 'src/app/core/services/guard.service';
 import { PostService } from '../../core/shared/posts/post.service';
 import { VisualCanvasComponent } from '../export-image/visual-canvas/visual-canvas.component';
 import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
-import { Post } from 'src/app/core/shared/posts/post';
 
 @Component({
   selector: 'app-creation',
@@ -25,7 +24,7 @@ export class CreationComponent implements OnInit, ComponentCanDeactivate {
     return !this.unsavedChanges
   }
 
-  public map = new Map;
+  public post = new Post;
   public selectedBlock: Block;
   public blockSelected: boolean = false;
   public savedProgress: [Block[]] = [[]];
@@ -38,17 +37,17 @@ export class CreationComponent implements OnInit, ComponentCanDeactivate {
   ) { }
 
   ngOnInit(): void {
-    var _map = JSON.parse(localStorage.getItem('mapa') || '{}');
+    var _post = JSON.parse(localStorage.getItem('post') || '{}');
 
-    if (_map.blocks)
-      this.map = _map;
+    if (_post.blocks)
+      this.post = _post;
 
-    this.savedProgress = [JSON.parse(JSON.stringify(this.map.blocks))];
+    this.savedProgress = [JSON.parse(JSON.stringify(this.post.blocks))];
 
   }
 
   addNewBlock() {
-    if (this.map.blocks?.length > 0)
+    if (this.post.blocks?.length > 0)
       return;
 
     console.log(this.main.nativeElement.clientHeight)
@@ -64,13 +63,13 @@ export class CreationComponent implements OnInit, ComponentCanDeactivate {
     _block.position.y = (this.main.nativeElement.clientHeight / 2) - (_block.size.height / 2);
 
 
-    if (this.map.blocks == null) {
-      let _map = new Map;
-      _map.blocks[0] = _block;
-      this.map = _map
+    if (this.post.blocks == null) {
+      let _post = new Post;
+      _post.blocks[0] = _block;
+      this.post = _post
       return
     }
-    this.map.blocks.push(_block);
+    this.post.blocks.push(_block);
     this.saveProgress();
   }
 
@@ -122,7 +121,7 @@ export class CreationComponent implements OnInit, ComponentCanDeactivate {
   undo() {
     this.unselectBlock();
     if (this.savedProgress.length > 1) {
-      this.map.blocks = JSON.parse(JSON.stringify(this.savedProgress[this.savedProgress.length - 2]));
+      this.post.blocks = JSON.parse(JSON.stringify(this.savedProgress[this.savedProgress.length - 2]));
       this.savedProgress.splice(-1)
     }
   }
@@ -131,32 +130,49 @@ export class CreationComponent implements OnInit, ComponentCanDeactivate {
     this.unsavedChanges = true;
     if (this.savedProgress.length > 15)
       this.savedProgress.splice(0, 1);
-    const blocks = JSON.parse(JSON.stringify(this.map.blocks));
+    const blocks = JSON.parse(JSON.stringify(this.post.blocks));
     this.savedProgress.push(blocks)
   }
 
   save() {
     this.unsavedChanges = false;
-    localStorage.setItem('mapa', JSON.stringify(this.map));
+    localStorage.setItem('post', JSON.stringify(this.post));
   }
 
-  post() {
+  createPost() {
     this.carregando = true;
 
+    var id;
     var post = new Post;
     let p = Object.assign({}, post)
 
+    p.description = "teste"
+    p.private = false;
+    p.title = "teste"
+
     this.postService.post(p).subscribe({
       next: obj => {
-        console.log('postado')
+        id = obj.body.id;
+        console.log(id)
+        this.postBlocks(id)
         this.carregando = false;
       }, error: error => {
-        console.log('erro na postagem')
         this.carregando = false;
       }
     })
   }
 
+  postBlocks(id: number) {
+    this.carregando = true;
+    this.postService.postBlocks(this.post.blocks[0], id).subscribe({
+      next: obj => {
+        console.log(obj)
+        this.carregando = false;
+      }, error: error => {
+        this.carregando = false;
+      }
+    })
+  }
 
   downloadImage() {
     var exportImageConfig = {
@@ -164,7 +180,7 @@ export class CreationComponent implements OnInit, ComponentCanDeactivate {
       width: 'auto',
       height: 'auto',
       data: {
-        blocks: this.map.blocks
+        blocks: this.post.blocks
       }
     };
 

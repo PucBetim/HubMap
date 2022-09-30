@@ -1,3 +1,4 @@
+import { Post } from 'src/app/core/shared/posts/post';
 import { Component, HostListener, OnInit } from '@angular/core';
 
 @Component({
@@ -24,7 +25,7 @@ export class LandingComponent implements OnInit {
   public searchBarClass: string[] = ["searchBar"];
   public resultDivClass: string[] = ["resultDiv"];
   public results: boolean = false;
-  public map = new Map;
+  public post = new Post;
   public blocksSize: number = 300;
 
   constructor() { }
@@ -45,9 +46,9 @@ export class LandingComponent implements OnInit {
     this.searchBarClass.push("sbTop");
     this.resultDivClass.push("rdTop");
 
-    var _map = JSON.parse(localStorage.getItem('mapa') || '{}');
+    var _post = JSON.parse(localStorage.getItem('post') || '{}');
 
-    if (_map.blocks)
-      this.map = _map;
+    if (_post.blocks)
+      this.post = _post;
   }
 }

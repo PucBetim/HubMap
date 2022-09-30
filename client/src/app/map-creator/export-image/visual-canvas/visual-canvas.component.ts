@@ -1,4 +1,4 @@
-import { Block, Position } from '../../../core/shared/posts/map';
+import { Block, Position } from '../../../core/shared/posts/post';
 import { AfterViewInit, Component, ElementRef, Inject, OnInit, ViewChild } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import html2canvas from 'html2canvas';
@@ -18,7 +18,7 @@ export class VisualCanvasComponent implements OnInit, AfterViewInit {
   @ViewChild('downloadLink') downloadLink: ElementRef;
   @ViewChild('triggerBckg', { static: false }) triggerBkg: MatMenuTrigger;
 
-  public carregando: boolean = false;
+  public loading: boolean = false;
   public blocks: Block[] = [];
   public closestPoint = new Position;
   public farestPoint = new Position;
@@ -50,10 +50,9 @@ export class VisualCanvasComponent implements OnInit, AfterViewInit {
   }
 
   generateImage() {
-    this.carregando = true;
+    this.loading = true;
     var color = this.backgroundColor == '' ? null : this.backgroundColor;
 
-    console.log(this.backgroundColor)
     setTimeout(() => {
       html2canvas(this.canvas.nativeElement, { backgroundColor: color }).then(canvas => {
         this.showcase.nativeElement.src = canvas.toDataURL();
@@ -61,7 +60,7 @@ export class VisualCanvasComponent implements OnInit, AfterViewInit {
         this.downloadLink.nativeElement.href = canvas.toDataURL('image/png');
         this.downloadLink.nativeElement.download = 'mapa-mental.png';
       });
-      this.carregando = false
+      this.loading = false
     }, 1000)
   }
 

@@ -1,4 +1,4 @@
-import { Block, Position } from '../posts/map';
+import { Block, Position } from '../posts/post';
 import { Component, Input, OnInit } from '@angular/core';
 
 @Component({

@@ -1,4 +1,4 @@
-import { Position, Block, Map } from '../../core/shared/posts/map';
+import { Position, Block, Post } from '../../core/shared/posts/post';
 import { Component, ElementRef, EventEmitter, HostListener, Input, OnInit, Output } from '@angular/core';
 import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
 
@@ -16,7 +16,7 @@ export class BlockComponent implements OnInit {
 
   @Input() block: Block;
   @Input() parentBlock: Block;
-  @Input() rootMap: Map;
+  @Input() rootPost: Post;
 
   @Output() selectBlockEvent = new EventEmitter<Block>();
   @Output() unselectBlockEvent = new EventEmitter<any>();

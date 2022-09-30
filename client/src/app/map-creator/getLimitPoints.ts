@@ -1,4 +1,4 @@
-import { Block, Position } from "../core/shared/posts/map";
+import { Block, Position } from "../core/shared/posts/post";
 
 export class GetLimitPoints {
     public points = new limitPoints;

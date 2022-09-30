@@ -2,8 +2,8 @@
     <div class="title-deco">Baixar Mapa Mental</div>
     <div class="margin">
         <div mat-dialog-content class="content">
-            <mat-spinner *ngIf="carregando"></mat-spinner>
-            <img #showcase *ngIf="!carregando">
+            <mat-spinner *ngIf="loading"></mat-spinner>
+            <img #showcase *ngIf="!loading">
         </div>
     </div>
     <div class="actions layoutDefaultStyle" mat-dialog-actions>

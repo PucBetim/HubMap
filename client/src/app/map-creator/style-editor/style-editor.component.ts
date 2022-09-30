@@ -1,6 +1,6 @@
 import { Component, ElementRef, EventEmitter, HostListener, Input, OnInit, Output, ViewChild, ViewEncapsulation } from '@angular/core';
 
-import { Block } from '../../core/shared/posts/map';
+import { Block } from '../../core/shared/posts/post';
 import { fontSizes } from 'src/app/core/shared/font-sizes';
 import { colors } from 'src/app/core/shared/colors';
 import { MatMenuTrigger } from '@angular/material/menu';
