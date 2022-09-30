@@ -3,6 +3,7 @@ package br.com.pucminas.hubmap.domain.post;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -16,8 +17,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-import javax.persistence.PrimaryKeyJoinColumn;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
@@ -26,7 +25,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import br.com.pucminas.hubmap.domain.comment.Comment;
 import br.com.pucminas.hubmap.domain.indexing.NGram;
-import br.com.pucminas.hubmap.domain.map.Map;
+import br.com.pucminas.hubmap.domain.map.Block;
 import br.com.pucminas.hubmap.domain.user.AppUser;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -35,7 +34,7 @@ import lombok.NoArgsConstructor;
 @SuppressWarnings("serial")
 @Entity
 @EntityListeners(PostListener.class)
-@JsonIgnoreProperties({"author", "ngrams", "comments"})
+@JsonIgnoreProperties({"author", "ngrams", "comments", "map"})
 @Getter
 @NoArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
@@ -63,10 +62,8 @@ public class Post implements Serializable {
 
 	private boolean isPrivate;
 	
-	//TODO @NotNull add this annotation 
-	@OneToOne(mappedBy = "post")
-	@PrimaryKeyJoinColumn
-	private Map map;
+	@OneToMany(mappedBy = "post", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	private Set<Block> map = new LinkedHashSet<>();
 	
 	@ManyToOne
 	@JoinColumn(name = "AUTHOR_ID", referencedColumnName = "id")
@@ -84,10 +81,12 @@ public class Post implements Serializable {
 	@OneToMany(mappedBy = "id.post", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Set<NGram> ngrams = new HashSet<>();
 
-	public Post(String title, String description, Map map, boolean isPrivate, AppUser author) {
+	/*@OneToOne(mappedBy = "post")
+	private Histogram histogram;*/
+	
+	public Post(String title, String description, boolean isPrivate, AppUser author) {
 		this.title = title;
 		this.description = description;
-		this.map = map;
 		this.isPrivate = isPrivate;
 		this.author = author;
 		initializePost();
@@ -99,6 +98,11 @@ public class Post implements Serializable {
 		views = 0;
 		created = LocalDateTime.now();
 		setModifiedNow();
+		//histogram = new Histogram();
+	}
+	
+	public void setId(Integer id) {
+		this.id = id;
 	}
 
 	public void setTitle(String title) {
@@ -107,10 +111,6 @@ public class Post implements Serializable {
 
 	public void setDescription(String description) {
 		this.description = description;
-	}
-
-	public void setMap(Map map) {
-		this.map = map;
 	}
 
 	public void changeLikes(boolean positive) {
