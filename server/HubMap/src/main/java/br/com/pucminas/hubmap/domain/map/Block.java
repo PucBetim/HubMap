@@ -67,7 +67,7 @@ public class Block implements Serializable {
 	
 	private String borderRadius;
 		
-	@ManyToMany(fetch = FetchType.EAGER)
+	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinTable(name = "POST_BLOCK_LINKED", joinColumns = {
 			@JoinColumn(name = "BLOCK_ID", referencedColumnName = "id")}, inverseJoinColumns = {
 				@JoinColumn(name = "LINKED_BLOCK_ID", referencedColumnName = "id") })
