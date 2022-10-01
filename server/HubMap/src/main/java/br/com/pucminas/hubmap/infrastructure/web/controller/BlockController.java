@@ -23,6 +23,7 @@ import br.com.pucminas.hubmap.domain.map.Block;
 import br.com.pucminas.hubmap.domain.map.BlockRepository;
 import br.com.pucminas.hubmap.domain.post.Post;
 import br.com.pucminas.hubmap.domain.post.PostRepository;
+import br.com.pucminas.hubmap.infrastructure.web.RestResponse;
 
 @RestController
 @RequestMapping(path = { "/hubmap/blocks" })
@@ -59,7 +60,7 @@ public class BlockController {
 	}
 	
 	@PostMapping("")
-	public ResponseEntity<Block> postBlock(
+	public ResponseEntity<RestResponse> postBlock(
 			@RequestParam(name = "post", required = true) Integer postId,
 			@RequestBody @Valid Block block) {
 		
@@ -69,7 +70,28 @@ public class BlockController {
 			block.setPost(post);
 			block = blockService.save(block);
 			
-			return new ResponseEntity<>(block, HttpStatus.CREATED);
+			RestResponse response = RestResponse.fromNormalResponse("Bloco criado com sucesso.", block.getId());
+			
+			return new ResponseEntity<>(response, HttpStatus.CREATED);
+		} catch (NoSuchElementException e) {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	@PutMapping()
+	public ResponseEntity<RestResponse> putComment(
+			@RequestParam(name = "post", required = true) Integer postId,
+			@RequestBody @Valid Block newBlock) {
+		
+		try {
+			Post post = postRepository.findById(postId).orElseThrow();
+			
+			newBlock.setPost(post);
+			newBlock = blockService.save(newBlock);
+			
+			RestResponse response = RestResponse.fromNormalResponse("Bloco atualizado com sucesso.", newBlock.getId());
+			
+			return new ResponseEntity<>(response, HttpStatus.OK);
 		} catch (NoSuchElementException e) {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
@@ -95,19 +117,4 @@ public class BlockController {
 			return new ResponseEntity<>(HttpStatus.CONFLICT);
 		}
 	}*/
-	
-	@PutMapping(path = "/{id}")
-	public ResponseEntity<Block> putComment(
-			@PathVariable Integer id,
-			@RequestBody Block newBlock) {
-		try {
-			
-			newBlock.setId(id);
-			newBlock = blockService.save(newBlock);
-			
-			return new ResponseEntity<>(newBlock, HttpStatus.OK);
-		} catch (NoSuchElementException e) {
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-		}
-	}
 }
