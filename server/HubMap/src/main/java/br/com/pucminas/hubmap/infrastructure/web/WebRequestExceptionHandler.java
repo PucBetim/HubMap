@@ -11,7 +11,7 @@ public class WebRequestExceptionHandler {
 	
 	@ExceptionHandler
 	@ResponseStatus(code = HttpStatus.BAD_REQUEST)
-	public RestResponseError handleException(RepositoryConstraintViolationException e) {
-		return RestResponseError.fromValidationError(e.getErrors());
+	public RestResponse handleException(RepositoryConstraintViolationException e) {
+		return RestResponse.fromValidationError(e.getErrors());
 	}
 }
