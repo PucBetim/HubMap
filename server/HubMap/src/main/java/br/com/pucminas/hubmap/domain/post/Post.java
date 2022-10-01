@@ -20,7 +20,11 @@ import javax.persistence.OneToMany;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import br.com.pucminas.hubmap.domain.comment.Comment;
@@ -30,12 +34,14 @@ import br.com.pucminas.hubmap.domain.user.AppUser;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @SuppressWarnings("serial")
 @Entity
 @EntityListeners(PostListener.class)
-@JsonIgnoreProperties({"author", "ngrams", "comments", "map"})
+@JsonIgnoreProperties({ "ngrams", "comments", "map" })
 @Getter
+@Setter
 @NoArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Post implements Serializable {
@@ -44,7 +50,7 @@ public class Post implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@EqualsAndHashCode.Include
 	private Integer id;
-	
+
 	@NotBlank(message = "Por favor, informe o título do post")
 	@Size(max = 30, message = "O título é muito grande")
 	@Column(length = 30, nullable = false)
@@ -61,29 +67,32 @@ public class Post implements Serializable {
 	private Integer views;
 
 	private boolean isPrivate;
-	
-	@OneToMany(mappedBy = "post", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	private Set<Block> map = new LinkedHashSet<>();
-	
+
+	@JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss")
+	private LocalDateTime created;
+
+	@JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss")
+	private LocalDateTime modified;
+
 	@ManyToOne
 	@JoinColumn(name = "AUTHOR_ID", referencedColumnName = "id")
 	private AppUser author;
-	
-	@JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss")
-	private LocalDateTime created;
-	
-	@JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss")
-	private LocalDateTime modified;
-	
+
 	@OneToMany(mappedBy = "post", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@OnDelete(action = OnDeleteAction.CASCADE)
+	private Set<Block> map = new LinkedHashSet<>();
+
+	@OneToMany(mappedBy = "post", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@OnDelete(action = OnDeleteAction.CASCADE)
 	private Set<Comment> comments = new HashSet<>();
-	
+
 	@OneToMany(mappedBy = "id.post", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Set<NGram> ngrams = new HashSet<>();
 
-	/*@OneToOne(mappedBy = "post")
-	private Histogram histogram;*/
-	
+	/*
+	 * @OneToOne(mappedBy = "post") private Histogram histogram;
+	 */
+
 	public Post(String title, String description, boolean isPrivate, AppUser author) {
 		this.title = title;
 		this.description = description;
@@ -91,26 +100,14 @@ public class Post implements Serializable {
 		this.author = author;
 		initializePost();
 	}
-	
+
 	public void initializePost() {
 		likes = 0;
 		dislikes = 0;
 		views = 0;
 		created = LocalDateTime.now();
 		setModifiedNow();
-		//histogram = new Histogram();
-	}
-	
-	public void setId(Integer id) {
-		this.id = id;
-	}
-
-	public void setTitle(String title) {
-		this.title = title;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
+		// histogram = new Histogram();
 	}
 
 	public void changeLikes(boolean positive) {
@@ -123,10 +120,10 @@ public class Post implements Serializable {
 	}
 
 	public void changeDislikes(boolean positive) {
-		
-		if(dislikes > 0) {
+
+		if (dislikes > 0) {
 			dislikes += positive ? 1 : -1;
-		} else if(dislikes == 0 && positive){
+		} else if (dislikes == 0 && positive) {
 			dislikes += 1;
 		}
 	}
@@ -135,23 +132,13 @@ public class Post implements Serializable {
 		views++;
 	}
 
-	public void setPrivate(boolean isPrivate) {
-		this.isPrivate = isPrivate;
-	}
-
-	public void setAuthor(AppUser author) {
-		this.author = author;
-	}
-	
 	public void setModifiedNow() {
 		this.modified = LocalDateTime.now();
 	}
 	
-	public void setComments(Set<Comment> comments) {
-		this.comments = comments;
+	@JsonIgnore
+	public void setAuthor(AppUser author) {
+		this.author = author;
 	}
-	
-	public void setNgrams(Set<NGram> ngrams) {
-		this.ngrams = ngrams;
-	}
+
 }
