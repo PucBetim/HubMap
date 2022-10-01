@@ -20,14 +20,16 @@ public class AppUserService {
 		}
 
 		if(appUser.getId() == null) {
-			
-			appUser.encryptPassword();
-			
-			if(StringUtils.isBlank(appUser.getNick())) {
-				appUser.createNickFromName();
-			}
+			appUser.encryptPassword();	
+		} else {
+			AppUser dbAppUser = appUserRepository.findById(appUser.getId()).orElseThrow();
+			appUser.setPassword(dbAppUser.getPassword());
 		}
-	
+		
+		if(StringUtils.isBlank(appUser.getNick())) {
+			appUser.createNickFromName();
+		}
+		
 		appUserRepository.save(appUser);
 		
 		return appUser;

@@ -21,6 +21,7 @@ import br.com.pucminas.hubmap.application.service.AppUserService;
 import br.com.pucminas.hubmap.application.service.DuplicatedEmailException;
 import br.com.pucminas.hubmap.domain.user.AppUser;
 import br.com.pucminas.hubmap.domain.user.AppUserRepository;
+import br.com.pucminas.hubmap.infrastructure.web.RestResponse;
 import br.com.pucminas.hubmap.utils.SecurityUtils;
 
 @RestController
@@ -45,19 +46,23 @@ public class AppUserController {
 	}
 	
 	@DeleteMapping("")
-	public ResponseEntity<AppUser> deleteAppUserById() {
+	public ResponseEntity<RestResponse> deleteAppUserById() {
 		
 		AppUser appUser = appUserRepository.findByEmail(SecurityUtils.getLoggedUserEmail());
 		
 		appUserRepository.deleteById(appUser.getId());
+
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
 
 	@PostMapping("")
-	public ResponseEntity<AppUser> postAppUser(@RequestBody @Valid AppUser newAppUser, Errors errors) {
+	public ResponseEntity<RestResponse> postAppUser(@RequestBody @Valid AppUser newAppUser, Errors errors) {
 		try {
 			newAppUser = appUserService.save(newAppUser);
-			return new ResponseEntity<>(newAppUser, HttpStatus.CREATED);
+			
+			RestResponse response = RestResponse.fromNormalResponse("Usuário criado com sucesso.", newAppUser.getId());
+			
+			return new ResponseEntity<>(response, HttpStatus.CREATED);
 		} catch (DuplicatedEmailException e) {
 			errors.rejectValue("email", null, e.getMessage());
 			throw new RepositoryConstraintViolationException(errors);
@@ -66,7 +71,7 @@ public class AppUserController {
 	}
 
 	@PutMapping(path = "")
-	public ResponseEntity<AppUser> putAppUser(@RequestBody @Valid AppUser appUser, Errors errors) {
+	public ResponseEntity<RestResponse> putAppUser(@RequestBody @Valid AppUser appUser, Errors errors) {
 
 		try {
 			
@@ -75,7 +80,9 @@ public class AppUserController {
 			
 			appUser = appUserService.save(appUser);
 
-			return new ResponseEntity<>(appUser, HttpStatus.OK);
+			RestResponse response = RestResponse.fromNormalResponse("Usuário atualizado com sucesso.", appUser.getId());
+			
+			return new ResponseEntity<>(response, HttpStatus.OK);
 		} catch (DuplicatedEmailException e) {
 			errors.rejectValue("email", null, e.getMessage());
 			throw new RepositoryConstraintViolationException(errors);
