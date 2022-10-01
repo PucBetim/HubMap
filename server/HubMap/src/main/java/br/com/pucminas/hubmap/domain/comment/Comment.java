@@ -23,12 +23,14 @@ import br.com.pucminas.hubmap.domain.user.AppUser;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @SuppressWarnings("serial")
 @Entity
 @EntityListeners(CommentListener.class)
 @JsonIgnoreProperties({ "post" })
 @Getter
+@Setter
 @NoArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Comment implements Serializable {
@@ -36,7 +38,7 @@ public class Comment implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@EqualsAndHashCode.Include
-	private int id;
+	private Integer id;
 
 	@Column(nullable = false)
 	@NotBlank(message = "O comentário deve ser informado")
@@ -47,16 +49,13 @@ public class Comment implements Serializable {
 	@JoinColumn(name = "POST_ID", referencedColumnName = "id")
 	private Post post;
 
-	private int likes;
+	private Integer likes;
 
-	private int dislikes;
-
-	private int views;
+	private Integer dislikes;
 
 	@OneToOne
 	@JoinColumn(name = "REPLIED_TO", referencedColumnName = "id")
 	private Comment repliedTo;
-	// TODO Think about a better way to do it
 
 	@ManyToOne
 	@JoinColumn(name = "AUTHOR_ID", referencedColumnName = "id")
@@ -65,6 +64,7 @@ public class Comment implements Serializable {
 	@JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss")
 	private LocalDateTime timestamp;
 
+	//TODO Remove all constructors
 	public Comment(Post post, String content, AppUser author, Comment repliedTo) {
 		this.post = post;
 		this.content = content;
@@ -80,12 +80,7 @@ public class Comment implements Serializable {
 	public void initializeComment() {
 		likes = 0;
 		dislikes = 0;
-		views = 0;
 		setTimestampNow();
-	}
-
-	public void setContent(String content) {
-		this.content = content;
 	}
 
 	public void changeLikes(boolean positive) {
@@ -101,27 +96,11 @@ public class Comment implements Serializable {
 		
 		if(dislikes > 0) {
 			dislikes += positive ? 1 : -1;
-		} else if(likes == 0 && positive){
+		} else if(dislikes == 0 && positive){
 			dislikes += 1;
 		}
 	}
-
-	public void addViews() {
-		views++;
-	}
-
-	public void setPost(Post post) {
-		this.post = post;
-	}
-
-	public void setRepliedTo(Comment repliedTo) {
-		this.repliedTo = repliedTo;
-	}
-
-	public void setAuthor(AppUser author) {
-		this.author = author;
-	}
-
+	
 	public void setTimestampNow() {
 		timestamp = LocalDateTime.now();
 	}

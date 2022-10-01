@@ -25,6 +25,10 @@ import br.com.pucminas.hubmap.domain.comment.Comment;
 import br.com.pucminas.hubmap.domain.comment.CommentRepository;
 import br.com.pucminas.hubmap.domain.post.Post;
 import br.com.pucminas.hubmap.domain.post.PostRepository;
+import br.com.pucminas.hubmap.domain.user.AppUser;
+import br.com.pucminas.hubmap.domain.user.AppUserRepository;
+import br.com.pucminas.hubmap.infrastructure.web.RestResponse;
+import br.com.pucminas.hubmap.utils.SecurityUtils;
 
 @RestController
 @RequestMapping(path = "/hubmap/comments")
@@ -38,6 +42,9 @@ public class CommentController {
 	
 	@Autowired
 	private PostRepository postRepository;
+	
+	@Autowired
+	private AppUserRepository appUserRepository;
 
 	@GetMapping("")
 	public ResponseEntity<List<Comment>> getCommentsByPost(@RequestParam(name = "post", required = true) Integer postId) {
@@ -80,32 +87,66 @@ public class CommentController {
 	}
 	
 	@PostMapping(path = "")
-	public ResponseEntity<Comment> postComment(
+	public ResponseEntity<RestResponse> postComment(
 			@RequestParam(name = "post", required = true) Integer postId,
 			@RequestBody @Valid Comment comment) {
 		
 		try {
 			Post post = postRepository.findById(postId).orElseThrow();
+			AppUser loggedUser = appUserRepository.findByEmail(SecurityUtils.getLoggedUserEmail());
 			
 			comment.setPost(post);
+			comment.setAuthor(loggedUser);
 			comment = commentService.save(comment);
 			
-			return new ResponseEntity<>(comment, HttpStatus.CREATED);
+			RestResponse response = RestResponse.fromNormalResponse("Comentário criado com sucesso.", comment.getId());
+			
+			return new ResponseEntity<>(response, HttpStatus.CREATED);
 		} catch (NoSuchElementException e) {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 	}
 	
 	@PutMapping(path = "/{id}")
-	public ResponseEntity<Comment> putComment(
+	public ResponseEntity<RestResponse> putComment(
 			@PathVariable Integer id,
-			@RequestBody Comment newComment) {
+			@RequestBody @Valid Comment newComment) {
 		try {
-			Comment oldComment = commentRepository.findById(id).orElseThrow();
 			
-			newComment = commentService.save(oldComment, newComment);
+			newComment.setId(id);
+			newComment = commentService.save(newComment);
 			
-			return new ResponseEntity<>(newComment, HttpStatus.OK);
+			RestResponse response = RestResponse.fromNormalResponse("Comentário atualizado com sucesso.", newComment.getId());
+			
+			return new ResponseEntity<>(response, HttpStatus.OK);
+		} catch (NoSuchElementException e) {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	@PostMapping("/{id}/likes")
+	public ResponseEntity<RestResponse> changeLike(
+			@PathVariable("id") Integer id,
+			@RequestParam(name = "add", required = true) Boolean positive) {
+		
+		try {
+			commentService.changeLike(id, positive);
+			RestResponse response = RestResponse.fromNormalResponse("Likes alterados com sucesso.", id);
+			return new ResponseEntity<>(response, HttpStatus.OK);
+		} catch (NoSuchElementException e) {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	@PostMapping("/{id}/dislikes")
+	public ResponseEntity<RestResponse> changeDislike(
+			@PathVariable("id") Integer id,
+			@RequestParam(name = "add", required = true) Boolean positive) {
+		
+		try {
+			commentService.changeDislike(id, positive);
+			RestResponse response = RestResponse.fromNormalResponse("Dislikes alterados com sucesso.", id);
+			return new ResponseEntity<>(response, HttpStatus.OK);
 		} catch (NoSuchElementException e) {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}

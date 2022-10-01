@@ -8,45 +8,32 @@ import org.springframework.transaction.annotation.Transactional;
 
 import br.com.pucminas.hubmap.domain.comment.Comment;
 import br.com.pucminas.hubmap.domain.comment.CommentRepository;
-import br.com.pucminas.hubmap.utils.StringUtils;
 
 @Service
 public class CommentService {
 	
 	@Autowired
 	private CommentRepository commentRepository;
-	
+
 	@Transactional
-	public Comment save(Comment comment) {
-		return commentRepository.save(comment);
-	}
-	
-	@Transactional
-	public Comment save(Comment dbComment, Comment newComment) {
-		
-		dbComment = commentRepository.findById(dbComment.getId()).orElseThrow();
-		
-		if(!StringUtils.isBlank(newComment.getContent())){
+	public Comment save(Comment newComment) {
 			
-			dbComment.setContent(newComment.getContent());
-			dbComment.setTimestampNow();
+		if(newComment.getId() != null) {
+			Comment dbComment = commentRepository.findById(newComment.getId()).orElseThrow();
+			
+			newComment.setAuthor(dbComment.getAuthor());
+			newComment.setPost(dbComment.getPost());
+			newComment.setLikes(dbComment.getLikes());
+			newComment.setDislikes(dbComment.getDislikes());
+			newComment.setTimestampNow();
+		} else {
+			newComment.initializeComment();
 		}
-		
-		if(newComment.getLikes() != 0) {
-			dbComment.changeLikes(newComment.getLikes() > 0);
-		}
-		
-		if(newComment.getDislikes() != 0) {
-			dbComment.changeDislikes(newComment.getDislikes() > 0);
-		}
-		
-		if(newComment.getViews() != 0) {
-			dbComment.addViews();
-		}
-		
-		return commentRepository.save(dbComment);
+			
+		return commentRepository.save(newComment);
 	}
 
+	@Transactional
 	public void delete(Integer commentId) throws CommentRepliedToException {
 		
 		List<Comment> comments = commentRepository.findByRepliedTo(commentId);
@@ -56,5 +43,17 @@ public class CommentService {
 		}
 		
 		commentRepository.deleteById(commentId);
+	}
+	
+	@Transactional
+	public void changeLike(Integer commentId, boolean positive) {
+		Comment dbComment = commentRepository.findById(commentId).orElseThrow();
+		dbComment.changeLikes(positive);
+	}
+	
+	@Transactional
+	public void changeDislike(Integer commentId, boolean positive) {
+		Comment dbComment = commentRepository.findById(commentId).orElseThrow();
+		dbComment.changeDislikes(positive);
 	}
 }
