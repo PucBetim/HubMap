@@ -34,8 +34,8 @@
             Meus Mapas
         </div>
         <br><br>
-        <div *ngIf="results" class="resultContainer">
-                <display-canvas *ngFor="let post of posts" [size]="300" [post]="post" ></display-canvas>
+        <div class="resultContainer" *ngIf="results">
+            <display-canvas *ngFor="let post of posts" [size]="300" [post]="post"></display-canvas>
         </div>
     </div>
 </div>

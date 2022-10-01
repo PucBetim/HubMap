@@ -6,15 +6,15 @@
 
     .container {
         position: relative;
-        min-height: 92vh;
+        height: 92vh;
         padding: 4vh;
     }
 
     .toolbar {
         position: relative;
         min-height: fit-content;
-        margin-bottom: 50px;
         color: aliceblue;
+        min-height: 10vh;
 
         h1 {
             grid-area: grid1;
@@ -24,6 +24,9 @@
             text-decoration: none;
             color: inherit;
         }
+    }
 
+    .content{
+        height: 82vh;
     }
 }

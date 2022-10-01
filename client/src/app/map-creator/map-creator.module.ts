@@ -62,7 +62,7 @@ export const OtherOptions: MatTooltipDefaultOptions = {
     MatDialogModule,
     MatCardModule,
     MatSliderModule,
-    SharedModule,
+    SharedModule, 
     MatProgressSpinnerModule
   ],
   providers: [

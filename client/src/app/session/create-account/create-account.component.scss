@@ -1,48 +1,53 @@
-.container {
-    min-width: 100%;
-    min-height: 80vh;
+.main {
+    width: 100%;
+    height: fit-content;
+    max-height: 100%;
 }
 
-.createAccount {
-    position: relative;
-    background-color: #272736;
-    max-width: 45vh;
-    height: 50%;
-    margin: auto;
-    top: 15%;
-    z-index: 1;
-    text-align: center;
+.createContainer {
+    padding: 4vh 8vh;
+    max-height: 74vh;
+    width: fit-content;
     background-color: #fff;
-    padding: 2em;
+    margin: auto;
     box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
 
-    .title-deco {
+    overflow: auto;
+
+    .createAccount {
+
+        max-height: 100%;
         position: relative;
-        float: left;
-    }
+        width: fit-content;
+        margin: auto;
+        z-index: 1;
+        text-align: center;
+        background-color: #fff;
 
-    input {
-        border: solid 3px #fff;
-        box-sizing: border-box;
-        font-size: 1.5em;
-        height: 2em;
-        width: 100%;
-        padding: .5em;
-    }
+        .title-deco {
+            position: relative;
+            float: left;
+        }
 
-    .link {
-        color: inherit;
-        float: left;
-        color: #236099;
-    }
-
-    .link:hover {
-        color: #77aada;
-    }
+        mat-form-field {
+            min-width: 200px;
+        }
 
 
-    button {
-        font-size: x-large;
-        padding: 1vh 3vh 1vh 3vh;
+        .link {
+            color: inherit;
+            float: left;
+            color: #236099;
+        }
+
+        .link:hover {
+            color: #77aada;
+        }
+
+
+        button {
+            font-size: x-large;
+            padding: 2% 5%;
+        }
     }
 }

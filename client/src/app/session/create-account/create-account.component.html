@@ -1,53 +1,53 @@
 <loading *ngIf="carregando"></loading>
-<div class="container">
-    <div class="createAccount">
-        <div class="title-deco">
-            Criar uma Conta
-        </div>
-        <br><br>
-        <form [formGroup]="form" (ngSubmit)="createUser()">
-            <div fxLayout="column" fxLayoutAlign="space-around">
-                <div class="pb-1">
-                    <mat-form-field>
-                        <input autofocus matInput placeholder="Nome" [formControl]="form.controls['name']">
-                    </mat-form-field>
-                </div>
-                <div class="pb-1">
-                    <mat-form-field>
-                        <input autofocus matInput placeholder="Apelido" [formControl]="form.controls['nick']">
-                    </mat-form-field>
-                </div>
-                <div class="pb-1">
-                    <mat-form-field>
-                        <input autofocus matInput placeholder="E-mail" [formControl]="form.controls['email']">
-                    </mat-form-field>
-                </div>
-                <div class="pb-1">
-                    <mat-form-field>
-                        <input autofocus matInput placeholder="Confirme seu E-mail"
-                            [formControl]="form.controls['confirmEmail']">
-                    </mat-form-field>
-                </div>
-                <div class="pb-1">
-                    <mat-form-field>
-                        <input autocomplete="off" matInput type="password" placeholder="Senha"
-                            [formControl]="form.controls['password']">
-                    </mat-form-field>
-                </div>
-                <div class="pb-1">
-                    <mat-form-field>
-                        <input autocomplete="off" matInput type="password" placeholder="Confirme sua Senha"
-                            [formControl]="form.controls['confirmPassword']">
-                    </mat-form-field>
-                </div>
-                <button type="submit" [disabled]="!form.valid">Criar</button>
-                <br>
-                <br>
-                <p><a class="link" href="/session/signin">Já possui conta? Faça login</a></p>
+<div class="main">
+    <div class="createContainer">
+        <div class="createAccount">
+            <div class="title-deco">
+                Criar uma Conta
             </div>
+            <br><br>
+            <form [formGroup]="form" (ngSubmit)="createUser()">
+                <div fxLayout="column" fxLayoutAlign="space-around">
+                    <div>
+                        <mat-form-field class="input">
+                            <input autofocus matInput placeholder="Nome" [formControl]="form.controls['name']">
+                        </mat-form-field>
+                    </div>
+                    <div>
+                        <mat-form-field>
+                            <input autofocus matInput placeholder="Apelido" [formControl]="form.controls['nick']">
+                        </mat-form-field>
+                    </div>
+                    <div>
+                        <mat-form-field>
+                            <input autofocus matInput placeholder="E-mail" [formControl]="form.controls['email']">
+                        </mat-form-field>
+                    </div>
+                    <div>
+                        <mat-form-field>
+                            <input autofocus matInput placeholder="Confirme seu E-mail"
+                                [formControl]="form.controls['confirmEmail']">
+                        </mat-form-field>
+                    </div>
+                    <div>
+                        <mat-form-field>
+                            <input autocomplete="off" matInput type="password" placeholder="Senha"
+                                [formControl]="form.controls['password']">
+                        </mat-form-field>
+                    </div>
+                    <div>
+                        <mat-form-field>
+                            <input autocomplete="off" matInput type="password" placeholder="Confirme sua Senha"
+                                [formControl]="form.controls['confirmPassword']">
+                        </mat-form-field>
+                    </div>
+                    <button type="submit" [disabled]="!form.valid">Criar</button>
+                    <br>
+                    <br>
+                    <p><a class="link" href="/session/signin">Já possui conta? Faça login</a></p>
+                </div>
 
-        </form>
-
+            </form>
+        </div>
     </div>
-
 </div>
