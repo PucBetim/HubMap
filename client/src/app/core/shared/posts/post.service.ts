@@ -18,13 +18,18 @@ export class PostService extends BaseService {
   post(post: Post): Observable<any> {
     return this.http.post<any>((ConfigService.getUrlApi() + this.userUrlPost), post, ConfigService.getOptions()).pipe(catchError(super.serviceError));
   };
+  
+  getUserPosts(): Observable<any> {
+    return this.http.get<any>((ConfigService.getUrlApi() + this.userUrlPost), ConfigService.getOptions()).pipe(catchError(super.serviceError));
+  };
+
+  getPostById(id: number): Observable<any> {
+    return this.http.get<any>((ConfigService.getUrlApi() + this.userUrlPost + `/${id}`), ConfigService.getOptions()).pipe(catchError(super.serviceError));
+  };
+
 
   postBlocks(blocks: Block, id: number): Observable<any> {
     return this.http.post<any>((ConfigService.getUrlApi() + this.userUrlBlocks + `?post=${id}`), blocks, ConfigService.getOptions()).pipe(catchError(super.serviceError));
-  };
-
-  getUserPosts(): Observable<any> {
-    return this.http.get<any>((ConfigService.getUrlApi() + this.userUrlPost), ConfigService.getOptions()).pipe(catchError(super.serviceError));
   };
 
   getPostBlocks(id: number): Observable<any> {

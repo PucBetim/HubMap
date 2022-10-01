@@ -22,11 +22,21 @@
     flex-direction: column;
     justify-content: space-around;
 
+    h4 {
+        margin-right: 15px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        line-clamp: 2;
+        -webkit-box-orient: vertical;
+    }
+
     .mat-icon {
         font-size: 1em;
     }
 
-    .btnEditar {
+    .btnEdit {
         height: 2em;
         padding: 0;
     }
@@ -35,6 +45,7 @@
 .opt {
     display: flex;
     justify-content: space-around;
+    margin-bottom: 5px;
 }
 
 .hover {

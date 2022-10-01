@@ -1,37 +1,33 @@
 <loading *ngIf="carregando"></loading>
-<div class="container">
-    <div class="login">
-        <div class="title-deco">
-            Login
-        </div>
-        <br><br>
-        <div>
-            <form [formGroup]="form" (ngSubmit)="login()">
-                <div fxLayout="column" fxLayoutAlign="space-around">
-                    <div class="pb-1">
-                        <mat-form-field>
-                            <input autofocus matInput placeholder="E-mail" [formControl]="form.controls['email']">
-                        </mat-form-field>
-
+<div class="main">
+    <div class="container">
+        <div class="login">
+            <div class="title-deco">
+                Login
+            </div>
+            <br><br>
+            <div>
+                <form [formGroup]="form" (ngSubmit)="login()">
+                    <div fxLayout="column" fxLayoutAlign="space-around">
+                        <div >
+                            <mat-form-field>
+                                <input autofocus matInput placeholder="E-mail" [formControl]="form.controls['email']">
+                            </mat-form-field>
+                        </div>
+                        <div >
+                            <mat-form-field>
+                                <input autocomplete="off" matInput type="password" placeholder="Senha"
+                                    [formControl]="form.controls['password']">
+                            </mat-form-field>
+                        </div>
+                        <form-error [errors]="errors"></form-error>
+                        <button type="submit" [disabled]="!form.valid">Login</button>
                     </div>
-                    <div class="pb-1">
-                        <mat-form-field>
-                            <input autocomplete="off" matInput type="password" placeholder="Senha"
-                                [formControl]="form.controls['password']">
-                        </mat-form-field>
-                    </div>
+                </form>
+            </div>
 
-                    <br>
-                    <form-error [errors]="errors"></form-error>
-                    <br>
-
-                    <button  type="submit" [disabled]="!form.valid">Login</button>
-                </div>
-            </form>
+            <br>
+            <p><a class="link" href="/session/create-account">Ainda não tem conta? Registre-se</a></p>
         </div>
-        <!-- <br>
-        <p><a class="link" routerLink="/session/password-reset">Esqueceu a senha?</a></p> -->
-        <br>
-        <p><a class="link" href="/session/create-account">Ainda não tem conta? Registre-se</a></p>
     </div>
 </div>

@@ -6,13 +6,14 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTooltipDefaultOptions, MatTooltipModule, MAT_TOOLTIP_DEFAULT_OPTIONS } from '@angular/material/tooltip';
 import { MatMenuModule } from '@angular/material/menu';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatSelectModule } from '@angular/material/select';
 import { MatCardModule } from '@angular/material/card';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
 import { CreationComponent } from './main/creation.component';
 import { CreatorRoutes } from './map-creator.routing';
@@ -26,6 +27,9 @@ import { VisualBlockComponent } from './export-image/visual-block/visual-block.c
 import { VisualTextDivComponent } from './export-image/visual-text-div/visual-text-div.component';
 import { SharedModule } from './../core/shared/shared.module';
 import { PendingChangesGuard } from '../core/services/guard.service';
+import { CreatePostComponent } from './create-post/create-post.component';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 
 export const OtherOptions: MatTooltipDefaultOptions = {
   showDelay: 0,
@@ -46,6 +50,7 @@ export const OtherOptions: MatTooltipDefaultOptions = {
     VisualCanvasComponent,
     VisualBlockComponent,
     VisualTextDivComponent,
+    CreatePostComponent,
   ],
   imports: [
     CommonModule,
@@ -55,6 +60,9 @@ export const OtherOptions: MatTooltipDefaultOptions = {
     MatButtonModule,
     MatTooltipModule,
     FormsModule,
+    MatFormFieldModule,
+    ReactiveFormsModule,
+    MatInputModule,
     MatMenuModule,
     MatButtonToggleModule,
     MatSelectModule,
@@ -62,8 +70,9 @@ export const OtherOptions: MatTooltipDefaultOptions = {
     MatDialogModule,
     MatCardModule,
     MatSliderModule,
-    SharedModule, 
-    MatProgressSpinnerModule
+    SharedModule,
+    MatProgressSpinnerModule,
+    MatSlideToggleModule
   ],
   providers: [
     { provide: MAT_TOOLTIP_DEFAULT_OPTIONS, useValue: OtherOptions },

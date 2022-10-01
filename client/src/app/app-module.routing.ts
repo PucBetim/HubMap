@@ -16,6 +16,7 @@ export const AppRoutes: Routes = [
   {
     path: 'creator', component: MapCreatorLayoutComponent,
     children: [
+      { path: ':id', loadChildren: () => import('./map-creator/map-creator.module').then(m => m.MapCreatorModule) },
       { path: '', loadChildren: () => import('./map-creator/map-creator.module').then(m => m.MapCreatorModule) },
     ]
   },

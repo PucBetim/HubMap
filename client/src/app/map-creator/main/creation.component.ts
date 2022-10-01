@@ -3,11 +3,14 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatMenuTrigger } from '@angular/material/menu';
 
 import { Post, Block } from '../../core/shared/posts/post';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { ComponentCanDeactivate } from 'src/app/core/services/guard.service';
 import { PostService } from '../../core/shared/posts/post.service';
 import { VisualCanvasComponent } from '../export-image/visual-canvas/visual-canvas.component';
 import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
+import { ActivatedRoute, Router } from '@angular/router';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { CreatePostComponent } from '../create-post/create-post.component';
 
 @Component({
   selector: 'app-creation',
@@ -30,20 +33,54 @@ export class CreationComponent implements OnInit, ComponentCanDeactivate {
   public savedProgress: [Block[]] = [[]];
   public unsavedChanges: boolean = false;
   public carregando: boolean = false;
+  public sub: Subscription;
+  public id: number;
 
-  constructor(
+  constructor(private route: ActivatedRoute,
     private dialog: MatDialog,
-    private postService: PostService
+    private postService: PostService,
+    private router: Router,
+    private snackBar: MatSnackBar
   ) { }
 
   ngOnInit(): void {
-    var _post = JSON.parse(localStorage.getItem('post') || '{}');
+    this.carregando = true;
+    var _post = new Post;
+    this.sub = this.route.params.subscribe(
+      params => {
+        this.id = params['id'];
+      });
 
-    if (_post.blocks)
-      this.post = _post;
+    if (this.id) {
+      this.postService.getPostById(this.id).subscribe(
+        {
+          next: result => {
+            _post = result.body;
+            this.getBlocks(_post);
+          },
+          error: error => {
+            this.snackBar.open(error.errors);
+            this.carregando = false;
+          }
+        })
+    }
+    else this.carregando = false
+  }
 
-    this.savedProgress = [JSON.parse(JSON.stringify(this.post.blocks))];
-
+  getBlocks(post: Post) {
+    this.carregando = true;
+    this.postService.getPostBlocks(post.id).subscribe({
+      next: result => {
+        post.blocks = result.body
+        if (post.blocks)
+          this.post = post;
+        this.savedProgress = [JSON.parse(JSON.stringify(this.post.blocks))];
+        this.carregando = false;
+      }, error: error => {
+        this.snackBar.open(error.errors);
+        this.carregando = false;
+      }
+    })
   }
 
   addNewBlock() {
@@ -140,38 +177,24 @@ export class CreationComponent implements OnInit, ComponentCanDeactivate {
   }
 
   createPost() {
-    this.carregando = true;
-
-    var id;
-    var post = new Post;
-    let p = Object.assign({}, post)
-
-    p.description = "teste"
-    p.private = false;
-    p.title = "teste"
-
-    this.postService.post(p).subscribe({
-      next: obj => {
-        id = obj.body.id;
-        console.log(id)
-        this.postBlocks(id)
-        this.carregando = false;
-      }, error: error => {
-        this.carregando = false;
+    var createPostConfig = {
+      disableClose: false,
+      width: '300px',
+      height: 'auto',
+      data: {
+        post: this.post
       }
-    })
-  }
+    };
 
-  postBlocks(id: number) {
-    this.carregando = true;
-    this.postService.postBlocks(this.post.blocks[0], id).subscribe({
-      next: obj => {
-        console.log(obj)
-        this.carregando = false;
-      }, error: error => {
-        this.carregando = false;
+    const dialogRef = this.dialog.open(CreatePostComponent, createPostConfig);
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.snackBar.open(result, "Ok", {
+          duration: 2000
+        })
+        this.unsavedChanges = false;
       }
-    })
+    });
   }
 
   downloadImage() {

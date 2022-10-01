@@ -2,6 +2,7 @@ import { PostService } from './../../posts/post.service';
 import { Component, Input, OnInit } from '@angular/core';
 import { GetLimitPoints } from 'src/app/map-creator/getLimitPoints';
 import { Block, Position, Post } from '../../posts/post';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'display-canvas',
@@ -21,7 +22,8 @@ export class DisplayCanvasComponent implements OnInit {
 
   constructor(
     private getLimitPoints: GetLimitPoints,
-    private postService: PostService
+    private postService: PostService,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
@@ -69,6 +71,11 @@ export class DisplayCanvasComponent implements OnInit {
       this.resizeBlocks(b.blocks);
       return;
     });
+  }
+
+  goToEdit(){
+    this.router.navigateByUrl('/creator/' + this.post.id);
+
   }
 }
 

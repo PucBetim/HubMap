@@ -26,11 +26,6 @@ export class BlockComponent implements OnInit {
   clickout(event: any) {
     if (!this.eRef.nativeElement.contains(event.target)) {
 
-      // if (this.blockSelected) {
-      //   this.block.position.x = event.layerX;
-      //   this.block.position.y = event.layerY;
-      // }
-
       this.blockSelected = false;
       this.emitUnselect();
 

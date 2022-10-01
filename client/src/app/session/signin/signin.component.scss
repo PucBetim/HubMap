@@ -1,31 +1,36 @@
+.main {
+    width: 100%;
+    height: fit-content;
+    max-height: 100%;
+}
+
 .container {
-    min-width: 100%;
-    min-height: 80vh;
+    padding: 4vh 8vh;
+    max-height: 74vh;
+    width: fit-content;
+    background-color: #fff;
+    margin: auto;
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+    overflow: auto;
 }
 
 .login {
+
+    max-height: 100%;
     position: relative;
-    background-color: #272736;
-    max-width: 45vh;
-    height: 50%;
+    width: fit-content;
     margin: auto;
-    top: 15%;
     z-index: 1;
     text-align: center;
     background-color: #fff;
-    padding: 2em;
-    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
 
     .title-deco {
         position: relative;
         float: left;
     }
 
-    input {
-        box-sizing: border-box;
-        font-size: 1.5em;
-        height: 2em;
-        width: 100%;
+    mat-form-field {
+        min-width: 200px;
     }
 
     .link {
@@ -40,8 +45,6 @@
 
     button {
         font-size: x-large;
-        padding: 1vh 3vh 1vh 3vh;
+        padding: 2% 5%;
     }
-
-
 }
