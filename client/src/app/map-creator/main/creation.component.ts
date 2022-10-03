@@ -8,7 +8,7 @@ import { ComponentCanDeactivate } from 'src/app/core/services/guard.service';
 import { PostService } from '../../core/shared/posts/post-blocks.service';
 import { VisualCanvasComponent } from '../export-image/visual-canvas/visual-canvas.component';
 import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { CreatePostComponent } from '../create-post/create-post.component';
 
@@ -43,7 +43,6 @@ export class CreationComponent implements OnInit, ComponentCanDeactivate {
   constructor(private route: ActivatedRoute,
     private dialog: MatDialog,
     private postService: PostService,
-    private router: Router,
     private snackBar: MatSnackBar
   ) { }
 
@@ -76,10 +75,10 @@ export class CreationComponent implements OnInit, ComponentCanDeactivate {
     this.carregando = true;
     this.postService.getPostBlocks(post.id).subscribe({
       next: result => {
-        post.blocks = result.body
-        if (post.blocks)
+        post.map = [result.body]
+        if (post.map)
           this.post = post;
-        this.savedProgress = [JSON.parse(JSON.stringify(this.post.blocks))];
+        this.savedProgress = [JSON.parse(JSON.stringify(this.post.map))];
         this.carregando = false;
       }, error: error => {
         this.snackBar.open(error.errors);
@@ -89,10 +88,8 @@ export class CreationComponent implements OnInit, ComponentCanDeactivate {
   }
 
   addNewBlock() {
-    if (this.post.blocks?.length > 0)
+    if (this.post.map?.length > 0)
       return;
-
-    console.log(this.main.nativeElement.clientHeight)
 
     let _block = new Block;
     _block.backgroundColor = "#64b5f6"
@@ -105,13 +102,13 @@ export class CreationComponent implements OnInit, ComponentCanDeactivate {
     _block.position.y = (this.main.nativeElement.clientHeight / 2) - (_block.size.height / 2);
 
 
-    if (this.post.blocks == null) {
+    if (this.post.map == null) {
       let _post = new Post;
-      _post.blocks[0] = _block;
+      _post.map[0] = _block;
       this.post = _post
       return
     }
-    this.post.blocks.push(_block);
+    this.post.map.push(_block);
     this.saveProgress();
   }
 
@@ -163,7 +160,7 @@ export class CreationComponent implements OnInit, ComponentCanDeactivate {
   undo() {
     this.unselectBlock();
     if (this.savedProgress.length > 1) {
-      this.post.blocks = JSON.parse(JSON.stringify(this.savedProgress[this.savedProgress.length - 2]));
+      this.post.map = JSON.parse(JSON.stringify(this.savedProgress[this.savedProgress.length - 2]));
       this.savedProgress.splice(-1)
     }
   }
@@ -172,7 +169,7 @@ export class CreationComponent implements OnInit, ComponentCanDeactivate {
     this.unsavedChanges = true;
     if (this.savedProgress.length > 15)
       this.savedProgress.splice(0, 1);
-    const blocks = JSON.parse(JSON.stringify(this.post.blocks));
+    const blocks = JSON.parse(JSON.stringify(this.post.map));
     this.savedProgress.push(blocks)
   }
 
@@ -209,14 +206,14 @@ export class CreationComponent implements OnInit, ComponentCanDeactivate {
       width: 'auto',
       height: 'auto',
       data: {
-        blocks: this.post.blocks
+        blocks: this.post.map
       }
     };
 
     const dialogRef = this.dialog.open(VisualCanvasComponent, exportImageConfig);
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        console.log('Imagem Salva')
+        // console.log('Imagem Salva')
       }
     });
   }

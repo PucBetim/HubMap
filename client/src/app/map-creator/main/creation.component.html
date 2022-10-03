@@ -8,13 +8,13 @@
             </div>
 
             <button class="sidebarGrid option" matTooltipClass="tooltip" matTooltip="Adicionar Bloco"
-                (click)="addNewBlock()" mat-mini-fab [ngClass]="{'disabled' : this.post.blocks.length > 0}"
-                [disabled]="this.post.blocks.length > 0">
+                (click)="addNewBlock()" mat-mini-fab [ngClass]="{'disabled' : this.post.map.length > 0}"
+                [disabled]="this.post.map.length > 0">
                 <mat-icon>add_circle</mat-icon>
             </button>
 
             <button class="sidebarGrid option" matTooltipClass="tooltip" matTooltip="Deletar Bloco"
-                (mousedown)="onDeleteBlock(this.post.blocks)" mat-mini-fab [ngClass]="{'disabled' : !blockSelected}"
+                (mousedown)="onDeleteBlock(this.post.map)" mat-mini-fab [ngClass]="{'disabled' : !blockSelected}"
                 [disabled]="!blockSelected">
                 <mat-icon>delete</mat-icon>
             </button>
@@ -29,13 +29,13 @@
 
                     <button *ngIf="!this.editorMode" class="sidebarEndOption" matTooltipClass="tooltip"
                         matTooltip="Postar mapa" (click)="createPost()" mat-mini-fab
-                        [ngClass]="{'disabled': post.blocks[0] == null}" [disabled]="post.blocks[0] == null">
+                        [ngClass]="{'disabled': post.map[0] == null}" [disabled]="post.map[0] == null">
                         <mat-icon>save</mat-icon>
                     </button>
 
                     <button *ngIf="this.editorMode" class="sidebarEndOption" matTooltipClass="tooltip"
                         matTooltip="Atualizar mapa" (click)="createPost()" mat-mini-fab
-                        [ngClass]="{'disabled': post.blocks[0] == null}" [disabled]="post.blocks[0] == null">
+                        [ngClass]="{'disabled': post.map[0] == null}" [disabled]="post.map[0] == null">
                         <mat-icon>save_alt</mat-icon>
                     </button>
 
@@ -57,7 +57,7 @@
             <div class="canvas">
                 <block (setDragEvent)="setDrag($event)" (selectBlockEvent)="selectBlock($event)"
                     (unselectBlockEvent)="unselectBlock()" (saveProgressEvent)="saveProgress()"
-                    *ngFor="let block of post.blocks" [block]="block" [rootMap]="map">
+                    *ngFor="let block of post.map" [block]="block" [rootMap]="map">
                 </block>
             </div>
         </div>

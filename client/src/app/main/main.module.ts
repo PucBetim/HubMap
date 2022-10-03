@@ -10,10 +10,11 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { PostDetailsComponent } from './post-details/post-details.component';
 
 
 @NgModule({
-  declarations: [LandingComponent],
+  declarations: [LandingComponent, PostDetailsComponent],
   imports: [
     CommonModule,
     RouterModule.forChild(MainRoutes),

@@ -47,7 +47,6 @@ export class CreatePostComponent implements OnInit {
   createOrUpdatePost() {
     this.carregando = true;
     let p = Object.assign({}, this.form.value);
-
     if (!this.editorMode) {
       this.postService.post(p).subscribe({
         next: obj => {
@@ -75,7 +74,7 @@ export class CreatePostComponent implements OnInit {
   }
 
   updateBlocks(id: number) {
-    this.post.blocks.forEach(b => {
+    this.post.map.forEach(b => {
       this.carregando = true;
       this.postService.updateBlocks(b, id).subscribe({
         next: obj => {
@@ -90,7 +89,7 @@ export class CreatePostComponent implements OnInit {
   }
 
   postBlocks(id: number) {
-    this.post.blocks.forEach(b => {
+    this.post.map.forEach(b => {
       this.carregando = true;
       this.postService.postBlocks(b, id).subscribe({
         next: obj => {

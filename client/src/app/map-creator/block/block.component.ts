@@ -85,15 +85,12 @@ export class BlockComponent implements OnInit {
   addBlock(location: string) {
     let dislocation = 50;
     let newBlock = JSON.parse(JSON.stringify(this.block))
+    newBlock.id = null;
     newBlock.blocks = [];
     newBlock.content = "Clique para editar";
 
     var closestGap: Position = { x: this.block.position.x, y: this.block.position.y }
     var farestGap: Position = { x: 3840 - (this.block.position.x + this.block.size.width + 10), y: 2160 - (this.block.position.y + this.block.size.height + 10) }
-
-    console.log(closestGap)
-    console.log
-    console.log(farestGap)
 
     switch (location) {
       case 'above':

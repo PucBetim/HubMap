@@ -13,7 +13,8 @@ export class DisplayCanvasComponent implements OnInit {
 
   @Input() post: Post;
   @Input() size: number;
-
+  @Input() showOptions: boolean = true;
+  
   visualPost: Post;
   resizeRatio: number;
   closestPoint = new Position;
@@ -32,7 +33,7 @@ export class DisplayCanvasComponent implements OnInit {
     this.visualPost = JSON.parse(JSON.stringify(this.post));
     this.postService.getPostBlocks(this.post.id).subscribe({
       next: result => {
-        this.visualPost.blocks = result.body;
+        this.visualPost.map = [result.body];
         this.carregando = false;
         this.loadCanvas();
       }, error: erro => {
@@ -43,8 +44,8 @@ export class DisplayCanvasComponent implements OnInit {
   }
 
   async loadCanvas() {
-    if (this.visualPost.blocks) {
-      var limit = this.getLimitPoints.getClosestFartest(this.visualPost.blocks)
+    if (this.visualPost.map) {
+      var limit = this.getLimitPoints.getClosestFartest(this.visualPost.map)
 
       this.closestPoint = limit.closestPoint;
       this.farestPoint = limit.farestPoint;
@@ -56,7 +57,7 @@ export class DisplayCanvasComponent implements OnInit {
 
       this.resizeRatio = widthRatio < heightRatio ? widthRatio : heightRatio;
 
-      await this.resizeBlocks(this.visualPost.blocks);
+      await this.resizeBlocks(this.visualPost.map);
     }
   }
 
@@ -76,8 +77,8 @@ export class DisplayCanvasComponent implements OnInit {
     });
   }
 
-  goToEdit() {
-    this.router.navigateByUrl('/creator/' + this.post.id);
+  goToDetails() {
+    this.router.navigateByUrl(`/details/${this.post.id}`);
   }
 }
 

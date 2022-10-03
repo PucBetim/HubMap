@@ -1,12 +1,17 @@
+import { Comment } from "./comment";
+
 export class Post {
     title: string;
     description: string;
     private: boolean;
     id: number;
     likes: number;
+    dislikes: number;
     views: number;
+    map: Block[] = [];
+    comments: Comment[];
     modified: Date;
-    blocks: Block[] = [];
+    created: Date;
 }
 export class Block {
     id: number;

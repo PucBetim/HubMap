@@ -34,8 +34,8 @@ export class PostService extends BaseService {
   //
 
   // Blocks
-  postBlocks(blocks: Block, id: number): Observable<any> {
-    return this.http.post<any>((ConfigService.getUrlApi() + this.userUrlBlocks + `?post=${id}`), blocks, ConfigService.getOptions()).pipe(catchError(super.serviceError));
+  postBlocks(map: Block, id: number): Observable<any> {
+    return this.http.post<any>((ConfigService.getUrlApi() + this.userUrlBlocks + `?post=${id}`), map, ConfigService.getOptions()).pipe(catchError(super.serviceError));
   };
 
   getPostBlocks(id: number): Observable<any> {

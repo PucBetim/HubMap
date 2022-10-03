@@ -1,15 +1,15 @@
 <loading *ngIf="carregando"></loading>
 <div class=" container" (mouseenter)="optionsStyle=['hover']" (mouseleave)="optionsStyle=[]"
-    [style.max-width]="size + 15 + 'px'" [style.max-height]="size+ 15 + 'px'">
+    [style.max-width]="size + 15 + 'px'" [style.max-height]="size + 15 + 'px'">
 
-    <div class="canvas" #canvas [style.width]="size + 'px'" [style.height]="size + 'px'">
-        <display-block (setDragEvent)="setDrag($event)" (selectBlockEvent)="selectBlock($event)"
-            (unselectBlockEvent)="unselectBlock()" (saveProgressEvent)="saveProgress()"
-            *ngFor="let block of visualPost.blocks" [block]="block">
-        </display-block>
-    </div>
+        <div class="canvas" #canvas [style.width]="size + 'px'" [style.height]="size + 'px'">
+            <display-block (setDragEvent)="setDrag($event)" (selectBlockEvent)="selectBlock($event)"
+                (unselectBlockEvent)="unselectBlock()" (saveProgressEvent)="saveProgress()"
+                *ngFor="let block of visualPost.map" [block]="block">
+            </display-block>
+        </div>
 
-    <div class="options" [style.width]="size + 'px'" [style.height]="size / 2 + 'px'" [ngClass]="optionsStyle">
+    <div class="options" *ngIf="showOptions" [style.width]="size + 'px'" [style.height]="size / 2 + 'px'" [ngClass]="optionsStyle">
         <div class="title-deco">
             <h2>{{post.title}}</h2>
         </div>
@@ -17,7 +17,7 @@
         <div>
             <div class="opt">
                 <div>
-                    <button class="btnEdit" (click)="goToEdit()">Editar</button>
+                    <button class="btnDetails" (click)="goToDetails()">Detalhes</button>
                 </div>
                 <div class="opt">
                     {{post.likes}}
@@ -28,6 +28,5 @@
                 </div>
             </div>
         </div>
-
     </div>
 </div>
