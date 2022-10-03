@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -25,6 +26,8 @@ import org.hibernate.annotations.OnDeleteAction;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonProperty.Access;
 
 import br.com.pucminas.hubmap.domain.comment.Comment;
 import br.com.pucminas.hubmap.domain.indexing.NGram;
@@ -38,7 +41,7 @@ import lombok.Setter;
 @SuppressWarnings("serial")
 @Entity
 @EntityListeners(PostListener.class)
-@JsonIgnoreProperties({ "ngrams", "comments", "map" })
+@JsonIgnoreProperties({ "ngrams" })
 @Getter
 @Setter
 @NoArgsConstructor
@@ -79,10 +82,12 @@ public class Post implements Serializable {
 
 	@OneToMany(mappedBy = "post", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@OnDelete(action = OnDeleteAction.CASCADE)
+	@JsonProperty(access = Access.READ_ONLY)
 	private Set<Block> map = new HashSet<>();
 
 	@OneToMany(mappedBy = "post", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@OnDelete(action = OnDeleteAction.CASCADE)
+	@JsonProperty(access = Access.READ_ONLY)
 	private Set<Comment> comments = new HashSet<>();
 
 	@OneToMany(mappedBy = "id.post", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
@@ -138,6 +143,12 @@ public class Post implements Serializable {
 	@JsonIgnore
 	public void setAuthor(AppUser author) {
 		this.author = author;
+	}
+	
+	public void setMapToShow() {
+		map = map.stream()
+				.filter(b -> b.getIsRoot())
+				.collect(Collectors.toSet());
 	}
 
 }

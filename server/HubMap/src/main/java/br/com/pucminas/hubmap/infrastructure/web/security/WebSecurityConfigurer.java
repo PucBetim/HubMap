@@ -38,6 +38,7 @@ public class WebSecurityConfigurer implements WebMvcConfigurer{
 			.authorizeRequests()
 				.antMatchers("/h2-console/**").permitAll()
 				.antMatchers(HttpMethod.POST, "/hubmap/appUsers").permitAll()
+				.antMatchers(HttpMethod.GET, "/hubmap/public/**").permitAll()
 				.anyRequest().authenticated()
 		.and()
 			.addFilter(new JWTAuthenticationFilter(authManager))
