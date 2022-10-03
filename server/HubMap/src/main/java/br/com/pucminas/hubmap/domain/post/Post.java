@@ -3,7 +3,6 @@ package br.com.pucminas.hubmap.domain.post;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.HashSet;
-import java.util.LinkedHashSet;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -80,7 +79,7 @@ public class Post implements Serializable {
 
 	@OneToMany(mappedBy = "post", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@OnDelete(action = OnDeleteAction.CASCADE)
-	private Set<Block> map = new LinkedHashSet<>();
+	private Set<Block> map = new HashSet<>();
 
 	@OneToMany(mappedBy = "post", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@OnDelete(action = OnDeleteAction.CASCADE)

@@ -1,7 +1,5 @@
 package br.com.pucminas.hubmap.infrastructure.web.controller;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.NoSuchElementException;
 
 import javax.validation.Valid;
@@ -21,8 +19,6 @@ import org.springframework.web.bind.annotation.RestController;
 import br.com.pucminas.hubmap.application.service.BlockService;
 import br.com.pucminas.hubmap.domain.map.Block;
 import br.com.pucminas.hubmap.domain.map.BlockRepository;
-import br.com.pucminas.hubmap.domain.post.Post;
-import br.com.pucminas.hubmap.domain.post.PostRepository;
 import br.com.pucminas.hubmap.infrastructure.web.RestResponse;
 
 @RestController
@@ -35,25 +31,18 @@ public class BlockController {
 	@Autowired
 	private BlockRepository blockRepository;
 	
-	@Autowired
-	private PostRepository postRepository;
-	
 	@GetMapping("")
-	public ResponseEntity<List<Block>> getBlocksByPost(
+	public ResponseEntity<Block> getBlocksByPost(
 			@RequestParam(name = "post", required = true) Integer postId) {
 		
-		try {
-			List<Block> blocks = new ArrayList<>();
-			
-			Post post = postRepository.findById(postId).orElseThrow();
-			
-			blockRepository.findByPost(post).forEach(blocks::add);
+		try {		
+			Block block = blockRepository.findByPost(postId);
 
-			if (blocks.isEmpty()) {
+			if (block == null) {
 				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 			}
 
-			return new ResponseEntity<>(blocks, HttpStatus.OK);
+			return new ResponseEntity<>(block, HttpStatus.OK);
 		} catch (NoSuchElementException e) {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
@@ -65,10 +54,7 @@ public class BlockController {
 			@RequestBody @Valid Block block) {
 		
 		try {
-			Post post = postRepository.findById(postId).orElseThrow();
-			
-			block.setPost(post);
-			block = blockService.save(block);
+			block = blockService.save(block, postId);
 			
 			RestResponse response = RestResponse.fromNormalResponse("Bloco criado com sucesso.", block.getId());
 			
@@ -78,16 +64,13 @@ public class BlockController {
 		}
 	}
 	
-	@PutMapping()
-	public ResponseEntity<RestResponse> putComment(
+	@PutMapping("")
+	public ResponseEntity<RestResponse> putBlock (
 			@RequestParam(name = "post", required = true) Integer postId,
 			@RequestBody @Valid Block newBlock) {
 		
 		try {
-			Post post = postRepository.findById(postId).orElseThrow();
-			
-			newBlock.setPost(post);
-			newBlock = blockService.save(newBlock);
+			newBlock = blockService.save(newBlock, postId);
 			
 			RestResponse response = RestResponse.fromNormalResponse("Bloco atualizado com sucesso.", newBlock.getId());
 			
@@ -98,7 +81,7 @@ public class BlockController {
 	}
 	
 	@GetMapping(path = "/{id}")
-	public ResponseEntity<Block> getCommentById(@PathVariable Integer id){
+	public ResponseEntity<Block> getBlockById(@PathVariable Integer id){
 		try {
 			Block block = blockRepository.findById(id).orElseThrow();
 			
@@ -107,14 +90,4 @@ public class BlockController {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 	}
-	/*
-	@DeleteMapping("/{id}")
-	public ResponseEntity<List<Comment>> deleteById(@PathVariable Integer id) {
-		try {
-			blockService.delete(id);
-			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-		} catch (NoSuchElementException e) {
-			return new ResponseEntity<>(HttpStatus.CONFLICT);
-		}
-	}*/
 }
