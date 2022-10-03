@@ -7,8 +7,9 @@
             </div>
             <br><br>
             <div>
-                <form [formGroup]="form" (ngSubmit)="postPost()">
+                <form [formGroup]="form" (ngSubmit)="createOrUpdatePost()">
                     <div fxLayout="column" fxLayoutAlign="space-around">
+
                         <div>
                             <mat-form-field class="input">
                                 <mat-label>Título</mat-label>
@@ -26,15 +27,17 @@
                         <div>
                             <div class="pubToggle">
                                 <mat-slide-toggle [formControl]="form.controls['private']">
-                                    Privado? 
+                                    Privado?
                                     <mat-icon *ngIf="form.controls['private'].value">lock</mat-icon>
-                                    <mat-icon *ngIf="!form.controls['private'].value">lock_open</mat-icon> 
+                                    <mat-icon *ngIf="!form.controls['private'].value">lock_open</mat-icon>
                                 </mat-slide-toggle>
                             </div>
                         </div>
                         <form-error [errors]="errors"></form-error>
                         <br>
-                        <button type="submit" [disabled]="!form.valid">Postar</button>
+                        <button *ngIf="!this.editorMode" type="submit" [disabled]="!form.valid">Postar</button>
+                        <button *ngIf="this.editorMode" type="submit" [disabled]="!form.valid">Atualizar</button>
+
                     </div>
                 </form>
             </div>

@@ -55,10 +55,11 @@
 
     <div class="resultBlock">
         <div [ngClass]="resultDivClass">
-            <!-- <mat-spinner *ngIf="!results"></mat-spinner> -->
+             <!-- <mat-spinner *ngIf="!results"></mat-spinner> -->
             <div *ngIf="results" class="resultContainer">
-                <display-canvas [size]="blocksSize" [post]="post" *ngFor="let _ of [].constructor(7)"></display-canvas>
-            </div>
+                <!-- <display-canvas [size]="blocksSize" [post]="post" *ngFor="let _ of [].constructor(7)"></display-canvas> -->
+                <h2>EM BREVE!</h2>
+            </div> 
         </div>
     </div>
 </div>

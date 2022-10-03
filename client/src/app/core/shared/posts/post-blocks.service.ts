@@ -15,10 +15,11 @@ export class PostService extends BaseService {
 
   constructor(private http: HttpClient,) { super(); }
 
+  //Posts
   post(post: Post): Observable<any> {
     return this.http.post<any>((ConfigService.getUrlApi() + this.userUrlPost), post, ConfigService.getOptions()).pipe(catchError(super.serviceError));
   };
-  
+
   getUserPosts(): Observable<any> {
     return this.http.get<any>((ConfigService.getUrlApi() + this.userUrlPost), ConfigService.getOptions()).pipe(catchError(super.serviceError));
   };
@@ -27,11 +28,22 @@ export class PostService extends BaseService {
     return this.http.get<any>((ConfigService.getUrlApi() + this.userUrlPost + `/${id}`), ConfigService.getOptions()).pipe(catchError(super.serviceError));
   };
 
+  updatePost(post: Post, id: number): Observable<any> {
+    return this.http.put<any>((ConfigService.getUrlApi() + this.userUrlPost + `/${id}`), post, ConfigService.getOptions()).pipe(catchError(super.serviceError));
+  };
+  //
 
+  // Blocks
   postBlocks(blocks: Block, id: number): Observable<any> {
     return this.http.post<any>((ConfigService.getUrlApi() + this.userUrlBlocks + `?post=${id}`), blocks, ConfigService.getOptions()).pipe(catchError(super.serviceError));
   };
 
   getPostBlocks(id: number): Observable<any> {
     return this.http.get<any>((ConfigService.getUrlApi() + this.userUrlBlocks + `?post=${id}`), ConfigService.getOptions()).pipe(catchError(super.serviceError));
-  };}
+  };
+
+  updateBlocks(blocks: Block, id: number): Observable<any> {
+    return this.http.put<any>((ConfigService.getUrlApi() + this.userUrlBlocks + `?post=${id}`), blocks, ConfigService.getOptions()).pipe(catchError(super.serviceError));
+  };
+}
+  //

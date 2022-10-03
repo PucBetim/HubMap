@@ -5,7 +5,7 @@ import { MatMenuTrigger } from '@angular/material/menu';
 import { Post, Block } from '../../core/shared/posts/post';
 import { Observable, Subscription } from 'rxjs';
 import { ComponentCanDeactivate } from 'src/app/core/services/guard.service';
-import { PostService } from '../../core/shared/posts/post.service';
+import { PostService } from '../../core/shared/posts/post-blocks.service';
 import { VisualCanvasComponent } from '../export-image/visual-canvas/visual-canvas.component';
 import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -28,11 +28,15 @@ export class CreationComponent implements OnInit, ComponentCanDeactivate {
   }
 
   public post = new Post;
+
   public selectedBlock: Block;
-  public blockSelected: boolean = false;
   public savedProgress: [Block[]] = [[]];
+
   public unsavedChanges: boolean = false;
   public carregando: boolean = false;
+  public blockSelected: boolean = false;
+  public editorMode: boolean = false;
+
   public sub: Subscription;
   public id: number;
 
@@ -56,6 +60,7 @@ export class CreationComponent implements OnInit, ComponentCanDeactivate {
         {
           next: result => {
             _post = result.body;
+            this.editorMode = true;
             this.getBlocks(_post);
           },
           error: error => {
@@ -182,7 +187,8 @@ export class CreationComponent implements OnInit, ComponentCanDeactivate {
       width: '300px',
       height: 'auto',
       data: {
-        post: this.post
+        post: this.post,
+        editorMode: this.editorMode
       }
     };
 

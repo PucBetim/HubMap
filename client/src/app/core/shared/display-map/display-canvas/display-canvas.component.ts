@@ -1,4 +1,4 @@
-import { PostService } from './../../posts/post.service';
+import { PostService } from '../../posts/post-blocks.service';
 import { Component, Input, OnInit } from '@angular/core';
 import { GetLimitPoints } from 'src/app/map-creator/getLimitPoints';
 import { Block, Position, Post } from '../../posts/post';
@@ -19,6 +19,7 @@ export class DisplayCanvasComponent implements OnInit {
   closestPoint = new Position;
   farestPoint = new Position;
   optionsStyle: string[];
+  public carregando: boolean = false;
 
   constructor(
     private getLimitPoints: GetLimitPoints,
@@ -27,20 +28,22 @@ export class DisplayCanvasComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.carregando = true;
     this.visualPost = JSON.parse(JSON.stringify(this.post));
     this.postService.getPostBlocks(this.post.id).subscribe({
       next: result => {
         this.visualPost.blocks = result.body;
+        this.carregando = false;
         this.loadCanvas();
       }, error: erro => {
         console.log(erro)
+        this.carregando = false;
       }
     })
   }
 
-  loadCanvas() {
+  async loadCanvas() {
     if (this.visualPost.blocks) {
-
       var limit = this.getLimitPoints.getClosestFartest(this.visualPost.blocks)
 
       this.closestPoint = limit.closestPoint;
@@ -53,7 +56,7 @@ export class DisplayCanvasComponent implements OnInit {
 
       this.resizeRatio = widthRatio < heightRatio ? widthRatio : heightRatio;
 
-      this.resizeBlocks(this.visualPost.blocks);
+      await this.resizeBlocks(this.visualPost.blocks);
     }
   }
 
@@ -73,9 +76,8 @@ export class DisplayCanvasComponent implements OnInit {
     });
   }
 
-  goToEdit(){
+  goToEdit() {
     this.router.navigateByUrl('/creator/' + this.post.id);
-
   }
 }
 
