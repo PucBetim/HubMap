@@ -90,4 +90,9 @@ public class Block implements Serializable {
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	@ToString.Exclude
 	private Set<Block> blocks = new HashSet<>();
+	
+	@Override
+	public String toString() {
+		return String.format("id: %d - isRoot: %s - blocksSize: %d", id, isRoot, blocks.size());
+	}
 }
