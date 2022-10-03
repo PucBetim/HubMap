@@ -48,6 +48,7 @@ public class PostController {
 			List<Post> posts = new ArrayList<>();
 
 			postRepository.findAll(Sort.by("title")).forEach(posts::add);
+			posts.forEach(p -> p.setMapToShow());
 
 			return new ResponseEntity<>(posts, HttpStatus.OK);
 		} catch (NoSuchElementException e) {
@@ -59,6 +60,7 @@ public class PostController {
 	public ResponseEntity<Post> getPostsById(@PathVariable Integer id) {
 		try {
 			Post post = postRepository.findById(id).orElseThrow();
+			post.setMapToShow();
 
 			return new ResponseEntity<>(post, HttpStatus.OK);
 		} catch (NoSuchElementException e) {
