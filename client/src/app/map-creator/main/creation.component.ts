@@ -8,7 +8,7 @@ import { ComponentCanDeactivate } from 'src/app/core/services/guard.service';
 import { PostService } from '../../core/shared/posts/post-blocks.service';
 import { VisualCanvasComponent } from '../export-image/visual-canvas/visual-canvas.component';
 import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { CreatePostComponent } from '../create-post/create-post.component';
 
@@ -43,10 +43,15 @@ export class CreationComponent implements OnInit, ComponentCanDeactivate {
   constructor(private route: ActivatedRoute,
     private dialog: MatDialog,
     private postService: PostService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private router: Router,
   ) { }
 
   ngOnInit(): void {
+    this.getPost();
+  }
+
+  getPost() {
     this.carregando = true;
     var _post = new Post;
     this.sub = this.route.params.subscribe(
@@ -63,12 +68,33 @@ export class CreationComponent implements OnInit, ComponentCanDeactivate {
             this.getBlocks(_post);
           },
           error: error => {
-            this.snackBar.open(error.errors);
-            this.carregando = false;
+            this.getPublicPost(this.id);
           }
         })
     }
-    else this.carregando = false
+    else {
+      _post = JSON.parse(localStorage.getItem('post')!);
+      if (_post)
+        this.post = _post;
+      localStorage.removeItem('post');
+
+      this.carregando = false;
+    }
+  }
+
+  getPublicPost(id: number) {
+    var _post = new Post;
+    this.postService.getPost(this.id).subscribe(
+      {
+        next: result => {
+          _post = result.body;
+          this.getBlocks(_post);
+        },
+        error: error => {
+          this.getPublicPost(this.id);
+          this.carregando = false;
+        }
+      })
   }
 
   getBlocks(post: Post) {
@@ -192,10 +218,20 @@ export class CreationComponent implements OnInit, ComponentCanDeactivate {
     const dialogRef = this.dialog.open(CreatePostComponent, createPostConfig);
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.snackBar.open(result, "Ok", {
-          duration: 2000
-        })
-        this.unsavedChanges = false;
+        if (result.link) { // Não logado
+          this.save();
+          this.unsavedChanges = false;
+          this.router.navigate([result.link]);
+        }
+        else {  //Logado
+          this.snackBar.open(result.msg, "Ok", {
+            duration: 2000
+          })
+          localStorage.removeItem('post');
+          if (result.id)
+            this.router.navigate([`creator/${result.id}`])
+          this.unsavedChanges = false;
+        }
       }
     });
   }

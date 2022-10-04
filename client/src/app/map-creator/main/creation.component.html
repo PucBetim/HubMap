@@ -28,19 +28,20 @@
                 <div class="bottom">
 
                     <button *ngIf="!this.editorMode" class="sidebarEndOption" matTooltipClass="tooltip"
-                        matTooltip="Postar mapa" (click)="createPost()" mat-mini-fab
+                        matTooltip="Salvar Mapa" (click)="createPost()" mat-mini-fab
                         [ngClass]="{'disabled': post.map[0] == null}" [disabled]="post.map[0] == null">
                         <mat-icon>save</mat-icon>
                     </button>
 
                     <button *ngIf="this.editorMode" class="sidebarEndOption" matTooltipClass="tooltip"
-                        matTooltip="Atualizar mapa" (click)="createPost()" mat-mini-fab
+                        matTooltip="Atualizar Mapa" (click)="createPost()" mat-mini-fab
                         [ngClass]="{'disabled': post.map[0] == null}" [disabled]="post.map[0] == null">
                         <mat-icon>save_alt</mat-icon>
                     </button>
 
-                    <button class="sidebarEndOption" matTooltipClass="tooltip" matTooltip="Exportar para imagem"
-                        (click)="downloadImage()" mat-mini-fab>
+                    <button class="sidebarEndOption" matTooltipClass="tooltip" matTooltip="Exportar Para Imagem"
+                        (click)="downloadImage()" mat-mini-fab [ngClass]="{'disabled': post.map[0] == null}"
+                        [disabled]="post.map[0] == null">
                         <mat-icon>image</mat-icon>
                     </button>
 

@@ -22,5 +22,6 @@ export class MainLayoutComponent implements OnInit {
   logout() {
     sessionStorage.clear();
     this.user = null;
+    this.router.navigate(['']);
   }
 }

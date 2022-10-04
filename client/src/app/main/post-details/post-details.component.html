@@ -1,25 +1,42 @@
 <loading *ngIf="carregando"></loading>
 <div class="container">
-    <div class="editAccount layoutDefaultStyle">
-        <div class="deco">
-            Detalhes
-        </div>
-        <div class="details">
-            <h2>{{post.title}}</h2>
-        </div>
-
-        <button class="btnEdit" (click)="goToEdit()">Editar</button>
-
+    <div class="mapContainer">
+        <display-canvas *ngIf="result" [showOptions]="false" [size]="mapSize" [post]="post">
+        </display-canvas>
     </div>
 
-    <div class="userMaps layoutDefaultStyle">
-        <div class="deco">
-            Mapas Mental
+    <div class="detailsContainer layoutDefaultStyle">
+        <div class="deco ">
+            <p>Detalhes</p>
         </div>
-        <br><br>
-        <div class="mapContainer">
-            <display-canvas *ngIf="result" [showOptions]="false" [size]="mapSize" [post]="post">
-            </display-canvas>
+
+        <div class="details">
+
+            <div class="header">
+                <div class="title">
+                    {{post.title}}
+                </div>
+                <div class="creationInfo">
+                    <h4>Criado em {{post.created | date: 'dd/MM/yyyy HH:mm' }}</h4>
+                </div>
+            </div>
+
+            <div class="description">
+                <hr style="height: 1px ;background-color: #316b83;">
+                {{post.description}}
+            </div>
+
+            <div class="options push">
+                <button class="btnEdit" (click)="goToEdit()">Editar</button>
+            </div>
+
         </div>
+
+    </div>
+</div>
+
+<div class="commentsContainer">
+    <div class="deco ">
+        <p class="ftl">Comentários</p>
     </div>
 </div>

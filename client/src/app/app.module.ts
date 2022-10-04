@@ -40,7 +40,7 @@ import { GetLimitPoints } from './map-creator/getLimitPoints';
     MatMenuModule,
     MatButtonModule,
     MatInputModule,
-    FormsModule 
+    FormsModule
   ],
   providers: [GetLimitPoints],
   bootstrap: [AppComponent]

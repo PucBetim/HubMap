@@ -33,7 +33,7 @@ export class DisplayCanvasComponent implements OnInit {
     this.visualPost = JSON.parse(JSON.stringify(this.post));
     this.postService.getPostBlocks(this.post.id).subscribe({
       next: result => {
-        this.visualPost.map = [result.body];
+        this.visualPost.map = [result.body];        
         this.carregando = false;
         this.loadCanvas();
       }, error: erro => {

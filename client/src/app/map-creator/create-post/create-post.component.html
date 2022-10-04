@@ -1,13 +1,13 @@
-<loading *ngIf="carregando"></loading>
+<loading *ngIf="loading"></loading>
 <div class="main layoutDefaultStyle">
     <div class="container">
         <div class="login">
             <div class="title-deco">
-                Postar Mapa
+                Salvar Mapa
             </div>
             <br><br>
             <div>
-                <form [formGroup]="form" (ngSubmit)="createOrUpdatePost()">
+                <form [formGroup]="form" (ngSubmit)="createOrUpdatePost()" *ngIf="userLogged">
                     <div fxLayout="column" fxLayoutAlign="space-around">
 
                         <div>
@@ -31,15 +31,24 @@
                                     <mat-icon *ngIf="form.controls['private'].value">lock</mat-icon>
                                     <mat-icon *ngIf="!form.controls['private'].value">lock_open</mat-icon>
                                 </mat-slide-toggle>
+                                <h4 *ngIf="!form.controls['private']"> Outros usuários terão acesso à mapas não
+                                    privados!</h4>
                             </div>
                         </div>
                         <form-error [errors]="errors"></form-error>
                         <br>
-                        <button *ngIf="!this.editorMode" type="submit" [disabled]="!form.valid">Postar</button>
+                        <button *ngIf="!this.editorMode" type="submit">Postar</button>
                         <button *ngIf="this.editorMode" type="submit" [disabled]="!form.valid">Atualizar</button>
-
                     </div>
                 </form>
+                <div *ngIf="!userLogged" style="text-align: center;">
+                    <p class="warnign">Precisa estar logado para salvar!</p>
+                    <br>
+                    <p style="display: flex; justify-content: space-around"><a class="link"
+                            (click)="close('/session/signin')">Fazer
+                            Login</a> <a class="link" (click)="close('/session/create-account')">Registrar</a>
+                    </p>
+                </div>
             </div>
         </div>
     </div>
