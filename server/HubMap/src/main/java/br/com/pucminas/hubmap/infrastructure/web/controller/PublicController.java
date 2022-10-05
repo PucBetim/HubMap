@@ -26,7 +26,10 @@ public class PublicController {
 		List<Post> posts = new ArrayList<>();
 		
 		postRepository.findAllPublic().forEach(posts::add);
-		posts.forEach(p -> p.setMapToShow());
+		posts.forEach(p -> {
+			p.setMapToShow();
+			p.setAuthorForPublicAccess();
+		});
 		
 		if (posts.isEmpty()) {
 			return new ResponseEntity<>(HttpStatus.NO_CONTENT);

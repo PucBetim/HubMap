@@ -68,7 +68,8 @@ public class Post implements Serializable {
 
 	private Integer views;
 
-	private boolean isPrivate;
+	@JsonProperty("private")
+	private Boolean isPrivate;
 
 	@JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss")
 	private LocalDateTime created;
@@ -78,6 +79,7 @@ public class Post implements Serializable {
 
 	@ManyToOne
 	@JoinColumn(name = "AUTHOR_ID", referencedColumnName = "id")
+	@JsonProperty(access = Access.READ_ONLY)
 	private AppUser author;
 
 	@OneToMany(mappedBy = "post", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
@@ -149,6 +151,11 @@ public class Post implements Serializable {
 		map = map.stream()
 				.filter(b -> b.getIsRoot())
 				.collect(Collectors.toSet());
+	}
+	
+	public void setAuthorForPublicAccess() {
+		author.setEmail(null);
+		author.setName(null);
 	}
 
 }
