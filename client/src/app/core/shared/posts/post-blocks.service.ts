@@ -17,12 +17,16 @@ export class PostService extends BaseService {
   constructor(private http: HttpClient,) { super(); }
 
   //Posts
-  post(post: Post): Observable<any> {
+  postPost(post: Post): Observable<any> {
     return this.http.post<any>((ConfigService.getUrlApi() + this.userUrlPost), post, ConfigService.getOptions()).pipe(catchError(super.serviceError));
   };
 
   getUserPosts(): Observable<any> {
     return this.http.get<any>((ConfigService.getUrlApi() + this.userUrlPost), ConfigService.getOptions()).pipe(catchError(super.serviceError));
+  };
+
+  getPublicPosts(): Observable<any> {
+    return this.http.get<any>((ConfigService.getUrlApi() + this.userUrlPublicPost), ConfigService.getOptions()).pipe(catchError(super.serviceError));
   };
 
   getPostById(id: number): Observable<any> {
@@ -31,6 +35,10 @@ export class PostService extends BaseService {
 
   updatePost(post: Post, id: number): Observable<any> {
     return this.http.put<any>((ConfigService.getUrlApi() + this.userUrlPost + `/${id}`), post, ConfigService.getOptions()).pipe(catchError(super.serviceError));
+  };
+
+  deletePost(id: number): Observable<any> {
+    return this.http.delete<any>((ConfigService.getUrlApi() + this.userUrlPost + `/${id}`), ConfigService.getOptions()).pipe(catchError(super.serviceError));
   };
   //
 

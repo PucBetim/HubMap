@@ -6,11 +6,11 @@ import { Post, Block } from '../../core/shared/posts/post';
 import { Observable, Subscription } from 'rxjs';
 import { ComponentCanDeactivate } from 'src/app/core/services/guard.service';
 import { PostService } from '../../core/shared/posts/post-blocks.service';
-import { VisualCanvasComponent } from '../export-image/visual-canvas/visual-canvas.component';
 import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { CreatePostComponent } from '../create-post/create-post.component';
+import { VisualCanvasComponent } from 'src/app/core/shared/export-image/visual-canvas/visual-canvas.component';
 
 @Component({
   selector: 'app-creation',
@@ -91,7 +91,7 @@ export class CreationComponent implements OnInit, ComponentCanDeactivate {
           this.getBlocks(_post);
         },
         error: error => {
-          this.getPublicPost(this.id);
+          console.log(error)
           this.carregando = false;
         }
       })
@@ -154,7 +154,8 @@ export class CreationComponent implements OnInit, ComponentCanDeactivate {
       width: 'auto',
       data: {
         titulo: "Deletar Bloco",
-        texto: "Tem certeza que deseja deletar o bloco selecionado? Todos os blocos filhos também serão excluídos."
+        texto: "Tem certeza que deseja deletar o bloco selecionado? Todos os blocos filhos também serão excluídos.",
+        danger: true,
       }
     };
 
@@ -228,8 +229,10 @@ export class CreationComponent implements OnInit, ComponentCanDeactivate {
             duration: 2000
           })
           localStorage.removeItem('post');
-          if (result.id)
+          if (result.id) {
             this.router.navigate([`creator/${result.id}`])
+            this.getPost();
+          }
           this.unsavedChanges = false;
         }
       }

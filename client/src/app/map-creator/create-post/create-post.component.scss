@@ -7,7 +7,20 @@
 }
 
 .pubToggle {
-    float: right;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    width: 100%;
+
+    .item {
+        width: fit-content;
+        align-self: flex-end;
+    }
+
+    .privWarn {
+        font-size: 9px;
+        color: #77aada;
+    }
 }
 
 mat-icon {

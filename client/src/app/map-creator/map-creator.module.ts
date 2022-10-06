@@ -22,9 +22,6 @@ import { BlockComponent } from './block/block.component';
 import { TextDivComponent } from './text-div/text-div.component';
 import { DragScrollModule } from 'ngx-drag-scroll';
 import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
-import { VisualCanvasComponent } from './export-image/visual-canvas/visual-canvas.component';
-import { VisualBlockComponent } from './export-image/visual-block/visual-block.component';
-import { VisualTextDivComponent } from './export-image/visual-text-div/visual-text-div.component';
 import { SharedModule } from './../core/shared/shared.module';
 import { PendingChangesGuard } from '../core/services/guard.service';
 import { CreatePostComponent } from './create-post/create-post.component';
@@ -47,9 +44,6 @@ export const OtherOptions: MatTooltipDefaultOptions = {
     BlockComponent,
     TextDivComponent,
     ConfirmDialogComponent,
-    VisualCanvasComponent,
-    VisualBlockComponent,
-    VisualTextDivComponent,
     CreatePostComponent,
   ],
   imports: [

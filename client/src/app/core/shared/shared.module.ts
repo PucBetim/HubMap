@@ -12,6 +12,11 @@ import { ToneHexColorPipe } from './pipe/tone-hex-color.pipe';
 import { LineSvgComponent } from './line-svg/line-svg.component';
 import { DisplayCanvasComponent } from './display-map/display-canvas/display-canvas.component';
 import { DisplayBlockComponent } from './display-map/display-block/display-block.component';
+import { VisualBlockComponent } from './export-image/visual-block/visual-block.component';
+import { VisualCanvasComponent } from './export-image/visual-canvas/visual-canvas.component';
+import { VisualTextDivComponent } from './export-image/visual-text-div/visual-text-div.component';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatDialogModule } from '@angular/material/dialog';
 
 @NgModule({
   declarations: [
@@ -21,6 +26,9 @@ import { DisplayBlockComponent } from './display-map/display-block/display-block
     LineSvgComponent,
     DisplayCanvasComponent,
     DisplayBlockComponent,
+    VisualCanvasComponent,
+    VisualBlockComponent,
+    VisualTextDivComponent,
   ],
   imports: [
     CommonModule,
@@ -29,6 +37,8 @@ import { DisplayBlockComponent } from './display-map/display-block/display-block
     DragDropModule,
     MatIconModule,
     DragScrollModule,
+    MatMenuModule,
+    MatDialogModule
   ],
   exports: [
     FormErrorComponent,
@@ -38,6 +48,9 @@ import { DisplayBlockComponent } from './display-map/display-block/display-block
     LineSvgComponent,
     DisplayCanvasComponent,
     DisplayBlockComponent,
+    VisualCanvasComponent,
+    VisualBlockComponent,
+    VisualTextDivComponent,
   ]
 })
 export class SharedModule { }

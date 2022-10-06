@@ -46,7 +46,7 @@
     <app-text-div (resizeFinishedEvent)="emitSaveProgress()" (onResizeEvent)="onResize($event)" [block]="block">
     </app-text-div>
 
-    <div class="dragHandle" [style.color]="block.backgroundColor | toneHexColor: -30" (click)="onDrag($event)"
+    <div class="dragHandle" [style.color]="block.backgroundColor | toneHexColor: -30" (click)="onDrag($event, false)"
         cdkDragHandle>
         <mat-icon>drag_indicator</mat-icon>
     </div>

@@ -36,7 +36,7 @@ export class CreatePostComponent implements OnInit {
     this.form = this.fb.group({
       title: ['', [Validators.required, Validators.maxLength(30)]],
       description: ['', [Validators.maxLength(500)]],
-      private: [false, [Validators.required]]
+      private: [false]
     });
 
     if (this.editorMode) this.patchFormValues();
@@ -56,7 +56,7 @@ export class CreatePostComponent implements OnInit {
 
       let p = Object.assign({}, this.form.value);
       if (!this.editorMode) {
-        this.postService.post(p).subscribe({
+        this.postService.postPost(p).subscribe({
           next: obj => {
             this.postBlocks(obj.body.dataId)
             this.loading = false;
@@ -69,7 +69,6 @@ export class CreatePostComponent implements OnInit {
       }
       else {
         let p = Object.assign({}, this.form.value);
-
         this.postService.updatePost(p, this.post.id).subscribe({
           next: obj => {
             this.updateBlocks(obj.body.dataId)

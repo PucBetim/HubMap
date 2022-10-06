@@ -1,4 +1,4 @@
-import { Comment } from "./comment";
+import { Author, Comment } from "./comment";
 
 export class Post {
     title: string;
@@ -12,6 +12,7 @@ export class Post {
     comments: Comment[];
     modified: Date;
     created: Date;
+    author: Author;
 }
 export class Block {
     id: number;

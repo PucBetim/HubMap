@@ -1,6 +1,7 @@
 import { Position, Block, Post } from '../../core/shared/posts/post';
-import { Component, ElementRef, EventEmitter, HostListener, Input, OnInit, Output } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, EventEmitter, HostListener, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
+import { fromEvent, Subscription } from 'rxjs';
 
 @Component({
   selector: 'block',
@@ -26,6 +27,9 @@ export class BlockComponent implements OnInit {
   clickout(event: any) {
     if (!this.eRef.nativeElement.contains(event.target)) {
 
+      if (this.blockSelected)
+        this.onDrag(event, true)
+
       this.blockSelected = false;
       this.emitUnselect();
 
@@ -40,6 +44,8 @@ export class BlockComponent implements OnInit {
     this.initialContent = this.block.content;
     this.afterImageSize = (this.block.size.width + this.block.size.height) / 10
     this.afterImagePosition = { x: (this.block.position.x + (this.block.size.width / 2) - this.afterImageSize / 2), y: (this.block.position.y + (this.block.size.height / 2) - this.afterImageSize / 2) };
+
+
   }
 
   clickInside() {
@@ -59,12 +65,21 @@ export class BlockComponent implements OnInit {
     this.saveProgressEvent.emit();
   }
 
-  onDrag(event: any) {
-    this.block.position.x = event.layerX - event.offsetX;
-    this.block.position.y = event.layerY - event.offsetY;
+  onDrag(event: any, overlap: boolean) {
+    if (overlap) {
+      var lastPosition = new Position;
+      lastPosition.x = this.afterImagePosition.x - (this.block.size.width / 2) + this.afterImageSize / 2;
+      lastPosition.y = this.afterImagePosition.y - (this.block.size.height / 2) + this.afterImageSize / 2;
+      this.block.position = lastPosition;
+    }
+    else {
 
-    this.afterImagePosition = { x: (this.block.position.x + (this.block.size.width / 2) - this.afterImageSize / 2), y: (this.block.position.y + (this.block.size.height / 2) - this.afterImageSize / 2) };
-    this.emitSaveProgress();
+      this.block.position.x = event.layerX - event.offsetX;
+      this.block.position.y = event.layerY - event.offsetY;
+
+      this.afterImagePosition = { x: (this.block.position.x + (this.block.size.width / 2) - this.afterImageSize / 2), y: (this.block.position.y + (this.block.size.height / 2) - this.afterImageSize / 2) };
+      this.emitSaveProgress();
+    }
   }
 
   onResize(event: any) {

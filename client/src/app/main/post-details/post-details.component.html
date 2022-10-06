@@ -1,15 +1,15 @@
 <loading *ngIf="carregando"></loading>
-<div class="container">
+<div *ngIf="!carregando" class="container">
     <div class="mapContainer">
         <display-canvas *ngIf="result" [showOptions]="false" [size]="mapSize" [post]="post">
-        </display-canvas>
+        </display-canvas> 
     </div>
 
     <div class="detailsContainer layoutDefaultStyle">
         <div class="deco ">
             <p>Detalhes</p>
         </div>
-
+        <br>
         <div class="details">
 
             <div class="header">
@@ -17,7 +17,7 @@
                     {{post.title}}
                 </div>
                 <div class="creationInfo">
-                    <h4>Criado em {{post.created | date: 'dd/MM/yyyy HH:mm' }}</h4>
+                    <h4>Criado em {{post.created | date: 'dd/MM/yyyy' }} por {{post.author.nick}}</h4>
                 </div>
             </div>
 
@@ -26,10 +26,12 @@
                 {{post.description}}
             </div>
 
-            <div class="options push">
-                <button class="btnEdit" (click)="goToEdit()">Editar</button>
+            <div class="options pushBottom">
+                <button (click)="downloadImage()">Baixar Mapa</button>
+                <button class="pushRight" (click)="goToEdit()">Editar</button>
+                <button class="btnDelete btn-danger" (click)="deletePostConfirm()">Excluir</button>
             </div>
-
+            
         </div>
 
     </div>

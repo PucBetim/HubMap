@@ -1,3 +1,4 @@
+<loading *ngIf="loading"></loading>
 <div class="create layoutDefaultStyle">
     <div class="leftSide">
         <div class="inner_block">
@@ -53,13 +54,13 @@
         </div>
     </div>
 
-    <div class="resultBlock">
+    <div class="resultBlock layoutDefaultStyle">
         <div [ngClass]="resultDivClass">
-             <!-- <mat-spinner *ngIf="!results"></mat-spinner> -->
+             <mat-spinner *ngIf="!results"></mat-spinner>
             <div *ngIf="results" class="resultContainer">
-                <!-- <display-canvas [size]="blocksSize" [post]="post" *ngFor="let _ of [].constructor(7)"></display-canvas> -->
-                <h2>EM BREVE!</h2>
-            </div> 
+                <display-canvas [size]="blocksSize" [post]="post" *ngFor="let post of postsResult"></display-canvas>
+                <!-- <display-canvas [size]="blocksSize" [post]="postsResult[0]" ></display-canvas> -->
+            </div>
         </div>
     </div>
 </div>

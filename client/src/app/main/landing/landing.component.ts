@@ -1,5 +1,6 @@
 import { Post } from 'src/app/core/shared/posts/post';
 import { Component, HostListener, OnInit } from '@angular/core';
+import { PostService } from 'src/app/core/shared/posts/post-blocks.service';
 
 @Component({
   selector: 'app-landing',
@@ -21,14 +22,14 @@ export class LandingComponent implements OnInit {
       this.resizeMapDisplay(100);
   }
 
-
+  public loading: boolean = false;
   public searchBarClass: string[] = ["searchBar"];
   public resultDivClass: string[] = ["resultDiv"];
   public results: boolean = false;
-  public post = new Post;
+  public postsResult: Post[];
   public blocksSize: number = 300;
 
-  constructor() { }
+  constructor(private postService: PostService) { }
 
   ngOnInit(): void {
   }
@@ -42,13 +43,24 @@ export class LandingComponent implements OnInit {
   }
 
   searchMaps() {
-    this.results = true;
+    this.loading = true;
+    this.results = false;
     this.searchBarClass.push("sbTop");
     this.resultDivClass.push("rdTop");
 
-    var _post = JSON.parse(localStorage.getItem('post') || '{}');
+    this.postService.getPublicPosts().subscribe(
+      {
+        next: result => {
+          console.log(result)
+          this.postsResult = result.body;
+          this.loading = false; this.results = true;
 
-    if (_post.blocks)
-      this.post = _post;
+        },
+        error: error => {
+          console.log(error)
+          this.loading = false; this.results = true;
+
+        }
+      })
   }
 }

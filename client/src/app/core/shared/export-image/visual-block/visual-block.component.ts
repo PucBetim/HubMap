@@ -1,5 +1,5 @@
 import { Component, ElementRef, EventEmitter, HostListener, Input, OnInit, Output } from '@angular/core';
-import { Block, Position } from '../../../core/shared/posts/post';
+import { Block, Position } from '../../posts/post';
 
 @Component({
   selector: 'visual-block',

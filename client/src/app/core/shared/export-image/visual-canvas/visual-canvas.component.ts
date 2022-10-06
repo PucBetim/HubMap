@@ -1,10 +1,11 @@
-import { Block, Position } from '../../../core/shared/posts/post';
 import { AfterViewInit, Component, ElementRef, Inject, OnInit, ViewChild } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import html2canvas from 'html2canvas';
-import { GetLimitPoints } from '../../getLimitPoints';
 import { colors } from 'src/app/core/shared/colors';
 import { MatMenuTrigger } from '@angular/material/menu';
+import { GetLimitPoints } from 'src/app/map-creator/getLimitPoints';
+import { Block, Position } from '../../posts/post';
+import { PostService } from '../../posts/post-blocks.service';
 
 @Component({
   selector: 'visual-canvas',
@@ -29,9 +30,10 @@ export class VisualCanvasComponent implements OnInit, AfterViewInit {
   public backgroundColor: string;
   public iconColor: string[];
 
-  constructor(public dialogRef: MatDialogRef<VisualCanvasComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any, public getLimitPoints: GetLimitPoints) {
-  }
+  constructor(
+    @Inject(MAT_DIALOG_DATA) public data: any,
+    public dialogRef: MatDialogRef<VisualCanvasComponent>,
+    public getLimitPoints: GetLimitPoints) { }
 
 
   ngOnInit(): void {

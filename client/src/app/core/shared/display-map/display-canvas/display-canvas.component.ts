@@ -14,13 +14,12 @@ export class DisplayCanvasComponent implements OnInit {
   @Input() post: Post;
   @Input() size: number;
   @Input() showOptions: boolean = true;
-  
+
   visualPost: Post;
   resizeRatio: number;
   closestPoint = new Position;
   farestPoint = new Position;
   optionsStyle: string[];
-  public carregando: boolean = false;
 
   constructor(
     private getLimitPoints: GetLimitPoints,
@@ -29,18 +28,17 @@ export class DisplayCanvasComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.carregando = true;
     this.visualPost = JSON.parse(JSON.stringify(this.post));
-    this.postService.getPostBlocks(this.post.id).subscribe({
-      next: result => {
-        this.visualPost.map = [result.body];        
-        this.carregando = false;
-        this.loadCanvas();
-      }, error: erro => {
-        console.log(erro)
-        this.carregando = false;
-      }
-    })
+    if (this.visualPost.map.length > 0) {
+      this.postService.getPostBlocks(this.post.id).subscribe({
+        next: result => {
+          this.visualPost.map = [result.body];
+          this.loadCanvas();
+        }, error: erro => {
+          console.log(erro)
+        }
+      })
+    }
   }
 
   async loadCanvas() {

@@ -40,6 +40,7 @@ $client-theme: mat.define-light-theme((color: (primary: $client-primary,
     margin: 0;
     font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 
+    //////////  Button
     button {
         font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
         background-color: rgba(#316b83, 0.8);
@@ -48,9 +49,7 @@ $client-theme: mat.define-light-theme((color: (primary: $client-primary,
         padding: 1vh;
         margin: 0 1vh;
         min-width: 5em;
-
     }
-
     button:hover {
         transform: scale(1.05);
         animation-name: fill;
@@ -58,21 +57,53 @@ $client-theme: mat.define-light-theme((color: (primary: $client-primary,
         animation-timing-function: linear;
         animation-fill-mode: forwards;
     }
-
     @keyframes fill {
         100% {
             background-color: #234f63;
         }
     }
+    ////////// End Button
 
-    .btn-light{
+
+
+    ////////// Light Button
+    .btn-light {
         background-color: rgba(#6D8299, 0.8);
     }
+    ////////// End Light Button
+
+
+
+    ////////// Danger Button
+    .btn-danger {
+        background-color: #b84949;
+    }
+    .btn-danger:hover {
+        transform: scale(1.05);
+        animation-name: fillDanger;
+        animation-duration: 300ms;
+        animation-timing-function: linear;
+        animation-fill-mode: forwards;
+    }
+    @keyframes fillDanger {
+        100% {
+            background-color: #811616;
+        }
+    }
+    ////////// End Danger Button
+
+
 
     .title-deco {
         font-size: 1.5em;
         font-weight: bolder;
         color: #77aada;
+    }
+
+    .title-deco-danger {
+        font-size: 1.5em;
+        font-weight: bolder;
+        color: #b84949;
     }
 }
 
@@ -96,6 +127,7 @@ $client-theme: mat.define-light-theme((color: (primary: $client-primary,
 ::-webkit-scrollbar-thumb:hover {
     background: #6a6aa3;
 }
+
 // End Scrollbar
 
 html,

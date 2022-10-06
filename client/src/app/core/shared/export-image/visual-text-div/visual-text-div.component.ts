@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Block } from '../../../core/shared/posts/post';
+import { Block } from '../../posts/post';
 
 @Component({
   selector: 'visual-text-div',
