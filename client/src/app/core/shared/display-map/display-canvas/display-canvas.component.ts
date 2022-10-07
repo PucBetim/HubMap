@@ -41,7 +41,7 @@ export class DisplayCanvasComponent implements OnInit {
     }
   }
 
-  async loadCanvas() {
+  loadCanvas() {
     if (this.visualPost.map) {
       var limit = this.getLimitPoints.getClosestFartest(this.visualPost.map)
 
@@ -55,7 +55,7 @@ export class DisplayCanvasComponent implements OnInit {
 
       this.resizeRatio = widthRatio < heightRatio ? widthRatio : heightRatio;
 
-      await this.resizeBlocks(this.visualPost.map);
+      this.resizeBlocks(this.visualPost.map);
     }
   }
 

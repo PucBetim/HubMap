@@ -64,14 +64,6 @@
     overflow: auto;
     text-align: left;
 
-    .pushBottom {
-        margin-top: auto;
-    }
-
-    .pushRight {
-        margin-left: auto;
-    }
-
     .details {
         padding: 10px;
         display: flex;
@@ -120,13 +112,44 @@
     }
 }
 
-.commentsContainer {
+.comments {
     position: relative;
-    padding: 2em;
+    padding: 1em;
     margin: 0;
-    background-color: #272736;
-    text-align: center;
     background-color: rgba(255, 255, 255, 0.9);
     box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
-    overflow: auto;
+    height: auto;
+
+    .commentsContainer {
+        display: flex;
+        flex-direction: column;
+
+        .postComment {
+            .postTextArea {
+                width: 96%;
+                resize: none;
+                border: none;
+                border-radius: 15px;
+                padding: 2%;
+                 box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+            }
+
+            .postActionArea {
+                display: flex;
+                width: 100%;
+                flex-direction: row;
+                color: #77aada;
+                font-size: small;
+                text-align: right;
+            }
+        }
+    }
+}
+
+.pushBottom {
+    margin-top: auto;
+}
+
+.pushRight {
+    margin-left: auto;
 }

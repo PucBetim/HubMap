@@ -25,10 +25,6 @@ export class PostService extends BaseService {
     return this.http.get<any>((ConfigService.getUrlApi() + this.userUrlPost), ConfigService.getOptions()).pipe(catchError(super.serviceError));
   };
 
-  getPublicPosts(): Observable<any> {
-    return this.http.get<any>((ConfigService.getUrlApi() + this.userUrlPublicPost), ConfigService.getOptions()).pipe(catchError(super.serviceError));
-  };
-
   getPostById(id: number): Observable<any> {
     return this.http.get<any>((ConfigService.getUrlApi() + this.userUrlPost + `/${id}`), ConfigService.getOptions()).pipe(catchError(super.serviceError));
   };
@@ -43,8 +39,12 @@ export class PostService extends BaseService {
   //
 
   // Public post
-  getPost(id: number): Observable<any> {
+  getPublicPostsById(id: number): Observable<any> {
     return this.http.get<any>((ConfigService.getUrlApi() + this.userUrlPublicPost + `/${id}`), ConfigService.getOptions()).pipe(catchError(super.serviceError));
+  };
+
+  getPublicPosts(): Observable<any> {
+    return this.http.get<any>((ConfigService.getUrlApi() + this.userUrlPublicPost), ConfigService.getOptions()).pipe(catchError(super.serviceError));
   };
   //
 

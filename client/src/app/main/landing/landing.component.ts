@@ -51,7 +51,6 @@ export class LandingComponent implements OnInit {
     this.postService.getPublicPosts().subscribe(
       {
         next: result => {
-          console.log(result)
           this.postsResult = result.body;
           this.loading = false; this.results = true;
 

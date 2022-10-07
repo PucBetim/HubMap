@@ -1,0 +1,29 @@
+.main {
+    color: black;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 30px auto;
+    border: solid 1px #316b83;
+    border-radius: 10px;
+    margin: 5px;
+
+    .decoBlock {
+        background-color: #316b83;
+        width: 50%;
+        min-height: 100%;
+        border-radius: 5px 0 0 5px;
+    }
+
+    .content {    padding: 0.5em;
+
+        .commentInfo {
+            color: #316b83;
+            font-size: small;
+            text-align: end;
+        }
+    }
+}
+
+.replies {
+    padding-left: 20px;
+}

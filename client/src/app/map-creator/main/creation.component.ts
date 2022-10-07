@@ -84,7 +84,7 @@ export class CreationComponent implements OnInit, ComponentCanDeactivate {
 
   getPublicPost(id: number) {
     var _post = new Post;
-    this.postService.getPost(this.id).subscribe(
+    this.postService.getPublicPostsById(this.id).subscribe(
       {
         next: result => {
           _post = result.body;

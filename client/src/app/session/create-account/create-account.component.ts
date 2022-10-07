@@ -45,8 +45,6 @@ export class CreateAccountComponent implements OnInit {
       p.nick = form.nick;
       p.email = form.email;
       p.password = form.password;
-
-      console.log(p);
       
       this.sessionService.createUser(p)
         .subscribe({

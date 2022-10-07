@@ -2,7 +2,7 @@
 <div *ngIf="!carregando" class="container">
     <div class="mapContainer">
         <display-canvas *ngIf="result" [showOptions]="false" [size]="mapSize" [post]="post">
-        </display-canvas> 
+        </display-canvas>
     </div>
 
     <div class="detailsContainer layoutDefaultStyle">
@@ -10,7 +10,7 @@
             <p>Detalhes</p>
         </div>
         <br>
-        <div class="details">
+        <div class="details" *ngIf="result">
 
             <div class="header">
                 <div class="title">
@@ -28,17 +28,31 @@
 
             <div class="options pushBottom">
                 <button (click)="downloadImage()">Baixar Mapa</button>
-                <button class="pushRight" (click)="goToEdit()">Editar</button>
-                <button class="btnDelete btn-danger" (click)="deletePostConfirm()">Excluir</button>
+                <button *ngIf="currentUserMap" class="pushRight" (click)="goToEdit()">Editar</button>
+                <button *ngIf="currentUserMap" class="btnDelete btn-danger"
+                    (click)="deletePostConfirm()">Excluir</button>
             </div>
-            
+
         </div>
 
     </div>
 </div>
-
-<div class="commentsContainer">
-    <div class="deco ">
-        <p class="ftl">Comentários</p>
+<div class="comments layoutDefaultStyle">
+    <div class="commentsContainer">
+        <div class="deco">
+            <p>Comentários</p>
+        </div>
+        <br>
+        <div class="postComment">
+            <textarea [(ngModel)]="postAreaValue" class="postTextArea" rows="5" [maxlength]="commentMaxLength"></textarea>
+            <div class="postActionArea">
+                Caracteres: {{postAreaValue.length}} / {{commentMaxLength}}
+                <button [disabled]="postAreaValue.length == 0" class="post pushRight" (click)="commentPost()">Postar</button>
+            </div>
+        </div>
+        <br>
+        <div class="comment" *ngIf="result">
+            <comment [comment]="comment" *ngFor="let comment of post.comments"></comment>
+        </div>
     </div>
 </div>

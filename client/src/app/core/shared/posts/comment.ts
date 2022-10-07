@@ -1,9 +1,10 @@
 export class Comment {
+    id: number;
     author: Author;
     content: string;
     dislikes: number;
     likes: number;
-    repliedTo: Comment;
+    repliedTo: any;
     timestamp: Date;
 }
 

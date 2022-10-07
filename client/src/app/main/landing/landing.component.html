@@ -59,7 +59,6 @@
              <mat-spinner *ngIf="!results"></mat-spinner>
             <div *ngIf="results" class="resultContainer">
                 <display-canvas [size]="blocksSize" [post]="post" *ngFor="let post of postsResult"></display-canvas>
-                <!-- <display-canvas [size]="blocksSize" [post]="postsResult[0]" ></display-canvas> -->
             </div>
         </div>
     </div>

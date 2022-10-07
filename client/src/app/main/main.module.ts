@@ -12,9 +12,10 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MainRoutes } from './main.routing';
 import { SharedModule } from './../core/shared/shared.module';
 import { LandingComponent } from './landing/landing.component';
+import { CommentComponent } from './comment/comment.component';
 
 @NgModule({
-  declarations: [LandingComponent, PostDetailsComponent],
+  declarations: [LandingComponent, PostDetailsComponent, CommentComponent],
   imports: [
     CommonModule,
     RouterModule.forChild(MainRoutes),

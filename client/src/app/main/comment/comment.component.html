@@ -1,0 +1,16 @@
+<div class="main">
+
+    <div class="decoBlock"></div>
+    <div class="content">
+        {{comment.content}}
+        <br>
+        <div class="commentInfo">
+            Criado em {{comment.timestamp | date: 'dd/MM/yyyy'}}
+            Por {{comment.author. name}}
+        </div>
+    </div>
+    <!-- 
+    <div class="replies">
+        <comment *ngFor="let comment of comment." [comment]=""></comment>
+    </div> -->
+</div>
