@@ -26,5 +26,8 @@ public interface PostRepository extends PagingAndSortingRepository<Post, Integer
 	@Override
 	@Query("SELECT p FROM Post p WHERE p.id = ?1 AND p.author.email = ?#{principal}")
 	Optional<Post> findById(Integer id);
+	
+	@Query("SELECT p FROM Post p WHERE p.id = ?1 AND p.isPrivate = false")
+	Optional<Post> findByIdWhereIsPrivateFalse(Integer id);
 }
 
