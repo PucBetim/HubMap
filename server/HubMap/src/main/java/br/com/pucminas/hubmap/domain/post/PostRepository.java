@@ -21,7 +21,7 @@ public interface PostRepository extends PagingAndSortingRepository<Post, Integer
 	Page<Post> findAll(Pageable pageable);
 	
 	@Query("SELECT p FROM Post p WHERE p.isPrivate = false")
-	Iterable<Post> findAllPublic();
+	Page<Post> findAllPublic(Pageable pageable);
 	
 	@Override
 	@Query("SELECT p FROM Post p WHERE p.id = ?1 AND p.author.email = ?#{principal}")

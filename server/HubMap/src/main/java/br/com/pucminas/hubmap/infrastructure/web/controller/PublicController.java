@@ -5,15 +5,18 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.pucminas.hubmap.domain.post.Post;
 import br.com.pucminas.hubmap.domain.post.PostRepository;
+import br.com.pucminas.hubmap.utils.PageableUtils;
 
 @RestController
 @RequestMapping(path = "/hubmap/public")
@@ -23,11 +26,21 @@ public class PublicController {
 	private PostRepository postRepository;
 	
 	@GetMapping(path = "/posts")
-	public ResponseEntity<List<Post>> getAllPublicPosts() {
+
+	public ResponseEntity<List<Post>> getAllPublicPosts(
+			@RequestParam(required = false) Integer page,
+			@RequestParam(required = false) Integer size,
+			@RequestParam(required = false) Boolean descending,
+			@RequestParam(required = false) String... sort) {
 		
 		List<Post> posts = new ArrayList<>();
 		
-		postRepository.findAllPublic().forEach(posts::add);
+		if(sort == null) {
+			sort = new String[]{"title", "id"};
+		}
+		Pageable pageable = PageableUtils.getPageableFromParameters(page, size, descending, sort);
+		
+		postRepository.findAllPublic(pageable).forEach(posts::add);
 		posts.forEach(p -> {
 			p.setMapToShow();
 			p.setAuthorForPublicAccess();
