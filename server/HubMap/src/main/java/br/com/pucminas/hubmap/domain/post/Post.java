@@ -32,7 +32,6 @@ import com.fasterxml.jackson.annotation.JsonProperty.Access;
 
 import br.com.pucminas.hubmap.domain.comment.Comment;
 import br.com.pucminas.hubmap.domain.indexing.Histogram;
-import br.com.pucminas.hubmap.domain.indexing.NGram;
 import br.com.pucminas.hubmap.domain.map.Block;
 import br.com.pucminas.hubmap.domain.user.AppUser;
 import lombok.EqualsAndHashCode;
@@ -94,9 +93,6 @@ public class Post implements Serializable {
 	@JsonProperty(access = Access.READ_ONLY)
 	private Set<Comment> comments = new HashSet<>();
 
-	@OneToMany(mappedBy = "id.post", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	private Set<NGram> ngrams = new HashSet<>();
-
 	@OneToOne(mappedBy = "post", cascade = CascadeType.ALL) 
 	private Histogram histogram;
 
@@ -114,7 +110,7 @@ public class Post implements Serializable {
 		views = 0;
 		created = LocalDateTime.now();
 		setModifiedNow();
-		histogram = new Histogram();
+		histogram = new Histogram(this);
 	}
 
 	public void changeLikes(boolean positive) {

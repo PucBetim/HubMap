@@ -35,58 +35,24 @@ public class Histogram implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@EqualsAndHashCode.Include
-	private Integer id;
+	private Long id;
 	
-	@OneToOne(cascade = CascadeType.ALL)
+	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	@JoinColumn(name = "POST_ID")
 	private Post post;
 
-	@OneToMany(mappedBy = "owner", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "owner", fetch = FetchType.EAGER)
 	@ToString.Exclude
 	private Set<HistogramItem> histogram = new LinkedHashSet<>();
 
 	public Histogram(Post post) {
 		this.post = post;
 	}
-	
-	public void initialize(List<String> bagOfWords) {
-		HistogramItem item;
-		int counter;
-
-		for (String word : bagOfWords) {
-			if (!isInHistogram(word)) {
-				counter = countWords(bagOfWords, word);
-				item = new HistogramItem();
-				item.setCount(counter);
-				histogram.add(item);
-			}
-		}
-	}
-	
-	public void initialize(List<String> bagOfWords, Set<Histogram> histograms) {
-		HistogramItem item;
-		int counter;
-
-		for (String word : bagOfWords) {
-			if (!isInHistogram(word)) {
-				counter = countWords(bagOfWords, word);
-				item = new HistogramItem();
-				item.setCount(counter);
-				histogram.add(item);
-			}
-		}
-		
-		calculateTfIdf(histograms);
-	}
 
 	public void refreshHistograms(Set<Histogram> histograms) {
-		List<String> words = new ArrayList<>();
+		List<String> words = getWordsOfHistogram();
 		int counter;
-		
-		for (HistogramItem item : histogram) {
-			words.add(item.getKey().getGram());
-		}
-		
+				
 		for (HistogramItem item : histogram) {
 			counter = countWords(words, item.getKey().getGram());
 			item.setCount(counter);
@@ -95,6 +61,16 @@ public class Histogram implements Serializable {
 		calculateTfIdf(histograms);
 	}
 
+	public List<String> getWordsOfHistogram() {
+		List<String> words = new ArrayList<>();
+		
+		for (HistogramItem item : histogram) {
+			words.add(item.getKey().getGram());
+		}
+		
+		return words;
+	}
+	
 	public boolean isInHistogram(String term) {
 		for (HistogramItem item : histogram) {
 			if (item.getKey().getGram().equals(term)) {
@@ -105,6 +81,11 @@ public class Histogram implements Serializable {
 		return false;
 	}
 
+	public int countWords(List<String> bagOfWords, String term) {
+
+		return Collections.frequency(bagOfWords, term);
+	}
+	
 	private void calculateTfIdf(Set<Histogram> histograms) {
 		double tf;
 		double idf;
@@ -143,10 +124,5 @@ public class Histogram implements Serializable {
 		counter = counter == 0 ? 1 : counter;
 
 		return 1 + Math.log(histograms.size() / counter);
-	}
-
-	private int countWords(List<String> bagOfWords, String term) {
-
-		return Collections.frequency(bagOfWords, term);
 	}
 }

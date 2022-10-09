@@ -18,6 +18,9 @@ public class BlockService {
 
 	@Autowired
 	private PostRepository postRepository;
+	
+	@Autowired
+	private HistogramService histogramService;
 
 	@Transactional
 	public Block save(Block block, Integer postId) {
@@ -46,6 +49,8 @@ public class BlockService {
 		if(dbBlock != null) {
 			blockRepository.deleteAllByPostWhereIsNotRoot(postId);
 		}
+		
+		histogramService.generateHistogram(blockToReturn, dbPost);
 		
 		return blockToReturn;
 	}
