@@ -7,9 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.IdClass;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
 
 import lombok.EqualsAndHashCode;
@@ -19,7 +17,6 @@ import lombok.Setter;
 
 @SuppressWarnings("serial")
 @Entity
-@IdClass(HistogramItemPK.class)
 @Getter
 @Setter
 @NoArgsConstructor
@@ -29,18 +26,14 @@ public class HistogramItem implements Serializable{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@EqualsAndHashCode.Include
-	private Integer id;
+	private Long id;
 	
-	@Id
 	@ManyToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "HISTOGRAM_ID", referencedColumnName = "id")
-	@EqualsAndHashCode.Include
+	@JoinColumn(name = "HISTOGRAM_ID")
 	private Histogram owner;
 	
-	@ManyToOne
-	@JoinColumns({
-			@JoinColumn(name = "NGRAM_ID_POST", referencedColumnName = "POST_ID"),
-			@JoinColumn(name = "NGRAM_ID_SEQUENCE", referencedColumnName = "sequence")})
+	@ManyToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "NGRAM_ID", referencedColumnName = "id")
 	private NGram key;
 	
 	private int count;
