@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Embeddable;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
 
@@ -23,6 +24,7 @@ public class NGramPK implements Serializable{
 	
 	@NotNull
 	@ManyToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "POST_ID", referencedColumnName = "id")
 	private Post post;
 	
 	@NotNull
