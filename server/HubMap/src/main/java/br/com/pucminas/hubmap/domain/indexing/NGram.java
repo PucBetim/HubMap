@@ -3,8 +3,10 @@ package br.com.pucminas.hubmap.domain.indexing;
 import java.io.Serializable;
 
 import javax.persistence.Column;
-import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.validation.constraints.NotBlank;
 
 import lombok.EqualsAndHashCode;
@@ -18,9 +20,10 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class NGram implements Serializable {
 	
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@EqualsAndHashCode.Include
-	@EmbeddedId
-	private NGramPK id;
+	private Long id;
 	
 	@NotBlank(message = "Uma n-gram não pode ser vazia.")
 	@Column(length = 20, nullable = false)
