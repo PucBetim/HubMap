@@ -44,15 +44,19 @@
         </div>
         <br>
         <div class="postComment">
-            <textarea [(ngModel)]="postAreaValue" class="postTextArea" rows="5" [maxlength]="commentMaxLength"></textarea>
+            <textarea [formControl]="form.controls['content']" class="postTextArea" rows="4"
+                [maxlength]="commentMaxLength"></textarea>
             <div class="postActionArea">
-                Caracteres: {{postAreaValue.length}} / {{commentMaxLength}}
-                <button [disabled]="postAreaValue.length == 0" class="post pushRight" (click)="commentPost()">Postar</button>
+                Caracteres: {{form.controls['content'].value.length}} / {{commentMaxLength}}
+                <button [disabled]="form.controls['content'].value.length < 3 "
+                    [ngClass]="{'btn-disabled': form.controls['content'].value.length < 3}" class="post pushRight"
+                    (click)="commentPost()">Postar
+                </button>
             </div>
         </div>
         <br>
         <div class="comment" *ngIf="result">
-            <comment [comment]="comment" *ngFor="let comment of post.comments"></comment>
+            <comment [order]="1"  (commentMadeEvent)="updateComments()" [postComments]="this.post.comments" [childComments]="getChildComments(comment.id)" [postId]="this.post.id" [comment]="comment" *ngFor="let comment of getPrimaryComments()"></comment>
         </div>
     </div>
 </div>

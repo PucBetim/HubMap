@@ -18,8 +18,12 @@ export class CommentService extends BaseService {
     return this.http.post<any>((ConfigService.getUrlApi() + this.userUrl + `?post=${id}`), comment, ConfigService.getOptions()).pipe(catchError(super.serviceError));
   };
 
+  postReply(comment: Comment): Observable<any> {
+    return this.http.post<any>((ConfigService.getUrlApi() + this.userUrl), comment, ConfigService.getOptions()).pipe(catchError(super.serviceError));
+  };
+
   getPostComments(id: number): Observable<any> {
-    return this.http.post<any>((ConfigService.getUrlApi() + this.userUrl + `/${id}`), ConfigService.getOptions()).pipe(catchError(super.serviceError));
+    return this.http.get<any>((ConfigService.getUrlApi() + this.userUrl + `?post=${id}`), ConfigService.getOptions()).pipe(catchError(super.serviceError));
   };
 
   getCommentById(id: number): Observable<any> {
@@ -34,5 +38,11 @@ export class CommentService extends BaseService {
     return this.http.delete<any>((ConfigService.getUrlApi() + this.userUrl + `/${id}`), ConfigService.getOptions()).pipe(catchError(super.serviceError));
   };
 
+  likeComment(rating: boolean, id: number): Observable<any> {
+    return this.http.post<any>((ConfigService.getUrlApi() + this.userUrl + `/${id}/likes?add=${rating}`), ConfigService.getOptions()).pipe(catchError(super.serviceError));
+  };
 
+  dislikeComment(rating: boolean, id: number): Observable<any> {
+    return this.http.post<any>((ConfigService.getUrlApi() + this.userUrl + `/${id}/dislikes?add=${rating}`), ConfigService.getOptions()).pipe(catchError(super.serviceError));
+  };
 }

@@ -9,6 +9,7 @@ import { VisualCanvasComponent } from 'src/app/core/shared/export-image/visual-c
 import { CommentService } from 'src/app/core/shared/posts/comment.service';
 import { Comment } from 'src/app/core/shared/posts/comment';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'post-map-details',
@@ -24,8 +25,8 @@ export class PostDetailsComponent implements OnInit {
   public mapSize: number = window.innerHeight / 1.8;
   public currentUserMap: boolean = false;
 
-  public postAreaValue: string = '';
-  public commentMaxLength: number = 500;
+  public commentMaxLength: number = 200;
+  public form: FormGroup;
 
   constructor(
     private postService: PostService,
@@ -33,15 +34,21 @@ export class PostDetailsComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private dialog: MatDialog,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private fb: FormBuilder,
+
   ) { }
 
   ngOnInit(): void {
+
     this.sub = this.route.params.subscribe(
       params => {
         this.getPost(params['id']);
       });
 
+    this.form = this.fb.group({
+      content: ['', [Validators.required, Validators.maxLength(3), Validators.maxLength(this.commentMaxLength)]],
+    });
   }
 
   resizeMapDisplay() {
@@ -53,6 +60,7 @@ export class PostDetailsComponent implements OnInit {
   }
 
   getPost(id: number) {
+    this.result = false;
     this.carregando = true;
     this.postService.getPostById(id).subscribe(
       {
@@ -74,7 +82,6 @@ export class PostDetailsComponent implements OnInit {
     this.postService.getPublicPostsById(id).subscribe(
       {
         next: result => {
-          console.log(result.body)
           this.post = result.body;
           this.carregando = false;
           this.result = true;
@@ -156,15 +163,40 @@ export class PostDetailsComponent implements OnInit {
 
   commentPost() {
     this.carregando = true;
-    var comment = new Comment;
-    comment.content = this.postAreaValue;
-    this.commentService.postComment(comment, this.post.id).subscribe(
+    let p = Object.assign({}, this.form.value);
+    this.commentService.postComment(p, this.post.id).subscribe(
       {
         next: result => {
           this.snackBar.open("Comentário feito!", "Ok", {
             duration: 2000
           })
-          this.getPost(this.post.id)
+          this.form.patchValue({ content: '' });
+          this.updateComments();
+          this.carregando = false;
+        },
+        error: error => {
+          this.carregando = false;
+        }
+      })
+  }
+
+  getChildComments(id: number) {
+    var childComments = this.post.comments.filter(c => c.repliedTo?.id == id);
+    return childComments.length > 0 ? childComments : null;
+  }
+
+  getPrimaryComments() {
+    var primaryComments = this.post.comments.filter(c => c.repliedTo == null);
+    return primaryComments.length > 0 ? primaryComments : null;
+  }
+
+  updateComments() {
+    this.carregando = true;
+    this.commentService.getPostComments(this.post.id).subscribe(
+      {
+        next: result => {
+          console.log(result)
+          this.post.comments = result.body;
           this.carregando = false;
         },
         error: error => {

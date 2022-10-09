@@ -50,6 +50,7 @@ $client-theme: mat.define-light-theme((color: (primary: $client-primary,
         margin: 0 1vh;
         min-width: 5em;
     }
+
     button:hover {
         transform: scale(1.05);
         animation-name: fill;
@@ -57,11 +58,13 @@ $client-theme: mat.define-light-theme((color: (primary: $client-primary,
         animation-timing-function: linear;
         animation-fill-mode: forwards;
     }
+
     @keyframes fill {
         100% {
             background-color: #234f63;
         }
     }
+
     ////////// End Button
 
 
@@ -70,6 +73,7 @@ $client-theme: mat.define-light-theme((color: (primary: $client-primary,
     .btn-light {
         background-color: rgba(#6D8299, 0.8);
     }
+
     ////////// End Light Button
 
 
@@ -78,6 +82,7 @@ $client-theme: mat.define-light-theme((color: (primary: $client-primary,
     .btn-danger {
         background-color: #b84949;
     }
+
     .btn-danger:hover {
         transform: scale(1.05);
         animation-name: fillDanger;
@@ -85,6 +90,7 @@ $client-theme: mat.define-light-theme((color: (primary: $client-primary,
         animation-timing-function: linear;
         animation-fill-mode: forwards;
     }
+
     @keyframes fillDanger {
         100% {
             background-color: #811616;
@@ -94,6 +100,21 @@ $client-theme: mat.define-light-theme((color: (primary: $client-primary,
 
 
 
+    ////////// Disabled Button
+    .btn-disabled {
+        background-color: rgb(206, 206, 206);
+        color: #7e7e7e;
+    }
+
+    .btn-disabled:hover {
+        animation-name: none;
+
+    }
+    ////////// End Disabled Button
+
+
+
+    ////////// Title Deco
     .title-deco {
         font-size: 1.5em;
         font-weight: bolder;
@@ -105,6 +126,19 @@ $client-theme: mat.define-light-theme((color: (primary: $client-primary,
         font-weight: bolder;
         color: #b84949;
     }
+    ////////// End Title Deco
+
+
+
+    ////////// Flex Push
+    .pushBottom {
+        margin-top: auto;
+    }
+
+    .pushRight {
+        margin-left: auto;
+    }
+    ////////// End Flex Push
 }
 
 // Scrollbar

@@ -2,28 +2,97 @@
     color: black;
     width: 100%;
     display: grid;
-    grid-template-columns: 30px auto;
+    grid-template-columns: 15px auto;
     border: solid 1px #316b83;
     border-radius: 10px;
     margin: 5px;
 
     .decoBlock {
         background-color: #316b83;
-        width: 50%;
+        width: 100%;
         min-height: 100%;
         border-radius: 5px 0 0 5px;
     }
 
-    .content {    padding: 0.5em;
+    .content {
+        padding: 1em;
 
         .commentInfo {
             color: #316b83;
             font-size: small;
             text-align: end;
         }
+
+        .commentActions {
+            display: flex;
+
+            .action {
+                margin: 0 20px;
+                display: flex;
+                text-align: center;
+                color: #316b83;
+            }
+
+            mat-icon {
+                align-self: center;
+                height: fit-content;
+                font-size: small;
+                color: #a3b2c2;
+                cursor: pointer;
+            }
+
+            .rated{
+                color: #316b83;
+            }
+        }
+
+        .openResponse {
+            font-size: smaller;
+            color: #316b83;
+        }
+
+        .openResponse:hover {
+            font-size: small;
+            cursor: pointer;
+        }
     }
 }
 
+.repliesPanel {
+    background-color: transparent;
+    box-shadow: none;
+}
+
+.repliesPanel:hover {
+    background-color: transparent;
+}
+
 .replies {
-    padding-left: 20px;
+    grid-column: 2;
+    grid-area: 1;
+    width: auto;
+}
+
+::ng-deep mat-expansion-panel-body {
+    padding: 0
+}
+
+.postResponse {
+    .postTextArea {
+        width: 96%;
+        resize: none;
+        border: none;
+        border-radius: 15px;
+        padding: 2%;
+        box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+    }
+
+    .postActionArea {
+        display: flex;
+        width: 100%;
+        flex-direction: row;
+        color: #77aada;
+        font-size: small;
+        text-align: right;
+    }
 }

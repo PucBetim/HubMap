@@ -20,10 +20,14 @@
                         <div>
                             <mat-form-field class="input">
                                 <mat-label>Descrição</mat-label>
-                                <textarea class="descTextarea" matInput placeholder="" rows="5"
+                                <textarea class="descTextarea" matInput placeholder="" rows="5" [maxlength]="descMaxLength"
                                     [formControl]="form.controls['description']"></textarea>
                             </mat-form-field>
+                            <div class="descTextareaDesc">
+                                Caracteres: {{form.controls['description'].value.length}} / {{descMaxLength}}
+                            </div>
                         </div>
+                        <br>
                         <div>
                             <div class="pubToggle">
                                 <div class="item">

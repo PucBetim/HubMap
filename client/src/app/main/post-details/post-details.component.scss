@@ -104,6 +104,7 @@
             align-self: flex-start;
             height: auto;
             width: 100%;
+            max-width: fit-content;
         }
 
         .options {
@@ -131,7 +132,7 @@
                 border: none;
                 border-radius: 15px;
                 padding: 2%;
-                 box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+                box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
             }
 
             .postActionArea {
@@ -144,12 +145,4 @@
             }
         }
     }
-}
-
-.pushBottom {
-    margin-top: auto;
-}
-
-.pushRight {
-    margin-left: auto;
 }

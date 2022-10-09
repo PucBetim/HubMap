@@ -1,16 +1,72 @@
+<loading *ngIf="carregando"></loading>
 <div class="main">
-
     <div class="decoBlock"></div>
     <div class="content">
         {{comment.content}}
         <br>
+
         <div class="commentInfo">
-            Criado em {{comment.timestamp | date: 'dd/MM/yyyy'}}
+            Postado em {{comment.timestamp | date: 'dd/MM/yyyy'}}
             Por {{comment.author. name}}
         </div>
+
+        <div class="commentActions">
+            <div *ngIf="order < 3" class="action" style="margin-right: 15px;">
+                <a class="openResponse" (click)="openResponse = true" *ngIf="!openResponse">RESPONDER</a>
+            </div>
+            <div class="action likeClass">
+                <a>
+                    <mat-icon (click)="likeComment()">thumb_up</mat-icon> {{comment.likes}}
+                </a>
+            </div>
+            <div class="action dislikeClass">
+                <a>
+                    <mat-icon (click)="dislikeComment()">thumb_down</mat-icon> {{comment.dislikes}}
+                </a>
+            </div>
+        </div>
+
+
+        <div *ngIf="openResponse" class="postResponse">
+            <br>
+            <textarea [formControl]="form.controls['content']" class="postTextArea" rows="3"
+                [maxlength]="commentMaxLength"></textarea>
+            <div class="postActionArea">
+                Caracteres: {{form.controls['content'].value.length}} / {{commentMaxLength}}
+
+                <button class="btn-light pushRight" (click)="openResponse = false">Cancelar</button>
+
+                <button [disabled]="form.controls['content'].value.length < 3 "
+                    [ngClass]="{'btn-disabled': form.controls['content'].value.length < 3}" class="post"
+                    (click)="replyComment()">Postar
+                </button>
+            </div>
+        </div>
+
+        <mat-expansion-panel class="repliesPanel" (opened)="repliesOpenedState = true"
+            (closed)="repliesOpenedState = false" hideToggle *ngIf="getChildComments(comment.id)?.length > 0">
+
+            <mat-expansion-panel-header style="padding: 0">
+                <mat-panel-title>
+                    <mat-icon *ngIf="repliesOpenedState">keyboard_arrow_up</mat-icon>
+                    <mat-icon *ngIf="!repliesOpenedState">keyboard_arrow_down</mat-icon>
+                    {{getChildComments(comment.id)?.length}} {{getChildComments(comment.id)?.length == 1 ? "RESPOSTA" :
+                    "RESPOSTAS" }}
+                </mat-panel-title>
+            </mat-expansion-panel-header>
+
+            <div class="replies">
+                <comment (commentMadeEvent)="emitCommentMadeEvent()" [postComments]="postComments"
+                    [childComments]="getChildComments(comment.id)" [postId]="postId" [response]="true"
+                    [order]="order + 1" *ngFor="let comment of childComments" [comment]="comment">
+                </comment>
+            </div>
+        </mat-expansion-panel>
+
+        <!-- <div class="replies">
+            <comment (commentMadeEvent)="emitCommentMadeEvent()" [postComments]="postComments"
+                [childComments]="getChildComments(comment.id)" [postId]="postId" [response]="true"
+                *ngFor="let comment of childComments" [comment]="comment"></comment>
+        </div> -->
     </div>
-    <!-- 
-    <div class="replies">
-        <comment *ngFor="let comment of comment." [comment]=""></comment>
-    </div> -->
 </div>

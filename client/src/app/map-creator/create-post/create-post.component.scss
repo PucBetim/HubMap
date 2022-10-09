@@ -6,6 +6,15 @@
     resize: none;
 }
 
+.descTextareaDesc {
+    display: flex;
+    width: 100%;
+    flex-direction: row;
+    color: #77aada;
+    font-size: small;
+    text-align: right;
+}
+
 .pubToggle {
     display: flex;
     flex-direction: column;

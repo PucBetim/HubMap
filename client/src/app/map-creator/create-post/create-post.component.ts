@@ -19,6 +19,8 @@ export class CreatePostComponent implements OnInit {
   public editorMode: boolean = false;
   public userLogged: boolean = true;
 
+  public descMaxLength: number = 200;
+
   constructor(
     public dialogRef: MatDialogRef<CreatePostComponent>,
     private postService: PostService,
@@ -30,12 +32,12 @@ export class CreatePostComponent implements OnInit {
     if (!ConfigService.getUser())
       this.userLogged = false;
 
-    this.editorMode = this.data.editorMode;   
+    this.editorMode = this.data.editorMode;
     this.post = this.data.post;
 
     this.form = this.fb.group({
       title: ['', [Validators.required, Validators.maxLength(30)]],
-      description: ['', [Validators.maxLength(500)]],
+      description: ['', [Validators.minLength(3), Validators.maxLength(this.descMaxLength)]],
       private: [false]
     });
 
@@ -88,7 +90,7 @@ export class CreatePostComponent implements OnInit {
       this.postService.updateBlocks(b, id).subscribe({
         next: obj => {
           this.loading = false;
-          this.dialogRef.close({id: id, msg: "Mapa editado com sucesso!"});
+          this.dialogRef.close({ id: id, msg: "Mapa editado com sucesso!" });
         }, error: error => {
           this.errors = error.errors;
           this.loading = false;
@@ -103,7 +105,7 @@ export class CreatePostComponent implements OnInit {
       this.postService.postBlocks(b, id).subscribe({
         next: obj => {
           this.loading = false;
-          this.dialogRef.close({id: id, msg: "Mapa postado com sucesso!"});
+          this.dialogRef.close({ id: id, msg: "Mapa postado com sucesso!" });
         }, error: error => {
           this.errors = error.errors;
           this.loading = false;
@@ -112,7 +114,7 @@ export class CreatePostComponent implements OnInit {
     });
   }
 
-  close(link: string){
-    this.dialogRef.close({link: link})
+  close(link: string) {
+    this.dialogRef.close({ link: link })
   }
 }
