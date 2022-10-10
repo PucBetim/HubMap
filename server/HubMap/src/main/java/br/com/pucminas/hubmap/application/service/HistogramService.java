@@ -2,6 +2,7 @@ package br.com.pucminas.hubmap.application.service;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Set;
 
 import javax.transaction.Transactional;
 
@@ -13,19 +14,27 @@ import br.com.pucminas.hubmap.application.service.python.PythonService;
 import br.com.pucminas.hubmap.domain.indexing.Histogram;
 import br.com.pucminas.hubmap.domain.indexing.HistogramItem;
 import br.com.pucminas.hubmap.domain.indexing.HistogramItemRepository;
+import br.com.pucminas.hubmap.domain.indexing.HistogramRepository;
 import br.com.pucminas.hubmap.domain.indexing.NGram;
+import br.com.pucminas.hubmap.domain.indexing.Vocabulary;
 import br.com.pucminas.hubmap.domain.map.Block;
 import br.com.pucminas.hubmap.domain.post.Post;
 
 @Service
 public class HistogramService {
-
+	
 	@Autowired
 	private PythonService pythonService;
 	
 	@Autowired
 	private HistogramItemRepository histogramItemRepository;
+	
+	@Autowired
+	private HistogramRepository histogramRepository;
 
+	@Autowired
+	private VocabularyService vocabularyService;
+	
 	@Transactional
 	public void generateHistogram(Block root, Post post) {
 
@@ -41,25 +50,35 @@ public class HistogramService {
 		}
 
 		initialize(bOW, post.getHistogram());
+		
+		Set<Histogram> histograms = histogramRepository.findAll();
+		histograms.stream()
+			.forEach(h -> h.calculateTfIdf(histograms));
+		
+		histogramRepository.saveAll(histograms);
 	}
 	
 	private void initialize(List<String> bagOfWords, Histogram hist) {
-		HistogramItem item;
-		int counter;
 
 		for (String word : bagOfWords) {
-			if (!hist.isInHistogram(word)) {
-				counter = hist.countWords(bagOfWords, word);
-				
-				item = new HistogramItem();
-				item.setOwner(hist);
-				item.setKey(new NGram(word));
-				item.setCount(counter);
-				
-				HistogramItem dbItem = histogramItemRepository.save(item);
-				
-				hist.getHistogram().add(dbItem);
-			}
+			vocabularyService.addGram(word);
+		}
+		
+		Vocabulary vocab = vocabularyService.getVocabulary();
+		HistogramItem item;
+		int counter;
+		
+		for(NGram nGram : vocab.getNgrams()) {
+			counter = hist.countWords(bagOfWords, nGram.getGram());
+			
+			item = new HistogramItem();
+			item.setOwner(hist);
+			item.setKey(nGram);
+			item.setCount(counter);
+			
+			HistogramItem dbItem = histogramItemRepository.save(item);
+			
+			hist.getHistogram().add(dbItem);
 		}
 	}
 
