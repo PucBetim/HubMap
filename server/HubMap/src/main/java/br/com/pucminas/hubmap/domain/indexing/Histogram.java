@@ -3,10 +3,9 @@ package br.com.pucminas.hubmap.domain.indexing;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.TreeSet;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -44,13 +43,7 @@ public class Histogram implements Serializable {
 
 	@OneToMany(mappedBy = "owner", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@ToString.Exclude
-	private Set<HistogramItem> histogram = new TreeSet<>(new Comparator<HistogramItem>() {
-
-		@Override
-		public int compare(HistogramItem o1, HistogramItem o2) {
-			return o1.getKey().getId().compareTo(o2.getKey().getId());
-		}
-	});
+	private Set<HistogramItem> histogram = new LinkedHashSet<>();
 
 	public Histogram(Post post) {
 		this.post = post;

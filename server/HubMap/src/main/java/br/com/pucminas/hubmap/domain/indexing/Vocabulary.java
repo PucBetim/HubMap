@@ -2,9 +2,8 @@ package br.com.pucminas.hubmap.domain.indexing;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.Comparator;
+import java.util.LinkedHashSet;
 import java.util.Set;
-import java.util.TreeSet;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -44,12 +43,6 @@ public class Vocabulary implements Serializable{
 	
 	@OneToMany(mappedBy = "vocabulary", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@ToString.Exclude
-	private Set<NGram> ngrams = new TreeSet<>(new Comparator<NGram>() {
-
-		@Override
-		public int compare(NGram o1, NGram o2) {
-			return o1.getId().compareTo(o2.getId());
-		}
-	});
+	private Set<NGram> ngrams = new LinkedHashSet<>();
 	
 }
