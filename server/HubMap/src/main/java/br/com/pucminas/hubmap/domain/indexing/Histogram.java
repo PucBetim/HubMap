@@ -49,18 +49,6 @@ public class Histogram implements Serializable {
 		this.post = post;
 	}
 
-	public void refreshHistograms(Set<Histogram> histograms) {
-		List<String> words = getWordsOfHistogram();
-		int counter;
-
-		for (HistogramItem item : histogram) {
-			counter = countWords(words, item.getKey().getGram());
-			item.setCount(counter);
-		}
-
-		calculateTfIdf(histograms);
-	}
-
 	public List<String> getWordsOfHistogram() {
 		List<String> words = new ArrayList<>();
 
