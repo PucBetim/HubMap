@@ -2,7 +2,6 @@ package br.com.pucminas.hubmap.domain.indexing;
 
 import java.io.Serializable;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -32,11 +31,11 @@ public class HistogramItem implements Serializable{
 	@EqualsAndHashCode.Include
 	private Long id;
 	
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne
 	@JoinColumn(name = "HISTOGRAM_ID")
 	private Histogram owner;
 	
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne
 	@JoinColumn(name = "NGRAM_ID", referencedColumnName = "id")
 	private NGram key;
 	

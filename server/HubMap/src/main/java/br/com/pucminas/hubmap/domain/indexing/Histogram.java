@@ -80,6 +80,16 @@ public class Histogram implements Serializable {
 
 		return false;
 	}
+	
+	public boolean isInHistogram(NGram nGram) {
+		for (HistogramItem item : histogram) {
+			if (item.getKey().equals(nGram)) {
+				return true;
+			}
+		}
+
+		return false;
+	}
 
 	public int countWords(List<String> bagOfWords, String term) {
 

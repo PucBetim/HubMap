@@ -24,7 +24,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-public class NGram implements Serializable {
+public class NGram implements Serializable, Comparable<NGram> {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -43,5 +43,10 @@ public class NGram implements Serializable {
 	
 	public NGram(String gram) {
 		this.gram = gram;
+	}
+
+	@Override
+	public int compareTo(NGram o) {
+		return id.compareTo(o.getId());
 	}
 }

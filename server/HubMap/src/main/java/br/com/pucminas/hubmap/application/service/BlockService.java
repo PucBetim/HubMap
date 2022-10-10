@@ -29,7 +29,9 @@ public class BlockService {
 		
 		Block dbBlock = null;
 		
-		if (block.getId() != null) {
+		boolean isEdit = block.getId() != null;
+		
+		if (isEdit) {
 			
 			dbBlock = dbPost.getMap()
 					.stream()
@@ -46,11 +48,11 @@ public class BlockService {
 		
 		Block blockToReturn = blockRepository.save(block);
 		
-		if(dbBlock != null) {
+		if(isEdit) {
 			blockRepository.deleteAllByPostWhereIsNotRoot(postId);
 		}
 		
-		histogramService.generateHistogram(blockToReturn, dbPost);
+		histogramService.generateHistogram(blockToReturn, dbPost, isEdit);
 		
 		return blockToReturn;
 	}

@@ -22,26 +22,26 @@ import br.com.pucminas.hubmap.domain.post.Post;
 
 @Service
 public class HistogramService {
-	
+
 	@Autowired
 	private PythonService pythonService;
-	
+
 	@Autowired
 	private HistogramItemRepository histogramItemRepository;
-	
+
 	@Autowired
 	private HistogramRepository histogramRepository;
 
 	@Autowired
 	private VocabularyService vocabularyService;
-	
+
 	@Transactional
-	public void generateHistogram(Block root, Post post) {
+	public void generateHistogram(Block root, Post post, boolean isEdit) {
 
 		String sentence = getWordsInBlocks(root, null);
 
 		List<String> bOW;
-		
+
 		try {
 			bOW = pythonService.getBagOfWords(sentence);
 		} catch (IOException e) {
@@ -49,35 +49,66 @@ public class HistogramService {
 					"Não foi possível encontrar o caminho informado");
 		}
 
-		initialize(bOW, post.getHistogram());
-		
+		if (isEdit) {
+			recalculate(bOW, post.getHistogram());
+		} else {
+			initialize(bOW, post.getHistogram());
+		}
+
 		Set<Histogram> histograms = histogramRepository.findAll();
-		histograms.stream()
-			.forEach(h -> h.calculateTfIdf(histograms));
-		
+		histograms.stream().forEach(h -> h.calculateTfIdf(histograms));
+
 		histogramRepository.saveAll(histograms);
 	}
-	
+
+	private void recalculate(List<String> bagOfWords, Histogram hist) {
+		
+		for (String word : bagOfWords) {
+			vocabularyService.addGram(word);
+		}
+
+		Vocabulary vocab = vocabularyService.getVocabulary();
+		HistogramItem item;
+		int counter;
+
+		for (NGram nGram : vocab.getNgrams()) {
+			counter = hist.countWords(bagOfWords, nGram.getGram());
+			
+			if(hist.isInHistogram(nGram)) {
+				item = histogramItemRepository.findByKeyAndOwner(nGram, hist);
+				item.setCount(counter);
+			} else {
+				item = new HistogramItem();
+				item.setOwner(hist);
+				item.setKey(nGram);
+				item.setCount(counter);
+
+				histogramItemRepository.save(item);
+			}
+		}
+		
+	}
+
 	private void initialize(List<String> bagOfWords, Histogram hist) {
 
 		for (String word : bagOfWords) {
 			vocabularyService.addGram(word);
 		}
-		
+
 		Vocabulary vocab = vocabularyService.getVocabulary();
 		HistogramItem item;
 		int counter;
-		
-		for(NGram nGram : vocab.getNgrams()) {
+
+		for (NGram nGram : vocab.getNgrams()) {
 			counter = hist.countWords(bagOfWords, nGram.getGram());
-			
+
 			item = new HistogramItem();
 			item.setOwner(hist);
 			item.setKey(nGram);
 			item.setCount(counter);
-			
+
 			HistogramItem dbItem = histogramItemRepository.save(item);
-			
+
 			hist.getHistogram().add(dbItem);
 		}
 	}

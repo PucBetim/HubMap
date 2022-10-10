@@ -2,7 +2,6 @@ package br.com.pucminas.hubmap.application.service;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
-import java.util.Set;
 
 import javax.transaction.Transactional;
 
@@ -10,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.pucminas.hubmap.domain.indexing.NGram;
-import br.com.pucminas.hubmap.domain.indexing.NGramRepository;
 import br.com.pucminas.hubmap.domain.indexing.Vocabulary;
 import br.com.pucminas.hubmap.domain.indexing.VocabularyRepository;
 
@@ -22,12 +20,12 @@ public class VocabularyService {
 	@Autowired
 	private VocabularyRepository vocabularyRepository;
 	
-	@Autowired
-	private NGramRepository nGramRepository;
+	/*@Autowired
+	private NGramRepository nGramRepository;*/
 	
 	@Transactional
 	public void addGram(String gram) {
-		Vocabulary vocab = getVocabulary(true);
+		Vocabulary vocab = getVocabulary();
 		
 		if(!isInVocabulary(gram, vocab)) {
 			NGram item = new NGram(gram);
@@ -52,17 +50,17 @@ public class VocabularyService {
 		return false;
 	}
 	
-	private Vocabulary getVocabulary(boolean isIntern) {
+	public Vocabulary getVocabulary() {
 		
 		Optional<Vocabulary> dbVocab = vocabularyRepository.findById(VOCAB_ID);
 		
-		if(dbVocab.isPresent() && isIntern) {
+		if(dbVocab.isPresent()) {
 			return dbVocab.get();	
 		} else {
 			return null;
 		}
 	}
-	
+	/*
 	public Vocabulary getVocabulary() {
 				
 		Optional<Vocabulary> dbVocab = vocabularyRepository.findById(VOCAB_ID);
@@ -77,5 +75,5 @@ public class VocabularyService {
 		} else {
 			return null;
 		}
-	}
+	}*/
 }
