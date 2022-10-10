@@ -3,11 +3,13 @@ package br.com.pucminas.hubmap.application.service;
 import java.io.IOException;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.CompletableFuture;
 
 import javax.transaction.Transactional;
 
 import org.springframework.beans.InvalidPropertyException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import br.com.pucminas.hubmap.application.service.python.PythonService;
@@ -36,6 +38,7 @@ public class HistogramService {
 	private VocabularyService vocabularyService;
 
 	@Transactional
+	@Async
 	public void generateHistogram(Block root, Post post, boolean isEdit) {
 
 		String sentence = getWordsInBlocks(root, null);
@@ -55,14 +58,24 @@ public class HistogramService {
 			initialize(bOW, post.getHistogram());
 		}
 
+		Set<Histogram> histograms = calculateTfIdfForAllHistograms(post.getHistogram());
+
+		Iterable<Histogram> hists = histogramRepository.saveAll(histograms);
+
+		CompletableFuture.completedFuture(hists);
+	}
+
+	private Set<Histogram> calculateTfIdfForAllHistograms(Histogram current) {
 		Set<Histogram> histograms = histogramRepository.findAll();
+		histograms.remove(current);
+		histograms.add(current);
 		histograms.stream().forEach(h -> h.calculateTfIdf(histograms));
 
-		histogramRepository.saveAll(histograms);
+		return histograms;
 	}
 
 	private void recalculate(List<String> bagOfWords, Histogram hist) {
-		
+
 		for (String word : bagOfWords) {
 			vocabularyService.addGram(word);
 		}
@@ -73,8 +86,8 @@ public class HistogramService {
 
 		for (NGram nGram : vocab.getNgrams()) {
 			counter = hist.countWords(bagOfWords, nGram.getGram());
-			
-			if(hist.isInHistogram(nGram)) {
+
+			if (hist.isInHistogram(nGram)) {
 				item = histogramItemRepository.findByKeyAndOwner(nGram, hist);
 				item.setCount(counter);
 			} else {
@@ -83,10 +96,11 @@ public class HistogramService {
 				item.setKey(nGram);
 				item.setCount(counter);
 
-				histogramItemRepository.save(item);
+				HistogramItem dbItem = histogramItemRepository.save(item);
+				hist.getHistogram().add(dbItem);
 			}
 		}
-		
+
 	}
 
 	private void initialize(List<String> bagOfWords, Histogram hist) {
