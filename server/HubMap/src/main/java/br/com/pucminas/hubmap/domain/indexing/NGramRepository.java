@@ -2,6 +2,7 @@ package br.com.pucminas.hubmap.domain.indexing;
 
 import java.util.Set;
 
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
@@ -9,4 +10,7 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 public interface NGramRepository extends CrudRepository<NGram, Long>{
 	
 	Set<NGram> findByVocabularyOrderById(Vocabulary vocabulary);
+	
+	@Query("SELECT n FROM NGram n WHERE n.newVocabulary.id = ?1")
+	Set<NGram> findByNewVocabulary(Long vocab);
 }

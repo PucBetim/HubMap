@@ -11,7 +11,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -38,8 +37,11 @@ public class NGram implements Serializable, Comparable<NGram> {
 
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "VOCABULARY_ID", referencedColumnName = "id")
-	@NotNull
 	private Vocabulary vocabulary;
+	
+	@ManyToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "NEW_VOCABULARY_ID", referencedColumnName = "id")
+	private Vocabulary newVocabulary;
 	
 	public NGram(String gram) {
 		this.gram = gram;

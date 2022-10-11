@@ -1,50 +1,88 @@
 package br.com.pucminas.hubmap.application.service;
 
-import java.time.LocalDateTime;
+import static br.com.pucminas.hubmap.utils.LoggerUtils.getLoggerFromClass;
+
 import java.util.Optional;
+import java.util.Set;
 
-import javax.transaction.Transactional;
-
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionTemplate;
 
+import br.com.pucminas.hubmap.domain.indexing.HistogramRepository;
 import br.com.pucminas.hubmap.domain.indexing.NGram;
+import br.com.pucminas.hubmap.domain.indexing.NGramRepository;
 import br.com.pucminas.hubmap.domain.indexing.Vocabulary;
 import br.com.pucminas.hubmap.domain.indexing.VocabularyRepository;
 
 @Service
 public class VocabularyService {
-	
+		
 	private static final Long VOCAB_ID = 1L;
 	
-	@Autowired
 	private VocabularyRepository vocabularyRepository;
+
+	private NGramRepository nGramRepository;
 	
+	private HistogramRepository histogramRepository;
+	
+	private TransactionTemplate transactionTemplate;
+	
+	public VocabularyService(VocabularyRepository vocabularyRepository, NGramRepository nGramRepository,
+			HistogramRepository histogramRepository, TransactionTemplate transactionTemplate) {
+		this.vocabularyRepository = vocabularyRepository;
+		this.nGramRepository = nGramRepository;
+		this.histogramRepository = histogramRepository;
+		this.transactionTemplate = transactionTemplate;
+	}
+
 	@Transactional
-	public void addGram(String gram) {
+	public Vocabulary.StatusRetorno addGram(String gram) {
+			
 		Vocabulary vocab = getVocabulary();
 		
-		if(!isInVocabulary(gram, vocab)) {
-			NGram item = new NGram(gram);
-			item.setVocabulary(vocab);
-			
-			vocab.setHasNewWords(false);
-			vocab.setWhenUpdated(LocalDateTime.now());
-			vocab.getNgrams().add(item);
-			
-			vocabularyRepository.save(vocab);
-		}		
+		Vocabulary.StatusRetorno result = vocab.addNGrams(gram);
+		vocabularyRepository.save(vocab);
+		
+		return result;
 	}
 	
-	private boolean isInVocabulary(String gram, Vocabulary vocab) {
-
-		for (NGram nGram : vocab.getNgrams()) {
-			if(nGram.getGram().equalsIgnoreCase(gram)) {
-				return true;
+	@Transactional
+	@Scheduled(initialDelay = 10 * 1000, fixedDelay = 10 * 1000)
+	protected void updateVocabulary() {
+		
+		Set<NGram> nGrams = nGramRepository.findByNewVocabulary(VOCAB_ID);
+		Vocabulary vocab = getVocabulary();
+		
+		if(vocab.getHasNewWords()) {
+			for (NGram nGram : nGrams) {
+				if(!vocab.hasInVocabulary(nGram.getGram())) {
+					nGram.setNewVocabulary(null);
+					nGram.setVocabulary(vocab);
+					vocab.getNgrams().add(nGram);
+				} else {
+					nGram.setNewVocabulary(null);
+					nGramRepository.delete(nGram);
+				}
 			}
+			
+			vocab.updateWhenUpdated();
+			transactionTemplate.execute(t -> {
+				histogramRepository.updateUpToDateWithVocabulary(false);
+				t.flush();
+				return null;
+			});
+			
+			
+			getLoggerFromClass(getClass()).info("Vocabulary updated succefuly");
+		} else {
+			getLoggerFromClass(getClass()).info("Vocabulary is already up-to-date");
 		}
 		
-		return false;
+		vocab.setHasNewWords(false);
+		
+		vocabularyRepository.save(vocab);
 	}
 	
 	public Vocabulary getVocabulary() {

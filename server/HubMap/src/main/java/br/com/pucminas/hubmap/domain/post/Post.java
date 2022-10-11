@@ -143,7 +143,7 @@ public class Post implements Serializable {
 	public void setAuthor(AppUser author) {
 		this.author = author;
 	}
-	
+
 	@JsonIgnore
 	public Block getMapRoot() {
 		return map.stream()
