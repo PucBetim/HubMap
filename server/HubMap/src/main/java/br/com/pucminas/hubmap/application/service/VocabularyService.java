@@ -20,9 +20,6 @@ public class VocabularyService {
 	@Autowired
 	private VocabularyRepository vocabularyRepository;
 	
-	/*@Autowired
-	private NGramRepository nGramRepository;*/
-	
 	@Transactional
 	public void addGram(String gram) {
 		Vocabulary vocab = getVocabulary();
@@ -60,20 +57,4 @@ public class VocabularyService {
 			return null;
 		}
 	}
-	/*
-	public Vocabulary getVocabulary() {
-				
-		Optional<Vocabulary> dbVocab = vocabularyRepository.findById(VOCAB_ID);
-		
-		if(dbVocab.isPresent()) {
-			Vocabulary vocabToReturn = dbVocab.get();
-			
-			Set<NGram> nGrams = nGramRepository.findByVocabularyOrderById(vocabToReturn);
-			
-			vocabToReturn.setNgrams(nGrams);
-			return vocabToReturn;
-		} else {
-			return null;
-		}
-	}*/
 }
