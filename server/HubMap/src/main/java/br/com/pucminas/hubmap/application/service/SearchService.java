@@ -8,7 +8,6 @@ import java.util.TreeSet;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Async;
@@ -22,7 +21,6 @@ import br.com.pucminas.hubmap.domain.indexing.NGram;
 import br.com.pucminas.hubmap.domain.indexing.Vocabulary;
 import br.com.pucminas.hubmap.domain.indexing.search.Search;
 import br.com.pucminas.hubmap.domain.post.Post;
-import br.com.pucminas.hubmap.domain.post.PostRepository;
 import br.com.pucminas.hubmap.utils.PageableUtils;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -31,23 +29,22 @@ import lombok.Setter;
 @Service
 public class SearchService {
 
-	@Autowired
 	private HistogramRepository histogramRepository;
 	
-	@Autowired
 	private HistogramService histogramService;
 
-	@Autowired
 	private VocabularyService vocabularyService;
 	
-	@Autowired
-	private PostRepository postRepository;
-	
+	public SearchService(HistogramRepository histogramRepository, HistogramService histogramService,
+			VocabularyService vocabularyService) {
+		this.histogramRepository = histogramRepository;
+		this.histogramService = histogramService;
+		this.vocabularyService = vocabularyService;
+	}
+
 	@Transactional(readOnly = true)
 	public List<Post> search(Search search) throws InterruptedException, ExecutionException {
 
-		PostRepository p2 = postRepository;
-		
 		Pageable pageable = PageableUtils.getPageableFromParameters(0, 10);
 
 		Page<Histogram> histograms = histogramRepository.findByInitilized(true, pageable);
@@ -70,7 +67,7 @@ public class SearchService {
 			for (Histogram histogram : hists) {
 				double similarity = compareHistograms(search.getHistogram(), histogram);
 				HistogramSearch histSearch = new HistogramSearch();
-				histSearch.setPostId(histogram.getPost().getId());
+				histSearch.setPost(histogram.getPost());
 				histSearch.setSimilarity(similarity);
 				histogramsSimilarity.add(histSearch);
 			}
@@ -81,16 +78,11 @@ public class SearchService {
 				break;
 			}
 		}
-
-		
 		
 		if (!histogramsSimilarity.isEmpty()) {
 			
-			for (HistogramSearch histSearch : histogramsSimilarity) {
-				
-				Post post = p2.findById(histSearch.getPostId()).orElseThrow();
-				
-				posts.add(post);
+			for (HistogramSearch histSearch : histogramsSimilarity) {				
+				posts.add(histSearch.getPost());
 			}
 		}
 
@@ -171,6 +163,6 @@ public class SearchService {
 		private Double similarity;
 
 		@EqualsAndHashCode.Include
-		private Integer postId;
+		private Post post;
 	}
 }

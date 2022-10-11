@@ -149,7 +149,8 @@ public class HistogramService {
 				}
 				
 				Histogram dbHistogram = histogramRepository.save(histogram);
-				calculateTfIdf(dbHistogram, histogramRepository.findByInitilized(true, pageable.first()));
+				dbHistogram = calculateTfIdf(dbHistogram, histogramRepository.findByInitilized(true, pageable.first()));
+				histogramRepository.save(dbHistogram);
 			}
 
 			if (histograms.hasNext()) {
