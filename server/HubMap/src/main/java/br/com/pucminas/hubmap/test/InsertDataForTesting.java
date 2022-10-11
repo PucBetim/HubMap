@@ -86,7 +86,6 @@ public class InsertDataForTesting {
 		appUserService.save(u3);
 
 		// USER 1
-
 		Post p1 = new Post("Arquitetura de Computadores", "Mapa mental sobre arquitetura de computadores", false, u1);
 		Post p2 = new Post("Virtualização", "Mapa mental sobre virtualização", false, u1);
 		Post p3 = new Post("Biologia | Plantas", "Mapa mental sobre plantas", false, u1);
