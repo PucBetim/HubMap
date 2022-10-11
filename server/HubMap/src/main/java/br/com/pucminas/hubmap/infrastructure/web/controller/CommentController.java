@@ -92,7 +92,7 @@ public class CommentController {
 			@RequestBody @Valid Comment comment) {
 		
 		try {
-			Post post = postRepository.findById(postId).orElseThrow();
+			Post post = postRepository.findByIdIfPublicOrFromAuthor(postId).orElseThrow();
 			AppUser loggedUser = appUserRepository.findByEmail(SecurityUtils.getLoggedUserEmail());
 			
 			comment.setPost(post);
