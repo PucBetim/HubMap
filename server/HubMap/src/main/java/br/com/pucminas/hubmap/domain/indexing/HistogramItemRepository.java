@@ -14,6 +14,9 @@ public interface HistogramItemRepository extends CrudRepository<HistogramItem, L
 	
 	HistogramItem findByKeyAndOwner(NGram nGram, Histogram owner);
 	
+	@Query("SELECT hi.tfidf FROM HistogramItem hi WHERE hi.owner.id = ?2 AND hi.key.id = ?1 ")
+	Double findTfIdfByKeyAndOwner(Long nGramId, Long ownerId);
+	
 	@Modifying(flushAutomatically = true, clearAutomatically = true)
 	@Query("DELETE FROM HistogramItem hi WHERE hi.owner.id = ?1")
 	void deleteAllByOwner(Long histId);

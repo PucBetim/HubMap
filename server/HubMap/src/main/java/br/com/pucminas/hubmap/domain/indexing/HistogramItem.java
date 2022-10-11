@@ -39,7 +39,7 @@ public class HistogramItem implements Serializable{
 	@JoinColumn(name = "NGRAM_ID", referencedColumnName = "id")
 	private NGram key;
 	
-	private int count;
+	private Integer count;
 	
-	private double tfidf;
+	private Double tfidf;
 }

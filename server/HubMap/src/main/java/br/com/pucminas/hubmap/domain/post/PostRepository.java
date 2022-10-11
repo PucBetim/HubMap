@@ -1,5 +1,6 @@
 package br.com.pucminas.hubmap.domain.post;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
@@ -10,6 +11,9 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface PostRepository extends PagingAndSortingRepository<Post, Integer> {
+	
+	@Override
+	List<Post> findAllById(Iterable<Integer> ids);
 	
 	@Query("SELECT p FROM Post p WHERE p.author.email = ?#{principal}")
 	Page<Post> findAllFromAuthor(Pageable pageable);

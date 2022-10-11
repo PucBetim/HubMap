@@ -19,6 +19,7 @@ import br.com.pucminas.hubmap.domain.indexing.HistogramItemRepository;
 import br.com.pucminas.hubmap.domain.indexing.HistogramRepository;
 import br.com.pucminas.hubmap.domain.indexing.NGram;
 import br.com.pucminas.hubmap.domain.indexing.Vocabulary;
+import br.com.pucminas.hubmap.domain.indexing.search.Search;
 import br.com.pucminas.hubmap.domain.map.Block;
 import br.com.pucminas.hubmap.domain.post.Post;
 
@@ -37,6 +38,28 @@ public class HistogramService {
 	@Autowired
 	private VocabularyService vocabularyService;
 
+	public Search generateSearchHistogram(Search search) {
+		String sentence = search.getSearch();
+		
+		List<String> bOW;
+
+		try {
+			bOW = pythonService.getBagOfWords(sentence);
+		} catch (IOException e) {
+			throw new InvalidPropertyException(PythonService.class, "hubmap.scripts.python.path",
+					"Não foi possível encontrar o caminho informado");
+		}
+
+		Set<Histogram> histograms = histogramRepository.findAll();
+		
+		Histogram hist = initialize(bOW);
+		hist.setInitialized(true);
+		hist.calculateTfIdf(histograms);
+		search.setHistogram(hist);
+		
+		return search;
+	}
+	
 	@Transactional
 	@Async
 	public void generateHistogram(Block root, Post post, boolean isEdit) {
@@ -57,7 +80,12 @@ public class HistogramService {
 		} else {
 			initialize(bOW, post.getHistogram());
 		}
-
+		
+		Histogram hist = post.getHistogram();
+		hist.setInitialized(true);
+		
+		histogramRepository.save(hist);
+		
 		Set<Histogram> histograms = calculateTfIdfForAllHistograms(post.getHistogram());
 
 		Iterable<Histogram> hists = histogramRepository.saveAll(histograms);
@@ -103,6 +131,31 @@ public class HistogramService {
 
 	}
 
+	private Histogram initialize(List<String> bagOfWords) {
+		
+		Vocabulary vocab = vocabularyService.getVocabulary();
+		Histogram hist = new Histogram();
+		HistogramItem item;
+		int counter;
+		long i = 1L;
+		
+		for (NGram nGram : vocab.getNgrams()) {
+			counter = hist.countWords(bagOfWords, nGram.getGram());
+
+			item = new HistogramItem();
+			item.setId(i);
+			item.setOwner(hist);
+			item.setKey(nGram);
+			item.setCount(counter);
+
+			hist.getHistogram().add(item);
+			i++;
+		}
+		
+		hist.setInitialized(true);
+		return hist;
+	}
+	
 	private void initialize(List<String> bagOfWords, Histogram hist) {
 
 		for (String word : bagOfWords) {

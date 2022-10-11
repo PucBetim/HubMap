@@ -31,7 +31,6 @@ public class PublicController {
 	private CommentRepository commetRepository;
 	
 	@GetMapping(path = "/posts")
-
 	public ResponseEntity<List<Post>> getAllPublicPosts(
 			@RequestParam(required = false) Integer page,
 			@RequestParam(required = false) Integer size,

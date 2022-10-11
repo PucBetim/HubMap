@@ -45,10 +45,23 @@ public class Histogram implements Serializable {
 	@ToString.Exclude
 	private Set<HistogramItem> histogram = new LinkedHashSet<>();
 
+	private Boolean initialized;
+	
 	public Histogram(Post post) {
 		this.post = post;
+		initialized = false;
 	}
 
+	public HistogramItem getItemFromHistogram(NGram ngram) {
+		for (HistogramItem item : histogram) {
+			if (item.getKey().equals(ngram)) {
+				return item;
+			}
+		}
+
+		return null;
+	}
+	
 	public List<String> getWordsOfHistogram() {
 		List<String> words = new ArrayList<>();
 
