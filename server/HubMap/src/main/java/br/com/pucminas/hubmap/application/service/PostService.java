@@ -41,19 +41,19 @@ public class PostService {
 	
 	@Transactional
 	public void changeLike(Integer postId, boolean positive) {
-		Post dbPost = postRepository.findById(postId).orElseThrow();
+		Post dbPost = postRepository.findByIdWhereIsPrivateFalse(postId).orElseThrow();
 		dbPost.changeLikes(positive);
 	}
 	
 	@Transactional
 	public void changeDislike(Integer postId, boolean positive) {
-		Post dbPost = postRepository.findById(postId).orElseThrow();
+		Post dbPost = postRepository.findByIdWhereIsPrivateFalse(postId).orElseThrow();
 		dbPost.changeDislikes(positive);
 	}
 
 	@Transactional
 	public void addView(Integer postId) {
-		Post dbPost = postRepository.findById(postId).orElseThrow();
+		Post dbPost = postRepository.findByIdWhereIsPrivateFalse(postId).orElseThrow();
 		dbPost.addViews();
 	}
 }

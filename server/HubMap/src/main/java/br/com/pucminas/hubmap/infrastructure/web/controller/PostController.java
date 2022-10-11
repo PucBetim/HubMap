@@ -38,27 +38,25 @@ public class PostController {
 
 	@Autowired
 	private PostService postService;
-	
+
 	@Autowired
 	private AppUserRepository appUserRepository;
 
 	@GetMapping("")
-	public ResponseEntity<List<Post>> getPosts(
-			@RequestParam(required = false) Integer page,
-			@RequestParam(required = false) Integer size,
-			@RequestParam(required = false) Boolean descending,
+	public ResponseEntity<List<Post>> getPosts(@RequestParam(required = false) Integer page,
+			@RequestParam(required = false) Integer size, @RequestParam(required = false) Boolean descending,
 			@RequestParam(required = false) String... sort) {
-		
+
 		try {
 
 			List<Post> posts = new ArrayList<>();
 
-			if(sort == null) {
-				sort = new String[]{"title", "id"};
+			if (sort == null) {
+				sort = new String[] { "title", "id" };
 			}
 			Pageable pageable = PageableUtils.getPageableFromParameters(page, size, descending, sort);
-			
-			postRepository.findAll(pageable).forEach(posts::add);
+
+			postRepository.findAllFromAuthor(pageable).forEach(posts::add);
 			posts.forEach(p -> p.setMapToShow());
 
 			return new ResponseEntity<>(posts, HttpStatus.OK);
@@ -70,7 +68,7 @@ public class PostController {
 	@GetMapping("/{id}")
 	public ResponseEntity<Post> getPostsById(@PathVariable Integer id) {
 		try {
-			Post post = postRepository.findById(id).orElseThrow();
+			Post post = postRepository.findByIdIfPublicOrFromAuthor(id).orElseThrow();
 			post.setMapToShow();
 
 			return new ResponseEntity<>(post, HttpStatus.OK);
@@ -87,77 +85,94 @@ public class PostController {
 
 	@PostMapping("")
 	public ResponseEntity<RestResponse> postPosts(@RequestBody @Valid Post newPost) {
-		
+
 		try {
 			AppUser loggedUser = appUserRepository.findByEmail(SecurityUtils.getLoggedUserEmail());
-			
+
 			newPost.setAuthor(loggedUser);
 			newPost = postService.save(newPost);
-			
+
 			RestResponse response = RestResponse.fromNormalResponse("Post criado com sucesso.", newPost.getId());
-			
+
 			return new ResponseEntity<>(response, HttpStatus.CREATED);
 		} catch (NoSuchElementException e) {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
-		
+
 	}
 
 	@PutMapping(path = "/{id}")
-	public ResponseEntity<RestResponse> putPost(
-			@PathVariable("id") Integer id, 
-			@RequestBody @Valid Post newPost) {
+	public ResponseEntity<RestResponse> putPost(@PathVariable("id") Integer id, @RequestBody @Valid Post newPost) {
 
 		try {
-			
+
 			newPost.setId(id);
 			newPost = postService.save(newPost);
-			
+
 			RestResponse response = RestResponse.fromNormalResponse("Post atualizado com sucesso.", newPost.getId());
-			
+
 			return new ResponseEntity<>(response, HttpStatus.OK);
 		} catch (NoSuchElementException e) {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 	}
-	
+
 	@PostMapping("/{id}/likes")
-	public ResponseEntity<RestResponse> changeLike(
-			@PathVariable("id") Integer id,
+	public ResponseEntity<RestResponse> changeLike(@PathVariable("id") Integer id,
 			@RequestParam(name = "add", required = true) Boolean positive) {
-		
+
+		String msg = null;
+		HttpStatus status = null;
+
 		try {
 			postService.changeLike(id, positive);
-			RestResponse response = RestResponse.fromNormalResponse("Likes alterados com sucesso.", id);
-			return new ResponseEntity<>(response, HttpStatus.OK);
+			msg = "Likes alterados com sucesso.";
+			status = HttpStatus.OK;
 		} catch (NoSuchElementException e) {
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+			msg = "Não foi possível encontrar o post";
+			status = HttpStatus.BAD_REQUEST;
 		}
+
+		RestResponse response = RestResponse.fromNormalResponse(msg, id);
+		return new ResponseEntity<>(response, status);
 	}
-	
+
 	@PostMapping("/{id}/dislikes")
-	public ResponseEntity<RestResponse> changeDislike(
-			@PathVariable("id") Integer id,
+	public ResponseEntity<RestResponse> changeDislike(@PathVariable("id") Integer id,
 			@RequestParam(name = "add", required = true) Boolean positive) {
-		
+
+		String msg = null;
+		HttpStatus status = null;
+
 		try {
 			postService.changeDislike(id, positive);
-			RestResponse response = RestResponse.fromNormalResponse("Dislikes alterados com sucesso.", id);
-			return new ResponseEntity<>(response, HttpStatus.OK);
+			msg = "Dislikes alterados com sucesso.";
+			status = HttpStatus.OK;
 		} catch (NoSuchElementException e) {
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+			msg = "Não foi possível encontrar o post";
+			status = HttpStatus.BAD_REQUEST;
 		}
+
+		RestResponse response = RestResponse.fromNormalResponse(msg, id);
+		return new ResponseEntity<>(response, status);
 	}
-	
+
 	@PostMapping("/{id}/views")
 	public ResponseEntity<RestResponse> addViews(@PathVariable("id") Integer id) {
-		
+
+		String msg = null;
+		HttpStatus status = null;
+
 		try {
 			postService.addView(id);
-			RestResponse response = RestResponse.fromNormalResponse("Views incrementadas com sucesso.", id);
-			return new ResponseEntity<>(response, HttpStatus.OK);
+			msg = "Views incrementadas com sucesso.";
+			status = HttpStatus.OK;
 		} catch (NoSuchElementException e) {
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+			msg = "Não foi possível encontrar o post";
+			status = HttpStatus.BAD_REQUEST;
 		}
+
+		RestResponse response = RestResponse.fromNormalResponse(msg, id);
+		return new ResponseEntity<>(response, status);
 	}
 }
