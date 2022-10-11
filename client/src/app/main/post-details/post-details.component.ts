@@ -1,3 +1,4 @@
+import { ConfigService } from './../../core/services/config.service';
 import { Subscription } from 'rxjs';
 import { PostService } from './../../core/shared/posts/post-blocks.service';
 import { Component, OnInit } from '@angular/core';
@@ -23,6 +24,8 @@ export class PostDetailsComponent implements OnInit {
   public post: Post;
   public sub: Subscription;
   public mapSize: number = window.innerHeight / 1.8;
+  public mapZoomSize: number = window.innerWidth / 1.4;
+
   public currentUserPost: boolean = false;
 
   public commentMaxLength: number = 200;
@@ -56,13 +59,6 @@ export class PostDetailsComponent implements OnInit {
     });
   }
 
-  resizeMapDisplay() {
-    this.mapSize = window.innerHeight / 1.5;
-    this.result = false;
-    setTimeout(() => {
-      this.result = true;
-    }, 200)
-  }
 
   getPost(id: number) {
     this.result = false;
@@ -74,7 +70,8 @@ export class PostDetailsComponent implements OnInit {
           this.carregando = false;
           this.currentUserPost = true;
           this.result = true;
-          this.viewPost();
+          if (ConfigService.getUser())
+            this.viewPost();
         },
         error: error => {
           this.getPublicPost(id)
@@ -92,7 +89,8 @@ export class PostDetailsComponent implements OnInit {
           this.carregando = false;
           this.currentUserPost = false;
           this.result = true;
-          this.viewPost();
+          if (ConfigService.getUser())
+            this.viewPost();
         },
         error: error => {
           console.log(error)
@@ -170,22 +168,26 @@ export class PostDetailsComponent implements OnInit {
   }
 
   commentPost() {
-    this.carregando = true;
-    let p = Object.assign({}, this.form.value);
-    this.commentService.postComment(p, this.post.id).subscribe(
-      {
-        next: result => {
-          this.snackBar.open("Comentário feito!", "Ok", {
-            duration: 2000
-          })
-          this.form.patchValue({ content: '' });
-          this.updateComments();
-          this.carregando = false;
-        },
-        error: error => {
-          this.carregando = false;
-        }
-      })
+    if (ConfigService.getUser()) {
+      this.carregando = true;
+      let p = Object.assign({}, this.form.value);
+      this.commentService.postComment(p, this.post.id).subscribe(
+        {
+          next: result => {
+            this.snackBar.open("Comentário feito!", "Ok", {
+              duration: 2000
+            })
+            this.form.patchValue({ content: '' });
+            this.updateComments();
+            this.carregando = false;
+          },
+          error: error => {
+            this.carregando = false;
+          }
+        })
+    }
+    else
+      this.router.navigate(['session/create-account'])
   }
 
   getChildComments(id: number) {
@@ -213,40 +215,52 @@ export class PostDetailsComponent implements OnInit {
   }
 
   likePost() {
-    this.lastLikeValue = this.lastLikeValue == true ? false : true;
+    if (ConfigService.getUser()) {
 
-    this.postService.likePost(this.lastLikeValue, this.post.id).subscribe(
-      {
-        next: result => {
-          this.likeClass = this.lastLikeValue ? ['rated'] : [];
-          if (!this.lastDislikeValue) this.dislikeClass = [];
-          if (this.lastDislikeValue && this.lastLikeValue) this.dislikePost();
+      this.lastLikeValue = this.lastLikeValue == true ? false : true;
 
-          if (this.currentUserPost) this.getPost(this.post.id);
-          else this.getPublicPost(this.post.id)
-        },
-        error: error => {
-        }
-      })
+      this.postService.likePost(this.lastLikeValue, this.post.id).subscribe(
+        {
+          next: result => {
+            this.likeClass = this.lastLikeValue ? ['rated'] : [];
+            if (!this.lastDislikeValue) this.dislikeClass = [];
+            if (this.lastDislikeValue && this.lastLikeValue) this.dislikePost();
+
+            if (this.currentUserPost) this.getPost(this.post.id);
+            else this.getPublicPost(this.post.id)
+          },
+          error: error => {
+          }
+        })
+    }
+    else
+      this.router.navigate(['session/create-account'])
+
   }
 
   dislikePost() {
-    this.lastDislikeValue = this.lastDislikeValue == true ? false : true;
+    if (ConfigService.getUser()) {
+
+      this.lastDislikeValue = this.lastDislikeValue == true ? false : true;
 
 
-    this.postService.dislikePost(this.lastDislikeValue, this.post.id).subscribe(
-      {
-        next: result => {
-          this.dislikeClass = this.lastDislikeValue ? ['rated'] : [];
-          if (!this.lastLikeValue) this.likeClass = [];
-          if (this.lastLikeValue && this.lastDislikeValue) this.likePost();
+      this.postService.dislikePost(this.lastDislikeValue, this.post.id).subscribe(
+        {
+          next: result => {
+            this.dislikeClass = this.lastDislikeValue ? ['rated'] : [];
+            if (!this.lastLikeValue) this.likeClass = [];
+            if (this.lastLikeValue && this.lastDislikeValue) this.likePost();
 
-          if (this.currentUserPost) this.getPost(this.post.id);
-          else this.getPublicPost(this.post.id)
-        },
-        error: error => {
-        }
-      })
+            if (this.currentUserPost) this.getPost(this.post.id);
+            else this.getPublicPost(this.post.id)
+          },
+          error: error => {
+          }
+        })
+    }
+    else
+      this.router.navigate(['session/create-account'])
+
   }
 
   viewPost() {

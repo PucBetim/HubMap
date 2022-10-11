@@ -12,7 +12,8 @@ import { Router } from '@angular/router';
 export class DisplayCanvasComponent implements OnInit {
 
   @Input() post: Post;
-  @Input() size: number;
+  @Input() size: number = 300;
+  @Input() zoomSize: number;
   @Input() showOptions: boolean = true;
 
   visualPost: Post;
@@ -20,28 +21,24 @@ export class DisplayCanvasComponent implements OnInit {
   closestPoint = new Position;
   farestPoint = new Position;
   optionsStyle: string[];
+  mapSize: number;
+  public zoomed: boolean = false;
 
   constructor(
     private getLimitPoints: GetLimitPoints,
-    private postService: PostService,
     private router: Router
   ) { }
 
   ngOnInit(): void {
-    this.visualPost = JSON.parse(JSON.stringify(this.post));
-    if (this.visualPost.map.length > 0) {
-      this.postService.getPostBlocks(this.post.id).subscribe({
-        next: result => {
-          this.visualPost.map = [result.body];
-          this.loadCanvas();
-        }, error: erro => {
-          console.log(erro)
-        }
-      })
+    this.mapSize = this.size;
+    if (this.post.map.length > 0) {
+      this.loadCanvas();
     }
   }
 
   loadCanvas() {
+    this.visualPost = JSON.parse(JSON.stringify(this.post));
+
     if (this.visualPost.map) {
       var limit = this.getLimitPoints.getClosestFartest(this.visualPost.map)
 
@@ -50,8 +47,8 @@ export class DisplayCanvasComponent implements OnInit {
       var PostOriginalWidth = this.farestPoint.x - this.closestPoint.x;
       var PostOriginalHeight = this.farestPoint.y - this.closestPoint.y;
 
-      var widthRatio = (this.size - 10) / PostOriginalWidth;
-      var heightRatio = (this.size - 10) / PostOriginalHeight;
+      var widthRatio = (this.mapSize - 10) / PostOriginalWidth;
+      var heightRatio = (this.mapSize - 10) / PostOriginalHeight;
 
       this.resizeRatio = widthRatio < heightRatio ? widthRatio : heightRatio;
 
@@ -77,6 +74,19 @@ export class DisplayCanvasComponent implements OnInit {
 
   goToDetails() {
     this.router.navigateByUrl(`/details/${this.post.id}`);
+  }
+
+  zoom(zoom: boolean) {
+    if (zoom) {
+      this.zoomed = true;
+      this.mapSize = this.zoomSize
+    }
+    else {
+      this.zoomed = false;
+      (this.mapSize = this.size)
+    }
+
+    this.loadCanvas();
   }
 }
 
