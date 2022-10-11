@@ -7,6 +7,10 @@ import org.springframework.data.domain.Sort.Direction;
 
 public class PageableUtils {
 
+	public static Pageable getPageableFromParameters(Integer page, Integer size) {
+		return getPageableFromParameters(page, size, null);
+	}
+	
 	public static Pageable getPageableFromParameters(Integer page, Integer size, Boolean descending, String... sort) {
 		
 		Direction direction = Direction.ASC;
@@ -25,7 +29,7 @@ public class PageableUtils {
 			}
 		}
 		
-		if (sort == null) {
+		if (sort.length == 0) {
 			return PageRequest.of(page, size, Sort.unsorted());
 		}
 
