@@ -14,14 +14,14 @@
             <div *ngIf="order < 3" class="action" style="margin-right: 15px;">
                 <a class="openResponse" (click)="openResponse = true" *ngIf="!openResponse">RESPONDER</a>
             </div>
-            <div class="action likeClass">
+            <div class="action">
                 <a>
-                    <mat-icon (click)="likeComment()">thumb_up</mat-icon> {{comment.likes}}
+                    <mat-icon [ngClass]="likeClass" (click)="likeComment()">thumb_up</mat-icon> {{comment.likes}}
                 </a>
             </div>
-            <div class="action dislikeClass">
+            <div class="action">
                 <a>
-                    <mat-icon (click)="dislikeComment()">thumb_down</mat-icon> {{comment.dislikes}}
+                    <mat-icon [ngClass]="dislikeClass" (click)="dislikeComment()">thumb_down</mat-icon> {{comment.dislikes}}
                 </a>
             </div>
         </div>

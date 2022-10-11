@@ -23,10 +23,15 @@ export class PostDetailsComponent implements OnInit {
   public post: Post;
   public sub: Subscription;
   public mapSize: number = window.innerHeight / 1.8;
-  public currentUserMap: boolean = false;
+  public currentUserPost: boolean = false;
 
   public commentMaxLength: number = 200;
   public form: FormGroup;
+
+  public likeClass: string[];
+  public dislikeClass: string[];
+  public lastLikeValue: boolean;
+  public lastDislikeValue: boolean;
 
   constructor(
     private postService: PostService,
@@ -67,8 +72,9 @@ export class PostDetailsComponent implements OnInit {
         next: result => {
           this.post = result.body;
           this.carregando = false;
-          this.currentUserMap = true;
+          this.currentUserPost = true;
           this.result = true;
+          this.viewPost();
         },
         error: error => {
           this.getPublicPost(id)
@@ -84,7 +90,9 @@ export class PostDetailsComponent implements OnInit {
         next: result => {
           this.post = result.body;
           this.carregando = false;
+          this.currentUserPost = false;
           this.result = true;
+          this.viewPost();
         },
         error: error => {
           console.log(error)
@@ -195,12 +203,59 @@ export class PostDetailsComponent implements OnInit {
     this.commentService.getPostComments(this.post.id).subscribe(
       {
         next: result => {
-          console.log(result)
           this.post.comments = result.body;
           this.carregando = false;
         },
         error: error => {
           this.carregando = false;
+        }
+      })
+  }
+
+  likePost() {
+    this.lastLikeValue = this.lastLikeValue == true ? false : true;
+
+    this.postService.likePost(this.lastLikeValue, this.post.id).subscribe(
+      {
+        next: result => {
+          this.likeClass = this.lastLikeValue ? ['rated'] : [];
+          if (!this.lastDislikeValue) this.dislikeClass = [];
+          if (this.lastDislikeValue && this.lastLikeValue) this.dislikePost();
+
+          if (this.currentUserPost) this.getPost(this.post.id);
+          else this.getPublicPost(this.post.id)
+        },
+        error: error => {
+        }
+      })
+  }
+
+  dislikePost() {
+    this.lastDislikeValue = this.lastDislikeValue == true ? false : true;
+
+
+    this.postService.dislikePost(this.lastDislikeValue, this.post.id).subscribe(
+      {
+        next: result => {
+          this.dislikeClass = this.lastDislikeValue ? ['rated'] : [];
+          if (!this.lastLikeValue) this.likeClass = [];
+          if (this.lastLikeValue && this.lastDislikeValue) this.likePost();
+
+          if (this.currentUserPost) this.getPost(this.post.id);
+          else this.getPublicPost(this.post.id)
+        },
+        error: error => {
+        }
+      })
+  }
+
+  viewPost() {
+    this.postService.viewPost(this.post.id).subscribe(
+      {
+        next: result => {
+
+        },
+        error: error => {
         }
       })
   }

@@ -39,10 +39,10 @@ export class CommentService extends BaseService {
   };
 
   likeComment(rating: boolean, id: number): Observable<any> {
-    return this.http.post<any>((ConfigService.getUrlApi() + this.userUrl + `/${id}/likes?add=${rating}`), ConfigService.getOptions()).pipe(catchError(super.serviceError));
+    return this.http.post<any>((ConfigService.getUrlApi() + this.userUrl + `/${id}/likes?add=${rating}`), null, ConfigService.getOptions()).pipe(catchError(super.serviceError));
   };
 
-  dislikeComment(rating: boolean, id: number): Observable<any> {
-    return this.http.post<any>((ConfigService.getUrlApi() + this.userUrl + `/${id}/dislikes?add=${rating}`), ConfigService.getOptions()).pipe(catchError(super.serviceError));
+  dislikeComment(rating: any, id: number): Observable<any> {
+    return this.http.post<any>((ConfigService.getUrlApi() + this.userUrl + `/${id}/dislikes?add=${rating}`), null, ConfigService.getOptions()).pipe(catchError(super.serviceError));
   };
 }

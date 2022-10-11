@@ -60,5 +60,23 @@ export class PostService extends BaseService {
   updateBlocks(blocks: Block, id: number): Observable<any> {
     return this.http.put<any>((ConfigService.getUrlApi() + this.userUrlBlocks + `?post=${id}`), blocks, ConfigService.getOptions()).pipe(catchError(super.serviceError));
   };
-}
   //
+
+
+  // Likes Dislikes
+  likePost(rating: boolean, id: number): Observable<any> {
+    return this.http.post<any>((ConfigService.getUrlApi() + this.userUrlPost + `/${id}/likes?add=${rating}`), null, ConfigService.getOptions()).pipe(catchError(super.serviceError));
+  };
+
+  dislikePost(rating: boolean, id: number): Observable<any> {
+    return this.http.post<any>((ConfigService.getUrlApi() + this.userUrlPost + `/${id}/dislikes?add=${rating}`), null, ConfigService.getOptions()).pipe(catchError(super.serviceError));
+  };
+  //
+
+  // Post View
+  viewPost(id: number): Observable<any> {
+    return this.http.post<any>((ConfigService.getUrlApi() + this.userUrlPost + `/${id}/views`), null, ConfigService.getOptions()).pipe(catchError(super.serviceError));
+  };
+  //
+}
+

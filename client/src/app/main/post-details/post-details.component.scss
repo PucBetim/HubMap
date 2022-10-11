@@ -51,14 +51,11 @@
     position: relative;
     padding: 2em;
     margin: 1em;
-
-    flex-grow: 1;
-
     display: flex;
+    flex-grow: 1;
     flex-direction: column;
     grid-area: grid2;
     background-color: #272736;
-    text-align: center;
     background-color: rgba(255, 255, 255, 0.9);
     box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
     overflow: auto;
@@ -104,11 +101,37 @@
             align-self: flex-start;
             height: auto;
             width: 100%;
-            max-width: fit-content;
         }
 
         .options {
             display: flex;
+
+            .action {
+                margin: 0 20px;
+                display: flex;
+                text-align: center;
+                color: #316b83;
+                height: fit-content;
+                align-self: center;
+            }
+
+            mat-icon {
+                align-self: center;
+                height: fit-content;
+                font-size: medium;
+                color: #a3b2c2;
+                cursor: pointer;
+            }
+
+            .viewIcon {
+                cursor: auto;
+                color: #234f63;
+            }
+
+            .rated {
+                color: #234f63;
+                transform: scale(1.5);
+            }
         }
     }
 }

@@ -27,9 +27,30 @@
             </div>
 
             <div class="options pushBottom">
-                <button (click)="downloadImage()">Baixar Mapa</button>
-                <button *ngIf="currentUserMap" class="pushRight" (click)="goToEdit()">Editar</button>
-                <button *ngIf="currentUserMap" class="btnDelete btn-danger"
+                <div>
+                    <button (click)="downloadImage()">Baixar Mapa</button>
+                </div>
+
+                <div class="action">
+                    <a>
+                        <mat-icon [ngClass]="likeClass" (click)="likePost()">thumb_up</mat-icon> {{post.likes}}
+                    </a>
+                </div>
+
+                <div class="action">
+                    <a>
+                        <mat-icon [ngClass]="dislikeClass" (click)="dislikePost()">thumb_down</mat-icon>
+                        {{post.dislikes}}
+                    </a>
+                </div>
+
+                <div class="action">
+                    <mat-icon class="viewIcon">remove_red_eye</mat-icon>
+                    {{post.views}}
+                </div>
+
+                <button *ngIf="currentUserPost" class="pushRight" (click)="goToEdit()">Editar</button>
+                <button *ngIf="currentUserPost" class="btnDelete btn-danger"
                     (click)="deletePostConfirm()">Excluir</button>
             </div>
 
@@ -56,7 +77,9 @@
         </div>
         <br>
         <div class="comment" *ngIf="result">
-            <comment [order]="1"  (commentMadeEvent)="updateComments()" [postComments]="this.post.comments" [childComments]="getChildComments(comment.id)" [postId]="this.post.id" [comment]="comment" *ngFor="let comment of getPrimaryComments()"></comment>
+            <comment [order]="1" (commentMadeEvent)="updateComments()" [postComments]="this.post.comments"
+                [childComments]="getChildComments(comment.id)" [postId]="this.post.id" [comment]="comment"
+                *ngFor="let comment of getPrimaryComments()"></comment>
         </div>
     </div>
 </div>

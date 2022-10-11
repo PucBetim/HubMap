@@ -81,8 +81,10 @@ export class CommentComponent implements OnInit {
     this.commentService.likeComment(this.lastLikeValue, this.comment.id).subscribe(
       {
         next: result => {
-          this.likeClass = ['rated']
-          this.dislikeClass = []
+          this.likeClass = this.lastLikeValue ? ['rated'] : [];
+          if (!this.lastDislikeValue) this.dislikeClass = [];
+          if (this.lastDislikeValue && this.lastLikeValue) this.dislikeComment()
+          else this.refreshComment();
         },
         error: error => {
         }
@@ -96,8 +98,21 @@ export class CommentComponent implements OnInit {
     this.commentService.dislikeComment(this.lastDislikeValue, this.comment.id).subscribe(
       {
         next: result => {
-          this.likeClass = []
-          this.dislikeClass = ['rated']
+          this.dislikeClass = this.lastDislikeValue ? ['rated'] : [];
+          if (!this.lastLikeValue) this.likeClass = [];
+          if (this.lastLikeValue && this.lastDislikeValue) this.likeComment()
+          else this.refreshComment();
+        },
+        error: error => {
+        }
+      })
+  }
+
+  refreshComment() {
+    this.commentService.getCommentById(this.comment.id).subscribe(
+      {
+        next: result => {
+          this.comment = result.body;
         },
         error: error => {
         }
