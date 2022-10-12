@@ -38,7 +38,7 @@ public class HistogramService {
 	private HistogramRepository histogramRepository;
 
 	private VocabularyService vocabularyService;
-	
+
 	public HistogramService(PythonService pythonService, HistogramItemRepository histogramItemRepository,
 			HistogramRepository histogramRepository, VocabularyService vocabularyService) {
 		this.pythonService = pythonService;
@@ -49,7 +49,7 @@ public class HistogramService {
 
 	public Search generateSearchHistogram(Search search) {
 		String sentence = search.getSearch();
-		
+
 		List<String> bOW;
 
 		try {
@@ -61,15 +61,15 @@ public class HistogramService {
 
 		Pageable pageable = PageableUtils.getPageableFromParameters(0, 10);
 		Page<Histogram> histograms = histogramRepository.findByInitilized(true, pageable);
-		
-		Histogram hist = initialize(bOW);
+
+		Histogram hist = initializeSearchHistogram(bOW);
 		hist.setInitialized(true);
 		hist = calculateTfIdf(hist, histograms);
 		search.setHistogram(hist);
-		
+
 		return search;
 	}
-	
+
 	@Transactional
 	@Async
 	public void generateHistogram(Block root, Post post, boolean isEdit) {
@@ -86,41 +86,40 @@ public class HistogramService {
 		}
 
 		StatusRetorno status;
-		
+
 		if (isEdit) {
 			status = recalculate(bOW, post.getHistogram());
 		} else {
-			status =initialize(bOW, post.getHistogram());
+			status = initialize(bOW, post.getHistogram());
 		}
-		
+
 		Histogram hist = post.getHistogram();
 		hist.setInitialized(true);
-		
 
-		if(status != StatusRetorno.ALREADY_IN_VOCABULARY) {
+		if (status != StatusRetorno.ALREADY_IN_VOCABULARY) {
 			hist.setNeedRecount(true);
 		} else {
 			hist.setNeedRecount(false);
 		}
-		
+
 		Histogram dbHistogram = histogramRepository.save(hist);
-		
+
 		CompletableFuture.completedFuture(dbHistogram);
 	}
 
 	@Transactional
 	@Scheduled(initialDelay = 10 * 1000, fixedDelay = 10 * 1500)
 	protected void refreshHistograms() {
-		
+
 		Pageable pageable = PageableUtils.getPageableFromParameters(0, 10);
 		Page<Histogram> histograms = histogramRepository.findByInitilized(true, pageable);
-		
+
 		while (true) {
 			for (Histogram histogram : histograms) {
-				if(histogram.getNeedRecount()) {
-					
+				if (histogram.getNeedRecount()) {
+
 					Block root = histogram.getPost().getMapRoot();
-					
+
 					String sentence = getWordsInBlocks(root, null);
 
 					List<String> bOW;
@@ -131,23 +130,23 @@ public class HistogramService {
 						throw new InvalidPropertyException(PythonService.class, "hubmap.scripts.python.path",
 								"Não foi possível encontrar o caminho informado");
 					}
-					
+
 					StatusRetorno status = recalculate(bOW, histogram);
-					
-					if(status != StatusRetorno.ALREADY_IN_VOCABULARY) {
+
+					if (status != StatusRetorno.ALREADY_IN_VOCABULARY) {
 						histogram.setNeedRecount(true);
 					} else {
 						histogram.setNeedRecount(false);
 					}
-					
+
 					getLoggerFromClass(getClass()).info("Recount all items of histogram " + histogram.getId());
-				} 
-				
+				}
+
 				if (!histogram.getUpToDateWithVocabulary()) {
 					addRecentlyWords(histogram);
 					histogram.setUpToDateWithVocabulary(true);
 				}
-				
+
 				Histogram dbHistogram = histogramRepository.save(histogram);
 				dbHistogram = calculateTfIdf(dbHistogram, histogramRepository.findByInitilized(true, pageable.first()));
 				histogramRepository.save(dbHistogram);
@@ -159,10 +158,10 @@ public class HistogramService {
 				break;
 			}
 		}
-		
+
 		getLoggerFromClass(getClass()).info("Histograms updated successfuly");
 	}
-	
+
 	public Histogram calculateTfIdf(Histogram histogram, Page<Histogram> histograms) {
 		double tf;
 		double idf;
@@ -172,7 +171,7 @@ public class HistogramService {
 			idf = calculateIdf(item.getKey().getGram(), histograms);
 			item.setTfidf(tf * idf);
 		}
-		
+
 		return histogram;
 	}
 
@@ -183,10 +182,10 @@ public class HistogramService {
 	private double calculateIdf(String term, Page<Histogram> histograms) {
 		double counter = 0.0;
 		boolean appear;
-		
+
 		while (true) {
 			for (Histogram hist : histograms) {
-				//counter = 0.0;
+				// counter = 0.0;
 				appear = false;
 
 				for (HistogramItem item : hist.getHistogram()) {
@@ -212,7 +211,7 @@ public class HistogramService {
 
 		return 1.0 + Math.log(histograms.getTotalElements() / counter);
 	}
-	
+
 	private void addRecentlyWords(Histogram hist) {
 		Vocabulary vocab = vocabularyService.getVocabulary();
 		HistogramItem item;
@@ -230,14 +229,39 @@ public class HistogramService {
 		}
 	}
 
+	private Histogram initializeSearchHistogram(List<String> bagOfWords) {
+
+		Vocabulary vocab = vocabularyService.getVocabulary();
+		Histogram hist = new Histogram();
+		HistogramItem item;
+		int counter;
+		long i = 1L;
+
+		for (NGram nGram : vocab.getNgrams()) {
+			counter = hist.countWords(bagOfWords, nGram.getGram());
+
+			item = new HistogramItem();
+			item.setId(i);
+			item.setOwner(hist);
+			item.setKey(nGram);
+			item.setCount(counter);
+
+			hist.getHistogram().add(item);
+			i++;
+		}
+
+		hist.setInitialized(true);
+		return hist;
+	}
+
 	private StatusRetorno recalculate(List<String> bagOfWords, Histogram hist) {
-		
+
 		StatusRetorno statusReturn = StatusRetorno.ALREADY_IN_VOCABULARY;
-		
+
 		for (String word : bagOfWords) {
 			StatusRetorno status = vocabularyService.addGram(word);
-			
-			if(status != StatusRetorno.ALREADY_IN_VOCABULARY) {
+
+			if (status != StatusRetorno.ALREADY_IN_VOCABULARY) {
 				statusReturn = status;
 			}
 		}
@@ -262,45 +286,20 @@ public class HistogramService {
 				hist.getHistogram().add(dbItem);
 			}
 		}
-		
+
 		hist.setUpToDateWithVocabulary(true);
-		
+
 		return statusReturn;
 	}
 
-	private Histogram initialize(List<String> bagOfWords) {
-		
-		Vocabulary vocab = vocabularyService.getVocabulary();
-		Histogram hist = new Histogram();
-		HistogramItem item;
-		int counter;
-		long i = 1L;
-		
-		for (NGram nGram : vocab.getNgrams()) {
-			counter = hist.countWords(bagOfWords, nGram.getGram());
-
-			item = new HistogramItem();
-			item.setId(i);
-			item.setOwner(hist);
-			item.setKey(nGram);
-			item.setCount(counter);
-
-			hist.getHistogram().add(item);
-			i++;
-		}
-		
-		hist.setInitialized(true);
-		return hist;
-	}
-	
 	private StatusRetorno initialize(List<String> bagOfWords, Histogram hist) {
 
 		StatusRetorno statusReturn = StatusRetorno.ALREADY_IN_VOCABULARY;
-		
+
 		for (String word : bagOfWords) {
 			StatusRetorno status = vocabularyService.addGram(word);
-			
-			if(status != StatusRetorno.ALREADY_IN_VOCABULARY) {
+
+			if (status != StatusRetorno.ALREADY_IN_VOCABULARY) {
 				statusReturn = status;
 			}
 		}
@@ -321,7 +320,7 @@ public class HistogramService {
 
 			hist.getHistogram().add(dbItem);
 		}
-		
+
 		return statusReturn;
 	}
 

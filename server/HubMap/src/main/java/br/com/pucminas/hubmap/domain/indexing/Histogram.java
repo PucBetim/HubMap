@@ -1,7 +1,6 @@
 package br.com.pucminas.hubmap.domain.indexing;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -66,16 +65,6 @@ public class Histogram implements Serializable {
 		return null;
 	}
 
-	public List<String> getWordsOfHistogram() {
-		List<String> words = new ArrayList<>();
-
-		for (HistogramItem item : histogram) {
-			words.add(item.getKey().getGram());
-		}
-
-		return words;
-	}
-
 	public boolean isInHistogram(String term) {
 		for (HistogramItem item : histogram) {
 			if (item.getKey().getGram().equals(term)) {
@@ -100,29 +89,4 @@ public class Histogram implements Serializable {
 
 		return Collections.frequency(bagOfWords, term);
 	}
-
-	/*
-	 * public void calculateTfIdf(Set<Histogram> histograms) { double tf; double
-	 * idf;
-	 * 
-	 * for (HistogramItem item : histogram) { tf = calculateTf(item.getCount()); idf
-	 * = calculateIdf(item.getKey().getGram(), histograms); item.setTfidf(tf * idf);
-	 * } }
-	 * 
-	 * private double calculateTf(double count) { return count / histogram.size(); }
-	 * 
-	 * private double calculateIdf(String term, Set<Histogram> histograms) { double
-	 * counter = 0.0; boolean appear;
-	 * 
-	 * for (Histogram hist : histograms) { counter = 0.0; appear = false;
-	 * 
-	 * for (HistogramItem item : hist.getHistogram()) { if
-	 * (item.getKey().getGram().equals(term)) { appear = true; break; } }
-	 * 
-	 * if (appear) { counter++; } }
-	 * 
-	 * counter = counter == 0.0 ? 1.0 : counter;
-	 * 
-	 * return 1.0 + Math.log(histograms.size() / counter); }
-	 */
 }
