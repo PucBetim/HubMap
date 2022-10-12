@@ -136,7 +136,6 @@ public class CommentController {
 		RestResponse response = null;
 		
 		try {
-			
 			newComment.setId(id);
 			newComment = commentService.save(newComment);
 			
