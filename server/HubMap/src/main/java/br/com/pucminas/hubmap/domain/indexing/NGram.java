@@ -51,4 +51,9 @@ public class NGram implements Serializable, Comparable<NGram> {
 	public int compareTo(NGram o) {
 		return id.compareTo(o.getId());
 	}
+	
+	@Override
+	public String toString() {
+		return id + " - " + gram;
+	}
 }
