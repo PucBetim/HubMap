@@ -71,10 +71,10 @@ public class Post implements Serializable {
 	@JsonProperty("private")
 	private Boolean isPrivate;
 
-	@JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss")
+	@JsonFormat(pattern = "MM-dd-yyyy HH:mm:ss")
 	private LocalDateTime created;
 
-	@JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss")
+	@JsonFormat(pattern = "MM-dd-yyyy HH:mm:ss")
 	private LocalDateTime modified;
 
 	@ManyToOne
