@@ -19,7 +19,7 @@ public class PostService {
 		
 		if(newPost.getId() != null) {
 			
-			Post dbPost = postRepository.findById(newPost.getId()).orElseThrow();
+			Post dbPost = postRepository.findByIdFromLoggedAuthor(newPost.getId()).orElseThrow();
 			
 			newPost.setAuthor(dbPost.getAuthor());
 			newPost.setLikes(dbPost.getLikes());
@@ -35,8 +35,14 @@ public class PostService {
 	}
 	
 	@Transactional
-	public void delete(Integer postId) {			
-		postRepository.deleteById(postId);
+	public boolean delete(Integer postId) {
+		boolean isPresent = postRepository.findByIdFromLoggedAuthor(postId).isPresent();
+		
+		if(isPresent) {
+			postRepository.deleteById(postId);
+			return true;
+		}
+		return false;
 	}
 	
 	@Transactional

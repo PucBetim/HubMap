@@ -78,9 +78,15 @@ public class PostController {
 	}
 
 	@DeleteMapping("/{id}")
-	public ResponseEntity<Post> deletePostsById(@PathVariable Integer id) {
-		postRepository.deleteById(id);
-		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+	public ResponseEntity<RestResponse> deletePostsById(@PathVariable Integer id) {
+		boolean deleted = postService.delete(id);
+		
+		if(deleted) {
+			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+		} else {
+			RestResponse response = RestResponse.fromNormalResponse("Não foi encontrado nenhum post de sua autoria com o id informado", id);
+			return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+		}	
 	}
 
 	@PostMapping("")
@@ -103,18 +109,24 @@ public class PostController {
 
 	@PutMapping(path = "/{id}")
 	public ResponseEntity<RestResponse> putPost(@PathVariable("id") Integer id, @RequestBody @Valid Post newPost) {
-
+		
+		String msg = null;
+		HttpStatus status;
+		
 		try {
-
 			newPost.setId(id);
 			newPost = postService.save(newPost);
 
-			RestResponse response = RestResponse.fromNormalResponse("Post atualizado com sucesso.", newPost.getId());
-
-			return new ResponseEntity<>(response, HttpStatus.OK);
+			msg = "Post atualizado com sucesso.";
+			status = HttpStatus.OK;
 		} catch (NoSuchElementException e) {
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+			status = HttpStatus.BAD_REQUEST;
+			msg = "Não foi encontrado nenhum post de sua autoria com o id informado";
 		}
+		
+		RestResponse response = RestResponse.fromNormalResponse(msg, id);
+				
+		return new ResponseEntity<>(response, status);
 	}
 
 	@PostMapping("/{id}/likes")
