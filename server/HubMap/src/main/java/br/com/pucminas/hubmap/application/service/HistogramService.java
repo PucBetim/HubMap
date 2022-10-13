@@ -156,7 +156,6 @@ public class HistogramService {
 				}
 
 				Histogram dbHistogram = histogramRepository.save(histogram);
-				// TODO Think to create the histogram just after and not with Post
 				dbHistogram = calculateTfIdf(dbHistogram,
 						histogramRepository.findByInitilized(true, pageable.first()).getTotalElements());
 				histogramRepository.save(dbHistogram);
@@ -215,6 +214,10 @@ public class HistogramService {
 
 			if (nGramOpt.isPresent()) {
 				NGram nGram = nGramOpt.orElseThrow();
+				
+				if(hist.isInHistogram(nGram)) {
+					continue;
+				}
 				counter = hist.countWords(bagOfWords, nGram.getGram());
 
 				if (counter > 0) {

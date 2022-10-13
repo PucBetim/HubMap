@@ -3,7 +3,9 @@ package br.com.pucminas.hubmap.application.service;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
@@ -18,7 +20,6 @@ import br.com.pucminas.hubmap.domain.indexing.Histogram;
 import br.com.pucminas.hubmap.domain.indexing.HistogramItem;
 import br.com.pucminas.hubmap.domain.indexing.HistogramRepository;
 import br.com.pucminas.hubmap.domain.indexing.NGram;
-import br.com.pucminas.hubmap.domain.indexing.Vocabulary;
 import br.com.pucminas.hubmap.domain.indexing.search.Search;
 import br.com.pucminas.hubmap.infrastructure.web.RestResponseSearch;
 import br.com.pucminas.hubmap.utils.PageableUtils;
@@ -35,13 +36,11 @@ public class SearchService {
 
 	private HistogramService histogramService;
 
-	private VocabularyService vocabularyService;
+	// private VocabularyService vocabularyService;
 
-	public SearchService(HistogramRepository histogramRepository, HistogramService histogramService,
-			VocabularyService vocabularyService) {
+	public SearchService(HistogramRepository histogramRepository, HistogramService histogramService) {
 		this.histogramRepository = histogramRepository;
 		this.histogramService = histogramService;
-		this.vocabularyService = vocabularyService;
 	}
 
 	@Transactional(readOnly = true)
@@ -89,7 +88,7 @@ public class SearchService {
 					return -1 * o1.getSimilarity().compareTo(o2.getSimilarity());
 				}
 			});
-			
+
 			for (HistogramSearch histSearch : histogramsSimilarity) {
 				posts.add(histSearch.getPostId());
 			}
@@ -102,11 +101,14 @@ public class SearchService {
 
 	private double compareHistograms(Histogram hist1, Histogram hist2) throws InterruptedException, ExecutionException {
 
-		CompletableFuture<Double[]> dissimilarityCoefficient = calculateDissimilarityCoefficient(hist1, hist2);
+		Set<NGram> vocab = joinHistograms(hist1, hist2);
+		CompletableFuture<Double[]> dissimilarityCoefficient = calculateDissimilarityCoefficient(hist1, hist2, vocab);
 
 		return dissimilarityCoefficient.thenApply(coef -> {
-			//TODO Check if I really can change the n value from size of vocabulary to highest between histograms 
-			int n = Math.max(hist1.getHistogram().size(), hist2.getHistogram().size());
+			// TODO Check if I really can change the n value from size of vocabulary to
+			// highest between histograms
+			// int n = Math.max(hist1.getHistogram().size(), hist2.getHistogram().size());
+			int n = vocab.size();
 			double dc = coef[0];
 			double s = coef[1];
 			double t = coef[2];
@@ -117,29 +119,31 @@ public class SearchService {
 
 	}
 
-	private CompletableFuture<Double[]> calculateDissimilarityCoefficient(Histogram hist1, Histogram hist2) {
+	private CompletableFuture<Double[]> calculateDissimilarityCoefficient(Histogram hist1, Histogram hist2,
+			Set<NGram> vocab) {
 
-		CompletableFuture<Double[]> dividend = calculateDissimilarityCoefficientDividendAndT(hist1, hist2);
-		CompletableFuture<Double[]> divisor = calculateDissimilarityCoefficientDivisorAndS(hist1, hist2);
+		CompletableFuture<Double[]> dividend = calculateDissimilarityCoefficientDividendAndT(hist1, hist2, vocab);
+		CompletableFuture<Double[]> divisor = calculateDissimilarityCoefficientDivisorAndS(hist1, hist2, vocab);
 
 		return dividend.thenCompose(fd1Value -> divisor
 				.thenApply(fd2Value -> new Double[] { fd1Value[0] / fd2Value[0], fd2Value[1], fd1Value[1] }));
 	}
 
 	@Async
-	private CompletableFuture<Double[]> calculateDissimilarityCoefficientDivisorAndS(Histogram hist1, Histogram hist2) {
-		Vocabulary vocab = vocabularyService.getVocabulary();
+	private CompletableFuture<Double[]> calculateDissimilarityCoefficientDivisorAndS(Histogram hist1, Histogram hist2,
+			Set<NGram> vocab) {
+		// Vocabulary vocab = vocabularyService.getVocabulary();
 
 		double divisor = 0.0;
 		double s = 0.0;
 
-		for (NGram nGram : vocab.getNgrams()) {
+		for (NGram nGram : vocab) {
 			HistogramItem item1 = hist1.getItemFromHistogram(nGram);
 			HistogramItem item2 = hist2.getItemFromHistogram(nGram);
 			double tfIdfH1 = item1 != null ? item1.getTfidf() : 0.0;
 			double tfIdfH2 = item2 != null ? item2.getTfidf() : 0.0;
 
-			divisor += Math.abs(tfIdfH1 + tfIdfH2);
+			divisor += tfIdfH1 + tfIdfH2;
 
 			if (tfIdfH1 != 0.0 && tfIdfH2 != 0.0) {
 				s++;
@@ -150,13 +154,14 @@ public class SearchService {
 	}
 
 	@Async
-	private CompletableFuture<Double[]> calculateDissimilarityCoefficientDividendAndT(Histogram hist1,
-			Histogram hist2) {
-		Vocabulary vocab = vocabularyService.getVocabulary();
+	private CompletableFuture<Double[]> calculateDissimilarityCoefficientDividendAndT(Histogram hist1, Histogram hist2,
+			Set<NGram> vocab) {
+		// Vocabulary vocab = vocabularyService.getVocabulary();
+
 		double dividend = 0.0;
 		double t = 0.0;
 
-		for (NGram nGram : vocab.getNgrams()) {
+		for (NGram nGram : vocab) {
 			HistogramItem item1 = hist1.getItemFromHistogram(nGram);
 			HistogramItem item2 = hist2.getItemFromHistogram(nGram);
 			double tfIdfH1 = item1 != null ? item1.getTfidf() : 0.0;
@@ -170,6 +175,15 @@ public class SearchService {
 		}
 
 		return new AsyncResult<>(new Double[] { dividend, t }).completable();
+	}
+
+	private Set<NGram> joinHistograms(Histogram hist1, Histogram hist2) {
+		Set<NGram> nGrams = new HashSet<>();
+
+		hist2.getHistogram().forEach(i -> nGrams.add(i.getKey()));
+		hist1.getHistogram().forEach(i -> nGrams.add(i.getKey()));
+
+		return nGrams;
 	}
 
 	@Getter
