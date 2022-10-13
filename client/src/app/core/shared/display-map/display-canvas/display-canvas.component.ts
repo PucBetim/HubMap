@@ -31,7 +31,7 @@ export class DisplayCanvasComponent implements OnInit {
 
   ngOnInit(): void {
     this.mapSize = this.size;
-    if (this.post.map.length > 0) {
+    if (this.post.map[0]) {
       this.loadCanvas();
     }
   }

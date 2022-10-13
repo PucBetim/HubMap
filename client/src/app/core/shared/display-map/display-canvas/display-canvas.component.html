@@ -1,6 +1,5 @@
-<div class=" container" (mouseenter)="optionsStyle=['hover']" (mouseleave)="optionsStyle=[]"
+<div class=" container" (mouseenter)="optionsStyle=['hover']" (mouseleave)="optionsStyle=[]" *ngIf="this.post.map[0]"
     [style.max-width]="mapSize + 15 + 'px'" [style.max-height]="mapSize + 15 + 'px'">
-
 
     <div class="canvas" #canvas [style.width]="mapSize + 'px'" [style.height]="mapSize + 'px'">
 

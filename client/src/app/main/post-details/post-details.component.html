@@ -1,7 +1,8 @@
 <loading *ngIf="carregando"></loading>
 <div *ngIf="!carregando" class="container">
     <div class="mapContainer">
-        <display-canvas *ngIf="result" [showOptions]="false" [size]="mapSize" [zoomSize]="mapZoomSize" [post]="post">
+        <display-canvas *ngIf="result && mapSize > 0 && mapZoomSize > 0" [showOptions]=" false" [size]="mapSize"
+            [zoomSize]="mapZoomSize" [post]="post">
         </display-canvas>
     </div>
 

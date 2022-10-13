@@ -56,7 +56,9 @@
 
     <div class="resultBlock layoutDefaultStyle">
         <div [ngClass]="resultDivClass">
-             <mat-spinner *ngIf="!results"></mat-spinner>
+            <div class="spinnerContainer" *ngIf="!results" [style.height.px]="blocksSize">
+                <mat-spinner></mat-spinner>
+            </div>
             <div *ngIf="results" class="resultContainer">
                 <display-canvas [size]="blocksSize" [post]="post" *ngFor="let post of postsResult"></display-canvas>
             </div>

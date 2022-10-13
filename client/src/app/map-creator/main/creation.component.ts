@@ -68,7 +68,7 @@ export class CreationComponent implements OnInit, ComponentCanDeactivate {
             this.getBlocks(_post);
           },
           error: error => {
-            this.getPublicPost(this.id);
+            this.router.navigate(['/creator'])
           }
         })
     }
@@ -82,20 +82,6 @@ export class CreationComponent implements OnInit, ComponentCanDeactivate {
     }
   }
 
-  getPublicPost(id: number) {
-    var _post = new Post;
-    this.postService.getPublicPostsById(this.id).subscribe(
-      {
-        next: result => {
-          _post = result.body;
-          this.getBlocks(_post);
-        },
-        error: error => {
-          console.log(error)
-          this.carregando = false;
-        }
-      })
-  }
 
   getBlocks(post: Post) {
     this.carregando = true;

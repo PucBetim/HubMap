@@ -52,13 +52,14 @@ export class LandingComponent implements OnInit {
       {
         next: result => {
           this.postsResult = result.body;
-          this.loading = false; this.results = true;
+          this.loading = false;
+          this.results = true;
 
         },
         error: error => {
           console.log(error)
-          this.loading = false; this.results = true;
-
+          this.loading = false;
+          this.results = true;
         }
       })
   }

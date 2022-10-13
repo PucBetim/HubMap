@@ -1,7 +1,7 @@
 import { ConfigService } from './../../core/services/config.service';
 import { Subscription } from 'rxjs';
 import { PostService } from './../../core/shared/posts/post-blocks.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { Post } from 'src/app/core/shared/posts/post';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
@@ -19,12 +19,22 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 })
 export class PostDetailsComponent implements OnInit {
 
+  @HostListener('window:resize', ['$event'])
+  onResize() {
+    this.mapSize = 0;
+    this.mapZoomSize = 0;
+    setTimeout(() => {
+      this.mapSize = window.innerHeight / 1.8;
+      this.mapZoomSize = window.innerWidth / 1.3;
+    }, 1000)
+  }
+
   public carregando: boolean = false;
   public result: boolean = false;
   public post: Post;
   public sub: Subscription;
   public mapSize: number = window.innerHeight / 1.8;
-  public mapZoomSize: number = window.innerWidth / 1.4;
+  public mapZoomSize: number = window.innerWidth / 1.3;
 
   public currentUserPost: boolean = false;
 
@@ -48,7 +58,6 @@ export class PostDetailsComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-
     this.sub = this.route.params.subscribe(
       params => {
         this.getPost(params['id']);
@@ -58,7 +67,6 @@ export class PostDetailsComponent implements OnInit {
       content: ['', [Validators.required, Validators.maxLength(3), Validators.maxLength(this.commentMaxLength)]],
     });
   }
-
 
   getPost(id: number) {
     this.result = false;
@@ -71,7 +79,7 @@ export class PostDetailsComponent implements OnInit {
           this.currentUserPost = true;
           this.result = true;
           if (ConfigService.getUser())
-            this.viewPost();
+            this.postService.viewPost(this.post.id).subscribe();
         },
         error: error => {
           this.getPublicPost(id)
@@ -90,7 +98,7 @@ export class PostDetailsComponent implements OnInit {
           this.currentUserPost = false;
           this.result = true;
           if (ConfigService.getUser())
-            this.viewPost();
+            this.postService.viewPost(this.post.id).subscribe();
         },
         error: error => {
           console.log(error)
@@ -263,14 +271,5 @@ export class PostDetailsComponent implements OnInit {
 
   }
 
-  viewPost() {
-    this.postService.viewPost(this.post.id).subscribe(
-      {
-        next: result => {
 
-        },
-        error: error => {
-        }
-      })
-  }
 }
