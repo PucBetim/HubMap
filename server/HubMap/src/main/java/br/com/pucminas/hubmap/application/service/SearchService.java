@@ -46,7 +46,7 @@ public class SearchService {
 	@Transactional(readOnly = true)
 	public RestResponseSearch search(Search search) throws InterruptedException, ExecutionException {
 
-		int currentPage = 0;
+		Integer currentPage = 0;
 		int resultPageSize = 5;
 
 		if (search.getOldSearch() != null) {
@@ -94,7 +94,7 @@ public class SearchService {
 			}
 		}
 
-		currentPage = histograms.getPageable().getPageNumber();
+		currentPage = !histograms.isLast() ? histograms.nextPageable().getPageNumber() : null;
 
 		return RestResponseSearch.fromSearchResult(null, posts, resultPageSize, currentPage);
 	}

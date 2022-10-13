@@ -35,6 +35,7 @@ public class SearchController {
 			response.setMessage("Pesquisa realizada com sucesso.");
 			
 			if(StringUtils.isBlank(response.getDataId())) {
+				response = null;
 				status = HttpStatus.NO_CONTENT;
 			} else {
 				status = HttpStatus.OK;
