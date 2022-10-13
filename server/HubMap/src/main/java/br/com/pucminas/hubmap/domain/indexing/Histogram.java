@@ -2,7 +2,7 @@ package br.com.pucminas.hubmap.domain.indexing;
 
 import java.io.Serializable;
 import java.util.Collections;
-import java.util.LinkedHashSet;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -42,7 +42,7 @@ public class Histogram implements Serializable {
 
 	@OneToMany(mappedBy = "owner", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@ToString.Exclude
-	private Set<HistogramItem> histogram = new LinkedHashSet<>();
+	private Set<HistogramItem> histogram = new HashSet<>();
 
 	private Boolean initialized;
 

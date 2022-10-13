@@ -3,7 +3,6 @@ package br.com.pucminas.hubmap.domain.indexing;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.HashSet;
-import java.util.LinkedHashSet;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -50,7 +49,7 @@ public class Vocabulary implements Serializable{
 	
 	@OneToMany(mappedBy = "vocabulary", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@ToString.Exclude
-	private Set<NGram> ngrams = new LinkedHashSet<>();
+	private Set<NGram> ngrams = new HashSet<>();
 	
 	@OneToMany(mappedBy = "newVocabulary", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@ToString.Exclude
