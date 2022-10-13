@@ -152,7 +152,7 @@ public class HistogramService {
 						histogram.setNeedRecount(false);
 					}
 
-					getLoggerFromClass(getClass()).info("Recount all items of histogram " + histogram.getId());
+					getLoggerFromClass(getClass()).debug("Recount all items of histogram " + histogram.getId());
 				}
 
 				Histogram dbHistogram = histogramRepository.save(histogram);
