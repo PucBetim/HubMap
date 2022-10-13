@@ -68,7 +68,7 @@ public class PostController {
 	@GetMapping("/{id}")
 	public ResponseEntity<Post> getPostsById(@PathVariable Integer id) {
 		try {
-			Post post = postRepository.findByIdIfPublicOrFromAuthor(id).orElseThrow();
+			Post post = postRepository.findByIdFromLoggedAuthor(id).orElseThrow();
 			post.setMapToShow();
 
 			return new ResponseEntity<>(post, HttpStatus.OK);
