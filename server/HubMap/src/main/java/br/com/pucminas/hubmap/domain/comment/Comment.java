@@ -61,7 +61,7 @@ public class Comment implements Serializable {
 	@JoinColumn(name = "AUTHOR_ID", referencedColumnName = "id")
 	private AppUser author;
 
-	@JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss")
+	@JsonFormat(pattern = "MM-dd-yyyy HH:mm:ss")
 	private LocalDateTime timestamp;
 
 	//TODO Remove all constructors
