@@ -3,6 +3,7 @@ package br.com.pucminas.hubmap.domain.indexing;
 import java.io.Serializable;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -31,7 +32,7 @@ public class HistogramItem implements Serializable{
 	@EqualsAndHashCode.Include
 	private Long id;
 	
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "HISTOGRAM_ID")
 	private Histogram owner;
 	

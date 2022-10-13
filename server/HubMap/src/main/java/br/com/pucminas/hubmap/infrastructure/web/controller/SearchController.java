@@ -1,6 +1,5 @@
 package br.com.pucminas.hubmap.infrastructure.web.controller;
 
-import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +12,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.pucminas.hubmap.application.service.SearchService;
 import br.com.pucminas.hubmap.domain.indexing.search.Search;
-import br.com.pucminas.hubmap.domain.post.Post;
+import br.com.pucminas.hubmap.infrastructure.web.RestResponse;
+import br.com.pucminas.hubmap.utils.StringUtils;
 
 @RestController
 @RequestMapping(path = "/hubmap/public/search")
@@ -23,20 +23,32 @@ public class SearchController {
 	private SearchService searchService;
 
 	@GetMapping("")
-	public ResponseEntity<List<Post>> search(@RequestBody Search search)  {
+	public ResponseEntity<RestResponse> search(@RequestBody Search search)  {
+
+		HttpStatus status;
+		String msg;
+		RestResponse response;
 		
-		try {
-			List<Post> posts = searchService.search(search);
+		try {			
+			response = searchService.search(search);
 			
-			if(posts.isEmpty()) {
-				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+			response.setMessage("Pesquisa realizada com sucesso.");
+			
+			if(StringUtils.isBlank(response.getDataId())) {
+				status = HttpStatus.NO_CONTENT;
 			} else {
-				return new ResponseEntity<>(posts, HttpStatus.OK);
+				status = HttpStatus.OK;
 			}
 		} catch (InterruptedException ie) {
-			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+			msg = "Ocorreu um erro interno durante o cálculo de similaridade.";
+			status = HttpStatus.INTERNAL_SERVER_ERROR;
+			response = RestResponse.fromNormalResponse(msg, null);
 		} catch (ExecutionException e) {
-			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+			msg = "Ocorreu um erro interno durante o cálculo de similaridade.";
+			status = HttpStatus.INTERNAL_SERVER_ERROR;
+			response = RestResponse.fromNormalResponse(msg, null);
 		}
+		
+		return new ResponseEntity<>(response, status);
 	}
 }

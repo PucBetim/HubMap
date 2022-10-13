@@ -1,10 +1,9 @@
 package br.com.pucminas.hubmap.application.service;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.SortedSet;
-import java.util.TreeSet;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
@@ -16,11 +15,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import br.com.pucminas.hubmap.domain.indexing.Histogram;
+import br.com.pucminas.hubmap.domain.indexing.HistogramItem;
 import br.com.pucminas.hubmap.domain.indexing.HistogramRepository;
 import br.com.pucminas.hubmap.domain.indexing.NGram;
 import br.com.pucminas.hubmap.domain.indexing.Vocabulary;
 import br.com.pucminas.hubmap.domain.indexing.search.Search;
-import br.com.pucminas.hubmap.domain.post.Post;
+import br.com.pucminas.hubmap.infrastructure.web.RestResponseSearch;
 import br.com.pucminas.hubmap.utils.PageableUtils;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -29,12 +29,14 @@ import lombok.Setter;
 @Service
 public class SearchService {
 
+	private static final Integer PAGE_SIZE = 5;
+
 	private HistogramRepository histogramRepository;
-	
+
 	private HistogramService histogramService;
 
 	private VocabularyService vocabularyService;
-	
+
 	public SearchService(HistogramRepository histogramRepository, HistogramService histogramService,
 			VocabularyService vocabularyService) {
 		this.histogramRepository = histogramRepository;
@@ -43,58 +45,68 @@ public class SearchService {
 	}
 
 	@Transactional(readOnly = true)
-	public List<Post> search(Search search) throws InterruptedException, ExecutionException {
+	public RestResponseSearch search(Search search) throws InterruptedException, ExecutionException {
 
-		Pageable pageable = PageableUtils.getPageableFromParameters(0, 10);
+		int currentPage = 0;
+		int resultPageSize = 5;
 
-		Page<Histogram> histograms = histogramRepository.findByInitilized(true, pageable);
-		List<Post> posts = new ArrayList<>();
-		SortedSet<HistogramSearch> histogramsSimilarity = new TreeSet<>(new Comparator<>() {
+		if (search.getOldSearch() != null) {
+			currentPage = search.getOldSearch().getPage();
+			resultPageSize = search.getOldSearch().getSize();
+		}
 
-			@Override
-			public int compare(HistogramSearch o1, HistogramSearch o2) {
-				return -1 * o1.getSimilarity().compareTo(o2.getSimilarity());
-			}
-
-		});
+		Pageable pageable = PageableUtils.getPageableFromParameters(currentPage, PAGE_SIZE);
+		List<Integer> posts = new ArrayList<>();
+		List<HistogramSearch> histogramsSimilarity = new ArrayList<>();
 
 		search = histogramService.generateSearchHistogram(search);
-		
-		List<Histogram> hists = histograms.getContent();
-		
-		while (true) {
 
-			for (Histogram histogram : hists) {
+		Page<Histogram> histograms = histogramRepository.findByInitilized(true, pageable);
+
+		while (true) {
+			for (Histogram histogram : histograms) {
 				double similarity = compareHistograms(search.getHistogram(), histogram);
-				HistogramSearch histSearch = new HistogramSearch();
-				histSearch.setPost(histogram.getPost());
-				histSearch.setSimilarity(similarity);
-				histogramsSimilarity.add(histSearch);
+
+				if (similarity > 0.0) {
+					HistogramSearch histSearch = new HistogramSearch();
+					histSearch.setPostId(histogram.getPost().getId());
+					histSearch.setSimilarity(similarity);
+					histogramsSimilarity.add(histSearch);
+				}
 			}
 
-			if (histograms.hasNext()) {
+			if (histogramsSimilarity.size() < resultPageSize && histograms.hasNext()) {
 				histograms = histogramRepository.findAll(pageable.next());
 			} else {
 				break;
 			}
 		}
-		
+
 		if (!histogramsSimilarity.isEmpty()) {
+			Collections.sort(histogramsSimilarity, new Comparator<>() {
+				@Override
+				public int compare(HistogramSearch o1, HistogramSearch o2) {
+					return -1 * o1.getSimilarity().compareTo(o2.getSimilarity());
+				}
+			});
 			
-			for (HistogramSearch histSearch : histogramsSimilarity) {				
-				posts.add(histSearch.getPost());
+			for (HistogramSearch histSearch : histogramsSimilarity) {
+				posts.add(histSearch.getPostId());
 			}
 		}
 
-		return posts;
+		currentPage = histograms.getPageable().getPageNumber();
+
+		return RestResponseSearch.fromSearchResult(null, posts, resultPageSize, currentPage);
 	}
 
 	private double compareHistograms(Histogram hist1, Histogram hist2) throws InterruptedException, ExecutionException {
 
 		CompletableFuture<Double[]> dissimilarityCoefficient = calculateDissimilarityCoefficient(hist1, hist2);
-		
-		return dissimilarityCoefficient.thenApply(coef ->  {
-			int n = hist1.getHistogram().size();
+
+		return dissimilarityCoefficient.thenApply(coef -> {
+			//TODO Check if I really can change the n value from size of vocabulary to highest between histograms 
+			int n = Math.max(hist1.getHistogram().size(), hist2.getHistogram().size());
 			double dc = coef[0];
 			double s = coef[1];
 			double t = coef[2];
@@ -122,12 +134,14 @@ public class SearchService {
 		double s = 0.0;
 
 		for (NGram nGram : vocab.getNgrams()) {
-			double tfIdfH1 = hist1.getItemFromHistogram(nGram).getTfidf();
-			double tfIdfH2 = hist2.getItemFromHistogram(nGram).getTfidf();
+			HistogramItem item1 = hist1.getItemFromHistogram(nGram);
+			HistogramItem item2 = hist2.getItemFromHistogram(nGram);
+			double tfIdfH1 = item1 != null ? item1.getTfidf() : 0.0;
+			double tfIdfH2 = item2 != null ? item2.getTfidf() : 0.0;
 
 			divisor += Math.abs(tfIdfH1 + tfIdfH2);
 
-			if (tfIdfH1 != 0 && tfIdfH2 != 0) {
+			if (tfIdfH1 != 0.0 && tfIdfH2 != 0.0) {
 				s++;
 			}
 		}
@@ -136,18 +150,21 @@ public class SearchService {
 	}
 
 	@Async
-	private CompletableFuture<Double[]> calculateDissimilarityCoefficientDividendAndT(Histogram hist1, Histogram hist2) {
+	private CompletableFuture<Double[]> calculateDissimilarityCoefficientDividendAndT(Histogram hist1,
+			Histogram hist2) {
 		Vocabulary vocab = vocabularyService.getVocabulary();
 		double dividend = 0.0;
 		double t = 0.0;
 
 		for (NGram nGram : vocab.getNgrams()) {
-			double tfIdfH1 = hist1.getItemFromHistogram(nGram).getTfidf();
-			double tfIdfH2 = hist2.getItemFromHistogram(nGram).getTfidf();
-			
+			HistogramItem item1 = hist1.getItemFromHistogram(nGram);
+			HistogramItem item2 = hist2.getItemFromHistogram(nGram);
+			double tfIdfH1 = item1 != null ? item1.getTfidf() : 0.0;
+			double tfIdfH2 = item2 != null ? item2.getTfidf() : 0.0;
+
 			dividend += Math.abs(tfIdfH1 - tfIdfH2);
 
-			if (tfIdfH1 != 0 || tfIdfH2 != 0) {
+			if (tfIdfH1 != 0.0 || tfIdfH2 != 0.0) {
 				t++;
 			}
 		}
@@ -163,6 +180,6 @@ public class SearchService {
 		private Double similarity;
 
 		@EqualsAndHashCode.Include
-		private Post post;
+		private Integer postId;
 	}
 }
