@@ -8,9 +8,7 @@ import java.util.Set;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.support.TransactionTemplate;
 
-import br.com.pucminas.hubmap.domain.indexing.HistogramRepository;
 import br.com.pucminas.hubmap.domain.indexing.NGram;
 import br.com.pucminas.hubmap.domain.indexing.NGramRepository;
 import br.com.pucminas.hubmap.domain.indexing.Vocabulary;
@@ -25,16 +23,9 @@ public class VocabularyService {
 
 	private NGramRepository nGramRepository;
 	
-	private HistogramRepository histogramRepository;
-	
-	private TransactionTemplate transactionTemplate;
-	
-	public VocabularyService(VocabularyRepository vocabularyRepository, NGramRepository nGramRepository,
-			HistogramRepository histogramRepository, TransactionTemplate transactionTemplate) {
+	public VocabularyService(VocabularyRepository vocabularyRepository, NGramRepository nGramRepository) {
 		this.vocabularyRepository = vocabularyRepository;
 		this.nGramRepository = nGramRepository;
-		this.histogramRepository = histogramRepository;
-		this.transactionTemplate = transactionTemplate;
 	}
 
 	@Transactional
@@ -57,7 +48,7 @@ public class VocabularyService {
 		
 		if(vocab.getHasNewWords()) {
 			for (NGram nGram : nGrams) {
-				if(!vocab.hasInVocabulary(nGram.getGram())) {
+				if(vocab.hasInVocabulary(nGram.getGram()) == null) {
 					nGram.setNewVocabulary(null);
 					nGram.setVocabulary(vocab);
 					vocab.getNgrams().add(nGram);
@@ -68,12 +59,6 @@ public class VocabularyService {
 			}
 			
 			vocab.updateWhenUpdated();
-			transactionTemplate.execute(t -> {
-				histogramRepository.updateUpToDateWithVocabulary(false);
-				t.flush();
-				return null;
-			});
-			
 			
 			getLoggerFromClass(getClass()).info("Vocabulary updated succefuly");
 		} else {

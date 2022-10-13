@@ -47,8 +47,6 @@ public class Histogram implements Serializable {
 	private Boolean initialized;
 
 	private Boolean needRecount;
-	
-	private Boolean upToDateWithVocabulary;
 
 	public Histogram(Post post) {
 		this.post = post;

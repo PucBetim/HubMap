@@ -59,7 +59,7 @@ public class Vocabulary implements Serializable{
 	public StatusRetorno addNGrams(String gram) {
 		StatusRetorno result = StatusRetorno.ALREADY_IN_VOCABULARY;
 		
-		if(!hasInVocabulary(gram)) {
+		if(hasInVocabulary(gram) == null) {
 			result = StatusRetorno.NOT_IN_VOCABULARY;
 		}
 		
@@ -78,14 +78,14 @@ public class Vocabulary implements Serializable{
 		return result;
 	}
 	
-	public boolean hasInVocabulary(String gram) {
+	public NGram hasInVocabulary(String gram) {
 		for (NGram nGram : ngrams) {
 			if(nGram.getGram().equalsIgnoreCase(gram)) {
-				return true;
+				return nGram;
 			}
 		}
 		
-		return false;
+		return null;
 	}
 	
 	public boolean hasInNewVocabulary(String gram) {
@@ -100,5 +100,9 @@ public class Vocabulary implements Serializable{
 	
 	public void updateWhenUpdated() {
 		whenUpdated = LocalDateTime.now();
+	}
+	
+	public int getOficialSize() {
+		return ngrams.size();
 	}
 }

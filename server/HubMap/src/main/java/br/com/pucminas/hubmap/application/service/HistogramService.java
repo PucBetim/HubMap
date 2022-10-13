@@ -113,7 +113,8 @@ public class HistogramService {
 
 		Pageable pageable = PageableUtils.getPageableFromParameters(0, 10);
 		Page<Histogram> histograms = histogramRepository.findByInitilized(true, pageable);
-
+		
+		//TODO create a flag to just it if there is an update on vocabulary or try to mark this as dependent of the other
 		while (true) {
 			for (Histogram histogram : histograms) {
 				if (histogram.getNeedRecount()) {
@@ -142,11 +143,6 @@ public class HistogramService {
 					getLoggerFromClass(getClass()).info("Recount all items of histogram " + histogram.getId());
 				}
 
-				if (!histogram.getUpToDateWithVocabulary()) {
-					addRecentlyWords(histogram);
-					histogram.setUpToDateWithVocabulary(true);
-				}
-
 				Histogram dbHistogram = histogramRepository.save(histogram);
 				dbHistogram = calculateTfIdf(dbHistogram, histogramRepository.findByInitilized(true, pageable.first()));
 				histogramRepository.save(dbHistogram);
@@ -165,9 +161,10 @@ public class HistogramService {
 	public Histogram calculateTfIdf(Histogram histogram, Page<Histogram> histograms) {
 		double tf;
 		double idf;
-
+		int vocabSize = vocabularyService.getVocabulary().getOficialSize();
+		
 		for (HistogramItem item : histogram.getHistogram()) {
-			tf = calculateTf(histogram, item.getCount());
+			tf = calculateTf(vocabSize, item.getCount());
 			idf = calculateIdf(item.getKey().getGram(), histograms);
 			item.setTfidf(tf * idf);
 		}
@@ -175,28 +172,23 @@ public class HistogramService {
 		return histogram;
 	}
 
-	private double calculateTf(Histogram histogram, double count) {
-		return count / histogram.getHistogram().size();
+	private double calculateTf(int vocabSize, double count) {
+		return count / vocabSize;
 	}
 
 	private double calculateIdf(String term, Page<Histogram> histograms) {
 		double counter = 0.0;
-		boolean appear;
 
 		while (true) {
 			for (Histogram hist : histograms) {
 				// counter = 0.0;
-				appear = false;
 
+				//TODO implement this calculation as database query to waste less memory
 				for (HistogramItem item : hist.getHistogram()) {
 					if (item.getKey().getGram().equals(term)) {
-						appear = true;
+						counter++;
 						break;
 					}
-				}
-
-				if (appear) {
-					counter++;
 				}
 			}
 
@@ -212,23 +204,6 @@ public class HistogramService {
 		return 1.0 + Math.log(histograms.getTotalElements() / counter);
 	}
 
-	private void addRecentlyWords(Histogram hist) {
-		Vocabulary vocab = vocabularyService.getVocabulary();
-		HistogramItem item;
-
-		for (NGram nGram : vocab.getNgrams()) {
-			if (!hist.isInHistogram(nGram)) {
-				item = new HistogramItem();
-				item.setOwner(hist);
-				item.setKey(nGram);
-				item.setCount(0);
-
-				HistogramItem dbItem = histogramItemRepository.save(item);
-				hist.getHistogram().add(dbItem);
-			}
-		}
-	}
-
 	private Histogram initializeSearchHistogram(List<String> bagOfWords) {
 
 		Vocabulary vocab = vocabularyService.getVocabulary();
@@ -237,17 +212,23 @@ public class HistogramService {
 		int counter;
 		long i = 1L;
 
-		for (NGram nGram : vocab.getNgrams()) {
-			counter = hist.countWords(bagOfWords, nGram.getGram());
+		for (String word : bagOfWords) {
+			NGram nGram = vocab.hasInVocabulary(word);
 
-			item = new HistogramItem();
-			item.setId(i);
-			item.setOwner(hist);
-			item.setKey(nGram);
-			item.setCount(counter);
+			if (nGram != null) {
+				counter = hist.countWords(bagOfWords, nGram.getGram());
 
-			hist.getHistogram().add(item);
-			i++;
+				if (counter > 0) {
+					item = new HistogramItem();
+					item.setId(i);
+					item.setOwner(hist);
+					item.setKey(nGram);
+					item.setCount(counter);
+
+					hist.getHistogram().add(item);
+					i++;
+				}
+			}
 		}
 
 		hist.setInitialized(true);
@@ -270,24 +251,28 @@ public class HistogramService {
 		HistogramItem item;
 		int counter;
 
-		for (NGram nGram : vocab.getNgrams()) {
-			counter = hist.countWords(bagOfWords, nGram.getGram());
+		for (String word : bagOfWords) {
+			NGram nGram = vocab.hasInVocabulary(word);
 
-			if (hist.isInHistogram(nGram)) {
-				item = histogramItemRepository.findByKeyAndOwner(nGram, hist);
-				item.setCount(counter);
-			} else {
-				item = new HistogramItem();
-				item.setOwner(hist);
-				item.setKey(nGram);
-				item.setCount(counter);
+			if (nGram != null) {
+				counter = hist.countWords(bagOfWords, nGram.getGram());
 
-				HistogramItem dbItem = histogramItemRepository.save(item);
-				hist.getHistogram().add(dbItem);
+				if (counter > 0) {
+					if (hist.isInHistogram(nGram)) {
+						item = histogramItemRepository.findByKeyAndOwner(nGram, hist);
+						item.setCount(counter);
+					} else {
+						item = new HistogramItem();
+						item.setOwner(hist);
+						item.setKey(nGram);
+						item.setCount(counter);
+
+						HistogramItem dbItem = histogramItemRepository.save(item);
+						hist.getHistogram().add(dbItem);
+					}
+				}
 			}
 		}
-
-		hist.setUpToDateWithVocabulary(true);
 
 		return statusReturn;
 	}
@@ -308,17 +293,24 @@ public class HistogramService {
 		HistogramItem item;
 		int counter;
 
-		for (NGram nGram : vocab.getNgrams()) {
-			counter = hist.countWords(bagOfWords, nGram.getGram());
+		for (String word : bagOfWords) {
+			// TODO Change this implementation to vocabularyService to decrease memory usage
+			NGram nGram = vocab.hasInVocabulary(word);
 
-			item = new HistogramItem();
-			item.setOwner(hist);
-			item.setKey(nGram);
-			item.setCount(counter);
+			if (nGram != null) {
+				counter = hist.countWords(bagOfWords, nGram.getGram());
 
-			HistogramItem dbItem = histogramItemRepository.save(item);
+				if (counter > 0) {
+					item = new HistogramItem();
+					item.setOwner(hist);
+					item.setKey(nGram);
+					item.setCount(counter);
 
-			hist.getHistogram().add(dbItem);
+					HistogramItem dbItem = histogramItemRepository.save(item);
+
+					hist.getHistogram().add(dbItem);
+				}
+			}
 		}
 
 		return statusReturn;
