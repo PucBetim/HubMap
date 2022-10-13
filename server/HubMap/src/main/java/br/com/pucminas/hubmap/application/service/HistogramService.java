@@ -17,6 +17,9 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import br.com.pucminas.hubmap.application.service.python.PythonService;
+import br.com.pucminas.hubmap.domain.extras.Parameter;
+import br.com.pucminas.hubmap.domain.extras.ParameterRepository;
+import br.com.pucminas.hubmap.domain.extras.ParametersTableContants;
 import br.com.pucminas.hubmap.domain.indexing.Histogram;
 import br.com.pucminas.hubmap.domain.indexing.HistogramItem;
 import br.com.pucminas.hubmap.domain.indexing.HistogramItemRepository;
@@ -41,15 +44,18 @@ public class HistogramService {
 	private VocabularyService vocabularyService;
 
 	private NGramRepository nGramRepository;
+	
+	private ParameterRepository parameterRepository;
 
 	public HistogramService(PythonService pythonService, HistogramItemRepository histogramItemRepository,
 			HistogramRepository histogramRepository, VocabularyService vocabularyService,
-			NGramRepository nGramRepository) {
+			NGramRepository nGramRepository, ParameterRepository parameterRepository) {
 		this.pythonService = pythonService;
 		this.histogramItemRepository = histogramItemRepository;
 		this.histogramRepository = histogramRepository;
 		this.vocabularyService = vocabularyService;
 		this.nGramRepository = nGramRepository;
+		this.parameterRepository = parameterRepository;
 	}
 
 	public Search generateSearchHistogram(Search search) {
@@ -111,12 +117,16 @@ public class HistogramService {
 	@Transactional
 	@Scheduled(initialDelay = 10 * 1000, fixedDelay = 10 * 1500)
 	protected void refreshHistograms() {
-
+		Parameter newWords = parameterRepository.findByTableName(ParametersTableContants.NEW_WORDS_IN_VOCABULARY).get(0);
+		boolean hasNewWords = Boolean.valueOf(newWords.getValueRegistry());
+		
+		if(!hasNewWords) {
+			return;
+		}
+		
 		Pageable pageable = PageableUtils.getPageableFromParameters(0, 10);
 		Page<Histogram> histograms = histogramRepository.findByInitilized(true, pageable);
-
-		// TODO create a flag to just it if there is an update on vocabulary or try to
-		// mark this as dependent of the other
+		
 		while (true) {
 			for (Histogram histogram : histograms) {
 				if (histogram.getNeedRecount()) {
@@ -159,6 +169,9 @@ public class HistogramService {
 			}
 		}
 
+		newWords.setValueRegistry("false");
+		parameterRepository.save(newWords);
+		
 		getLoggerFromClass(getClass()).info("Histograms updated successfuly");
 	}
 

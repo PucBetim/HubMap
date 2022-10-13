@@ -9,6 +9,9 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import br.com.pucminas.hubmap.domain.extras.Parameter;
+import br.com.pucminas.hubmap.domain.extras.ParameterRepository;
+import br.com.pucminas.hubmap.domain.extras.ParametersTableContants;
 import br.com.pucminas.hubmap.domain.indexing.NGram;
 import br.com.pucminas.hubmap.domain.indexing.NGramRepository;
 import br.com.pucminas.hubmap.domain.indexing.Vocabulary;
@@ -23,9 +26,13 @@ public class VocabularyService {
 
 	private NGramRepository nGramRepository;
 	
-	public VocabularyService(VocabularyRepository vocabularyRepository, NGramRepository nGramRepository) {
+	private ParameterRepository parameterRepository;
+	
+	public VocabularyService(VocabularyRepository vocabularyRepository, NGramRepository nGramRepository,
+			ParameterRepository parameterRepository) {
 		this.vocabularyRepository = vocabularyRepository;
 		this.nGramRepository = nGramRepository;
+		this.parameterRepository = parameterRepository;
 	}
 
 	@Transactional
@@ -59,10 +66,13 @@ public class VocabularyService {
 			}
 			
 			vocab.updateWhenUpdated();
+			Parameter newWords = parameterRepository.findByTableName(ParametersTableContants.NEW_WORDS_IN_VOCABULARY).get(0);
+			newWords.setValueRegistry("true");
+			parameterRepository.save(newWords);
 			
 			getLoggerFromClass(getClass()).info("Vocabulary updated succefuly");
 		} else {
-			getLoggerFromClass(getClass()).info("Vocabulary is already up-to-date");
+			getLoggerFromClass(getClass()).debug("Vocabulary is already up-to-date");
 		}
 		
 		vocab.setHasNewWords(false);
