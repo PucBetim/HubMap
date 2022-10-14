@@ -56,7 +56,7 @@ public class BlockController {
 		try {
 			block = blockService.save(block, postId);
 			
-			RestResponse response = RestResponse.fromNormalResponse("Bloco criado com sucesso.", block.getId());
+			RestResponse response = RestResponse.fromNormalResponse("Bloco criado com sucesso.", block.getId().toString());
 			
 			return new ResponseEntity<>(response, HttpStatus.CREATED);
 		} catch (NoSuchElementException e) {
@@ -72,7 +72,7 @@ public class BlockController {
 		try {
 			newBlock = blockService.save(newBlock, postId);
 			
-			RestResponse response = RestResponse.fromNormalResponse("Bloco atualizado com sucesso.", newBlock.getId());
+			RestResponse response = RestResponse.fromNormalResponse("Bloco atualizado com sucesso.", newBlock.getId().toString());
 			
 			return new ResponseEntity<>(response, HttpStatus.OK);
 		} catch (NoSuchElementException e) {

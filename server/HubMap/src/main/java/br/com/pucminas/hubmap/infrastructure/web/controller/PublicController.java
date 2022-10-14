@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.pucminas.hubmap.domain.comment.Comment;
+import br.com.pucminas.hubmap.domain.comment.CommentRepository;
 import br.com.pucminas.hubmap.domain.post.Post;
 import br.com.pucminas.hubmap.domain.post.PostRepository;
 import br.com.pucminas.hubmap.utils.PageableUtils;
@@ -25,6 +27,9 @@ public class PublicController {
 	@Autowired
 	private PostRepository postRepository;
 	
+	@Autowired
+	private CommentRepository commetRepository;
+	
 	@GetMapping(path = "/posts")
 
 	public ResponseEntity<List<Post>> getAllPublicPosts(
@@ -35,6 +40,10 @@ public class PublicController {
 		
 		List<Post> posts = new ArrayList<>();
 		
+		if(size == null) {
+			size = 10;
+		}
+		
 		if(sort == null) {
 			sort = new String[]{"title", "id"};
 		}
@@ -43,7 +52,7 @@ public class PublicController {
 		postRepository.findAllPublic(pageable).forEach(posts::add);
 		posts.forEach(p -> {
 			p.setMapToShow();
-			p.setAuthorForPublicAccess();
+			p.getAuthor().setAuthorForPublicAccess();
 		});
 		
 		if (posts.isEmpty()) {
@@ -58,9 +67,50 @@ public class PublicController {
 		try {
 			Post post = postRepository.findByIdWhereIsPrivateFalse(id).orElseThrow();
 			post.setMapToShow();
-			post.setAuthorForPublicAccess();
+			post.getAuthor().setAuthorForPublicAccess();
 
 			return new ResponseEntity<>(post, HttpStatus.OK);
+		} catch (NoSuchElementException e) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+	}
+	
+	@GetMapping(path = "/comments")
+	public ResponseEntity<List<Comment>> getAllPublicComments(
+			@RequestParam(required = true, name = "post") Integer postId,
+			@RequestParam(required = false) Integer page,
+			@RequestParam(required = false) Integer size,
+			@RequestParam(required = false) Boolean descending,
+			@RequestParam(required = false) String... sort) {
+		
+		List<Comment> comments = new ArrayList<>();
+		
+		if(size == null) {
+			size = 10;
+		}
+		
+		if(sort == null) {
+			sort = new String[]{"timestamp"};
+		}
+		Pageable pageable = PageableUtils.getPageableFromParameters(page, size, descending, sort);
+		
+		commetRepository.findByPostIfPublic(postId, pageable).forEach(comments::add);
+		comments.forEach(c -> c.getAuthor().setAuthorForPublicAccess());
+		
+		if (comments.isEmpty()) {
+			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+		}
+
+		return new ResponseEntity<>(comments, HttpStatus.OK);
+	}
+	
+	@GetMapping("/comments/{id}")
+	public ResponseEntity<Comment> getCommentsById(@PathVariable Integer id) {
+		try {
+			Comment comment = commetRepository.findByIdIfPostPublic(id).orElseThrow();
+			comment.getAuthor().setAuthorForPublicAccess();
+			
+			return new ResponseEntity<>(comment, HttpStatus.OK);
 		} catch (NoSuchElementException e) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}

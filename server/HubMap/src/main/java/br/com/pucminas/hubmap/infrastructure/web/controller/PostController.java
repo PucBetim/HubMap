@@ -43,8 +43,10 @@ public class PostController {
 	private AppUserRepository appUserRepository;
 
 	@GetMapping("")
-	public ResponseEntity<List<Post>> getPosts(@RequestParam(required = false) Integer page,
-			@RequestParam(required = false) Integer size, @RequestParam(required = false) Boolean descending,
+	public ResponseEntity<List<Post>> getPosts(
+			@RequestParam(required = false) Integer page,
+			@RequestParam(required = false) Integer size, 
+			@RequestParam(required = false) Boolean descending,
 			@RequestParam(required = false) String... sort) {
 
 		try {
@@ -84,7 +86,7 @@ public class PostController {
 		if(deleted) {
 			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		} else {
-			RestResponse response = RestResponse.fromNormalResponse("Não foi encontrado nenhum post de sua autoria com o id informado", id);
+			RestResponse response = RestResponse.fromNormalResponse("Não foi encontrado nenhum post de sua autoria com o id informado", id.toString());
 			return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
 		}	
 	}
@@ -98,7 +100,7 @@ public class PostController {
 			newPost.setAuthor(loggedUser);
 			newPost = postService.save(newPost);
 
-			RestResponse response = RestResponse.fromNormalResponse("Post criado com sucesso.", newPost.getId());
+			RestResponse response = RestResponse.fromNormalResponse("Post criado com sucesso.", newPost.getId().toString());
 
 			return new ResponseEntity<>(response, HttpStatus.CREATED);
 		} catch (NoSuchElementException e) {
@@ -124,7 +126,7 @@ public class PostController {
 			msg = "Não foi encontrado nenhum post de sua autoria com o id informado";
 		}
 		
-		RestResponse response = RestResponse.fromNormalResponse(msg, id);
+		RestResponse response = RestResponse.fromNormalResponse(msg, id.toString());
 				
 		return new ResponseEntity<>(response, status);
 	}
@@ -138,6 +140,7 @@ public class PostController {
 
 		try {
 			postService.changeLike(id, positive);
+			
 			msg = "Likes alterados com sucesso.";
 			status = HttpStatus.OK;
 		} catch (NoSuchElementException e) {
@@ -145,7 +148,8 @@ public class PostController {
 			status = HttpStatus.BAD_REQUEST;
 		}
 
-		RestResponse response = RestResponse.fromNormalResponse(msg, id);
+		RestResponse response = RestResponse.fromNormalResponse(msg, id.toString());
+		
 		return new ResponseEntity<>(response, status);
 	}
 
@@ -158,6 +162,7 @@ public class PostController {
 
 		try {
 			postService.changeDislike(id, positive);
+			
 			msg = "Dislikes alterados com sucesso.";
 			status = HttpStatus.OK;
 		} catch (NoSuchElementException e) {
@@ -165,7 +170,8 @@ public class PostController {
 			status = HttpStatus.BAD_REQUEST;
 		}
 
-		RestResponse response = RestResponse.fromNormalResponse(msg, id);
+		RestResponse response = RestResponse.fromNormalResponse(msg, id.toString());
+
 		return new ResponseEntity<>(response, status);
 	}
 
@@ -177,6 +183,7 @@ public class PostController {
 
 		try {
 			postService.addView(id);
+
 			msg = "Views incrementadas com sucesso.";
 			status = HttpStatus.OK;
 		} catch (NoSuchElementException e) {
@@ -184,7 +191,8 @@ public class PostController {
 			status = HttpStatus.BAD_REQUEST;
 		}
 
-		RestResponse response = RestResponse.fromNormalResponse(msg, id);
+		RestResponse response = RestResponse.fromNormalResponse(msg, id.toString());
+
 		return new ResponseEntity<>(response, status);
 	}
 }

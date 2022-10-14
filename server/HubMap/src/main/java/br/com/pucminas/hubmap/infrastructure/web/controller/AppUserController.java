@@ -60,7 +60,7 @@ public class AppUserController {
 		try {
 			newAppUser = appUserService.save(newAppUser);
 			
-			RestResponse response = RestResponse.fromNormalResponse("Usuário criado com sucesso.", newAppUser.getId());
+			RestResponse response = RestResponse.fromNormalResponse("Usuário criado com sucesso.", newAppUser.getId().toString());
 			
 			return new ResponseEntity<>(response, HttpStatus.CREATED);
 		} catch (DuplicatedEmailException e) {
@@ -80,7 +80,7 @@ public class AppUserController {
 			
 			appUser = appUserService.save(appUser);
 
-			RestResponse response = RestResponse.fromNormalResponse("Usuário atualizado com sucesso.", appUser.getId());
+			RestResponse response = RestResponse.fromNormalResponse("Usuário atualizado com sucesso.", appUser.getId().toString());
 			
 			return new ResponseEntity<>(response, HttpStatus.OK);
 		} catch (DuplicatedEmailException e) {

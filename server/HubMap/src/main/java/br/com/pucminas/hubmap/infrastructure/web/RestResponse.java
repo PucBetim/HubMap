@@ -14,31 +14,29 @@ public class RestResponse {
 	
 	private String message;
 	
-	private Integer dataId;
+	private String dataId;
+	
+	public RestResponse(String message, String dataId) {
+		this.message = message;
+		this.dataId = dataId;
+	}
 	
 	public static RestResponse fromValidationError(Errors errors, Integer id) {
-		RestResponse restError = new RestResponse();
+		
 		StringBuilder sb = new StringBuilder();
 		
 		for (ObjectError message : errors.getAllErrors()) {
 			sb.append(message.getDefaultMessage() + ". ");
 		}
 		
-		restError.message = sb.toString();
-		restError.dataId = id;
-		
-		return restError;
+		return new RestResponse(sb.toString(), id.toString());
 	}
 	
 	public static RestResponse fromValidationError(Errors errors) {
 		return fromValidationError(errors, 0);
 	}
 	
-	public static RestResponse fromNormalResponse(String message, Integer dataId) {
-		RestResponse response = new RestResponse();
-		response.setMessage(message);
-		response.setDataId(dataId);
-		
-		return response;
+	public static RestResponse fromNormalResponse(String message, String dataId) {	
+		return new RestResponse(message, dataId);
 	}
 }
