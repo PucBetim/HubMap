@@ -70,7 +70,7 @@ public class VocabularyService {
 			newWords.setValueRegistry("true");
 			parameterRepository.save(newWords);
 			
-			getLoggerFromClass(getClass()).info("Vocabulary updated succefuly");
+			getLoggerFromClass(getClass()).info("Vocabulary updated successfuly");
 		} else {
 			getLoggerFromClass(getClass()).debug("Vocabulary is already up-to-date");
 		}
