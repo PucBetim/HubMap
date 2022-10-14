@@ -8,6 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
@@ -23,7 +24,7 @@ import lombok.Setter;
 @SuppressWarnings("serial")
 @Entity
 @Table(name = "APP_USER")
-@JsonIgnoreProperties({"profilePicture", "id"})
+@JsonIgnoreProperties({"profilePicture"})
 @Getter
 @Setter
 @NoArgsConstructor
@@ -47,6 +48,7 @@ public class AppUser implements Serializable {
 	@NotBlank(message = "Por favor, informe seu e-mail.")
 	@Column(length = 100, nullable = false)
 	@Size(max = 100, message = "O e-mail é muito grande.")
+	@Email(message = "O e-mail não está em um formato válido.")
 	private String email;
 	
 	@NotBlank(message = "Por favor, informe sua senha.")
@@ -85,5 +87,10 @@ public class AppUser implements Serializable {
 		
 	public void encryptPassword() {	
 		this.password = StringUtils.encrypt(password);
+	}
+	
+	public void setAuthorForPublicAccess() {
+		email = null;
+		name = null;
 	}
 }

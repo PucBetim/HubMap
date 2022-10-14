@@ -12,15 +12,15 @@ import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 
 import br.com.pucminas.hubmap.domain.comment.Comment;
-import br.com.pucminas.hubmap.domain.indexing.NGram;
 import br.com.pucminas.hubmap.domain.post.Post;
+import br.com.pucminas.hubmap.domain.user.AppUser;
 
 @Configuration
 public class RestRepositoryConfigurer implements RepositoryRestConfigurer {
 
 	@Override
 	public void configureRepositoryRestConfiguration(RepositoryRestConfiguration config, CorsRegistry cors) {
-		config.exposeIdsFor(Comment.class, Post.class, NGram.class);
+		config.exposeIdsFor(Comment.class, Post.class, AppUser.class);
 		cors.addMapping("/**")
 			.allowedOrigins("*")
 			.allowedMethods("GET", "POST", "PUT", "DELETE");

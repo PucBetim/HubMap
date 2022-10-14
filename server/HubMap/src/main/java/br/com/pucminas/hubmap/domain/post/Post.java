@@ -30,7 +30,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonProperty.Access;
 
 import br.com.pucminas.hubmap.domain.comment.Comment;
-import br.com.pucminas.hubmap.domain.indexing.NGram;
 import br.com.pucminas.hubmap.domain.map.Block;
 import br.com.pucminas.hubmap.domain.user.AppUser;
 import lombok.EqualsAndHashCode;
@@ -41,7 +40,7 @@ import lombok.Setter;
 @SuppressWarnings("serial")
 @Entity
 @EntityListeners(PostListener.class)
-@JsonIgnoreProperties({ "ngrams" })
+@JsonIgnoreProperties({ "histogram", "comments" })
 @Getter
 @Setter
 @NoArgsConstructor
@@ -91,9 +90,6 @@ public class Post implements Serializable {
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	@JsonProperty(access = Access.READ_ONLY)
 	private Set<Comment> comments = new HashSet<>();
-
-	@OneToMany(mappedBy = "id.post", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	private Set<NGram> ngrams = new HashSet<>();
 
 	/*
 	 * @OneToOne(mappedBy = "post") private Histogram histogram;
@@ -147,15 +143,17 @@ public class Post implements Serializable {
 		this.author = author;
 	}
 	
+	@JsonIgnore
+	public Block getMapRoot() {
+		return map.stream()
+				.filter(b -> b.getIsRoot())
+				.findFirst()
+				.orElseThrow();
+	}
+	
 	public void setMapToShow() {
 		map = map.stream()
 				.filter(b -> b.getIsRoot())
 				.collect(Collectors.toSet());
 	}
-	
-	public void setAuthorForPublicAccess() {
-		author.setEmail(null);
-		author.setName(null);
-	}
-
 }
