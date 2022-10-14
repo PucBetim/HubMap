@@ -1,3 +1,4 @@
+import { Router } from '@angular/router';
 import { PostService } from '../../core/shared/posts/post-blocks.service';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -22,7 +23,8 @@ export class UserSettingsComponent implements OnInit {
   public results: boolean = false;
 
   constructor(private fb: FormBuilder,
-    private sessionService: SessionService, private postService: PostService
+    private sessionService: SessionService, private postService: PostService,
+    public router: Router
   ) { }
 
   ngOnInit(): void {
@@ -59,7 +61,7 @@ export class UserSettingsComponent implements OnInit {
           console.log(error)
         }
       })
-      this.results = true;
+    this.results = true;
   }
 
   editUser() {

@@ -1,7 +1,7 @@
 <loading *ngIf="carregando"></loading>
 <div *ngIf="!carregando" class="container">
     <div class="mapContainer">
-        <display-canvas *ngIf="result && mapSize > 0 && mapZoomSize > 0" [showOptions]=" false" [size]="mapSize"
+        <display-canvas *ngIf="mapSize > 0 && mapZoomSize > 0" [showOptions]=" false" [size]="mapSize"
             [zoomSize]="mapZoomSize" [post]="post">
         </display-canvas>
     </div>
@@ -11,7 +11,7 @@
             <p>Detalhes</p>
         </div>
         <br>
-        <div class="details" *ngIf="result">
+        <div class="details">
 
             <div class="header">
                 <div class="title">
@@ -29,22 +29,23 @@
 
             <div class="options pushBottom">
                 <div>
-                    <button (click)="downloadImage()">Baixar Mapa</button>
+                    <button class="btn-icon" (click)="downloadImage()">Baixar Mapa <mat-icon style="color: white;">download</mat-icon></button>
                 </div>
-
+                <div *ngIf="!currentUserPost">
+                    <button class="btn-icon"  (click)="forkMapa()">Fork <mat-icon style="color: white;"> call_split</mat-icon>
+                    </button>
+                </div>
                 <div class="action">
                     <a>
                         <mat-icon [ngClass]="likeClass" (click)="likePost()">thumb_up</mat-icon> {{post.likes}}
                     </a>
                 </div>
-
                 <div class="action">
                     <a>
                         <mat-icon [ngClass]="dislikeClass" (click)="dislikePost()">thumb_down</mat-icon>
                         {{post.dislikes}}
                     </a>
                 </div>
-
                 <div class="action">
                     <mat-icon class="viewIcon">remove_red_eye</mat-icon>
                     {{post.views}}
@@ -77,8 +78,8 @@
             </div>
         </div>
         <br>
-        <div class="comment" *ngIf="result">
-            <comment [order]="1" (commentMadeEvent)="updateComments()" [postComments]="this.post.comments"
+        <div class="comment" *ngIf="!carregando">
+            <comment [order]="1" (commentMadeEvent)="getComments()" [postComments]="this.post.comments"
                 [childComments]="getChildComments(comment.id)" [postId]="this.post.id" [comment]="comment"
                 *ngFor="let comment of getPrimaryComments()"></comment>
         </div>

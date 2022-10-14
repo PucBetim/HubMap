@@ -84,7 +84,7 @@ export class CreatePostComponent implements OnInit {
     }
   }
 
-  updateBlocks(id: number) {
+  updateBlocks(id: string) {
     this.post.map.forEach(b => {
       this.loading = true;
       this.postService.updateBlocks(b, id).subscribe({
@@ -99,7 +99,7 @@ export class CreatePostComponent implements OnInit {
     });
   }
 
-  postBlocks(id: number) {
+  postBlocks(id: string) {
     this.post.map.forEach(b => {
       this.loading = true;
       this.postService.postBlocks(b, id).subscribe({

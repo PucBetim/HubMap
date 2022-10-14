@@ -8,7 +8,6 @@ import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from 'src/app/map-creator/confirm-dialog/confirm-dialog.component';
 import { VisualCanvasComponent } from 'src/app/core/shared/export-image/visual-canvas/visual-canvas.component';
 import { CommentService } from 'src/app/core/shared/posts/comment.service';
-import { Comment } from 'src/app/core/shared/posts/comment';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
@@ -25,16 +24,16 @@ export class PostDetailsComponent implements OnInit {
     this.mapZoomSize = 0;
     setTimeout(() => {
       this.mapSize = window.innerHeight / 1.8;
-      this.mapZoomSize = window.innerWidth / 1.3;
+      this.mapZoomSize = window.innerWidth / 1.6;
     }, 1000)
   }
 
   public carregando: boolean = false;
-  public result: boolean = false;
+
   public post: Post;
   public sub: Subscription;
   public mapSize: number = window.innerHeight / 1.8;
-  public mapZoomSize: number = window.innerWidth / 1.3;
+  public mapZoomSize: number = window.innerWidth / 1.6;
 
   public currentUserPost: boolean = false;
 
@@ -60,6 +59,8 @@ export class PostDetailsComponent implements OnInit {
   ngOnInit(): void {
     this.sub = this.route.params.subscribe(
       params => {
+        if (ConfigService.getUser())
+          this.currentUserPost = ConfigService.getUser().id == params['authorId'] ? true : false;
         this.getPost(params['id']);
       });
 
@@ -68,44 +69,40 @@ export class PostDetailsComponent implements OnInit {
     });
   }
 
-  getPost(id: number) {
-    this.result = false;
+  getPost(id: string) {
     this.carregando = true;
-    this.postService.getPostById(id).subscribe(
-      {
-        next: result => {
-          this.post = result.body;
-          this.carregando = false;
-          this.currentUserPost = true;
-          this.result = true;
-          if (ConfigService.getUser())
-            this.postService.viewPost(this.post.id).subscribe();
-        },
-        error: error => {
-          this.getPublicPost(id)
-          this.carregando = false;
-        }
-      })
+    if (this.currentUserPost) {
+      this.postService.getPostById(id).subscribe(
+        {
+          next: result => {
+            this.post = result.body;
+            this.carregando = false;
+            this.getComments();
+          },
+          error: error => {
+            this.snackBar.open("Falha ao obter post! Tente novamente mais tarde.", "Ok");
+            this.carregando = false;
+            return;
+          }
+        })
+    }
+    else {
+      this.postService.getPublicPostsById(id).subscribe(
+        {
+          next: result => {
+            this.post = result.body;
+            this.carregando = false;
+            this.getComments();
+          },
+          error: error => {
+            this.snackBar.open("Falha ao obter post! Tente novamente mais tarde.", "Ok");
+            this.carregando = false;
+            return;
+          }
+        })
+    }
   }
 
-  getPublicPost(id: number) {
-    this.carregando = true;
-    this.postService.getPublicPostsById(id).subscribe(
-      {
-        next: result => {
-          this.post = result.body;
-          this.carregando = false;
-          this.currentUserPost = false;
-          this.result = true;
-          if (ConfigService.getUser())
-            this.postService.viewPost(this.post.id).subscribe();
-        },
-        error: error => {
-          console.log(error)
-          this.carregando = false;
-        }
-      })
-  }
 
 
   async downloadImage() {
@@ -149,58 +146,76 @@ export class PostDetailsComponent implements OnInit {
 
   deletePost() {
     this.carregando = true;
-    this.postService.deletePost(this.post.id).subscribe(
-      {
-        next: result => {
-          this.router.navigate(['/session/settings'])
-          this.carregando = false;
-        },
-        error: error => {
-          this.carregando = false;
-        }
-      })
+    this.postService.deletePost(this.post.id).subscribe({
+      next: result => {
+        this.router.navigate(['/session/settings'])
+        this.carregando = false;
+      },
+      error: error => {
+        this.carregando = false;
+      }
+    })
   }
 
   getComments() {
     this.carregando = true;
-    this.commentService.getPostComments(this.post.id).subscribe(
-      {
-        next: result => {
-          this.post.comments = result.body;
-          this.carregando = false;
-        },
-        error: error => {
-          this.carregando = false;
-        }
-      })
-  }
-
-  commentPost() {
-    if (ConfigService.getUser()) {
-      this.carregando = true;
-      let p = Object.assign({}, this.form.value);
-      this.commentService.postComment(p, this.post.id).subscribe(
+    if (this.currentUserPost) {
+      this.commentService.getPostComments(this.post.id).subscribe(
         {
           next: result => {
-            this.snackBar.open("Comentário feito!", "Ok", {
-              duration: 2000
-            })
-            this.form.patchValue({ content: '' });
-            this.updateComments();
+            this.post.comments = result.body;
             this.carregando = false;
           },
           error: error => {
+            this.snackBar.open("Erro ao obter comentários! Tente novamente mais tarde.", "Ok");
             this.carregando = false;
           }
         })
     }
-    else
-      this.router.navigate(['session/create-account'])
+    else {
+      this.commentService.getPublicPostComments(this.post.id).subscribe(
+        {
+          next: result => {
+            this.post.comments = result.body;
+            this.carregando = false;
+          },
+          error: error => {
+            this.snackBar.open("Erro ao obter comentários! Tente novamente mais tarde.", "Ok");
+            this.carregando = false;
+          }
+        })
+    }
+  }
+
+  commentPost() {
+    if (!ConfigService.getUser()) {
+      this.router.navigate(['session/create-account']);
+      return;
+    }
+
+    this.carregando = true;
+    let p = Object.assign({}, this.form.value);
+    this.commentService.postComment(p, this.post.id).subscribe({
+      next: result => {
+        this.snackBar.open("Comentário feito!", "Ok", {
+          duration: 2000
+        })
+        this.form.patchValue({ content: '' });
+        this.getComments();
+        this.carregando = false;
+      },
+      error: error => {
+        this.carregando = false;
+      }
+    })
   }
 
   getChildComments(id: number) {
-    var childComments = this.post.comments.filter(c => c.repliedTo?.id == id);
-    return childComments.length > 0 ? childComments : null;
+    if (this.post.comments[0]) {
+      var childComments = this.post.comments.filter(c => c.repliedTo?.id == id);
+      return childComments.length > 0 ? childComments : null;
+    }
+    return;
   }
 
   getPrimaryComments() {
@@ -208,68 +223,46 @@ export class PostDetailsComponent implements OnInit {
     return primaryComments.length > 0 ? primaryComments : null;
   }
 
-  updateComments() {
-    this.carregando = true;
-    this.commentService.getPostComments(this.post.id).subscribe(
-      {
-        next: result => {
-          this.post.comments = result.body;
-          this.carregando = false;
-        },
-        error: error => {
-          this.carregando = false;
-        }
-      })
-  }
-
   likePost() {
-    if (ConfigService.getUser()) {
-
-      this.lastLikeValue = this.lastLikeValue == true ? false : true;
-
-      this.postService.likePost(this.lastLikeValue, this.post.id).subscribe(
-        {
-          next: result => {
-            this.likeClass = this.lastLikeValue ? ['rated'] : [];
-            if (!this.lastDislikeValue) this.dislikeClass = [];
-            if (this.lastDislikeValue && this.lastLikeValue) this.dislikePost();
-
-            if (this.currentUserPost) this.getPost(this.post.id);
-            else this.getPublicPost(this.post.id)
-          },
-          error: error => {
-          }
-        })
+    if (!ConfigService.getUser()) {
+      this.router.navigate(['session/create-account']);
+      return;
     }
-    else
-      this.router.navigate(['session/create-account'])
 
+    this.lastLikeValue = this.lastLikeValue == true ? false : true;
+    this.postService.likePost(this.lastLikeValue, this.post.id).subscribe({
+      next: result => {
+        this.likeClass = this.lastLikeValue ? ['rated'] : [];
+        if (!this.lastDislikeValue) this.dislikeClass = [];
+        if (this.lastDislikeValue && this.lastLikeValue) this.dislikePost();
+        if (this.currentUserPost) this.getPost(this.post.id);
+        else this.getPost(this.post.id)
+      },
+      error: error => {
+        this.snackBar.open("Erro ao avaliar comentário! Tente novamente mais tarde.")
+      }
+    })
   }
 
   dislikePost() {
-    if (ConfigService.getUser()) {
-
-      this.lastDislikeValue = this.lastDislikeValue == true ? false : true;
-
-
-      this.postService.dislikePost(this.lastDislikeValue, this.post.id).subscribe(
-        {
-          next: result => {
-            this.dislikeClass = this.lastDislikeValue ? ['rated'] : [];
-            if (!this.lastLikeValue) this.likeClass = [];
-            if (this.lastLikeValue && this.lastDislikeValue) this.likePost();
-
-            if (this.currentUserPost) this.getPost(this.post.id);
-            else this.getPublicPost(this.post.id)
-          },
-          error: error => {
-          }
-        })
+    if (!ConfigService.getUser()) {
+      this.router.navigate(['session/create-account']);
+      return;
     }
-    else
-      this.router.navigate(['session/create-account'])
 
+    this.lastDislikeValue = this.lastDislikeValue == true ? false : true;
+    this.postService.dislikePost(this.lastDislikeValue, this.post.id).subscribe(
+      {
+        next: result => {
+          this.dislikeClass = this.lastDislikeValue ? ['rated'] : [];
+          if (!this.lastLikeValue) this.likeClass = [];
+          if (this.lastLikeValue && this.lastDislikeValue) this.likePost();
+          if (this.currentUserPost) this.getPost(this.post.id);
+          else this.getPost(this.post.id)
+        },
+        error: error => {
+          this.snackBar.open("Erro ao avaliar comentário! Tente novamente mais tarde.")
+        }
+      })
   }
-
-
 }

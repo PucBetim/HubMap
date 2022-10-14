@@ -7,21 +7,26 @@
 
         <div class="commentInfo">
             Postado em {{comment.timestamp | date: 'dd/MM/yyyy'}}
-            Por {{comment.author. name}}
+            Por {{comment.author.nick}}
         </div>
 
         <div class="commentActions">
             <div *ngIf="order < 3" class="action" style="margin-right: 15px;">
-                <a class="openResponse" (click)="openResponse = true" *ngIf="!openResponse">RESPONDER</a>
+                <a class="openResponse" (click)="openReply()" *ngIf="!openResponse">RESPONDER</a>
             </div>
             <div class="action">
                 <a>
-                    <mat-icon [ngClass]="likeClass" (click)="likeComment()">thumb_up</mat-icon> {{comment.likes}}
+                    <mat-icon class="rateIcon" [ngClass]="likeClass" (click)="likeComment()">thumb_up</mat-icon> {{comment.likes}}
                 </a>
             </div>
             <div class="action">
                 <a>
-                    <mat-icon [ngClass]="dislikeClass" (click)="dislikeComment()">thumb_down</mat-icon> {{comment.dislikes}}
+                    <mat-icon class="rateIcon" [ngClass]="dislikeClass" (click)="dislikeComment()">thumb_down</mat-icon> {{comment.dislikes}}
+                </a>
+            </div>
+            <div *ngIf="currentUserComment" class="optionIcon pushRight">
+                <a>
+                    <mat-icon (click)="openOptions()">more_vert</mat-icon>
                 </a>
             </div>
         </div>
@@ -63,10 +68,5 @@
             </div>
         </mat-expansion-panel>
 
-        <!-- <div class="replies">
-            <comment (commentMadeEvent)="emitCommentMadeEvent()" [postComments]="postComments"
-                [childComments]="getChildComments(comment.id)" [postId]="postId" [response]="true"
-                *ngFor="let comment of childComments" [comment]="comment"></comment>
-        </div> -->
     </div>
 </div>

@@ -139,6 +139,14 @@ $client-theme: mat.define-light-theme((color: (primary: $client-primary,
         margin-left: auto;
     }
     ////////// End Flex Push
+    /// 
+    
+    button{
+        mat-icon{
+            height: fit-content;
+            vertical-align: middle;
+        }
+    }
 }
 
 // Scrollbar

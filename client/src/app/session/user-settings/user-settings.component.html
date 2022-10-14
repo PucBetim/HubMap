@@ -30,8 +30,13 @@
     </div>
 
     <div class="userMaps layoutDefaultStyle">
-        <div class="deco">
-            Meus Mapas
+        <div style="display: flex;">
+            <div class="deco">
+                Meus Mapas
+            </div>
+            <div class="pushRight">
+                <button (click)="router.navigate(['/creator'])">Criar Mapa</button>
+            </div>
         </div>
         <br><br>
         <div class="resultContainer" *ngIf="results">

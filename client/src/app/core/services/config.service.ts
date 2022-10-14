@@ -31,7 +31,6 @@ export class ConfigService {
         if (user) return user;
         return;
     }
-
     public static resetLogin() {
         sessionStorage.clear();
         window.location.href = "/session/signin";

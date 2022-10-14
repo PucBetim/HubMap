@@ -4,7 +4,7 @@ export class Post {
     title: string;
     description: string;
     private: boolean;
-    id: number;
+    id: string;
     likes: number;
     dislikes: number;
     views: number;

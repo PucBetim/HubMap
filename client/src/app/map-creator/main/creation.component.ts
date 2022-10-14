@@ -1,4 +1,4 @@
-import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, HostListener, OnInit, ViewChild, EventEmitter } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatMenuTrigger } from '@angular/material/menu';
 
@@ -21,11 +21,21 @@ export class CreationComponent implements OnInit, ComponentCanDeactivate {
 
   @ViewChild('editTrigger') editTrigger: MatMenuTrigger;
   @ViewChild('main') main: ElementRef;
+  @ViewChild('canvas') canvas: ElementRef;
 
   @HostListener('window:beforeunload')
   canDeactivate(): Observable<boolean> | boolean {
     return !this.unsavedChanges
   }
+
+  // @HostListener("wheel", ["$event"])
+  // onScroll(event: WheelEvent) {
+  //   event.preventDefault();
+  //   if (event.ctrlKey == true && event.target == this.canvas.nativeElement) 
+  //     this.containerCanvasZoom += (event.deltaY * -0.1);
+  //   console.log(this.containerCanvasZoom)
+  // }
+  public containerCanvasZoom = 100;
 
   public post = new Post;
 
@@ -38,7 +48,7 @@ export class CreationComponent implements OnInit, ComponentCanDeactivate {
   public editorMode: boolean = false;
 
   public sub: Subscription;
-  public id: number;
+  public id: string;
 
   constructor(private route: ActivatedRoute,
     private dialog: MatDialog,

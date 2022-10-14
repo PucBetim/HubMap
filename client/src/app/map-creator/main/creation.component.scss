@@ -74,11 +74,11 @@
 .containerCanvas {
     grid-area: canvas;
     position: relative;
+    zoom: 100%;
 
     .canvas {
         $backgroundColor: #ffffff;
         $gridColor: #e4e4e4;
-        zoom: -10%;
 
         background-color: $backgroundColor;
         width: 3840px;

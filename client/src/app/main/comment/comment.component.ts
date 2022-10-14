@@ -1,9 +1,11 @@
+import { ConfigService } from 'src/app/core/services/config.service';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { Comment } from 'src/app/core/shared/posts/comment';
 import { CommentService } from 'src/app/core/shared/posts/comment.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'comment',
@@ -16,7 +18,7 @@ export class CommentComponent implements OnInit {
 
   @Input() postComments: Comment[];
   @Input() comment: Comment;
-  @Input() postId: number;
+  @Input() postId: string;
   @Input() childComments: Comment[];
   @Input() response: boolean = false;
   @Input() order: number;
@@ -33,19 +35,29 @@ export class CommentComponent implements OnInit {
   public likeClass: string[];
   public dislikeClass: string[];
 
+  public currentUserComment: boolean = false;
+
   constructor(
     private fb: FormBuilder,
     private commentService: CommentService,
     private snackBar: MatSnackBar,
+    private router: Router,
   ) { }
 
   ngOnInit(): void {
+    if (ConfigService.getUser())
+    this.currentUserComment = ConfigService.getUser().id == this.comment.author.id ? true : false;
+
     this.form = this.fb.group({
       content: ['', [Validators.required, Validators.maxLength(3), Validators.maxLength(this.commentMaxLength)]],
     });
   }
 
   replyComment() {
+    if (!ConfigService.getUser()) {
+      this.router.navigate(['session/create-account']);
+      return;
+    }
 
     this.carregando = true;
     let p = Object.assign({}, new Comment, this.form.value);
@@ -66,6 +78,14 @@ export class CommentComponent implements OnInit {
       })
   }
 
+  openReply() {
+    if (!ConfigService.getUser()) {
+      this.router.navigate(['session/create-account']);
+      return;
+    }
+    this.openResponse = true
+  }
+
   getChildComments(id: number) {
     var childComments = this.postComments.filter(c => c.repliedTo?.id == id);
     return childComments.length > 0 ? childComments : null;
@@ -76,6 +96,11 @@ export class CommentComponent implements OnInit {
   }
 
   likeComment() {
+    if (!ConfigService.getUser()) {
+      this.router.navigate(['session/create-account']);
+      return;
+    }
+
     this.lastLikeValue = this.lastLikeValue == true ? false : true;
 
     this.commentService.likeComment(this.lastLikeValue, this.comment.id).subscribe(
@@ -117,5 +142,9 @@ export class CommentComponent implements OnInit {
         error: error => {
         }
       })
+  }
+
+  openOptions(){
+
   }
 }

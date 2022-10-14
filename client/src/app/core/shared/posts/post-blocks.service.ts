@@ -25,21 +25,21 @@ export class PostService extends BaseService {
     return this.http.get<any>((ConfigService.getUrlApi() + this.userUrlPost), ConfigService.getOptions()).pipe(catchError(super.serviceError));
   };
 
-  getPostById(id: number): Observable<any> {
+  getPostById(id: string): Observable<any> {
     return this.http.get<any>((ConfigService.getUrlApi() + this.userUrlPost + `/${id}`), ConfigService.getOptions()).pipe(catchError(super.serviceError));
   };
 
-  updatePost(post: Post, id: number): Observable<any> {
+  updatePost(post: Post, id: string): Observable<any> {
     return this.http.put<any>((ConfigService.getUrlApi() + this.userUrlPost + `/${id}`), post, ConfigService.getOptions()).pipe(catchError(super.serviceError));
   };
 
-  deletePost(id: number): Observable<any> {
+  deletePost(id: string): Observable<any> {
     return this.http.delete<any>((ConfigService.getUrlApi() + this.userUrlPost + `/${id}`), ConfigService.getOptions()).pipe(catchError(super.serviceError));
   };
   //
 
   // Public post
-  getPublicPostsById(id: number): Observable<any> {
+  getPublicPostsById(id: string): Observable<any> {
     return this.http.get<any>((ConfigService.getUrlApi() + this.userUrlPublicPost + `/${id}`), ConfigService.getOptions()).pipe(catchError(super.serviceError));
   };
 
@@ -49,32 +49,32 @@ export class PostService extends BaseService {
   //
 
   // Blocks
-  postBlocks(map: Block, id: number): Observable<any> {
+  postBlocks(map: Block, id: string): Observable<any> {
     return this.http.post<any>((ConfigService.getUrlApi() + this.userUrlBlocks + `?post=${id}`), map, ConfigService.getOptions()).pipe(catchError(super.serviceError));
   };
 
-  getPostBlocks(id: number): Observable<any> {
+  getPostBlocks(id: string): Observable<any> {
     return this.http.get<any>((ConfigService.getUrlApi() + this.userUrlBlocks + `?post=${id}`), ConfigService.getOptions()).pipe(catchError(super.serviceError));
   };
 
-  updateBlocks(blocks: Block, id: number): Observable<any> {
+  updateBlocks(blocks: Block, id: string): Observable<any> {
     return this.http.put<any>((ConfigService.getUrlApi() + this.userUrlBlocks + `?post=${id}`), blocks, ConfigService.getOptions()).pipe(catchError(super.serviceError));
   };
   //
 
 
   // Likes Dislikes
-  likePost(rating: boolean, id: number): Observable<any> {
+  likePost(rating: boolean, id: string): Observable<any> {
     return this.http.post<any>((ConfigService.getUrlApi() + this.userUrlPost + `/${id}/likes?add=${rating}`), null, ConfigService.getOptions()).pipe(catchError(super.serviceError));
   };
 
-  dislikePost(rating: boolean, id: number): Observable<any> {
+  dislikePost(rating: boolean, id: string): Observable<any> {
     return this.http.post<any>((ConfigService.getUrlApi() + this.userUrlPost + `/${id}/dislikes?add=${rating}`), null, ConfigService.getOptions()).pipe(catchError(super.serviceError));
   };
   //
 
   // Post View
-  viewPost(id: number): Observable<any> {
+  viewPost(id: string): Observable<any> {
     return this.http.post<any>((ConfigService.getUrlApi() + this.userUrlPost + `/${id}/views`), null, ConfigService.getOptions()).pipe(catchError(super.serviceError));
   };
   //

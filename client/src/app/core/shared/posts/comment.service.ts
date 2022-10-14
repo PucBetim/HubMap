@@ -10,39 +10,48 @@ import { Comment } from './comment';
 })
 export class CommentService extends BaseService {
 
-  public userUrl = "hubmap/comments";
+  public userUrlComments = "hubmap/comments";
+  public userUrlPublicComments = "hubmap/public/comments";
 
   constructor(private http: HttpClient,) { super(); }
 
-  postComment(comment: Comment, id: number): Observable<any> {
-    return this.http.post<any>((ConfigService.getUrlApi() + this.userUrl + `?post=${id}`), comment, ConfigService.getOptions()).pipe(catchError(super.serviceError));
+  postComment(comment: Comment, id: string): Observable<any> {
+    return this.http.post<any>((ConfigService.getUrlApi() + this.userUrlComments + `?post=${id}`), comment, ConfigService.getOptions()).pipe(catchError(super.serviceError));
   };
 
   postReply(comment: Comment): Observable<any> {
-    return this.http.post<any>((ConfigService.getUrlApi() + this.userUrl), comment, ConfigService.getOptions()).pipe(catchError(super.serviceError));
+    return this.http.post<any>((ConfigService.getUrlApi() + this.userUrlComments), comment, ConfigService.getOptions()).pipe(catchError(super.serviceError));
   };
 
-  getPostComments(id: number): Observable<any> {
-    return this.http.get<any>((ConfigService.getUrlApi() + this.userUrl + `?post=${id}`), ConfigService.getOptions()).pipe(catchError(super.serviceError));
+  getPostComments(id: string): Observable<any> {
+    return this.http.get<any>((ConfigService.getUrlApi() + this.userUrlComments + `?post=${id}`), ConfigService.getOptions()).pipe(catchError(super.serviceError));
   };
 
   getCommentById(id: number): Observable<any> {
-    return this.http.get<any>((ConfigService.getUrlApi() + this.userUrl + `/${id}`), ConfigService.getOptions()).pipe(catchError(super.serviceError));
+    return this.http.get<any>((ConfigService.getUrlApi() + this.userUrlComments + `/${id}`), ConfigService.getOptions()).pipe(catchError(super.serviceError));
   };
 
   updateComment(comment: Comment, id: number): Observable<any> {
-    return this.http.put<any>((ConfigService.getUrlApi() + this.userUrl + `/${id}`), comment, ConfigService.getOptions()).pipe(catchError(super.serviceError));
+    return this.http.put<any>((ConfigService.getUrlApi() + this.userUrlComments + `/${id}`), comment, ConfigService.getOptions()).pipe(catchError(super.serviceError));
   };
 
   deleteComment(id: number): Observable<any> {
-    return this.http.delete<any>((ConfigService.getUrlApi() + this.userUrl + `/${id}`), ConfigService.getOptions()).pipe(catchError(super.serviceError));
+    return this.http.delete<any>((ConfigService.getUrlApi() + this.userUrlComments + `/${id}`), ConfigService.getOptions()).pipe(catchError(super.serviceError));
   };
 
+  // Rate Comment
   likeComment(rating: boolean, id: number): Observable<any> {
-    return this.http.post<any>((ConfigService.getUrlApi() + this.userUrl + `/${id}/likes?add=${rating}`), null, ConfigService.getOptions()).pipe(catchError(super.serviceError));
+    return this.http.post<any>((ConfigService.getUrlApi() + this.userUrlComments + `/${id}/likes?add=${rating}`), null, ConfigService.getOptions()).pipe(catchError(super.serviceError));
   };
 
   dislikeComment(rating: any, id: number): Observable<any> {
-    return this.http.post<any>((ConfigService.getUrlApi() + this.userUrl + `/${id}/dislikes?add=${rating}`), null, ConfigService.getOptions()).pipe(catchError(super.serviceError));
+    return this.http.post<any>((ConfigService.getUrlApi() + this.userUrlComments + `/${id}/dislikes?add=${rating}`), null, ConfigService.getOptions()).pipe(catchError(super.serviceError));
   };
+  // End Rate Comment
+
+  // Public Comments
+  getPublicPostComments(id: string): Observable<any> {
+    return this.http.get<any>((ConfigService.getUrlApi() + this.userUrlPublicComments + `?post=${id}`), ConfigService.getOptions()).pipe(catchError(super.serviceError));
+  };
+  // End Public Comments
 }

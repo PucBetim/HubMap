@@ -73,7 +73,7 @@ export class DisplayCanvasComponent implements OnInit {
   }
 
   goToDetails() {
-    this.router.navigateByUrl(`/details/${this.post.id}`);
+    this.router.navigateByUrl(`/details/${this.post.id}/${this.post.author.id}`);
   }
 
   zoom(zoom: boolean) {

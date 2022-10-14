@@ -12,4 +12,5 @@ export class Author {
     email: string;
     name: string;
     nick: string;
+    id: string;
 }

@@ -1,5 +1,5 @@
 import { Position, Block, Post } from '../../core/shared/posts/post';
-import { Component, ElementRef, EventEmitter, HostListener, Input, OnInit, Output } from '@angular/core';
+import { Component, ElementRef, EventEmitter, HostListener, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
@@ -43,8 +43,6 @@ export class BlockComponent implements OnInit {
     this.initialContent = this.block.content;
     this.afterImageSize = (this.block.size.width + this.block.size.height) / 10
     this.afterImagePosition = { x: (this.block.position.x + (this.block.size.width / 2) - this.afterImageSize / 2), y: (this.block.position.y + (this.block.size.height / 2) - this.afterImageSize / 2) };
-
-
   }
 
   clickInside() {
@@ -72,10 +70,8 @@ export class BlockComponent implements OnInit {
       this.block.position = lastPosition;
     }
     else {
-
       this.block.position.x = event.layerX - event.offsetX;
       this.block.position.y = event.layerY - event.offsetY;
-
       this.afterImagePosition = { x: (this.block.position.x + (this.block.size.width / 2) - this.afterImageSize / 2), y: (this.block.position.y + (this.block.size.height / 2) - this.afterImageSize / 2) };
       this.emitSaveProgress();
     }

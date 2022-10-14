@@ -27,17 +27,22 @@
             display: flex;
 
             .action {
-                margin: 0 20px;
                 display: flex;
                 text-align: center;
                 color: #316b83;
+                margin: 0 20px;
             }
 
-            mat-icon {
+            .rateIcon {
                 align-self: center;
                 height: fit-content;
                 font-size: small;
                 color: #a3b2c2;
+                cursor: pointer;
+            }
+
+            .optionIcon{
+                color: #316b83;
                 cursor: pointer;
             }
 

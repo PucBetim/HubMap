@@ -14,19 +14,19 @@ import { MatSliderModule } from '@angular/material/slider';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { DragScrollModule } from 'ngx-drag-scroll';
 
 import { CreationComponent } from './main/creation.component';
 import { CreatorRoutes } from './map-creator.routing';
 import { StyleEditorComponent } from './style-editor/style-editor.component';
 import { BlockComponent } from './block/block.component';
 import { TextDivComponent } from './text-div/text-div.component';
-import { DragScrollModule } from 'ngx-drag-scroll';
 import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
 import { SharedModule } from './../core/shared/shared.module';
 import { PendingChangesGuard } from '../core/services/guard.service';
 import { CreatePostComponent } from './create-post/create-post.component';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
 
 export const OtherOptions: MatTooltipDefaultOptions = {
   showDelay: 0,
