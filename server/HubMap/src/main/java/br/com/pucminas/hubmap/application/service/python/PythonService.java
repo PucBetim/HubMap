@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.text.Normalizer;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import jep.Interpreter;
@@ -13,18 +12,12 @@ import jep.SharedInterpreter;
 
 @Service
 public class PythonService {
-
-	@Value("${hubmap.scripts.python.path}")
-	private String scritpsPythonPath;
-	
-	@Value("${hubmap.scripts.python.file-name}")
-	private String scritpPythonFileName;
 	
 	@SuppressWarnings("unchecked")
 	public List<String> getBagOfWords(String sentence) throws IOException {
 		
-		String canonicalPath =  new File(".").getCanonicalPath();
-		String fullPath = canonicalPath + scritpsPythonPath + scritpPythonFileName;
+		File file = new File("resources/python/spacy.py");
+		String fullPath = file.getAbsolutePath();
 		
 		List<String> tokens = null;
 		
