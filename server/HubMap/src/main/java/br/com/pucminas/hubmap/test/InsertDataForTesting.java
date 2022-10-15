@@ -1,78 +1,41 @@
 package br.com.pucminas.hubmap.test;
 
-import java.time.LocalDateTime;
-
-import javax.transaction.Transactional;
-
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
+import org.springframework.core.env.Environment;
+import org.springframework.core.env.Profiles;
 import org.springframework.stereotype.Component;
 
 import br.com.pucminas.hubmap.application.service.AppUserService;
 import br.com.pucminas.hubmap.application.service.DuplicatedEmailException;
 import br.com.pucminas.hubmap.domain.comment.Comment;
 import br.com.pucminas.hubmap.domain.comment.CommentRepository;
-import br.com.pucminas.hubmap.domain.indexing.NGram;
-import br.com.pucminas.hubmap.domain.indexing.NGramRepository;
-import br.com.pucminas.hubmap.domain.indexing.Vocabulary;
-import br.com.pucminas.hubmap.domain.indexing.VocabularyRepository;
 import br.com.pucminas.hubmap.domain.post.Post;
 import br.com.pucminas.hubmap.domain.post.PostRepository;
 import br.com.pucminas.hubmap.domain.user.AppUser;
 
 @Component
 public class InsertDataForTesting {
-
+	
 	private AppUserService appUserService;
 	private PostRepository postRepository;
 	private CommentRepository commentRepository;
-	private VocabularyRepository vocabularyRepository;
-	private NGramRepository nGramRepository;
-	
-	public InsertDataForTesting(AppUserService appUserService, PostRepository postRepository,
-			CommentRepository commentRepository, VocabularyRepository vocabularyRepository,
-			NGramRepository nGramRepository) {
 
+	public InsertDataForTesting(AppUserService appUserService, PostRepository postRepository, CommentRepository commentRepository) {
 		this.appUserService = appUserService;
 		this.postRepository = postRepository;
 		this.commentRepository = commentRepository;
-		this.vocabularyRepository = vocabularyRepository;
-		this.nGramRepository = nGramRepository;
 	}
 
 	@EventListener
-	@Transactional
 	public void onApplicationEvent(ContextRefreshedEvent event) throws DuplicatedEmailException {
-
-		if(vocabularyRepository.count() <= 0) {
-			Vocabulary vocab = new Vocabulary();
-			vocab.setHasNewWords(false);
-			vocab.setWhenUpdated(LocalDateTime.now());
-			vocabularyRepository.save(vocab);
-			
-			NGram g1 = new NGram("Barco");
-			g1.setVocabulary(vocab);
-			g1 = nGramRepository.save(g1);
-			vocab.getNgrams().add(g1);
-			
-			NGram g2 = new NGram("Vela");
-			g2.setVocabulary(vocab);
-			g2 = nGramRepository.save(g2);
-			vocab.getNgrams().add(g2);
-			
-			NGram g3 = new NGram("Educacao");
-			g3.setVocabulary(vocab);
-			g3 = nGramRepository.save(g3);
-			vocab.getNgrams().add(g3);
-			
-			NGram g4 = new NGram("Amizade");
-			g4.setVocabulary(vocab);
-			g4 = nGramRepository.save(g4);
-			vocab.getNgrams().add(g4);
-
+		
+		Environment env = event.getApplicationContext().getEnvironment();
+		
+		if(!env.acceptsProfiles(Profiles.of("prod")) && !env.acceptsProfiles(Profiles.of("prodAzure"))) {
+			addTestingData();
 		}
-				
-		addTestingData();
+		
 	}
 	
 	private void addTestingData() throws DuplicatedEmailException {
