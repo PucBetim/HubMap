@@ -1,7 +1,12 @@
 package br.com.pucminas.hubmap.application.service.python;
 
+import static br.com.pucminas.hubmap.utils.LoggerUtils.getLoggerFromClass;
+
 import java.io.File;
 import java.io.IOException;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.nio.file.Paths;
 import java.text.Normalizer;
 import java.util.List;
 
@@ -16,8 +21,18 @@ public class PythonService {
 	@SuppressWarnings("unchecked")
 	public List<String> getBagOfWords(String sentence) throws IOException {
 		
-		File file = new File("resources/python/spacy.py");
+		File file;
+		
+		URL res = getClass().getClassLoader().getResource("python/spacy.py");
+		try {
+			file = Paths.get(res.toURI()).toFile();
+		} catch (URISyntaxException e) {
+			throw new RuntimeException(e);
+		}
+		
 		String fullPath = file.getAbsolutePath();
+		
+		getLoggerFromClass(getClass()).info("2 - Path spacy.py" + fullPath);
 		
 		List<String> tokens = null;
 		
