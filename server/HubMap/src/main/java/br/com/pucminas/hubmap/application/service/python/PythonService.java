@@ -1,7 +1,5 @@
 package br.com.pucminas.hubmap.application.service.python;
 
-import static br.com.pucminas.hubmap.utils.LoggerUtils.getLoggerFromClass;
-
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -31,8 +29,6 @@ public class PythonService {
 		}
 		
 		String fullPath = file.getAbsolutePath();
-		
-		getLoggerFromClass(getClass()).info("2 - Path spacy.py" + fullPath);
 		
 		List<String> tokens = null;
 		
