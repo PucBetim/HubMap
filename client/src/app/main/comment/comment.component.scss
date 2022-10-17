@@ -83,22 +83,36 @@
     padding: 0
 }
 
-.postResponse {
-    .postTextArea {
+
+
+.EditOrReply {
+    textarea {
         width: 96%;
         resize: none;
         border: none;
         border-radius: 15px;
         padding: 2%;
-        box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+        box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 10px 0px;
     }
 
-    .postActionArea {
+    .actions {
         display: flex;
         width: 100%;
         flex-direction: row;
         color: #77aada;
         font-size: small;
         text-align: right;
+    }
+}
+
+::ng-deep .optionsMenu {
+    background-color: #272736;
+    overflow: hidden;
+    ::ng-deep .mat-icon {
+        color: #77aada 
+    }
+
+    span {
+        color: #ffffff;
     }
 }

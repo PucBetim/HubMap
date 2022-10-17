@@ -8,6 +8,7 @@ import { MatGridListModule } from '@angular/material/grid-list';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatExpansionModule } from '@angular/material/expansion';
+import { MatMenuModule } from '@angular/material/menu';
 
 import { MainRoutes } from './main.routing';
 import { SharedModule } from './../core/shared/shared.module';
@@ -28,7 +29,8 @@ import { PostDetailsComponent } from './post-details/post-details.component';
     MatProgressSpinnerModule,
     MatDialogModule,
     ReactiveFormsModule,
-    MatExpansionModule
+    MatExpansionModule,
+    MatMenuModule
   ]
 })
 export class MainModule { }

@@ -246,10 +246,6 @@ export class CreationComponent implements OnInit, ComponentCanDeactivate {
     };
 
     const dialogRef = this.dialog.open(VisualCanvasComponent, exportImageConfig);
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        // console.log('Imagem Salva')
-      }
-    });
+    dialogRef.afterClosed().subscribe();
   }
 }

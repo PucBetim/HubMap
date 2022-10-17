@@ -27,24 +27,24 @@ export class CommentService extends BaseService {
     return this.http.get<any>((ConfigService.getUrlApi() + this.userUrlComments + `?post=${id}`), ConfigService.getOptions()).pipe(catchError(super.serviceError));
   };
 
-  getCommentById(id: number): Observable<any> {
+  getCommentById(id: string): Observable<any> {
     return this.http.get<any>((ConfigService.getUrlApi() + this.userUrlComments + `/${id}`), ConfigService.getOptions()).pipe(catchError(super.serviceError));
   };
 
-  updateComment(comment: Comment, id: number): Observable<any> {
+  updateComment(comment: Comment, id: string): Observable<any> {
     return this.http.put<any>((ConfigService.getUrlApi() + this.userUrlComments + `/${id}`), comment, ConfigService.getOptions()).pipe(catchError(super.serviceError));
   };
 
-  deleteComment(id: number): Observable<any> {
+  deleteComment(id: string): Observable<any> {
     return this.http.delete<any>((ConfigService.getUrlApi() + this.userUrlComments + `/${id}`), ConfigService.getOptions()).pipe(catchError(super.serviceError));
   };
 
   // Rate Comment
-  likeComment(rating: boolean, id: number): Observable<any> {
+  likeComment(rating: boolean, id: string): Observable<any> {
     return this.http.post<any>((ConfigService.getUrlApi() + this.userUrlComments + `/${id}/likes?add=${rating}`), null, ConfigService.getOptions()).pipe(catchError(super.serviceError));
   };
 
-  dislikeComment(rating: any, id: number): Observable<any> {
+  dislikeComment(rating: any, id: string): Observable<any> {
     return this.http.post<any>((ConfigService.getUrlApi() + this.userUrlComments + `/${id}/dislikes?add=${rating}`), null, ConfigService.getOptions()).pipe(catchError(super.serviceError));
   };
   // End Rate Comment

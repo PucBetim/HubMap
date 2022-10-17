@@ -29,10 +29,12 @@
 
             <div class="options pushBottom">
                 <div>
-                    <button class="btn-icon" (click)="downloadImage()">Baixar Mapa <mat-icon style="color: white;">download</mat-icon></button>
+                    <button class="btn-icon" (click)="downloadImage()">Baixar Mapa <mat-icon style="color: white;">
+                            download</mat-icon></button>
                 </div>
                 <div *ngIf="!currentUserPost">
-                    <button class="btn-icon"  (click)="forkMapa()">Fork <mat-icon style="color: white;"> call_split</mat-icon>
+                    <button class="btn-icon" (click)="forkMapa()">Fork <mat-icon style="color: white;"> call_split
+                        </mat-icon>
                     </button>
                 </div>
                 <div class="action">
@@ -51,9 +53,12 @@
                     {{post.views}}
                 </div>
 
-                <button *ngIf="currentUserPost" class="pushRight" (click)="goToEdit()">Editar</button>
-                <button *ngIf="currentUserPost" class="btnDelete btn-danger"
-                    (click)="deletePostConfirm()">Excluir</button>
+                <button *ngIf="currentUserPost" class="pushRight" (click)="goToEdit()">
+                    Editar <mat-icon style="color: white;">edit</mat-icon>
+                </button>
+                <button *ngIf="currentUserPost" class="btnDelete btn-danger" (click)="deletePostConfirm()">
+                    Excluir <mat-icon style="color: white;">delete</mat-icon>
+                </button>
             </div>
 
         </div>
@@ -79,8 +84,7 @@
         </div>
         <br>
         <div class="comment" *ngIf="!carregando">
-            <comment [order]="1" (commentMadeEvent)="getComments()" [postComments]="this.post.comments"
-                [childComments]="getChildComments(comment.id)" [postId]="this.post.id" [comment]="comment"
+            <comment [order]="1" [comment]="comment" [post]="post"
                 *ngFor="let comment of getPrimaryComments()"></comment>
         </div>
     </div>

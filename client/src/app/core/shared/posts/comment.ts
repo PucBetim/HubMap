@@ -1,5 +1,5 @@
 export class Comment {
-    id: number;
+    id: string;
     author: Author;
     content: string;
     dislikes: number;

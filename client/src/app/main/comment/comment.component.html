@@ -1,45 +1,68 @@
-<loading *ngIf="carregando"></loading>
+<loading *ngIf="loading"></loading>
 <div class="main">
     <div class="decoBlock"></div>
     <div class="content">
-        {{comment.content}}
-        <br>
-
-        <div class="commentInfo">
-            Postado em {{comment.timestamp | date: 'dd/MM/yyyy'}}
-            Por {{comment.author.nick}}
+        <div *ngIf="!editOpened">
+            {{comment.content}}
         </div>
+
+        <div *ngIf="editOpened" class="EditOrReply">
+            <textarea [formControl]="formEdit.controls['content']" rows="3" [maxlength]="commentMaxLength">
+            </textarea>
+
+            <div class="actions">
+                Caracteres: {{formEdit.controls['content'].value.length}} / {{commentMaxLength}}
+
+                <button class="btn-light pushRight" (click)="editOpened = false">Cancelar</button>
+
+                <button [disabled]="formEdit.controls['content'].value.length < 3 "
+                    [ngClass]="{'btn-disabled': formEdit.controls['content'].value.length < 3}" class="post"
+                    (click)="updateComment()">Atualizar
+                </button>
+            </div>
+        </div>
+        
+        <br>
 
         <div class="commentActions">
             <div *ngIf="order < 3" class="action" style="margin-right: 15px;">
-                <a class="openResponse" (click)="openReply()" *ngIf="!openResponse">RESPONDER</a>
+                <a class="openResponse" (click)="openReply()" *ngIf="!responseOpened">RESPONDER</a>
             </div>
             <div class="action">
                 <a>
-                    <mat-icon class="rateIcon" [ngClass]="likeClass" (click)="likeComment()">thumb_up</mat-icon> {{comment.likes}}
+                    <mat-icon class="rateIcon" [ngClass]="likeClass" (click)="likeComment()">thumb_up</mat-icon>
+                    {{comment.likes}}
                 </a>
             </div>
             <div class="action">
                 <a>
-                    <mat-icon class="rateIcon" [ngClass]="dislikeClass" (click)="dislikeComment()">thumb_down</mat-icon> {{comment.dislikes}}
+                    <mat-icon class="rateIcon" [ngClass]="dislikeClass" (click)="dislikeComment()">thumb_down</mat-icon>
+                    {{comment.dislikes}}
                 </a>
             </div>
-            <div *ngIf="currentUserComment" class="optionIcon pushRight">
+
+            <div class="commentInfo pushRight">
+                Postado em {{comment.timestamp | date: 'dd/MM/yyyy'}}
+                Por {{comment.author.nick}}
+            </div>
+
+            <div *ngIf="currentUserComment" class="optionIcon">
                 <a>
-                    <mat-icon (click)="openOptions()">more_vert</mat-icon>
+                    <mat-icon [matMenuTriggerFor]="optionsMenu">more_vert</mat-icon>
                 </a>
             </div>
         </div>
 
 
-        <div *ngIf="openResponse" class="postResponse">
+        <div *ngIf="responseOpened" class="EditOrReply">
             <br>
-            <textarea [formControl]="form.controls['content']" class="postTextArea" rows="3"
-                [maxlength]="commentMaxLength"></textarea>
-            <div class="postActionArea">
+            <textarea [formControl]="form.controls['content']" rows="3" [maxlength]="commentMaxLength">
+            </textarea>
+
+            <div class="actions">
                 Caracteres: {{form.controls['content'].value.length}} / {{commentMaxLength}}
 
-                <button class="btn-light pushRight" (click)="openResponse = false">Cancelar</button>
+                <button class="btn-light pushRight" (click)="responseOpened = false">Cancelar</button>
 
                 <button [disabled]="form.controls['content'].value.length < 3 "
                     [ngClass]="{'btn-disabled': form.controls['content'].value.length < 3}" class="post"
@@ -49,24 +72,35 @@
         </div>
 
         <mat-expansion-panel class="repliesPanel" (opened)="repliesOpenedState = true"
-            (closed)="repliesOpenedState = false" hideToggle *ngIf="getChildComments(comment.id)?.length > 0">
+            (closed)="repliesOpenedState = false" hideToggle *ngIf="getChildComments()?.length > 0">
 
             <mat-expansion-panel-header style="padding: 0">
                 <mat-panel-title>
                     <mat-icon *ngIf="repliesOpenedState">keyboard_arrow_up</mat-icon>
                     <mat-icon *ngIf="!repliesOpenedState">keyboard_arrow_down</mat-icon>
-                    {{getChildComments(comment.id)?.length}} {{getChildComments(comment.id)?.length == 1 ? "RESPOSTA" :
+                    {{getChildComments()?.length}} {{getChildComments()?.length == 1 ? "RESPOSTA" :
                     "RESPOSTAS" }}
                 </mat-panel-title>
             </mat-expansion-panel-header>
 
             <div class="replies">
-                <comment (commentMadeEvent)="emitCommentMadeEvent()" [postComments]="postComments"
-                    [childComments]="getChildComments(comment.id)" [postId]="postId" [response]="true"
-                    [order]="order + 1" *ngFor="let comment of childComments" [comment]="comment">
+                <comment (commentMadeEvent)="refreshComment()" (commentDeletedEvent)="emitCommentDeletedEvent($event)"
+                    [response]="true" [order]="order + 1" *ngFor="let comment of getChildComments()" [comment]="comment"
+                    [post]="post">
                 </comment>
             </div>
         </mat-expansion-panel>
 
     </div>
 </div>
+
+<mat-menu class="optionsMenu" #optionsMenu="matMenu" xPosition="before">
+    <button mat-menu-item (click)="openEdit()">
+        <mat-icon class="mat-icon">edit</mat-icon>
+        <span>Editar</span>
+    </button>
+    <button mat-menu-item (click)="openDelete()">
+        <mat-icon class="mat-icon">delete</mat-icon>
+        <span>Excluir</span>
+    </button>
+</mat-menu>
