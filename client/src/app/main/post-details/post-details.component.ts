@@ -219,8 +219,11 @@ export class PostDetailsComponent implements OnInit {
   }
 
   getPrimaryComments() {
-    var primaryComments = this.post.comments.filter(c => c.repliedTo == null);
-    return primaryComments.length > 0 ? primaryComments : null;
+    if (this.post.comments) {
+      var primaryComments = this.post.comments.filter(c => c.repliedTo == null);
+      return primaryComments.length > 0 ? primaryComments : null;
+    }
+    return null;
   }
 
   likePost() {

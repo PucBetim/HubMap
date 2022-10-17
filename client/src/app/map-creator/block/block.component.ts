@@ -11,7 +11,7 @@ export class BlockComponent implements OnInit {
 
   public blockSelected: boolean = false;
   public afterImagePosition: Position = { x: 0, y: 0 };
-  public afterImageSize: number;
+  public afterImageSize: number = 50;
   public initialContent: string;
 
   @Input() block: Block;
@@ -41,7 +41,6 @@ export class BlockComponent implements OnInit {
 
   ngOnInit(): void {
     this.initialContent = this.block.content;
-    this.afterImageSize = (this.block.size.width + this.block.size.height) / 10
     this.afterImagePosition = { x: (this.block.position.x + (this.block.size.width / 2) - this.afterImageSize / 2), y: (this.block.position.y + (this.block.size.height / 2) - this.afterImageSize / 2) };
   }
 
@@ -82,7 +81,6 @@ export class BlockComponent implements OnInit {
     this.block.size.height = event.height;
 
     this.afterImagePosition = { x: (this.block.position.x + (this.block.size.width / 2) - this.afterImageSize / 2), y: (this.block.position.y + (this.block.size.height / 2) - this.afterImageSize / 2) };
-    this.afterImageSize = (this.block.size.width + this.block.size.height) / 10
   }
 
 
