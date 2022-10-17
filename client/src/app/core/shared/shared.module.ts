@@ -17,6 +17,7 @@ import { VisualCanvasComponent } from './export-image/visual-canvas/visual-canva
 import { VisualTextDivComponent } from './export-image/visual-text-div/visual-text-div.component';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatDialogModule } from '@angular/material/dialog';
+import { ContenteditableModel } from './contentEditableModule';
 
 @NgModule({
   declarations: [
@@ -29,6 +30,7 @@ import { MatDialogModule } from '@angular/material/dialog';
     VisualCanvasComponent,
     VisualBlockComponent,
     VisualTextDivComponent,
+    ContenteditableModel
   ],
   imports: [
     CommonModule,
@@ -51,6 +53,7 @@ import { MatDialogModule } from '@angular/material/dialog';
     VisualCanvasComponent,
     VisualBlockComponent,
     VisualTextDivComponent,
+    ContenteditableModel
   ]
 })
 export class SharedModule { }

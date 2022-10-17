@@ -2,7 +2,7 @@ import { Component, EventEmitter, HostListener, Input, Output, Renderer2, ViewCh
 import { Block } from "../../core/shared/posts/post";
 
 @Component({
-  selector: 'app-text-div',
+  selector: 'text-div',
   templateUrl: './text-div.component.html',
   styleUrls: ['./text-div.component.scss']
 })
@@ -45,9 +45,5 @@ export class TextDivComponent {
     if (this.mouseMoveListener) {
       this.mouseMoveListener();
     }
-  }
-
-  x(){
-    console.log('x')
   }
 }

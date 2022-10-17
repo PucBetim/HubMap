@@ -28,7 +28,7 @@ export class PostDetailsComponent implements OnInit {
     }, 1000)
   }
 
-  public carregando: boolean = false;
+  public loading: boolean = false;
 
   public post: Post;
   public sub: Subscription;
@@ -70,18 +70,18 @@ export class PostDetailsComponent implements OnInit {
   }
 
   getPost(id: string) {
-    this.carregando = true;
+    this.loading = true;
     if (this.currentUserPost) {
       this.postService.getPostById(id).subscribe(
         {
           next: result => {
             this.post = result.body;
-            this.carregando = false;
+            this.loading = false;
             this.getComments();
           },
           error: error => {
             this.snackBar.open("Falha ao obter post! Tente novamente mais tarde.", "Ok");
-            this.carregando = false;
+            this.loading = false;
             return;
           }
         })
@@ -91,12 +91,12 @@ export class PostDetailsComponent implements OnInit {
         {
           next: result => {
             this.post = result.body;
-            this.carregando = false;
+            this.loading = false;
             this.getComments();
           },
           error: error => {
             this.snackBar.open("Falha ao obter post! Tente novamente mais tarde.", "Ok");
-            this.carregando = false;
+            this.loading = false;
             return;
           }
         })
@@ -145,30 +145,30 @@ export class PostDetailsComponent implements OnInit {
   }
 
   deletePost() {
-    this.carregando = true;
+    this.loading = true;
     this.postService.deletePost(this.post.id).subscribe({
       next: result => {
         this.router.navigate(['/session/settings'])
-        this.carregando = false;
+        this.loading = false;
       },
       error: error => {
-        this.carregando = false;
+        this.loading = false;
       }
     })
   }
 
   getComments() {
-    this.carregando = true;
+    this.loading = true;
     if (this.currentUserPost) {
       this.commentService.getPostComments(this.post.id).subscribe(
         {
           next: result => {
             this.post.comments = result.body;
-            this.carregando = false;
+            this.loading = false;
           },
           error: error => {
             this.snackBar.open("Erro ao obter comentários! Tente novamente mais tarde.", "Ok");
-            this.carregando = false;
+            this.loading = false;
           }
         })
     }
@@ -177,11 +177,11 @@ export class PostDetailsComponent implements OnInit {
         {
           next: result => {
             this.post.comments = result.body;
-            this.carregando = false;
+            this.loading = false;
           },
           error: error => {
             this.snackBar.open("Erro ao obter comentários! Tente novamente mais tarde.", "Ok");
-            this.carregando = false;
+            this.loading = false;
           }
         })
     }
@@ -193,7 +193,7 @@ export class PostDetailsComponent implements OnInit {
       return;
     }
 
-    this.carregando = true;
+    this.loading = true;
     let p = Object.assign({}, this.form.value);
     this.commentService.postComment(p, this.post.id).subscribe({
       next: result => {
@@ -202,10 +202,10 @@ export class PostDetailsComponent implements OnInit {
         })
         this.form.patchValue({ content: '' });
         this.getComments();
-        this.carregando = false;
+        this.loading = false;
       },
       error: error => {
-        this.carregando = false;
+        this.loading = false;
       }
     })
   }
@@ -267,5 +267,36 @@ export class PostDetailsComponent implements OnInit {
           this.snackBar.open("Erro ao avaliar comentário! Tente novamente mais tarde.")
         }
       })
+  }
+
+  forkPost() {
+    if (!this.currentUserPost) {
+      this.loading = true;
+      let p = new Post;
+      p.title = this.post.title += ' (cópia)';
+      p.description = this.post.description;
+      p.private = true;
+      this.postService.postPost(p).subscribe({
+        next: obj => {
+          this.forkBlocks(obj.body.dataId)
+          this.loading = false;
+        }, error: error => {
+          this.loading = false;
+        }
+      })
+    }
+  }
+  forkBlocks(id: string) {
+    console.log(id)
+    this.post.map.forEach(b => {
+      this.loading = true;
+      this.postService.postBlocks(b, id).subscribe({
+        next: obj => {
+          this.loading = false;
+        }, error: error => {
+          this.loading = false;
+        }
+      })
+    });
   }
 }

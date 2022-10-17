@@ -1,5 +1,5 @@
-<loading *ngIf="carregando"></loading>
-<div *ngIf="!carregando" class="container">
+<loading *ngIf="loading"></loading>
+<div *ngIf="!loading" class="container">
     <div class="mapContainer">
         <display-canvas *ngIf="mapSize > 0 && mapZoomSize > 0" [showOptions]=" false" [size]="mapSize"
             [zoomSize]="mapZoomSize" [post]="post">
@@ -33,7 +33,7 @@
                             download</mat-icon></button>
                 </div>
                 <div *ngIf="!currentUserPost">
-                    <button class="btn-icon" (click)="forkMapa()">Fork <mat-icon style="color: white;"> call_split
+                    <button class="btn-icon" (click)="forkPost()">Fork <mat-icon style="color: white;"> call_split
                         </mat-icon>
                     </button>
                 </div>
@@ -83,7 +83,7 @@
             </div>
         </div>
         <br>
-        <div class="comment" *ngIf="!carregando">
+        <div class="comment" *ngIf="!loading">
             <comment [order]="1" [comment]="comment" [post]="post"
                 *ngFor="let comment of getPrimaryComments()"></comment>
         </div>

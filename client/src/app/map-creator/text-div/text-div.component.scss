@@ -1,7 +1,4 @@
 .textContainer {
-  overflow-wrap: break-word;
-  word-wrap: break-word;
-  hyphens: auto;
   overflow: hidden;
   resize: both;
   min-height: 75px;
@@ -17,11 +14,7 @@
   border: none;
   outline: none;
   line-height: 1em;
-
-  overflow-wrap: break-word;
-  word-wrap: break-word;
-  hyphens: auto;
-  white-space: normal;
+  white-space: pre-wrap;
 
   top: 50%;
   transform: translateY(-50%);

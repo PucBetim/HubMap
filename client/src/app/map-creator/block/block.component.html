@@ -43,8 +43,8 @@
         </button>
     </div>
 
-    <app-text-div (resizeFinishedEvent)="emitSaveProgress()" (onResizeEvent)="onResize($event)" [block]="block">
-    </app-text-div>
+    <text-div (resizeFinishedEvent)="emitSaveProgress()" (onResizeEvent)="onResize($event)" [block]="block">
+    </text-div>
 
     <div class="dragHandle" [style.color]="block.backgroundColor | toneHexColor: -30" (click)="onDrag($event, false)"
         cdkDragHandle>
