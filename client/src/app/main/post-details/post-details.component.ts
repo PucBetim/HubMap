@@ -2,7 +2,7 @@ import { ConfigService } from './../../core/services/config.service';
 import { Subscription } from 'rxjs';
 import { PostService } from './../../core/shared/posts/post-blocks.service';
 import { Component, HostListener, OnInit } from '@angular/core';
-import { Post } from 'src/app/core/shared/posts/post';
+import { Block, Post } from 'src/app/core/shared/posts/post';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from 'src/app/map-creator/confirm-dialog/confirm-dialog.component';
@@ -10,6 +10,7 @@ import { VisualCanvasComponent } from 'src/app/core/shared/export-image/visual-c
 import { CommentService } from 'src/app/core/shared/posts/comment.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { User } from 'src/app/session/models/user';
 
 @Component({
   selector: 'post-map-details',
@@ -36,6 +37,7 @@ export class PostDetailsComponent implements OnInit {
   public mapZoomSize: number = window.innerWidth / 1.6;
 
   public currentUserPost: boolean = false;
+  public loggedUser: User;
 
   public commentMaxLength: number = 200;
   public form: FormGroup;
@@ -57,10 +59,12 @@ export class PostDetailsComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.loggedUser = ConfigService.getUser()
+
     this.sub = this.route.params.subscribe(
       params => {
-        if (ConfigService.getUser())
-          this.currentUserPost = ConfigService.getUser().id == params['authorId'] ? true : false;
+        if (this.loggedUser)
+          this.currentUserPost = this.loggedUser.id == params['authorId'] ? true : false;
         this.getPost(params['id']);
       });
 
@@ -75,8 +79,10 @@ export class PostDetailsComponent implements OnInit {
       this.postService.getPostById(id).subscribe(
         {
           next: result => {
+            console.log(result.body)
             this.post = result.body;
             this.loading = false;
+            this.viewPost();
             this.getComments();
           },
           error: error => {
@@ -92,6 +98,7 @@ export class PostDetailsComponent implements OnInit {
           next: result => {
             this.post = result.body;
             this.loading = false;
+            this.viewPost();
             this.getComments();
           },
           error: error => {
@@ -188,7 +195,8 @@ export class PostDetailsComponent implements OnInit {
   }
 
   commentPost() {
-    if (!ConfigService.getUser()) {
+    console.log(this.loggedUser)
+    if (!this.loggedUser) {
       this.router.navigate(['session/create-account']);
       return;
     }
@@ -227,7 +235,7 @@ export class PostDetailsComponent implements OnInit {
   }
 
   likePost() {
-    if (!ConfigService.getUser()) {
+    if (!this.loggedUser) {
       this.router.navigate(['session/create-account']);
       return;
     }
@@ -269,34 +277,47 @@ export class PostDetailsComponent implements OnInit {
       })
   }
 
-  forkPost() {
-    if (!this.currentUserPost) {
-      this.loading = true;
-      let p = new Post;
-      p.title = this.post.title += ' (cópia)';
-      p.description = this.post.description;
-      p.private = true;
-      this.postService.postPost(p).subscribe({
-        next: obj => {
-          this.forkBlocks(obj.body.dataId)
-          this.loading = false;
-        }, error: error => {
-          this.loading = false;
-        }
-      })
-    }
-  }
-  forkBlocks(id: string) {
-    console.log(id)
-    this.post.map.forEach(b => {
-      this.loading = true;
-      this.postService.postBlocks(b, id).subscribe({
-        next: obj => {
-          this.loading = false;
-        }, error: error => {
-          this.loading = false;
-        }
-      })
-    });
+  // forkPost() {
+  //   if (!this.currentUserPost) {
+  //     this.loading = true;
+  //     let p = new Post;
+  //     p.title = this.post.title += ' (cópia)';
+  //     p.description = this.post.description;
+  //     p.private = true;
+  //     this.postService.postPost(p).subscribe({
+  //       next: obj => {
+  //         this.forkBlocks(obj.body.dataId)
+  //         this.loading = false;
+  //       }, error: error => {
+  //         this.loading = false;
+  //       }
+  //     })
+  //   }
+  // }
+  // forkBlocks(id: string) {
+  //   var blocks = this.removeId(this.post.map);
+  //   blocks.forEach(b => {
+  //     this.loading = true;
+  //     this.postService.postBlocks(b, id).subscribe({
+  //       next: obj => {
+  //         this.loading = false;
+  //       }, error: error => {
+  //         this.loading = false;
+  //       }
+  //     })
+  //   });
+  // }
+
+  // removeId(block: Block[]){
+  //   block.forEach(b => {
+  //     delete b.id;
+  //     this.removeId(b.blocks);
+  //     return;
+  //   });
+  //   return block;
+  // }
+
+  viewPost() {
+    this.postService.viewPost(this.post.id).subscribe()
   }
 }

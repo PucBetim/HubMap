@@ -15,7 +15,7 @@ export class Post {
     author: Author;
 }
 export class Block {
-    id: string;
+    id?: string;
     blocks: Block[] = [];
     content: string = "Default";
     position: Position = new Position;

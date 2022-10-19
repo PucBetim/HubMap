@@ -32,11 +32,11 @@
                     <button class="btn-icon" (click)="downloadImage()">Baixar Mapa <mat-icon style="color: white;">
                             download</mat-icon></button>
                 </div>
-                <div *ngIf="!currentUserPost">
+                <!-- <div *ngIf="!currentUserPost && loggedUser">
                     <button class="btn-icon" (click)="forkPost()">Fork <mat-icon style="color: white;"> call_split
                         </mat-icon>
                     </button>
-                </div>
+                </div> -->
                 <div class="action">
                     <a>
                         <mat-icon [ngClass]="likeClass" (click)="likePost()">thumb_up</mat-icon> {{post.likes}}

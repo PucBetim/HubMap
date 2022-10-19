@@ -4,11 +4,12 @@ import { PageNotFoundComponent } from '../core/page-not-found/page-not-found.com
 import { UserSettingsComponent } from './user-settings/user-settings.component';
 import { SigninComponent } from './signin/signin.component';
 import { Routes } from '@angular/router';
+import { AuthService } from '../core/services/auth.service';
 
 export const SessionRoutes: Routes = [
   { path: '', component: PageNotFoundComponent },
   { path: 'signin', component: SigninComponent },
   { path: 'create-account', component: CreateAccountComponent },
   //{ path: 'password-reset', component: PasswordResetComponent },
-  { path: 'settings', component: UserSettingsComponent }
+  { path: 'settings', canActivate: [AuthService], component: UserSettingsComponent }
 ];

@@ -13,6 +13,7 @@ import { PasswordResetComponent } from './password-reset/password-reset.componen
 import { SessionService } from './session.service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from '../core/shared/shared.module';
+import { AuthService } from '../core/services/auth.service';
 
 @NgModule({
   declarations: [
@@ -32,7 +33,8 @@ import { SharedModule } from '../core/shared/shared.module';
     SharedModule
   ],
   providers:[
-    SessionService
+    SessionService,
+    AuthService
   ]
 })
 export class UserModule { }

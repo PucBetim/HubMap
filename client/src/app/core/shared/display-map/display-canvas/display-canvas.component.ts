@@ -22,7 +22,9 @@ export class DisplayCanvasComponent implements OnInit {
   farestPoint = new Position;
   optionsStyle: string[];
   mapSize: number;
+
   public zoomed: boolean = false;
+  public result: boolean = false;
 
   constructor(
     private getLimitPoints: GetLimitPoints,
@@ -40,6 +42,7 @@ export class DisplayCanvasComponent implements OnInit {
     this.visualPost = JSON.parse(JSON.stringify(this.post));
 
     if (this.visualPost.map) {
+      this.result = true;
       var limit = this.getLimitPoints.getClosestFartest(this.visualPost.map)
 
       this.closestPoint = limit.closestPoint;

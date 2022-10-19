@@ -1,4 +1,4 @@
-<div class=" container" (mouseenter)="optionsStyle=['hover']" (mouseleave)="optionsStyle=[]" *ngIf="this.post.map[0]"
+<div class=" container" (mouseenter)="optionsStyle=['hover']" (mouseleave)="optionsStyle=[]" *ngIf="result"
     [style.max-width]="mapSize + 15 + 'px'" [style.max-height]="mapSize + 15 + 'px'">
 
     <div class="canvas" #canvas [style.width]="mapSize + 'px'" [style.height]="mapSize + 'px'">
@@ -21,16 +21,16 @@
     <div class="options" *ngIf="showOptions" [style.width]="mapSize + 'px'" [style.height]="mapSize / 2 + 'px'"
         [ngClass]="optionsStyle">
         <div class="title-deco">
-            <h2>{{post.title}}</h2>
+            <h2>{{visualPost.title}}</h2>
         </div>
-        <h4>{{post.description}}</h4>
+        <h4>{{visualPost.description}}</h4>
         <div>
             <div class="opt">
                 <div>
                     <button class="btnDetails" (click)="goToDetails()">Detalhes</button>
                 </div>
                 <div class="opt">
-                    {{post.likes}}
+                    {{visualPost.likes}}
                     <mat-icon>thumb_up</mat-icon>
 
                     {{post.views}}

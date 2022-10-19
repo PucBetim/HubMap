@@ -18,8 +18,6 @@ export class LandingComponent implements OnInit {
       this.resizeMapDisplay(300);
     else if (window.innerWidth > 800 && window.innerWidth < 1201 && this.blocksSize != 200)
       this.resizeMapDisplay(200);
-    else if (window.innerWidth < 801 && this.blocksSize != 100)
-      this.resizeMapDisplay(100);
   }
 
   public loading: boolean = false;
