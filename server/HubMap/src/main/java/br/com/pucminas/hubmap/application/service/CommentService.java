@@ -29,7 +29,7 @@ public class CommentService {
 			Comment dbComment = commentRepository.findById(newComment.getId()).orElseThrow();
 			AppUser loggedUser = appUserRepository.findByEmail(SecurityUtils.getLoggedUserEmail());
 			
-			if(!canEdit(newComment, loggedUser)) {
+			if(!canEdit(dbComment, loggedUser)) {
 				return null;
 			}
 			
