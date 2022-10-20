@@ -1,7 +1,7 @@
 package br.com.pucminas.hubmap.domain.comment;
 
-import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,8 +16,8 @@ public interface CommentRepository extends PagingAndSortingRepository<Comment, I
 	@Query("SELECT c FROM Comment c WHERE c.post.id = ?1 AND c.post.author.email = ?#{principal}")
 	Page<Comment> findByPost(Integer postId, Pageable pageable);
 	
-	@Query("SELECT c FROM Comment c WHERE c.repliedTo.id = ?1")
-	List<Comment> findByRepliedTo(@Param("rootId") Integer rootId);
+	@Query("SELECT c.id FROM Comment c WHERE c.repliedTo.id = ?1")
+	Set<Integer> findByRepliedTo(@Param("rootId") Integer rootId);
 	
 	@Query("SELECT c FROM Comment c WHERE c.post.id = ?1 AND c.post.isPrivate = false")
 	Page<Comment> findByPostIfPublic(Integer postId, Pageable pageable);

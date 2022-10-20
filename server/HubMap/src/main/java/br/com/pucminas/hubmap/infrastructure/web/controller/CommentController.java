@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.pucminas.hubmap.application.service.CommentRepliedToException;
 import br.com.pucminas.hubmap.application.service.CommentService;
 import br.com.pucminas.hubmap.domain.comment.Comment;
 import br.com.pucminas.hubmap.domain.comment.CommentRepository;
@@ -93,13 +92,17 @@ public class CommentController {
 	}
 	
 	@DeleteMapping("/{id}")
-	public ResponseEntity<List<Comment>> deleteById(@PathVariable Integer id) {
-		try {
-			commentService.delete(id);
-			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-		} catch (CommentRepliedToException e) {
-			return new ResponseEntity<>(e.getAssociatedComments(), HttpStatus.CONFLICT);
+	public ResponseEntity<RestResponse> deleteById(@PathVariable Integer id) {
+		boolean deleted = commentService.delete(id);
+		HttpStatus status = HttpStatus.NO_CONTENT;
+		RestResponse response = null;
+		
+		if(!deleted) {
+			status = HttpStatus.BAD_REQUEST;
+			response = RestResponse.fromNormalResponse("O comentário não foi encontrado ou você não possui permissão para deletá-lo.", id.toString());
 		}
+		
+		return new ResponseEntity<>(response, status);
 	}
 	
 	@PostMapping(path = "")

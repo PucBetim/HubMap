@@ -64,6 +64,8 @@ public class Comment implements Serializable {
 	@JsonFormat(pattern = "MM-dd-yyyy HH:mm:ss")
 	private LocalDateTime timestamp;
 
+	private Boolean edited;
+	
 	//TODO Remove all constructors
 	public Comment(Post post, String content, AppUser author, Comment repliedTo) {
 		this.post = post;
@@ -80,6 +82,7 @@ public class Comment implements Serializable {
 	public void initializeComment() {
 		likes = 0;
 		dislikes = 0;
+		edited = false;
 		setTimestampNow();
 	}
 
