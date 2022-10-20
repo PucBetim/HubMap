@@ -27,7 +27,12 @@ public class CommentService {
 
 		if (newComment.getId() != null) {
 			Comment dbComment = commentRepository.findById(newComment.getId()).orElseThrow();
-
+			AppUser loggedUser = appUserRepository.findByEmail(SecurityUtils.getLoggedUserEmail());
+			
+			if(!canEdit(newComment, loggedUser)) {
+				return null;
+			}
+			
 			newComment.setAuthor(dbComment.getAuthor());
 			newComment.setPost(dbComment.getPost());
 			newComment.setLikes(dbComment.getLikes());
@@ -39,7 +44,23 @@ public class CommentService {
 
 		return commentRepository.save(newComment);
 	}
+	
+	private boolean canEdit(Comment comment, AppUser author) {
+		if(comment == null || author == null) {
+			return false;
+		}
+		
+		return comment.getAuthor() == author;
+	}
 
+	private boolean canDelete(Comment comment, AppUser author) {
+		if(comment == null || author == null) {
+			return false;
+		}
+		
+		return comment.getAuthor() == author || comment.getPost().getAuthor() == author;
+	}
+	
 	@Transactional
 	public boolean delete(Integer commentId) {
 		Optional<Comment> optComment = commentRepository.findById(commentId);
@@ -52,7 +73,7 @@ public class CommentService {
 
 		Comment dbComment = optComment.get();
 
-		if (dbComment.getAuthor() != loggedUser && dbComment.getPost().getAuthor() != loggedUser) {
+		if (!canDelete(dbComment, loggedUser)) {
 			return false;
 		}
 

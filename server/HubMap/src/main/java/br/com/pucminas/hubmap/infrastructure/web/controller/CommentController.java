@@ -130,17 +130,31 @@ public class CommentController {
 	public ResponseEntity<RestResponse> putComment(
 			@PathVariable Integer id,
 			@RequestBody @Valid Comment newComment) {
+		
+		HttpStatus status = HttpStatus.OK;
+		String msg = null;
+		RestResponse response = null;
+		
 		try {
 			
 			newComment.setId(id);
 			newComment = commentService.save(newComment);
 			
-			RestResponse response = RestResponse.fromNormalResponse("Comentário atualizado com sucesso.", newComment.getId().toString());
+			if(newComment == null) {
+				status = HttpStatus.BAD_REQUEST;
+				msg = "O comentário não foi encontrado ou você não possui permissão para editá-lo.";
+			} else {
+				msg = "Comentário atualizado com sucesso.";	
+			}
 			
-			return new ResponseEntity<>(response, HttpStatus.OK);
 		} catch (NoSuchElementException e) {
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+			status = HttpStatus.BAD_REQUEST;
+			msg = "O comentário não foi encontrado ou você não possui permissão para editá-lo.";
 		}
+		
+		response = RestResponse.fromNormalResponse(msg, id.toString());
+		
+		return new ResponseEntity<>(response, status);
 	}
 	
 	@PostMapping("/{id}/likes")
