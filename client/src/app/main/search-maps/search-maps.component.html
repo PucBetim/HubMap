@@ -1,0 +1,25 @@
+<loading *ngIf="loading"></loading>
+<div class="main">
+    <div class="searchContainer ">
+        <div class="titleBar layoutDefaultStyle">
+            <a class="title-deco">Buscar Mapas Mentais</a>
+        </div>
+        <div class="searchBar">
+            <form (ngSubmit)="searchMaps()">
+                <input placeholder="Pesquisar mapas...">
+                <button class="searchIcon" type="submit" mat-icon-button>
+                    <mat-icon>search</mat-icon>
+                </button>
+            </form>
+        </div>
+
+        <div class="resultMaps layoutDefaultStyle">
+            <div class="resultContainer" *ngIf="results">
+                <display-canvas *ngFor="let post of postsResult" [size]="300" [post]="post"></display-canvas>
+            </div>
+        </div>
+        <!-- <div class="resultContainer layoutDefaultStyle" *ngIf="results">
+            <display-canvas *ngFor="let post of postsResult" [size]="300" [post]="post"></display-canvas>
+        </div> -->
+    </div>
+</div>

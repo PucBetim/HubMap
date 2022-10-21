@@ -17,7 +17,7 @@
     min-height: 10vh;
     grid-template-areas:
         'grid1 grid2 grid3 grid4 grid5';
-    grid-template-columns: 25% 15% 15% 15% 30%;
+    grid-template-columns: min-content 15% auto auto 30%;
 
     .toolbar_title {
         grid-area: grid1;
@@ -26,6 +26,24 @@
         a {
             text-decoration: none;
             color: inherit;
+            padding: 0 25px;
+        }
+    }
+
+    .toolbar_search {
+        grid-area: grid2;
+
+        .searchMap {
+            display: flex;
+            justify-content: center;
+            font-size: large;
+            text-decoration: none;
+
+            .mat-icon {
+                height: fit-content;
+                font-size: large;
+                padding: 0 5px;
+            }
         }
     }
 
@@ -62,13 +80,28 @@
         grid-area: grid2;
         position: relative;
     }
+
+    .disabled {
+        color: #77aada;
+        cursor: default;
+        pointer-events: none;
+    }
+
+    .active {
+        color: inherit;
+    }
+
+    .active:hover {
+        transform: scale(1.1);
+        cursor: pointer;
+    }
 }
 
 ::ng-deep .userMenu {
     background-color: #272736;
 
     ::ng-deep .mat-icon {
-        color: #77aada 
+        color: #77aada
     }
 
     span {

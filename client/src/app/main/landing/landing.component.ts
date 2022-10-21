@@ -1,7 +1,9 @@
+import { Router } from '@angular/router';
 import { Post } from 'src/app/core/shared/posts/post';
 import { Component, HostListener, OnInit } from '@angular/core';
 import { PostService } from 'src/app/core/shared/posts/post-blocks.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-landing',
@@ -27,19 +29,25 @@ export class LandingComponent implements OnInit {
   public results: boolean = false;
   public postsResult: Post[];
   public blocksSize: number;
+  public form: FormGroup;
 
-  constructor(private postService: PostService, private snackBar: MatSnackBar,
+  constructor(private postService: PostService, private snackBar: MatSnackBar, private router: Router, private fb: FormBuilder,
+
   ) { }
 
   ngOnInit(): void {
+    this.form = this.fb.group({
+      searchTerm: ['', [Validators.required]],
+    });
+
     this.onResize();
   }
 
   resizeMapDisplay(newSize: number) {
     this.blocksSize = newSize
-    this.results = false;
+    this.loading = true;
     setTimeout(() => {
-      this.results = true;
+      this.loading = false;
     }, 1000)
   }
 

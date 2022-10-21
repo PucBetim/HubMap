@@ -42,29 +42,32 @@
         </div>
     </div>
 </div>
-<div class="search" [style.min-height]="(blocksSize + 200) + 'px'">
+<div class="search" [style.min-height]="(blocksSize + 250) + 'px'">
     <div class="searchBlock">
         <div [ngClass]="searchBarClass">
             <form (ngSubmit)="searchMaps()">
-                <input placeholder="Pesquisar mapas...">
+                <input placeholder="Pesquisar mapas..." [formControl]="form.controls['searchTerm']">
                 <button class="searchIcon" type="submit" mat-icon-button>
                     <mat-icon>search</mat-icon>
                 </button>
             </form>
+            <a class="moreMaps" *ngIf="results" href="/search">
+                Pesquisar mais mapas
+            </a>
         </div>
     </div>
 
     <div class="resultBlock layoutDefaultStyle">
         <div [ngClass]="resultDivClass">
-            <div class="spinnerContainer" *ngIf="!results" [style.height.px]="blocksSize">
+            <div class="spinnerContainer" *ngIf="loading" [style.height.px]="blocksSize">
                 <mat-spinner></mat-spinner>
             </div>
-            <div *ngIf="results" class="resultContainer">
-                <display-canvas [size]="blocksSize" [post]="post" *ngFor="let post of postsResult"></display-canvas>
-            </div>
-            <div *ngIf="postsResult?.length == 0" class="resultContainer">
-                Não foi encontrado nenhum mapa!
+            <div *ngIf="!loading && results" class="resultContainer">
+                <display-canvas [size]="blocksSize" [post]="post" *ngFor="let post of postsResult">
+                </display-canvas>
+                <div *ngIf="postsResult?.length == 0" class="resultContainer">
+                    Não foi encontrado nenhum mapa!
+                </div>
             </div>
         </div>
     </div>
-</div>

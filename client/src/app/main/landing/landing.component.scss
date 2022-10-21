@@ -147,6 +147,19 @@
                 color: #272736;
             }
         }
+
+        .moreMaps {
+            display: flex;
+            align-content: center;
+            justify-content: center;
+            color: inherit;
+            color: #236099;
+        }
+
+        .moreMaps:hover {
+            color: #77aada;
+            cursor: pointer;
+        }
     }
 
     .resultBlock {
@@ -180,9 +193,10 @@
             }
         }
 
-        .spinnerContainer{
+        .spinnerContainer {
             width: 100%;
-            mat-spinner{
+
+            mat-spinner {
                 margin: auto;
                 top: 50%;
                 transform: translateY(-50%);

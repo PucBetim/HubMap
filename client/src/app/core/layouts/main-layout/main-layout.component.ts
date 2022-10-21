@@ -9,13 +9,14 @@ import { Component, OnInit } from '@angular/core';
 export class MainLayoutComponent implements OnInit {
 
   public user: any;
-  constructor(private router: Router) { }
+
+  constructor(public router: Router) { }
 
   ngOnInit(): void {
     this.user = JSON.parse(sessionStorage.getItem('hubmap.user')!);
   }
 
-  configUser(){
+  configUser() {
     this.router.navigate(["/session/settings"])
   }
 

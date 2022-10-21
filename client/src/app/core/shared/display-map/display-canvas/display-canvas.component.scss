@@ -7,6 +7,10 @@
         0 1px 5px 0 rgba(0, 0, 0, 0.12);
 }
 
+.optionMode {
+    cursor: pointer;
+}
+
 .canvas {
     border: solid #ffffff 15px;
     position: relative;
@@ -22,6 +26,7 @@
         right: 15px;
         z-index: 10;
         cursor: pointer;
+
         mat-icon {
             transform: scale(2);
             color: rgba(2, 2, 2, 0.4);
@@ -60,9 +65,17 @@
 }
 
 .opt {
-    display: flex;
-    justify-content: space-around;
-    margin-bottom: 5px;
+    display: grid;
+    grid-template-areas:
+        'grid1 grid2 grid3 grid4 grid5 grid6 grid7 grid8';
+    grid-template-columns: min-content min-content 20% min-content min-content 20% min-content min-content;
+    align-content: center;
+
+    mat-icon {
+        margin: 0 auto;
+        padding: 0 5px;
+        height: fit-content;
+    }
 }
 
 .hover {

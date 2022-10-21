@@ -25,6 +25,7 @@ export class DisplayCanvasComponent implements OnInit {
 
   public zoomed: boolean = false;
   public result: boolean = false;
+  public optionsClass: string[] = [];
 
   constructor(
     private getLimitPoints: GetLimitPoints,
@@ -33,6 +34,7 @@ export class DisplayCanvasComponent implements OnInit {
 
   ngOnInit(): void {
     this.mapSize = this.size;
+    if (this.showOptions) this.optionsClass = ['optionMode']
     this.loadCanvas();
   }
 
@@ -42,7 +44,7 @@ export class DisplayCanvasComponent implements OnInit {
     if (this.visualPost.map) {
       this.result = true;
       var limit = this.getLimitPoints.getClosestFartest(this.visualPost.map)
-      
+
       this.closestPoint = limit.closestPoint;
       this.farestPoint = limit.farestPoint;
 
@@ -74,7 +76,8 @@ export class DisplayCanvasComponent implements OnInit {
   }
 
   goToDetails() {
-    this.router.navigateByUrl(`/details/${this.post.id}/${this.post.author.id}`);
+    if (this.showOptions)
+      this.router.navigateByUrl(`/details/${this.post.id}/${this.post.author.id}`);
   }
 
   zoom(zoom: boolean) {

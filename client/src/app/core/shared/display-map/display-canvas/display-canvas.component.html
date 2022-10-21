@@ -1,5 +1,6 @@
-<div class=" container" (mouseenter)="optionsStyle=['hover']" (mouseleave)="optionsStyle=[]" *ngIf="result"
-    [style.max-width]="mapSize + 15 + 'px'" [style.max-height]="mapSize + 15 + 'px'">
+<div (click)="goToDetails()" [ngClass]="optionsClass" class="container" (mouseenter)="optionsStyle=['hover']"
+    (mouseleave)="optionsStyle=[]" *ngIf="result" [style.max-width]="mapSize + 15 + 'px'"
+    [style.max-height]="mapSize + 15 + 'px'">
 
     <div class="canvas" #canvas [style.width]="mapSize + 'px'" [style.height]="mapSize + 'px'">
 
@@ -26,15 +27,27 @@
         <h4>{{visualPost.description}}</h4>
         <div>
             <div class="opt">
-                <div>
-                    <button class="btnDetails" (click)="goToDetails()">Detalhes</button>
-                </div>
-                <div class="opt">
-                    {{visualPost.likes}}
+                <div style="grid-area: grid1;">
                     <mat-icon>thumb_up</mat-icon>
 
-                    {{post.views}}
+                </div>
+                <div style="grid-area: grid2;"> {{visualPost.likes}}
+
+                </div>
+                <div style="grid-area: grid4;">
+                    <mat-icon>thumb_down</mat-icon>
+                </div>
+                <div style="grid-area: grid5;">
+                    {{visualPost.dislikes}}
+
+                </div>
+
+                <div style="grid-area: grid7;">
                     <mat-icon>visibility</mat-icon>
+                </div>
+                <div style="grid-area: grid8;">
+                    {{visualPost.views}}
+
                 </div>
             </div>
         </div>

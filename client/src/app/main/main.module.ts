@@ -15,9 +15,10 @@ import { SharedModule } from './../core/shared/shared.module';
 import { LandingComponent } from './landing/landing.component';
 import { CommentComponent } from './comment/comment.component';
 import { PostDetailsComponent } from './post-details/post-details.component';
+import { SearchMapsComponent } from './search-maps/search-maps.component';
 
 @NgModule({
-  declarations: [LandingComponent, PostDetailsComponent, CommentComponent],
+  declarations: [LandingComponent, PostDetailsComponent, CommentComponent, SearchMapsComponent],
   imports: [
     CommonModule,
     RouterModule.forChild(MainRoutes),

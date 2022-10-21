@@ -2,6 +2,12 @@
     <div class="container">
         <div class="toolbar">
             <div class="toolbar_title layoutDefaultStyle"> <a href="">HubMap</a></div>
+            <div class="toolbar_search">
+                <a href="search" class="searchMap"
+                    [ngClass]="{'disabled' : router.url == '/search', 'active' : router.url != '/search'}">
+                    Buscar Mapas <mat-icon>search</mat-icon>
+                </a>
+            </div>
             <div class="toolbar_user">
                 <div class="layoutDefaultStyle" #userNotLogged *ngIf="!user">
                     <button routerLink="session/signin">Login</button>
