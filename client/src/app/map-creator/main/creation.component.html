@@ -55,7 +55,7 @@
     </div>
     <drag-scroll [drag-scroll-disabled]="this.blockSelected" scrollbar-hidden="true" class="containerCanvas" >
         <div>
-            <div class="canvas" #canvas [style.zoom]="containerCanvasZoom + '%'">
+            <div class="canvas" #canvas>
                 <block (setDragEvent)="setDrag($event)" (selectBlockEvent)="selectBlock($event)"
                     (unselectBlockEvent)="unselectBlock()" (saveProgressEvent)="saveProgress()"
                     *ngFor="let block of post.map" [block]="block" [rootMap]="map">

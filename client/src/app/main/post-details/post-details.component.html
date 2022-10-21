@@ -7,8 +7,14 @@
     </div>
 
     <div class="detailsContainer layoutDefaultStyle">
-        <div class="deco ">
-            <p>Detalhes</p>
+        <div class="titleDiv">
+            <a class="deco">Detalhes</a>
+            <a class="pushRight privacy" *ngIf="post.private">
+                <mat-icon>lock</mat-icon> Privado
+            </a>
+            <a class="pushRight privacy" *ngIf="!post.private">
+                <mat-icon>lock_open</mat-icon> Público
+            </a>
         </div>
         <br>
         <div class="details">
@@ -32,11 +38,11 @@
                     <button class="btn-icon" (click)="downloadImage()">Baixar Mapa <mat-icon style="color: white;">
                             download</mat-icon></button>
                 </div>
-                <!-- <div *ngIf="!currentUserPost && loggedUser">
+                <div *ngIf="!currentUserPost">
                     <button class="btn-icon" (click)="forkPost()">Fork <mat-icon style="color: white;"> call_split
                         </mat-icon>
                     </button>
-                </div> -->
+                </div>
                 <div class="action">
                     <a>
                         <mat-icon [ngClass]="likeClass" (click)="likePost()">thumb_up</mat-icon> {{post.likes}}

@@ -79,7 +79,6 @@ export class PostDetailsComponent implements OnInit {
       this.postService.getPostById(id).subscribe(
         {
           next: result => {
-            console.log(result.body)
             this.post = result.body;
             this.loading = false;
             this.viewPost();
@@ -195,7 +194,6 @@ export class PostDetailsComponent implements OnInit {
   }
 
   commentPost() {
-    console.log(this.loggedUser)
     if (!this.loggedUser) {
       this.router.navigate(['session/create-account']);
       return;

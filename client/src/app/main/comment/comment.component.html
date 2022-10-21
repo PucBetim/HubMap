@@ -21,7 +21,7 @@
                 </button>
             </div>
         </div>
-        
+
         <br>
 
         <div class="commentActions">
@@ -43,7 +43,7 @@
 
             <div class="commentInfo pushRight">
                 Postado em {{comment.timestamp | date: 'dd/MM/yyyy'}}
-                Por {{comment.author.nick}}
+                Por {{comment.author.nick}} <a *ngIf="comment.edited">(Editado)</a>
             </div>
 
             <div *ngIf="currentUserComment" class="optionIcon">

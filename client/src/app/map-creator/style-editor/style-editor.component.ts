@@ -82,7 +82,6 @@ export class StyleEditorComponent implements OnInit {
 
   changeColor(color: string) {
     this.block.backgroundColor = color;
-    console.log(color)
     this.styleAndSave();
   }
 

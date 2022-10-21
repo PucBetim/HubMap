@@ -62,6 +62,9 @@
             <div *ngIf="results" class="resultContainer">
                 <display-canvas [size]="blocksSize" [post]="post" *ngFor="let post of postsResult"></display-canvas>
             </div>
+            <div *ngIf="postsResult?.length == 0" class="resultContainer">
+                Não foi encontrado nenhum mapa!
+            </div>
         </div>
     </div>
 </div>

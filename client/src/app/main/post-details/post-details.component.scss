@@ -13,13 +13,27 @@
 
 }
 
-.deco {
+.titleDiv {
     position: relative;
-    font-size: 1.5em;
-    font-weight: bolder;
-    color: #77aada;
     float: left;
     height: 5%;
+    display: flex;
+
+    .deco {
+        font-size: 1.5em;
+        font-weight: bolder;
+        color: #77aada;
+        float: left;
+    }
+
+    .privacy {
+        color: #77aada;
+
+        mat-icon{
+            font-size: medium;
+            height: fit-content;
+        }
+    }
 }
 
 .btn {

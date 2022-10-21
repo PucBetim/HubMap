@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SessionService } from '../session.service';
 import { Router } from '@angular/router';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-signin',
@@ -20,6 +21,7 @@ export class SigninComponent implements OnInit {
     private fb: FormBuilder,
     private sessionService: SessionService,
     private router: Router,
+    private snackBar: MatSnackBar
   ) { }
 
   ngOnInit(): void {
@@ -57,8 +59,9 @@ export class SigninComponent implements OnInit {
           this.router.navigate(['/']);
         },
         error: error => {
-          console.log(error)
-        }
+          this.snackBar.open("Falha ao fazer login! Tente novamente mais tarde.", "Ok");
+
+      }
       })
-  }
+}
 }

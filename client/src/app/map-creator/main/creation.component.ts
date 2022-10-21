@@ -28,15 +28,6 @@ export class CreationComponent implements OnInit, ComponentCanDeactivate {
     return !this.unsavedChanges
   }
 
-  // @HostListener("wheel", ["$event"])
-  // onScroll(event: WheelEvent) {
-  //   event.preventDefault();
-  //   if (event.ctrlKey == true && event.target == this.canvas.nativeElement) 
-  //     this.containerCanvasZoom += (event.deltaY * -0.1);
-  //   console.log(this.containerCanvasZoom)
-  // }
-  public containerCanvasZoom = 100;
-
   public post = new Post;
 
   public selectedBlock: Block;
@@ -97,9 +88,9 @@ export class CreationComponent implements OnInit, ComponentCanDeactivate {
     this.carregando = true;
     this.postService.getPostBlocks(post.id).subscribe({
       next: result => {
-        post.map = [result.body]
-        if (post.map)
-          this.post = post;
+        if (result.body != null)
+          post.map = [result.body]
+        this.post = post;
         this.savedProgress = [JSON.parse(JSON.stringify(this.post.map))];
         this.carregando = false;
       }, error: error => {

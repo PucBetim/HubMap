@@ -33,9 +33,7 @@ export class DisplayCanvasComponent implements OnInit {
 
   ngOnInit(): void {
     this.mapSize = this.size;
-    if (this.post.map[0]) {
-      this.loadCanvas();
-    }
+    this.loadCanvas();
   }
 
   loadCanvas() {
@@ -44,9 +42,10 @@ export class DisplayCanvasComponent implements OnInit {
     if (this.visualPost.map) {
       this.result = true;
       var limit = this.getLimitPoints.getClosestFartest(this.visualPost.map)
-
+      
       this.closestPoint = limit.closestPoint;
       this.farestPoint = limit.farestPoint;
+
       var PostOriginalWidth = this.farestPoint.x - this.closestPoint.x;
       var PostOriginalHeight = this.farestPoint.y - this.closestPoint.y;
 
@@ -54,7 +53,6 @@ export class DisplayCanvasComponent implements OnInit {
       var heightRatio = (this.mapSize - 10) / PostOriginalHeight;
 
       this.resizeRatio = widthRatio < heightRatio ? widthRatio : heightRatio;
-
       this.resizeBlocks(this.visualPost.map);
     }
   }

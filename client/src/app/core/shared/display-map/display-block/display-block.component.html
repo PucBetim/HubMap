@@ -12,10 +12,10 @@
 
     <div class="textContainer" [style.width.px]="block.size.width" [style.height.px]="block.size.height"
         [style.border-radius]="block.borderRadius + 'px'">
-        <div class="textDiv" ngDefaultControl [style.font-style]="block.fontStyle"
+        <div class="textDiv" [(contenteditableModel)]="block.content" [style.font-style]="block.fontStyle"
             [style.font-weight]="block.fontWeight" [style.text-decoration]="block.textDecoration"
             [style.color]="block.fontColor" [style.font-size]="block.fontSize + 'px'"
-            [style.text-align]="block.textAlign" [textContent]="block.content"
+            [style.text-align]="block.textAlign" 
             [style.border-radius]="block.borderRadius + 'px'">
             {{block.content}}
         </div>

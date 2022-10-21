@@ -7,6 +7,7 @@ import { User } from '../models/user';
 import { SessionService } from '../session.service';
 import { ConfigService } from 'src/app/core/services/config.service';
 import { Post } from 'src/app/core/shared/posts/post';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-user-settings',
@@ -24,7 +25,8 @@ export class UserSettingsComponent implements OnInit {
 
   constructor(private fb: FormBuilder,
     private sessionService: SessionService, private postService: PostService,
-    public router: Router
+    public router: Router,
+    private snackBar: MatSnackBar
   ) { }
 
   ngOnInit(): void {
@@ -58,7 +60,7 @@ export class UserSettingsComponent implements OnInit {
           this.posts = result.body;
         },
         error: error => {
-          console.log(error)
+          this.snackBar.open("Falha ao obter mapas! Tente novamente mais tarde.", "Ok");
         }
       })
     this.results = true;
@@ -74,7 +76,6 @@ export class UserSettingsComponent implements OnInit {
         p.name = form.name;
         p.nick = form.nick;
         p.email = user.email!;
-        console.log(p)
         this.sessionService.updateUser(p)
           .subscribe({
             next: result => {

@@ -1,18 +1,19 @@
-import { AfterViewInit, Component, ElementRef, Inject, OnInit, ViewChild } from '@angular/core';
+import { AfterContentInit, Component, ElementRef, Inject, OnInit, ViewChild } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import html2canvas from 'html2canvas';
-import { colors } from 'src/app/core/shared/colors';
 import { MatMenuTrigger } from '@angular/material/menu';
+
+import html2canvas from 'html2canvas';
+
+import { colors } from 'src/app/core/shared/colors';
 import { GetLimitPoints } from 'src/app/map-creator/getLimitPoints';
 import { Block, Position } from '../../posts/post';
-import { PostService } from '../../posts/post-blocks.service';
 
 @Component({
   selector: 'visual-canvas',
   templateUrl: './visual-canvas.component.html',
   styleUrls: ['./visual-canvas.component.scss']
 })
-export class VisualCanvasComponent implements OnInit, AfterViewInit {
+export class VisualCanvasComponent implements OnInit, AfterContentInit {
 
   @ViewChild('canvas') canvas: ElementRef;
   @ViewChild('showcase') showcase: ElementRef;
@@ -47,7 +48,7 @@ export class VisualCanvasComponent implements OnInit, AfterViewInit {
     this.height = this.farestPoint.y - this.closestPoint.y + this.spacingImageBorder + 14; // 14 = Considerar padding e borda
   }
 
-  ngAfterViewInit(): void {
+  ngAfterContentInit(): void {
     this.generateImage()
   }
 

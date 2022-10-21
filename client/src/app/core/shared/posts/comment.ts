@@ -6,6 +6,7 @@ export class Comment {
     likes: number;
     repliedTo: any;
     timestamp: Date;
+    edited: boolean;
 }
 
 export class Author {
