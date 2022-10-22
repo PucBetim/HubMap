@@ -58,7 +58,7 @@ public class HistogramService {
 		this.parameterRepository = parameterRepository;
 	}
 
-	public Search generateSearchHistogram(Search search) {
+	public Histogram generateSearchHistogram(Search search) {
 		String sentence = search.getSearch();
 
 		List<String> bOW;
@@ -76,9 +76,8 @@ public class HistogramService {
 		Histogram hist = initializeSearchHistogram(bOW);
 		hist.setInitialized(true);
 		hist = calculateTfIdf(hist, totalElements);
-		search.setHistogram(hist);
 
-		return search;
+		return hist;
 	}
 
 	@Transactional

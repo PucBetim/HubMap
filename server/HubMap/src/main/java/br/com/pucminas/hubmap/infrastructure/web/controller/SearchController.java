@@ -1,5 +1,6 @@
 package br.com.pucminas.hubmap.infrastructure.web.controller;
 
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 import br.com.pucminas.hubmap.application.service.SearchService;
 import br.com.pucminas.hubmap.domain.indexing.search.Search;
 import br.com.pucminas.hubmap.infrastructure.web.RestResponse;
-import br.com.pucminas.hubmap.utils.StringUtils;
 
 @RestController
 @RequestMapping(path = "/hubmap/public/search")
@@ -30,15 +30,15 @@ public class SearchController {
 		RestResponse response;
 		
 		try {			
-			response = searchService.search(search);
+			List<Integer> posts = searchService.search(search);
 			
-			response.setMessage("Pesquisa realizada com sucesso.");
-			
-			if(StringUtils.isBlank(response.getDataId())) {
+			if(!posts.isEmpty()) {
+				status = HttpStatus.OK;
+				msg = "Pesquisa realizada com sucesso.";
+				response = RestResponse.fromSearchResult(msg, posts);
+			} else {
 				response = null;
 				status = HttpStatus.NO_CONTENT;
-			} else {
-				status = HttpStatus.OK;
 			}
 		} catch (InterruptedException ie) {
 			msg = "Ocorreu um erro interno durante o cálculo de similaridade.";

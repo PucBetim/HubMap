@@ -7,6 +7,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ExecutionException;
+import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -20,7 +21,6 @@ import br.com.pucminas.hubmap.domain.indexing.HistogramItemRepository;
 import br.com.pucminas.hubmap.domain.indexing.HistogramRepository;
 import br.com.pucminas.hubmap.domain.indexing.NGram;
 import br.com.pucminas.hubmap.domain.indexing.search.Search;
-import br.com.pucminas.hubmap.infrastructure.web.RestResponse;
 import br.com.pucminas.hubmap.utils.PageableUtils;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -46,16 +46,19 @@ public class SearchService {
 	}
 
 	@Transactional(readOnly = true)
-	public RestResponse search(Search search) throws InterruptedException, ExecutionException {
+	public List<Integer> search(Search search) throws InterruptedException, ExecutionException {
 
 		Pageable pageable = PageableUtils.getPageableFromParameters(0, PAGE_SIZE);
-		List<Integer> posts = new ArrayList<>();
 		List<HistogramSearch> histogramsSimilarity = new ArrayList<>();
+		
 		StopWatch measure = new StopWatch();
+		
 		measure.start("GenerateSearchHist");
-		search = histogramService.generateSearchHistogram(search);
+		Histogram searchHist = histogramService.generateSearchHistogram(search);
+		search.setHistogram(searchHist);
+		
 		measure.stop();
-		final Search searchFinal = search;
+
 		measure.start("CalculateSimilarity");
 		Page<Histogram> histograms = histogramRepository.findByInitilized(true, pageable);
 
@@ -66,7 +69,7 @@ public class SearchService {
 					double similarity = 0.0;
 					
 					try {
-						similarity = compareHistograms(searchFinal.getHistogram(), histogram);
+						similarity = compareHistograms(search.getHistogram(), histogram);
 					} catch (InterruptedException | ExecutionException e) {
 						throw new RuntimeException(e);
 					}
@@ -94,14 +97,12 @@ public class SearchService {
 					return -1 * o1.getSimilarity().compareTo(o2.getSimilarity());
 				}
 			});
-
-			for (HistogramSearch histSearch : histogramsSimilarity) {
-				posts.add(histSearch.getPostId());
-			}
 		}
-		
+			
 		System.out.println(measure.prettyPrint());
-		return RestResponse.fromSearchResult(null, posts);
+		return histogramsSimilarity.stream()
+				.map(h -> h.getPostId())
+				.collect(Collectors.toList());
 	}
 
 	private double compareHistograms(Histogram hist1, Histogram hist2) throws InterruptedException, ExecutionException {
