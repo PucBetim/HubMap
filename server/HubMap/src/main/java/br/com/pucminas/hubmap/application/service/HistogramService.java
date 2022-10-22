@@ -115,7 +115,7 @@ public class HistogramService {
 	}
 
 	@Transactional
-	@Scheduled(initialDelay = 10 * 1000, fixedDelay = 10 * 1500)
+	@Scheduled(initialDelay = 10 * 1000, fixedDelay = 8 * 1000)
 	protected void refreshHistograms() {
 		Parameter newWords = parameterRepository.findByTableName(ParametersTableContants.NEW_WORDS_IN_VOCABULARY).get(0);
 		boolean hasNewWords = Boolean.valueOf(newWords.getValueRegistry());
@@ -126,7 +126,7 @@ public class HistogramService {
 		
 		Pageable pageable = PageableUtils.getPageableFromParameters(0, 10);
 		Page<Histogram> histograms = histogramRepository.findByInitilized(true, pageable);
-		
+		//TODO Fix removal of Histogram Item, to delete it from database
 		while (true) {
 			for (Histogram histogram : histograms) {
 				if (histogram.getNeedRecount()) {
@@ -175,31 +175,30 @@ public class HistogramService {
 	}
 
 	public Histogram calculateTfIdf(Histogram histogram, long totalElements) {
-		double tf;
-		double idf;
-		int vocabSize = vocabularyService.getVocabulary().getOficialSize();
 
-		for (HistogramItem item : histogram.getHistogram()) {
-			tf = calculateTf(vocabSize, item.getCount());
-			idf = calculateIdf(item.getKey().getId(), totalElements);
-			item.setTfidf(tf * idf);
-		}
+		histogram.getHistogram().parallelStream()
+			.forEach(item -> {
+				double tf = calculateTf(item.getCount());
+				double idf = calculateIdf(item.getKey().getId(), totalElements);
+				item.setTfidf(tf * idf);
+			});
 
 		return histogram;
 	}
 
-	private double calculateTf(int vocabSize, double count) {
-		return count / vocabSize;
+	private double calculateTf(int count) {
+		return 1 + Math.log(count);
 	}
 
 	private double calculateIdf(long nGramId, long totalElements) {
-		double counter = 0.0;
+		int counter = 0;
 
 		counter = histogramItemRepository.countHistogramsOfNgramId(nGramId);
 
-		counter = counter == 0.0 ? 1.0 : counter;
+		counter = counter == 0 ? 1 : counter;
 
-		return 1.0 + Math.log(totalElements / counter);
+		//TODO Check this formula with Professor
+		return 1.0 + Math.log(1.0 * totalElements / counter);
 	}
 
 	private Histogram initializeSearchHistogram(List<String> bagOfWords) {
@@ -277,6 +276,10 @@ public class HistogramService {
 				}
 			}
 		}
+		
+		Histogram dbHistogram = calculateTfIdf(hist,
+				histogramRepository.findByInitilized(true, PageableUtils.getPageableFromParameters(0, 1)).getTotalElements());
+		histogramRepository.save(dbHistogram);
 
 		return statusReturn;
 	}

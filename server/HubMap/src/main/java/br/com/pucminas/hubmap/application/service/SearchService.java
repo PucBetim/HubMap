@@ -6,22 +6,21 @@ import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.scheduling.annotation.Async;
-import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StopWatch;
 
 import br.com.pucminas.hubmap.domain.indexing.Histogram;
 import br.com.pucminas.hubmap.domain.indexing.HistogramItem;
+import br.com.pucminas.hubmap.domain.indexing.HistogramItemRepository;
 import br.com.pucminas.hubmap.domain.indexing.HistogramRepository;
 import br.com.pucminas.hubmap.domain.indexing.NGram;
 import br.com.pucminas.hubmap.domain.indexing.search.Search;
-import br.com.pucminas.hubmap.infrastructure.web.RestResponseSearch;
+import br.com.pucminas.hubmap.infrastructure.web.RestResponse;
 import br.com.pucminas.hubmap.utils.PageableUtils;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -36,51 +35,58 @@ public class SearchService {
 
 	private HistogramService histogramService;
 
-	// private VocabularyService vocabularyService;
+	private HistogramItemRepository histogramItemRepository;
 
-	public SearchService(HistogramRepository histogramRepository, HistogramService histogramService) {
+	public SearchService(HistogramRepository histogramRepository, HistogramService histogramService,
+			HistogramItemRepository histogramItemRepository) {
+		super();
 		this.histogramRepository = histogramRepository;
 		this.histogramService = histogramService;
+		this.histogramItemRepository = histogramItemRepository;
 	}
 
 	@Transactional(readOnly = true)
-	public RestResponseSearch search(Search search) throws InterruptedException, ExecutionException {
+	public RestResponse search(Search search) throws InterruptedException, ExecutionException {
 
-		Integer currentPage = 0;
-		int resultPageSize = 5;
-
-		if (search.getOldSearch() != null) {
-			currentPage = search.getOldSearch().getPage();
-			resultPageSize = search.getOldSearch().getSize();
-		}
-
-		Pageable pageable = PageableUtils.getPageableFromParameters(currentPage, PAGE_SIZE);
+		Pageable pageable = PageableUtils.getPageableFromParameters(0, PAGE_SIZE);
 		List<Integer> posts = new ArrayList<>();
 		List<HistogramSearch> histogramsSimilarity = new ArrayList<>();
-
+		StopWatch measure = new StopWatch();
+		measure.start("GenerateSearchHist");
 		search = histogramService.generateSearchHistogram(search);
-
+		measure.stop();
+		final Search searchFinal = search;
+		measure.start("CalculateSimilarity");
 		Page<Histogram> histograms = histogramRepository.findByInitilized(true, pageable);
 
 		while (true) {
-			for (Histogram histogram : histograms) {
-				double similarity = compareHistograms(search.getHistogram(), histogram);
+			histograms.stream()
+				.parallel()
+				.forEach(histogram -> {
+					double similarity = 0.0;
+					
+					try {
+						similarity = compareHistograms(searchFinal.getHistogram(), histogram);
+					} catch (InterruptedException | ExecutionException e) {
+						throw new RuntimeException(e);
+					}
 
-				if (similarity > 0.0) {
-					HistogramSearch histSearch = new HistogramSearch();
-					histSearch.setPostId(histogram.getPost().getId());
-					histSearch.setSimilarity(similarity);
-					histogramsSimilarity.add(histSearch);
-				}
-			}
+					if (similarity > 0.0) {
+						HistogramSearch histSearch = new HistogramSearch();
+						histSearch.setPostId(histogram.getPost().getId());
+						histSearch.setSimilarity(similarity);
+						histogramsSimilarity.add(histSearch);
+					}
+				});
 
-			if (histogramsSimilarity.size() < resultPageSize && histograms.hasNext()) {
+			if (histograms.hasNext()) {
 				histograms = histogramRepository.findAll(pageable.next());
 			} else {
 				break;
 			}
 		}
-
+		measure.stop();
+		
 		if (!histogramsSimilarity.isEmpty()) {
 			Collections.sort(histogramsSimilarity, new Comparator<>() {
 				@Override
@@ -93,88 +99,56 @@ public class SearchService {
 				posts.add(histSearch.getPostId());
 			}
 		}
-
-		currentPage = !histograms.isLast() ? histograms.nextPageable().getPageNumber() : null;
-
-		return RestResponseSearch.fromSearchResult(null, posts, resultPageSize, currentPage);
+		
+		System.out.println(measure.prettyPrint());
+		return RestResponse.fromSearchResult(null, posts);
 	}
 
 	private double compareHistograms(Histogram hist1, Histogram hist2) throws InterruptedException, ExecutionException {
 
 		Set<NGram> vocab = joinHistograms(hist1, hist2);
-		CompletableFuture<Double[]> dissimilarityCoefficient = calculateDissimilarityCoefficient(hist1, hist2, vocab);
-
-		return dissimilarityCoefficient.thenApply(coef -> {
-			// TODO Check if I really can change the n value from size of vocabulary to
-			// highest between histograms
-			// int n = Math.max(hist1.getHistogram().size(), hist2.getHistogram().size());
-			int n = vocab.size();
-			double dc = coef[0];
-			double s = coef[1];
-			double t = coef[2];
-
-			return 0.5 * ((s / n) + ((t * s) / (t * s + dc)));
-
-		}).get();
-
+		Double[] dissimilarityCoefficient = calculateDissimilarityCoefficient(hist1, hist2, vocab);
+		
+		int n = vocab.size();
+		double dc = dissimilarityCoefficient[0] / dissimilarityCoefficient[1];
+		double s = dissimilarityCoefficient[2];
+		double t = dissimilarityCoefficient[3];
+		
+		double similarity = 0.5 * ((s / n) + ((t * s) / (t * s + dc)));
+		
+		return similarity;
 	}
-
-	private CompletableFuture<Double[]> calculateDissimilarityCoefficient(Histogram hist1, Histogram hist2,
+	
+	private Double[] calculateDissimilarityCoefficient(Histogram hist1, Histogram hist2,
 			Set<NGram> vocab) {
-
-		CompletableFuture<Double[]> dividend = calculateDissimilarityCoefficientDividendAndT(hist1, hist2, vocab);
-		CompletableFuture<Double[]> divisor = calculateDissimilarityCoefficientDivisorAndS(hist1, hist2, vocab);
-
-		return dividend.thenCompose(fd1Value -> divisor
-				.thenApply(fd2Value -> new Double[] { fd1Value[0] / fd2Value[0], fd2Value[1], fd1Value[1] }));
-	}
-
-	@Async
-	private CompletableFuture<Double[]> calculateDissimilarityCoefficientDivisorAndS(Histogram hist1, Histogram hist2,
-			Set<NGram> vocab) {
-		// Vocabulary vocab = vocabularyService.getVocabulary();
 
 		double divisor = 0.0;
-		double s = 0.0;
+		double dividend = 0.0;
+		double t = 0;
+		double s = 0;
 
 		for (NGram nGram : vocab) {
+			/*HistogramItem item1 = hist1.getItemFromHistogram(nGram);
+			HistogramItem item2 = hist2.getItemFromHistogram(nGram);*/
+			
 			HistogramItem item1 = hist1.getItemFromHistogram(nGram);
-			HistogramItem item2 = hist2.getItemFromHistogram(nGram);
+			HistogramItem item2 = histogramItemRepository.findByKeyAndOwner(nGram, hist2);
 			double tfIdfH1 = item1 != null ? item1.getTfidf() : 0.0;
 			double tfIdfH2 = item2 != null ? item2.getTfidf() : 0.0;
 
 			divisor += tfIdfH1 + tfIdfH2;
-
+			dividend += Math.abs(tfIdfH1 - tfIdfH2);
+			
 			if (tfIdfH1 != 0.0 && tfIdfH2 != 0.0) {
 				s++;
 			}
-		}
-
-		return new AsyncResult<>(new Double[] { divisor * 0.5, s }).completable();
-	}
-
-	@Async
-	private CompletableFuture<Double[]> calculateDissimilarityCoefficientDividendAndT(Histogram hist1, Histogram hist2,
-			Set<NGram> vocab) {
-		// Vocabulary vocab = vocabularyService.getVocabulary();
-
-		double dividend = 0.0;
-		double t = 0.0;
-
-		for (NGram nGram : vocab) {
-			HistogramItem item1 = hist1.getItemFromHistogram(nGram);
-			HistogramItem item2 = hist2.getItemFromHistogram(nGram);
-			double tfIdfH1 = item1 != null ? item1.getTfidf() : 0.0;
-			double tfIdfH2 = item2 != null ? item2.getTfidf() : 0.0;
-
-			dividend += Math.abs(tfIdfH1 - tfIdfH2);
-
+			
 			if (tfIdfH1 != 0.0 || tfIdfH2 != 0.0) {
 				t++;
 			}
 		}
 
-		return new AsyncResult<>(new Double[] { dividend, t }).completable();
+		return new Double[] { divisor * 0.5, dividend, s, t };
 	}
 
 	private Set<NGram> joinHistograms(Histogram hist1, Histogram hist2) {
