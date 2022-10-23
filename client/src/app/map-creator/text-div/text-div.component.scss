@@ -1,0 +1,22 @@
+.textContainer {
+  overflow: hidden;
+  resize: both;
+  min-height: 75px;
+  min-width: 75px;
+}
+
+.textDiv {
+  max-width: 100%;
+  padding: 0;
+  text-align: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  outline: none;
+  line-height: 1em;
+  white-space: pre-wrap;
+
+  top: 50%;
+  transform: translateY(-50%);
+  position: relative;
+}

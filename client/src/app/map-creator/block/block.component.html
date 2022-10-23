@@ -1,0 +1,53 @@
+<line-svg [block]="this.block" [parentBlock]="this.parentBlock" *ngIf="this.parentBlock"></line-svg>
+
+<block (setDragEvent)="setDrag($event)" (selectBlockEvent)="emitSelect($event)" (saveProgressEvent)="emitSaveProgress()"
+    (click)="blockSelected = false" *ngFor="let childBlock of this.block.blocks" [block]="childBlock"
+    [parentBlock]="this.block">
+</block>
+
+<style-editor (styleAndSaveEvent)="onStyleAndSave($event)" [clickInside]="clickInside" [block]="block"
+    *ngIf="blockSelected">
+</style-editor>
+
+<div class="afterImage" cdkDrag cdkDragDisabled="true" cdkDragBoundary=".canvas"
+    [style.background-color]="this.block.backgroundColor"
+    [style.border-color]="this.block.backgroundColor | toneHexColor: -30" [cdkDragFreeDragPosition]="afterImagePosition"
+    [style.width]="afterImageSize + 'px'" [style.height]="afterImageSize + 'px'"></div>
+
+<div class="block" cdkDrag cdkDragBoundary=".canvas" [cdkDragFreeDragPosition]="block.position"
+    (mousedown)="clickInside()" [style.background-color]="block.backgroundColor"
+    [style.border-radius]="block.borderRadius + 'px'">
+
+    <div class="highlighted" *ngIf="blockSelected" [style.border-radius]="block.borderRadius + 'px'"
+        [style.border-color]="block.backgroundColor | toneHexColor: -30">
+
+        <button [style.color]="block.backgroundColor | toneHexColor: -30" matTooltip="Adicionar Bloco Acima"
+            [matTooltipPosition]="'above'" class="addBlockUpIcon" matTooltipClass="tooltip" mat-icon-button
+            (click)="addBlock('above')">
+            <mat-icon>keyboard_arrow_up</mat-icon>
+        </button>
+        <button [style.color]="block.backgroundColor | toneHexColor: -30" matTooltip="Adicionar Bloco a Direita"
+            [matTooltipPosition]="'right'" class="addBlockRightIcon" matTooltipClass="tooltip" mat-icon-button
+            (click)="addBlock('right')">
+            <mat-icon>keyboard_arrow_right</mat-icon>
+        </button>
+        <button [style.color]="block.backgroundColor | toneHexColor: -30" matTooltip="Adicionar Bloco Abaixo"
+            [matTooltipPosition]="'below'" class="addBlockBelowIcon" matTooltipClass="tooltip" mat-icon-button
+            (click)="addBlock('below')">
+            <mat-icon>keyboard_arrow_down</mat-icon>
+        </button>
+        <button [style.color]="block.backgroundColor | toneHexColor: -30" matTooltip="Adicionar Bloco a Esquerda"
+            [matTooltipPosition]="'left'" class="addBlockLeftIcon" matTooltipClass="tooltip" mat-icon-button
+            (click)="addBlock('left')">
+            <mat-icon>keyboard_arrow_left</mat-icon>
+        </button>
+    </div>
+
+    <text-div (resizeFinishedEvent)="emitSaveProgress()" (onResizeEvent)="onResize($event)" [block]="block">
+    </text-div>
+
+    <div class="dragHandle" [style.color]="block.backgroundColor | toneHexColor: -30" (click)="onDrag($event, false)"
+        cdkDragHandle>
+        <mat-icon>drag_indicator</mat-icon>
+    </div>
+</div>

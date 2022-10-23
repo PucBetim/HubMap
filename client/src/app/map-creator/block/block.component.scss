@@ -1,0 +1,87 @@
+
+.block {
+  min-height: fit-content;
+  width: fit-content;
+  padding: 5px;
+  color: rgba(0, 0, 0, 0.87);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  background: #fff;
+  position: absolute;
+  z-index: 1;
+  border: 0;
+  transition: box-shadow 200ms cubic-bezier(0, 0, 0.2, 1);
+  box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2),
+    0 2px 2px 0 rgba(0, 0, 0, 0.14),
+    0 1px 5px 0 rgba(0, 0, 0, 0.12);
+
+    overflow-wrap: break-word;
+  word-wrap: break-word;
+  hyphens: auto;
+}
+
+.afterImage{
+  position: absolute;
+  border-radius: 50%;
+  border: solid 5px;
+}
+
+.dragHandle {
+  position: absolute;
+  top: 0%;
+  right: -30px;
+  pointer-events: stroke;
+  width: 24px;
+  height: 24px;
+}
+
+.darker {
+  color: rgba(0, 0, 0, 0.2);
+}
+
+.highlighted {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  padding: 5px;
+  background-color: transparent;
+  border: 2px dashed;
+  z-index: -1;
+  color: rgba(0, 0, 0, 0.2);
+
+  background: -moz-linear-gradient(top, rgba(30, 87, 153, 0) 0%, rgba(41, 137, 216, 0) 50%, rgba(34, 125, 203, 1) 52%, rgba(125, 185, 232, 1) 100%);
+
+  button {
+    position: absolute;
+    z-index: 1;
+    background-color: transparent;
+  }
+
+  .addBlockUpIcon {
+    top: 0;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -80%);
+  }
+
+  .addBlockRightIcon {
+    right: 0;
+    bottom: 50%;
+    -ms-transform: translate(-50%, 50%);
+    transform: translate(80%, 50%);
+  }
+
+  .addBlockBelowIcon {
+    bottom: 0;
+    -ms-transform: translate(-50%, 50%);
+    transform: translate(-50%, 80%);
+  }
+
+  .addBlockLeftIcon {
+    left: 0;
+    bottom: 50%;
+    -ms-transform: translate(-50%, 50%);
+    transform: translate(-80%, 50%);
+  }
+}

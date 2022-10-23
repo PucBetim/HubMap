@@ -1,0 +1,118 @@
+.main {
+    color: black;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 15px auto;
+    border: solid 1px #316b83;
+    border-radius: 10px;
+    margin: 5px;
+
+    .decoBlock {
+        background-color: #316b83;
+        width: 100%;
+        min-height: 100%;
+        border-radius: 5px 0 0 5px;
+    }
+
+    .content {
+        padding: 1em;
+
+        .commentInfo {
+            color: #316b83;
+            font-size: small;
+            text-align: end;
+        }
+
+        .commentActions {
+            display: flex;
+
+            .action {
+                display: flex;
+                text-align: center;
+                color: #316b83;
+                margin: 0 20px;
+            }
+
+            .rateIcon {
+                align-self: center;
+                height: fit-content;
+                font-size: small;
+                color: #a3b2c2;
+                cursor: pointer;
+            }
+
+            .optionIcon{
+                color: #316b83;
+                cursor: pointer;
+            }
+
+            .rated {
+                color: #234f63;
+                transform: scale(1.5);
+            }
+        }
+
+        .openResponse {
+            font-size: smaller;
+            color: #316b83;
+        }
+
+        .openResponse:hover {
+            font-size: small;
+            cursor: pointer;
+        }
+    }
+}
+
+.repliesPanel {
+    background-color: transparent;
+    box-shadow: none;
+}
+
+.repliesPanel:hover {
+    background-color: transparent;
+}
+
+.replies {
+    grid-column: 2;
+    grid-area: 1;
+    width: auto;
+}
+
+::ng-deep mat-expansion-panel-body {
+    padding: 0
+}
+
+
+
+.EditOrReply {
+    textarea {
+        width: 96%;
+        resize: none;
+        border: none;
+        border-radius: 15px;
+        padding: 2%;
+        box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 10px 0px;
+    }
+
+    .actions {
+        display: flex;
+        width: 100%;
+        flex-direction: row;
+        color: #77aada;
+        font-size: small;
+        text-align: right;
+    }
+}
+
+::ng-deep .optionsMenu {
+    background-color: #272736;
+    overflow: hidden;
+    ::ng-deep .mat-icon {
+        color: #77aada 
+    }
+
+    span {
+        color: #ffffff;
+    }
+}

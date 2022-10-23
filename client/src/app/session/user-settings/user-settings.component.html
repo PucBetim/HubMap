@@ -1,0 +1,46 @@
+<loading *ngIf="carregando"></loading>
+<div class="container">
+    <div class="editAccount layoutDefaultStyle">
+        <div class="deco">
+            Configuração de Conta
+        </div>
+        <br><br>
+        <form [formGroup]="form" (ngSubmit)="editUser()">
+            <div class="inputfield">
+                <mat-form-field>
+                    <mat-label>Apelido</mat-label>
+                    <input matInput [formControl]="form.controls['nick']">
+                    <mat-icon class="icon" matSuffix>edit</mat-icon>
+                </mat-form-field>
+            </div>
+
+            <div class="inputfield">
+                <mat-form-field>
+                    <mat-label>Nome</mat-label>
+                    <input matInput [formControl]="form.controls['name']">
+                    <mat-icon class="icon" matSuffix>edit</mat-icon>
+                </mat-form-field>
+            </div>
+
+            <button class="btn-disabled" mat-raised-button color="primary" type="submit" disabled="true"
+                [disabled]="!form.valid || !form.dirty">Salvar</button>
+        </form>
+        <h2 style="color: #6b6b6b;">Indisponível no momento</h2>
+
+    </div>
+
+    <div class="userMaps layoutDefaultStyle">
+        <div style="display: flex;">
+            <div class="deco">
+                Meus Mapas
+            </div>
+            <div class="pushRight">
+                <button (click)="router.navigate(['/creator'])">Criar Mapa</button>
+            </div>
+        </div>
+        <br><br>
+        <div class="resultContainer" *ngIf="results">
+            <display-canvas *ngFor="let post of posts" [size]="300" [post]="post"></display-canvas>
+        </div>
+    </div>
+</div>

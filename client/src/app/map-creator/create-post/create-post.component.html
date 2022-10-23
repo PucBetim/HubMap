@@ -1,0 +1,61 @@
+<loading *ngIf="loading"></loading>
+<div class="main layoutDefaultStyle">
+    <div class="container">
+        <div class="login">
+            <div class="title-deco">
+                Salvar Mapa
+            </div>
+            <br><br>
+            <div>
+                <form [formGroup]="form" (ngSubmit)="createOrUpdatePost()" *ngIf="userLogged">
+                    <div fxLayout="column" fxLayoutAlign="space-around">
+
+                        <div>
+                            <mat-form-field class="input">
+                                <mat-label>Título</mat-label>
+
+                                <input matInput [formControl]="form.controls['title']">
+                            </mat-form-field>
+                        </div>
+                        <div>
+                            <mat-form-field class="input">
+                                <mat-label>Descrição</mat-label>
+                                <textarea class="descTextarea" matInput placeholder="" rows="5" [maxlength]="descMaxLength"
+                                    [formControl]="form.controls['description']"></textarea>
+                            </mat-form-field>
+                            <div class="descTextareaDesc">
+                                Caracteres: {{form.controls['description'].value.length}} / {{descMaxLength}}
+                            </div>
+                        </div>
+                        <br>
+                        <div>
+                            <div class="pubToggle">
+                                <div class="item">
+                                    <mat-slide-toggle [formControl]="form.controls['private']">
+                                        Privado?
+                                        <mat-icon *ngIf="form.controls['private'].value">lock</mat-icon>
+                                        <mat-icon *ngIf="!form.controls['private'].value">lock_open</mat-icon>
+                                    </mat-slide-toggle>
+                                </div>
+                                <div class="item privWarn" *ngIf="!form.controls['private'].value">
+                                    Outros usuários terão acesso a mapas não privados!
+                                </div>
+                            </div>
+                        </div>
+                        <form-error [errors]="errors"></form-error>
+                        <br>
+                        <button *ngIf="!this.editorMode" type="submit">Postar</button>
+                        <button *ngIf="this.editorMode" type="submit" [disabled]="!form.valid">Atualizar</button>
+                    </div>
+                </form>
+                <div *ngIf="!userLogged" style="text-align: center;">
+                    <p class="warnign">Precisa estar logado para salvar!</p>
+                    <br>
+                    <p style="display: flex; justify-content: space-around"><a class="link"
+                            (click)="close('/session/signin')">Fazer
+                            Login</a> <a class="link" (click)="close('/session/create-account')">Registrar</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>

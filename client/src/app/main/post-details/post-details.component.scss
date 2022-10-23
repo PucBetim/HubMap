@@ -1,0 +1,178 @@
+.container {
+    min-width: 100%;
+    height: 100%;
+
+    background-image: linear-gradient(rgba(#272736, 0.3), rgba(#272736, 0.3)), url("/assets/img/account_settings_bkg.jpg");
+    background-size: cover;
+
+    display: flex;
+    flex-wrap: wrap;
+    grid-template-areas:
+        'grid1 grid2';
+    //grid-template-columns: max-content;
+
+}
+
+.titleDiv {
+    position: relative;
+    float: left;
+    height: 5%;
+    display: flex;
+
+    .privacy {
+        color: #77aada;
+
+        mat-icon{
+            font-size: medium;
+            height: fit-content;
+        }
+    }
+}
+
+.btn {
+    font-size: x-large;
+    padding: 1vh 3vh 1vh 3vh;
+    background-color: rgba(#316B83, 0.8);
+}
+
+.btn:hover {
+    transform: scale(1.05);
+    animation-name: fill;
+    animation-duration: 300ms;
+    animation-timing-function: linear;
+    animation-fill-mode: forwards;
+}
+
+@keyframes fill {
+    100% {
+        background-color: #316B83;
+    }
+}
+
+.mapContainer {
+    grid-area: grid1;
+    margin: 0 auto;
+}
+
+.detailsContainer {
+    position: relative;
+    padding: 2em;
+    margin: 1em;
+    display: flex;
+    flex-grow: 1;
+    flex-direction: column;
+    grid-area: grid2;
+    background-color: #272736;
+    background-color: rgba(255, 255, 255, 0.9);
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+    overflow: auto;
+    text-align: left;
+
+    .details {
+        padding: 10px;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            height: fit-content;
+
+            .title {
+                font-size: xx-large;
+                font-weight: 700;
+                padding: 5px;
+                color: #234f63;
+                line-height: 1em;
+            }
+
+            .creationInfo {
+                position: relative;
+                width: auto;
+                float: left;
+                padding: 5px;
+                text-align: end;
+
+                h4 {
+                    font-size: small;
+                    color: #316b83;
+                    margin: 0;
+                }
+            }
+        }
+
+        .description {
+            color: #316b83;
+            align-self: flex-start;
+            height: auto;
+            width: 100%;
+        }
+
+        .options {
+            display: flex;
+
+            .action {
+                margin: 0 20px;
+                display: flex;
+                text-align: center;
+                color: #316b83;
+                height: fit-content;
+                align-self: center;
+            }
+
+            mat-icon {
+                align-self: center;
+                height: fit-content;
+                font-size: medium;
+                color: #a3b2c2;
+                cursor: pointer;
+            }
+
+            .viewIcon {
+                cursor: auto;
+                color: #234f63;
+            }
+
+            .rated {
+                color: #234f63;
+                transform: scale(1.5);
+            }
+        }
+    }
+}
+
+.comments {
+    position: relative;
+    padding: 1em;
+    margin: 0;
+    background-color: rgba(255, 255, 255, 0.9);
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+    height: auto;
+
+    .commentsContainer {
+        display: flex;
+        flex-direction: column;
+
+        .postComment {
+            .postTextArea {
+                width: 96%;
+                resize: none;
+                border: none;
+                border-radius: 15px;
+                padding: 2%;
+                box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+            }
+
+            .postActionArea {
+                display: flex;
+                width: 100%;
+                flex-direction: row;
+                color: #77aada;
+                font-size: small;
+                text-align: right;
+            }
+        }
+    }
+}

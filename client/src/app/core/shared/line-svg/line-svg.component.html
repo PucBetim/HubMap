@@ -1,0 +1,23 @@
+<svg *ngIf="this.parentBlock && this.block">
+    <path [style.stroke-width]="strokeWidth" [style.stroke]="this.block.backgroundColor | toneHexColor: -20" [attr.d]="
+        'M '+
+        (this.block.position.x + (this.block.size.width / 2)) 
+        + ' ' +
+        (this.block.position.y  + (this.block.size.height / 2)) 
+        
+        + ' C ' + 
+        ((this.block.position.x + (this.block.size.width / 2)) + ((this.block.position.x + (this.block.size.width / 2))  - (this.parentBlock.position.x  + (this.parentBlock.size.width / 2))) * -0.5)
+
+        + ' ' +
+        (this.block.position.y  + (this.block.size.height / 2))   
+
+        + ', ' + 
+        ((this.parentBlock.position.x  + (this.parentBlock.size.width / 2))  + ((this.parentBlock.position.x  + (this.parentBlock.size.width / 2))   - (this.block.position.x + (this.block.size.width / 2))) * -0.5)
+        + ' ' + 
+        (this.parentBlock.position.y + (this.parentBlock.size.height / 2)) 
+
+        + ',' +
+         (this.parentBlock.position.x  + (this.parentBlock.size.width / 2)) 
+        + ' ' + 
+        (this.parentBlock.position.y + (this.parentBlock.size.height / 2))" fill="transparent" />
+</svg>

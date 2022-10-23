@@ -1,0 +1,137 @@
+.main {
+    position: absolute;
+    background-color: #272736;
+    color: aliceblue;
+    width: 100%;
+
+    .container {
+        position: relative;
+        min-height: 92vh;
+        padding: 4vh;
+    }
+}
+
+.toolbar {
+    position: relative;
+    display: grid;
+    min-height: 10vh;
+    grid-template-areas:
+        'grid1 grid2 grid3 grid4 grid5';
+    grid-template-columns: min-content 15% auto auto 30%;
+
+    .toolbar_title {
+        grid-area: grid1;
+        font-size: 5vh;
+
+        a {
+            text-decoration: none;
+            color: inherit;
+            padding: 0 25px;
+        }
+    }
+
+    .toolbar_search {
+        grid-area: grid2;
+
+        .searchMap {
+            display: flex;
+            justify-content: center;
+            font-size: large;
+            text-decoration: none;
+
+            .mat-icon {
+                height: fit-content;
+                font-size: large;
+                padding: 0 5px;
+            }
+        }
+    }
+
+    .toolbar_user {
+        grid-area: grid5;
+        text-align: right;
+    }
+
+    .link {
+        color: inherit;
+        color: #236099;
+    }
+
+    .link:hover {
+        color: #77aada;
+    }
+
+    .userLoggedOptions {
+        position: relative;
+        display: grid;
+        grid-template-areas:
+            'grid1 grid2';
+        grid-template-columns: 90% 10%;
+        width: 100%;
+    }
+
+    .grid1 {
+        grid-area: grid1;
+        overflow: hidden;
+        max-width: 50vw;
+    }
+
+    .grid2 {
+        grid-area: grid2;
+        position: relative;
+    }
+
+    .disabled {
+        color: #77aada;
+        cursor: default;
+        pointer-events: none;
+    }
+
+    .active {
+        color: inherit;
+    }
+
+    .active:hover {
+        transform: scale(1.1);
+        cursor: pointer;
+    }
+}
+
+::ng-deep .userMenu {
+    background-color: #272736;
+
+    ::ng-deep .mat-icon {
+        color: #77aada
+    }
+
+    span {
+        color: #ffffff;
+    }
+}
+
+.footer {
+    background-color: #1b1b20;
+    position: relative;
+    min-height: 30vh;
+    display: grid;
+    overflow: hidden;
+    grid-template-areas:
+        'left middle right';
+
+    .ft {
+        text-align: center;
+        margin: 50px;
+    }
+
+    .ft_left {
+        grid-area: left;
+    }
+
+    .ft_middle {
+        grid-area: middle;
+    }
+
+    .ft_right {
+        grid-area: right;
+    }
+}

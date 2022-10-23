@@ -1,0 +1,111 @@
+//////////////////////////////////////////
+// Barra de Edição
+.main {
+    position: fixed;
+    width: fit-content;
+    display: flex;
+    background-color: hsla(198, 46%, 35%, 0.7);
+    top: 2em;
+    padding: 1vh;
+    left: 7.5em;
+    z-index: 10;
+}
+
+.matEditGridItem {
+    margin: 0 1.5vh 0 1.5vh;
+    width: fit-content;
+}
+
+mat-form-field.mat-form-field {
+    font-size: 12px;
+    width: 7vw;
+}
+
+::ng-deep .tooltip {
+    background: rgba(49, 106, 131, 0.7);
+    color: #fff;
+}
+
+//Barra de Edição Fim
+//////////////////////////////////////////
+
+
+//////////////////////////////////////////
+// Seletor Tamanho da Fonte
+.fontSizeMenu {
+    max-height: 300px;
+    overflow-y: scroll;
+}
+
+.fontSizeMenuItem {
+    font-size: 14px;
+    padding: 7px 0 7px 7px;
+}
+
+.fontSizeMenuItem:hover {
+    background-color: rgb(228, 228, 228);
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(49, 106, 131, 0.7);
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(49, 106, 131);
+}
+
+// Seletor Tamanho da Fonte FIM
+//////////////////////////////////////////
+
+
+//////////////////////////////////////////
+// Grau da Borda
+.borderRadius {
+    width: 200px;
+    padding: 5px;
+    overflow: hidden;
+
+    .borderLabel{
+        margin: 0;
+        text-align: center;
+    }
+    
+    .slider {
+        width: 100%;
+    }
+}
+
+::ng-deep .mat-slider-thumb-label {
+    color: #ffffff;
+    padding: 2px;
+}
+// Grau da Borda FIM
+//////////////////////////////////////////
+
+
+//////////////////////////////////////////
+// Seletor de Cores
+.colorShowcase {
+    height: 4px;
+    width: 24px;
+    transform: translate(0px, -12px);
+    border: 1px solid #fff;
+}
+
+.colorGrid {
+    padding: 1vh;
+    display: grid;
+    grid-template-columns: auto auto auto auto auto;
+}
+
+.colorSelector {
+    margin: 6px;
+    border: 1px solid rgb(39, 39, 39);
+    border-radius: 50%;
+    width: 12px;
+    height: 12px;
+    cursor: pointer;
+}
+
+// Seletor de Cores Fim
+//////////////////////////////////////////

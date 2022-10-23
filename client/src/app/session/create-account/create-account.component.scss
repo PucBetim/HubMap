@@ -1,0 +1,50 @@
+.main {
+    width: 100%;
+    height: fit-content;
+    max-height: 100%;
+}
+
+.container {
+    padding: 4vh 8vh;
+    max-height: 74vh;
+    width: fit-content;
+    background-color: #fff;
+    margin: auto;
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+    overflow: auto;
+
+    .createAccount {
+
+        max-height: 100%;
+        position: relative;
+        width: fit-content;
+        margin: auto;
+        z-index: 1;
+        text-align: center;
+        background-color: #fff;
+
+        .title-deco {
+            position: relative;
+            float: left;
+        }
+
+        mat-form-field {
+            min-width: 200px;
+        }
+
+        .link {
+            color: inherit;
+            float: left;
+            color: #236099;
+        }
+
+        .link:hover {
+            color: #77aada;
+        }
+
+        button {
+            font-size: x-large;
+            padding: 2% 5%;
+        }
+    }
+}

@@ -1,0 +1,51 @@
+<div class="container layoutDefaultStyle">
+    <div class="title-deco">Baixar Mapa Mental</div>
+    <div class="margin">
+        <div mat-dialog-content class="content">
+            <mat-spinner *ngIf="loading"></mat-spinner>
+            <img #showcase *ngIf="!loading">
+        </div>
+    </div>
+    <div class="actions layoutDefaultStyle" mat-dialog-actions>
+
+        <div style="align-self: end; font-weight: bold;">
+            COR DE FUNDO:
+            <button class="btn" #triggerBckg="matMenuTrigger" matTooltipClass="tooltip" matTooltip="Cor do Fundo"
+                [matMenuTriggerFor]="colorMenuBackground">
+                <mat-icon [ngClass]="iconColor"> format_color_fill</mat-icon>
+                <div class="colorShowcase" [style.background-color]="backgroundColor"></div>
+            </button>
+        </div>
+        <br>
+        <div>
+            <button (click)="downloadImage()">Download <mat-icon style="color: white;">download</mat-icon></button>
+        </div>
+
+    </div>
+</div>
+
+<div class="hidden">
+    <div class="canvas" #canvas [style.width]="width + 'px'" [style.height]="height + 'px'">
+        <visual-block (setDragEvent)="setDrag($event)" (selectBlockEvent)="selectBlock($event)"
+            (unselectBlockEvent)="unselectBlock()" (saveProgressEvent)="saveProgress()" *ngFor="let block of blocks"
+            [block]="block">
+        </visual-block>
+    </div>
+    <div id="download">
+        <img #canvas>
+        <a #downloadLink></a>
+    </div>
+</div>
+
+<mat-menu hasBackdrop="false" #colorMenuBackground="matMenu" class="layoutDefaultStyle">
+    <div class="colorMenu" (click)="$event.stopPropagation()" (mouseleave)="triggerBkg.closeMenu()">
+        <button class="colorSelectorTransparent" (click)="iconColor = ['clear']" (click)="setColor('')">
+            Transparente
+        </button>
+        <div class="colorGrid">
+            <div class="colorSelector" (click)="iconColor = ['']" (click)="setColor(color.hexValue)"
+                *ngFor="let color of colors" [style.background-color]="color.hexValue">
+            </div>
+        </div>
+    </div>
+</mat-menu>

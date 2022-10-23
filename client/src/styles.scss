@@ -1,0 +1,183 @@
+@use '@angular/material' as mat;
+@include mat.core();
+
+
+$clr-primary: (
+    50: #ffffff,
+    100: #dce9ee,
+    200: #b6c0c4,
+    300: #99a6ac,
+    400: #7e96a1,
+    500: #7d9aa7,
+    600: #588296,
+    700: #44788f,
+    800: #316b83,
+    900: #234f63,
+    A100: #ffffff,
+    A400: #7e96a1,
+    A800: #316b83,
+    A900: #234f63,
+    contrast: ()
+);
+
+
+$client-primary: mat.define-palette($clr-primary);
+$client-accent: mat.define-palette($clr-primary, A800, A400, A900);
+
+$client-warn: mat.define-palette(mat.$red-palette);
+
+
+$client-theme: mat.define-light-theme((color: (primary: $client-primary,
+                accent: $client-accent,
+                warn: $client-warn,
+            )));
+
+
+@include mat.all-component-themes($client-theme);
+
+
+.layoutDefaultStyle {
+    margin: 0;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+
+    //////////  Button
+    button {
+        font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+        background-color: rgba(#316b83, 0.8);
+        color: #f0f8ff;
+        border: solid white 2px;
+        padding: 1vh;
+        margin: 0 1vh;
+        min-width: 5em;
+    }
+
+    button:hover {
+        transform: scale(1.05);
+        animation-name: fill;
+        animation-duration: 300ms;
+        animation-timing-function: linear;
+        animation-fill-mode: forwards;
+    }
+
+    @keyframes fill {
+        100% {
+            background-color: #234f63;
+        }
+    }
+
+    ////////// End Button
+
+
+
+    ////////// Light Button
+    .btn-light {
+        background-color: rgba(#6D8299, 0.8);
+    }
+
+    ////////// End Light Button
+
+
+
+    ////////// Danger Button
+    .btn-danger {
+        background-color: #b84949;
+    }
+
+    .btn-danger:hover {
+        transform: scale(1.05);
+        animation-name: fillDanger;
+        animation-duration: 300ms;
+        animation-timing-function: linear;
+        animation-fill-mode: forwards;
+    }
+
+    @keyframes fillDanger {
+        100% {
+            background-color: #811616;
+        }
+    }
+    ////////// End Danger Button
+
+
+
+    ////////// Disabled Button
+    .btn-disabled {
+        background-color: rgb(206, 206, 206);
+        color: #7e7e7e;
+    }
+
+    .btn-disabled:hover {
+        animation-name: none;
+
+    }
+    ////////// End Disabled Button
+
+
+
+    ////////// Title Deco
+    .title-deco {
+        font-size: 1.5em;
+        font-weight: bolder;
+        color: #77aada;
+    }
+
+    .title-deco-danger {
+        font-size: 1.5em;
+        font-weight: bolder;
+        color: #b84949;
+    }
+    ////////// End Title Deco
+
+
+
+    ////////// Flex Push
+    .pushBottom {
+        margin-top: auto;
+    }
+
+    .pushRight {
+        margin-left: auto;
+    }
+    ////////// End Flex Push
+    /// 
+    
+    button{
+        mat-icon{
+            height: fit-content;
+            vertical-align: middle;
+        }
+    }
+}
+
+// Scrollbar
+/* width */
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    background: #f0f8ff;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #1b1b20;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #6a6aa3;
+}
+
+// End Scrollbar
+
+html,
+body {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+}

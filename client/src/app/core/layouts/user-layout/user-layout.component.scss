@@ -1,0 +1,32 @@
+.main {
+    position: absolute;
+    background-color: #272736;
+    width: 100%;
+    max-height: 100vh;
+
+    .container {
+        position: relative;
+        height: 92vh;
+        padding: 4vh;
+    }
+
+    .toolbar {
+        position: relative;
+        min-height: fit-content;
+        color: aliceblue;
+        min-height: 10vh;
+
+        h1 {
+            grid-area: grid1;
+            font-size: 5vh;
+        }
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+    }
+
+    .content{
+        height: 82vh;
+    }
+}

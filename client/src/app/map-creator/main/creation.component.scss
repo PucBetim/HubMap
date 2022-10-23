@@ -1,0 +1,90 @@
+.main {
+    height: 100%;
+    width: 100%;
+    display: grid;
+    grid-template: "sidebar gap canvas";
+    grid-template-columns: 75px 10px auto;
+    position: relative;
+}
+
+.sideBar {
+    grid-area: sidebar;
+    background-color: #316b83;
+    position: relative;
+    overflow: hidden;
+
+    .containerSideBar {
+        position: absolute;
+        text-align: center;
+
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        width: 100%;
+
+        .sidebarGrid {
+            flex: 1;
+            margin: 0.5em;
+            align-self: center;
+            height: fit-content;
+        }
+
+        .option {
+            max-height: 40px;
+        }
+
+        .sidebarTitle {
+            a {
+                text-decoration: none;
+                color: inherit;
+            }
+        }
+
+        .bottom {
+            position: relative;
+            text-align: center;
+
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            width: 100%;
+            min-height: 100%;
+            justify-content: flex-end;
+
+            .sidebarEndOption {
+                flex: 1;
+                margin: 0.5em;
+                align-self: center;
+                max-height: 40px;
+            }
+        }
+    }
+
+    button {
+        background-color: white;
+        color: #316b83;
+    }
+
+    .disabled {
+        background-color: rgb(206, 206, 206);
+        color: #7e7e7e;
+    }
+}
+
+.containerCanvas {
+    grid-area: canvas;
+    position: relative;
+    zoom: 100%;
+
+    .canvas {
+        $backgroundColor: #ffffff;
+        $gridColor: #e4e4e4;
+
+        background-color: $backgroundColor;
+        width: 3840px;
+        height: 2160px;
+        position: relative;
+        background-image: repeating-linear-gradient(to bottom, transparent, transparent 5.9em, $gridColor 5.9em, $gridColor 6em),
+            repeating-linear-gradient(to right, $backgroundColor, $backgroundColor 5.9em, $gridColor 5.9em, $gridColor 6em);
+    }
+}

@@ -1,0 +1,55 @@
+.input {
+    width: 100%;
+}
+
+.descTextarea {
+    resize: none;
+}
+
+.descTextareaDesc {
+    display: flex;
+    width: 100%;
+    flex-direction: row;
+    color: #77aada;
+    font-size: small;
+    text-align: right;
+}
+
+.pubToggle {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    width: 100%;
+
+    .item {
+        width: fit-content;
+        align-self: flex-end;
+    }
+
+    .privWarn {
+        font-size: 9px;
+        color: #77aada;
+    }
+}
+
+mat-icon {
+    font-size: 18px;
+    color: #316b83;
+    vertical-align: middle;
+    width: fit-content;
+    height: fit-content;
+}
+
+.warnign {
+    color: red;
+}
+
+.link {
+    color: inherit;
+    float: left;
+    color: #236099;
+}
+
+.link:hover {
+    color: #77aada;
+}

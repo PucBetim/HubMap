@@ -1,0 +1,15 @@
+<line-svg [block]="this.block" [parentBlock]="this.parentBlock" *ngIf="this.parentBlock"></line-svg>
+
+<visual-block (setDragEvent)="setDrag($event)" (selectBlockEvent)="emitSelect($event)"
+    (saveProgressEvent)="emitSaveProgress()" (click)="blockSelected = false"
+    *ngFor="let childBlock of this.block.blocks" [block]="childBlock" [parentBlock]="this.block">
+</visual-block>
+
+
+<div class="visualBlock" [style.border-color]="this.block.backgroundColor | toneHexColor: -30" cdkDrag
+    cdkDragDisabled="true" cdkDragBoundary=".canvas" [cdkDragFreeDragPosition]="block.position"
+    [style.background-color]="block.backgroundColor" [style.border-radius]="block.borderRadius + 'px'">
+
+    <visual-text-div [block]="block">
+    </visual-text-div>
+</div>

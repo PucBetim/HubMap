@@ -1,0 +1,18 @@
+export const fontSizes = [
+    { value: 8 },
+    { value: 9 },
+    { value: 10 },
+    { value: 11 },
+    { value: 12 },
+    { value: 14 },
+    { value: 16 },
+    { value: 18 },
+    { value: 20 },
+    { value: 22 },
+    { value: 24 },
+    { value: 26 },
+    { value: 28 },
+    { value: 36 },
+    { value: 48 },
+    { value: 72 },
+]

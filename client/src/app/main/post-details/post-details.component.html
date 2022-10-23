@@ -1,0 +1,97 @@
+<loading *ngIf="loading"></loading>
+<div *ngIf="!loading" class="container">
+    <div class="mapContainer">
+        <display-canvas *ngIf="mapSize > 0 && mapZoomSize > 0" [showOptions]=" false" [size]="mapSize"
+            [zoomSize]="mapZoomSize" [post]="post">
+        </display-canvas>
+    </div>
+
+    <div class="detailsContainer layoutDefaultStyle">
+        <div class="titleDiv">
+            <a class="title-deco">Detalhes</a>
+            <a class="pushRight privacy" *ngIf="post.private">
+                <mat-icon>lock</mat-icon> Privado
+            </a>
+            <a class="pushRight privacy" *ngIf="!post.private">
+                <mat-icon>lock_open</mat-icon> Público
+            </a>
+        </div>
+        <br>
+        <div class="details">
+
+            <div class="header">
+                <div class="title">
+                    {{post.title}}
+                </div>
+                <div class="creationInfo">
+                    <h4>Criado em {{post.created | date: 'dd/MM/yyyy' }} por {{post.author.nick}}</h4>
+                </div>
+            </div>
+
+            <div class="description">
+                <hr style="height: 1px ;background-color: #316b83;">
+                {{post.description}}
+            </div>
+
+            <div class="options pushBottom">
+                <div>
+                    <button class="btn-icon" (click)="downloadImage()">Baixar Mapa <mat-icon style="color: white;">
+                            download</mat-icon></button>
+                </div>
+                <div *ngIf="!currentUserPost">
+                    <button class="btn-icon" (click)="forkPost()">Fork <mat-icon style="color: white;"> call_split
+                        </mat-icon>
+                    </button>
+                </div>
+                <div class="action">
+                    <a>
+                        <mat-icon [ngClass]="likeClass" (click)="likePost()">thumb_up</mat-icon> {{post.likes}}
+                    </a>
+                </div>
+                <div class="action">
+                    <a>
+                        <mat-icon [ngClass]="dislikeClass" (click)="dislikePost()">thumb_down</mat-icon>
+                        {{post.dislikes}}
+                    </a>
+                </div>
+                <div class="action">
+                    <mat-icon class="viewIcon">remove_red_eye</mat-icon>
+                    {{post.views}}
+                </div>
+
+                <button *ngIf="currentUserPost" class="pushRight" (click)="goToEdit()">
+                    Editar <mat-icon style="color: white;">edit</mat-icon>
+                </button>
+                <button *ngIf="currentUserPost" class="btnDelete btn-danger" (click)="deletePostConfirm()">
+                    Excluir <mat-icon style="color: white;">delete</mat-icon>
+                </button>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+<div class="comments layoutDefaultStyle">
+    <div class="commentsContainer">
+        <div class="deco">
+            <p>Comentários</p>
+        </div>
+        <br>
+        <div class="postComment">
+            <textarea [formControl]="form.controls['content']" class="postTextArea" rows="4"
+                [maxlength]="commentMaxLength"></textarea>
+            <div class="postActionArea">
+                Caracteres: {{form.controls['content'].value.length}} / {{commentMaxLength}}
+                <button [disabled]="form.controls['content'].value.length < 3 "
+                    [ngClass]="{'btn-disabled': form.controls['content'].value.length < 3}" class="post pushRight"
+                    (click)="commentPost()">Postar
+                </button>
+            </div>
+        </div>
+        <br>
+        <div class="comment" *ngIf="!loading">
+            <comment [order]="1" [comment]="comment" [post]="post"
+                *ngFor="let comment of getPrimaryComments()"></comment>
+        </div>
+    </div>
+</div>
