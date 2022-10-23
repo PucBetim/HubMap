@@ -3,8 +3,10 @@ package br.com.pucminas.hubmap.application.service;
 import static br.com.pucminas.hubmap.utils.LoggerUtils.getLoggerFromClass;
 
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 
 import javax.transaction.Transactional;
@@ -44,7 +46,7 @@ public class HistogramService {
 	private VocabularyService vocabularyService;
 
 	private NGramRepository nGramRepository;
-	
+
 	private ParameterRepository parameterRepository;
 
 	public HistogramService(PythonService pythonService, HistogramItemRepository histogramItemRepository,
@@ -116,16 +118,17 @@ public class HistogramService {
 	@Transactional
 	@Scheduled(initialDelay = 10 * 1000, fixedDelay = 8 * 1000)
 	protected void refreshHistograms() {
-		Parameter newWords = parameterRepository.findByTableName(ParametersTableContants.NEW_WORDS_IN_VOCABULARY).get(0);
+		Parameter newWords = parameterRepository.findByTableName(ParametersTableContants.NEW_WORDS_IN_VOCABULARY)
+				.get(0);
 		boolean hasNewWords = Boolean.valueOf(newWords.getValueRegistry());
-		
-		if(!hasNewWords) {
+
+		if (!hasNewWords) {
 			return;
 		}
-		
+
 		Pageable pageable = PageableUtils.getPageableFromParameters(0, 10);
 		Page<Histogram> histograms = histogramRepository.findByInitilized(true, pageable);
-		//TODO Fix removal of Histogram Item, to delete it from database
+
 		while (true) {
 			for (Histogram histogram : histograms) {
 				if (histogram.getNeedRecount()) {
@@ -155,8 +158,7 @@ public class HistogramService {
 				}
 
 				Histogram dbHistogram = histogramRepository.save(histogram);
-				dbHistogram = calculateTfIdf(dbHistogram,
-						histogramRepository.findByInitilized(true, pageable.first()).getTotalElements());
+				dbHistogram = calculateTfIdf(dbHistogram, histograms.getTotalElements());
 				histogramRepository.save(dbHistogram);
 			}
 
@@ -169,18 +171,17 @@ public class HistogramService {
 
 		newWords.setValueRegistry("false");
 		parameterRepository.save(newWords);
-		
+
 		getLoggerFromClass(getClass()).info("Histograms updated successfuly");
 	}
 
 	public Histogram calculateTfIdf(Histogram histogram, long totalElements) {
 
-		histogram.getHistogram().parallelStream()
-			.forEach(item -> {
-				double tf = calculateTf(item.getCount());
-				double idf = calculateIdf(item.getKey().getId(), totalElements);
-				item.setTfidf(tf * idf);
-			});
+		histogram.getHistogram().parallelStream().forEach(item -> {
+			double tf = calculateTf(item.getCount());
+			double idf = calculateIdf(item.getKey().getId(), totalElements);
+			item.setTfidf(tf * idf);
+		});
 
 		return histogram;
 	}
@@ -196,7 +197,7 @@ public class HistogramService {
 
 		counter = counter == 0 ? 1 : counter;
 
-		//TODO Check this formula with Professor
+		// TODO Check this formula with Professor
 		return 1.0 + Math.log(1.0 * totalElements / counter);
 	}
 
@@ -212,8 +213,8 @@ public class HistogramService {
 
 			if (nGramOpt.isPresent()) {
 				NGram nGram = nGramOpt.orElseThrow();
-				
-				if(hist.isInHistogram(nGram)) {
+
+				if (hist.isInHistogram(nGram)) {
 					continue;
 				}
 				counter = hist.countWords(bagOfWords, nGram.getGram());
@@ -221,7 +222,7 @@ public class HistogramService {
 				if (counter > 0) {
 					item = buildHistogramItem(hist, counter, nGram);
 					item.setId(i);
-					
+
 					hist.getHistogram().add(item);
 					i++;
 				}
@@ -254,8 +255,13 @@ public class HistogramService {
 
 		HistogramItem item;
 		int counter;
+		Set<String> words = new HashSet<>(bagOfWords);
 
-		for (String word : bagOfWords) {
+		if (isEdit) {
+			histogramItemRepository.updateAnalyzed(hist.getId(), false);
+		}
+
+		for (String word : words) {
 			Optional<NGram> nGramOpt = nGramRepository.findByGramAndNewVocabulary(word, null);
 
 			if (nGramOpt.isPresent()) {
@@ -265,20 +271,31 @@ public class HistogramService {
 				if (counter > 0) {
 					if (isEdit && hist.isInHistogram(nGram)) {
 						item = histogramItemRepository.findByKeyAndOwner(nGram, hist);
+						hist.getHistogram().remove(item);
 						item.setCount(counter);
+						item.setAnalyzed(true);
 					} else {
 						item = buildHistogramItem(hist, counter, nGram);
-
-						HistogramItem dbItem = histogramItemRepository.save(item);
-						hist.getHistogram().add(dbItem);
 					}
+
+					item = histogramItemRepository.save(item);
+					hist.getHistogram().add(item);
 				}
 			}
 		}
-		
-		Histogram dbHistogram = calculateTfIdf(hist,
-				histogramRepository.findByInitilized(true, PageableUtils.getPageableFromParameters(0, 1)).getTotalElements());
+		List<HistogramItem> oldItems = null;
+
+		if (isEdit) {
+			oldItems = histogramItemRepository.findByOwnerAndAnalyzed(hist, false);
+			hist.getHistogram().removeAll(oldItems);
+		}
+
+		Histogram dbHistogram = calculateTfIdf(hist, histogramRepository.countByInitialized(true));
 		histogramRepository.save(dbHistogram);
+
+		if (isEdit) {
+			histogramItemRepository.deleteAll(oldItems);
+		}
 
 		return statusReturn;
 	}

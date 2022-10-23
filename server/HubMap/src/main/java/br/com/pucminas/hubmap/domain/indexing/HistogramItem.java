@@ -43,4 +43,6 @@ public class HistogramItem implements Serializable{
 	private Integer count;
 	
 	private Double tfidf = 0.0;
+	
+	private Boolean analyzed;
 }
