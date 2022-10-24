@@ -22,7 +22,7 @@
     .privacy {
         color: #77aada;
 
-        mat-icon{
+        mat-icon {
             font-size: medium;
             height: fit-content;
         }
@@ -110,8 +110,9 @@
             width: 100%;
         }
 
-        .options {
+        .ratings {
             display: flex;
+            margin-bottom: 20px;
 
             .action {
                 margin: 0 20px;
@@ -140,7 +141,13 @@
                 transform: scale(1.5);
             }
         }
+
+        .options {
+            display: flex;
+        }
     }
+
+
 }
 
 .comments {

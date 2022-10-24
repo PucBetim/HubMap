@@ -318,4 +318,10 @@ export class PostDetailsComponent implements OnInit {
   viewPost() {
     this.postService.viewPost(this.post.id).subscribe()
   }
+
+  sharePost() {
+    navigator.clipboard.writeText(window.location.href)
+    this.snackBar.open("Link copiado para a área de transferência!", "Ok")
+
+  }
 }

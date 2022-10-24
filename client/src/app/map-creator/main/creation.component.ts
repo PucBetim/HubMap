@@ -219,7 +219,7 @@ export class CreationComponent implements OnInit, ComponentCanDeactivate {
         if (result.link) { // Não logado
           this.save();
           this.unsavedChanges = false;
-          this.router.navigate([result.link]);
+          this.router.navigate([result.link, {savedRoute: window.location.href}]);
         }
         else {  //Logado
           this.snackBar.open(result.msg, "Ok", {
