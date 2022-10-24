@@ -20,7 +20,7 @@ export class CreatePostComponent implements OnInit {
   public userLogged: boolean = true;
 
   public descMaxLength: number = 200;
-
+  public rootBlockId: string;
   constructor(
     public dialogRef: MatDialogRef<CreatePostComponent>,
     private postService: PostService,
@@ -34,6 +34,7 @@ export class CreatePostComponent implements OnInit {
 
     this.editorMode = this.data.editorMode;
     this.post = this.data.post;
+    this.rootBlockId = this.data.rootBlockId;
 
     this.form = this.fb.group({
       title: ['', [Validators.required, Validators.maxLength(30)]],
@@ -63,7 +64,6 @@ export class CreatePostComponent implements OnInit {
             this.postBlocks(obj.body.dataId)
             this.loading = false;
           }, error: error => {
-
             this.errors = error.errors;
             this.loading = false;
           }
@@ -86,6 +86,8 @@ export class CreatePostComponent implements OnInit {
 
   updateBlocks(id: string) {
     this.post.map.forEach(b => {
+      if (!b.id)
+        b.id = this.rootBlockId;
       this.loading = true;
       this.postService.updateBlocks(b, id).subscribe({
         next: obj => {

@@ -5,6 +5,10 @@
     grid-template: "sidebar gap canvas";
     grid-template-columns: 75px 10px auto;
     position: relative;
+
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 
 .sideBar {
@@ -81,10 +85,27 @@
         $gridColor: #e4e4e4;
 
         background-color: $backgroundColor;
-        width: 3840px;
-        height: 2160px;
         position: relative;
         background-image: repeating-linear-gradient(to bottom, transparent, transparent 5.9em, $gridColor 5.9em, $gridColor 6em),
             repeating-linear-gradient(to right, $backgroundColor, $backgroundColor 5.9em, $gridColor 5.9em, $gridColor 6em);
+
+        .goToRootIcon {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            font-size:large;
+            color: #316b83;
+        }
+
+        .goToRootIcon {
+            background-color: transparent;
+            color: #316b83;
+            z-index: 20;
+        }
+    
+        .goToRootIconDisabled {
+            background-color: transparent;
+            color: #7e7e7e;
+        }
     }
 }

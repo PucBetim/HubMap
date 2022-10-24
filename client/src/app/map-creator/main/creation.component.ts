@@ -1,4 +1,5 @@
-import { Component, ElementRef, HostListener, OnInit, ViewChild, EventEmitter } from '@angular/core';
+import { Position } from './../../core/shared/posts/post';
+import { Component, ElementRef, HostListener, OnInit, ViewChild, EventEmitter, AfterContentInit, AfterViewInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatMenuTrigger } from '@angular/material/menu';
 
@@ -11,6 +12,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { CreatePostComponent } from '../create-post/create-post.component';
 import { VisualCanvasComponent } from 'src/app/core/shared/export-image/visual-canvas/visual-canvas.component';
+import { CanvasService } from 'src/app/core/services/canvas.service';
 
 @Component({
   selector: 'app-creation',
@@ -19,8 +21,8 @@ import { VisualCanvasComponent } from 'src/app/core/shared/export-image/visual-c
 })
 export class CreationComponent implements OnInit, ComponentCanDeactivate {
 
-  @ViewChild('editTrigger') editTrigger: MatMenuTrigger;
   @ViewChild('main') main: ElementRef;
+  @ViewChild('scrollLink') scrollLink: ElementRef;
   @ViewChild('canvas') canvas: ElementRef;
 
   @HostListener('window:beforeunload')
@@ -29,17 +31,19 @@ export class CreationComponent implements OnInit, ComponentCanDeactivate {
   }
 
   public post = new Post;
+  public canvasSize = CanvasService.canvasSize;
 
   public selectedBlock: Block;
   public savedProgress: [Block[]] = [[]];
 
   public unsavedChanges: boolean = false;
-  public carregando: boolean = false;
+  public loading: boolean = false;
   public blockSelected: boolean = false;
   public editorMode: boolean = false;
 
   public sub: Subscription;
   public id: string;
+  public rootBlockId: string;
 
   constructor(private route: ActivatedRoute,
     private dialog: MatDialog,
@@ -52,8 +56,17 @@ export class CreationComponent implements OnInit, ComponentCanDeactivate {
     this.getPost();
   }
 
+  scrollToRoot() {
+    if (!this.blockSelected)
+      this.scrollLink.nativeElement.scrollIntoView({
+        behavior: 'auto',
+        block: 'center',
+        inline: 'center'
+      });
+  }
+
   getPost() {
-    this.carregando = true;
+    this.loading = true;
     var _post = new Post;
     this.sub = this.route.params.subscribe(
       params => {
@@ -78,24 +91,24 @@ export class CreationComponent implements OnInit, ComponentCanDeactivate {
       if (_post)
         this.post = _post;
       localStorage.removeItem('post');
-
-      this.carregando = false;
+      this.loading = false;
     }
   }
 
 
   getBlocks(post: Post) {
-    this.carregando = true;
+    this.loading = true;
     this.postService.getPostBlocks(post.id).subscribe({
       next: result => {
         if (result.body != null)
           post.map = [result.body]
         this.post = post;
+        this.rootBlockId = this.post.map[0].id!;
         this.savedProgress = [JSON.parse(JSON.stringify(this.post.map))];
-        this.carregando = false;
+        this.loading = false;
       }, error: error => {
         this.snackBar.open(error.errors);
-        this.carregando = false;
+        this.loading = false;
       }
     })
   }
@@ -107,24 +120,20 @@ export class CreationComponent implements OnInit, ComponentCanDeactivate {
     let _block = new Block;
     _block.backgroundColor = "#64b5f6"
     _block.fontColor = "#ffffff"
-    _block.fontSize = 24;
+    _block.fontSize = 18;
     _block.content = "Editar";
-    _block.size.width = 250;
-    _block.size.height = 100;
-    _block.position.x = (this.main.nativeElement.clientWidth / 2) - (_block.size.width / 2);
-    _block.position.y = (this.main.nativeElement.clientHeight / 2) - (_block.size.height / 2);
+    _block.size.width = 125;
+    _block.size.height = 50;
+    _block.position.x = (this.canvasSize.width + _block.size.width) / 2;
+    _block.position.y = (this.canvasSize.height + _block.size.height) / 2;
 
-
-    if (this.post.map == null) {
-      let _post = new Post;
-      _post.map[0] = _block;
-      this.post = _post
-      return
-    }
     this.post.map.push(_block);
     this.saveProgress();
   }
 
+  finishedLoading() {
+    this.scrollToRoot();
+  }
 
   selectBlock(block: Block) {
     this.selectedBlock = block;
@@ -199,7 +208,8 @@ export class CreationComponent implements OnInit, ComponentCanDeactivate {
       height: 'auto',
       data: {
         post: this.post,
-        editorMode: this.editorMode
+        editorMode: this.editorMode,
+        rootBlockId: this.rootBlockId
       }
     };
 

@@ -26,12 +26,12 @@ export class CreateAccountComponent implements OnInit {
   ngOnInit(): void {
     sessionStorage.clear();
     this.form = this.fb.group({
-      name: ['', [Validators.required]],
-      nick: ['', [Validators.required]],
-      email: ['', [Validators.required, Validators.email]],
-      confirmEmail: ['', [Validators.required, Validators.email, EmailValidator('email')]],
-      password: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(100)]],
-      confirmPassword: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(100), PasswordValidator('password')]]
+      name: ['', [Validators.required, Validators.maxLength(80)]],
+      nick: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(15)]],
+      email: ['', [Validators.required, Validators.email, Validators.maxLength(100),]],
+      confirmEmail: ['', [Validators.required, Validators.email, Validators.maxLength(100), EmailValidator('email')]],
+      password: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(80)]],
+      confirmPassword: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(80), PasswordValidator('password')]]
     });
   }
 

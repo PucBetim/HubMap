@@ -27,8 +27,8 @@ export class SigninComponent implements OnInit {
   ngOnInit(): void {
     sessionStorage.clear();
     this.form = this.fb.group({
-      email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(100)]]
+      email: ['', [Validators.required, Validators.email, Validators.maxLength(100)]],
+      password: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(80)]]
     });
   }
 

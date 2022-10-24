@@ -1,6 +1,6 @@
 <line-svg [block]="this.block" [parentBlock]="this.parentBlock" *ngIf="this.parentBlock"></line-svg>
 
-<block (setDragEvent)="setDrag($event)" (selectBlockEvent)="emitSelect($event)" (saveProgressEvent)="emitSaveProgress()"
+<block (selectBlockEvent)="emitSelect($event)" (saveProgressEvent)="emitSaveProgress()" (finishedLoadingEvent)="emitFinishedLoading()"
     (click)="blockSelected = false" *ngFor="let childBlock of this.block.blocks" [block]="childBlock"
     [parentBlock]="this.block">
 </block>

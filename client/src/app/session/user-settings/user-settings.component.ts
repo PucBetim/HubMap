@@ -8,6 +8,8 @@ import { SessionService } from '../session.service';
 import { ConfigService } from 'src/app/core/services/config.service';
 import { Post } from 'src/app/core/shared/posts/post';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { ConfirmDialogComponent } from 'src/app/map-creator/confirm-dialog/confirm-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-user-settings',
@@ -26,7 +28,8 @@ export class UserSettingsComponent implements OnInit {
   constructor(private fb: FormBuilder,
     private sessionService: SessionService, private postService: PostService,
     public router: Router,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private dialog: MatDialog,
   ) { }
 
   ngOnInit(): void {
@@ -38,8 +41,8 @@ export class UserSettingsComponent implements OnInit {
     }
 
     this.form = this.fb.group({
-      name: ['', [Validators.required]],
-      nick: ['', [Validators.required]],
+      name: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(80)]],
+      nick: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(15)]],
     });
 
     this.fillFormEvent()
@@ -88,5 +91,25 @@ export class UserSettingsComponent implements OnInit {
           });
       }
     }
+  }
+
+  logout() {
+    var confirmDeleteConfig = {
+      disableClose: false,
+      width: 'auto',
+      data: {
+        titulo: "Sair",
+        texto: "Tem certeza que deseja sair?"
+      }
+    };
+
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, confirmDeleteConfig);
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        sessionStorage.clear();
+        this.router.navigate(['']);
+      }
+    });
+
   }
 }

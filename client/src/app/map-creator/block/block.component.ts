@@ -1,5 +1,6 @@
+import { CanvasService } from './../../core/services/canvas.service';
 import { Position, Block, Post } from '../../core/shared/posts/post';
-import { Component, ElementRef, EventEmitter, HostListener, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, HostListener, Input, OnInit, Output, ViewChild, AfterContentInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
@@ -7,7 +8,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   templateUrl: './block.component.html',
   styleUrls: ['./block.component.scss']
 })
-export class BlockComponent implements OnInit {
+export class BlockComponent implements OnInit, AfterContentInit {
 
   public blockSelected: boolean = false;
   public afterImagePosition: Position = { x: 0, y: 0 };
@@ -21,6 +22,7 @@ export class BlockComponent implements OnInit {
   @Output() selectBlockEvent = new EventEmitter<Block>();
   @Output() unselectBlockEvent = new EventEmitter<any>();
   @Output() saveProgressEvent = new EventEmitter<any>();
+  @Output() finishedLoadingEvent = new EventEmitter<boolean>();
 
   @HostListener('document:click', ['$event'])
   clickout(event: any) {
@@ -38,6 +40,15 @@ export class BlockComponent implements OnInit {
   }
 
   constructor(private eRef: ElementRef, private snackBar: MatSnackBar) { }
+
+  ngAfterContentInit(): void {
+    if(this.block.blocks.length == 0)
+    this.emitFinishedLoading();
+  }
+
+  emitFinishedLoading() {
+    this.finishedLoadingEvent.emit(true)
+  }
 
   ngOnInit(): void {
     this.initialContent = this.block.content;
@@ -98,7 +109,7 @@ export class BlockComponent implements OnInit {
     newBlock.content = "Clique para editar";
 
     var closestGap: Position = { x: this.block.position.x, y: this.block.position.y }
-    var farestGap: Position = { x: 3840 - (this.block.position.x + this.block.size.width + 10), y: 2160 - (this.block.position.y + this.block.size.height + 10) }
+    var farestGap: Position = { x: CanvasService.canvasSize.width - (this.block.position.x + this.block.size.width + 10), y: CanvasService.canvasSize.height - (this.block.position.y + this.block.size.height + 10) }
 
     switch (location) {
       case 'above':

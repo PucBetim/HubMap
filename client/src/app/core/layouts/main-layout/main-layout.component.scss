@@ -117,21 +117,34 @@
     overflow: hidden;
     grid-template-areas:
         'left middle right';
+    grid-template-columns: 33% 33% 33%;
 
-    .ft {
-        text-align: center;
-        margin: 50px;
+    h3,h4{
+        mat-icon{
+            height: fit-content;
+            font-size: medium;
+            vertical-align: middle;
+        }
+    }
+    h4 {
+        font-weight: 100;
     }
 
     .ft_left {
+        text-align: left;
+        margin: 50px;
         grid-area: left;
     }
 
     .ft_middle {
+        text-align: center;
+        margin: 50px;
         grid-area: middle;
     }
 
     .ft_right {
+        text-align: right;
+        margin: 50px;
         grid-area: right;
     }
 }

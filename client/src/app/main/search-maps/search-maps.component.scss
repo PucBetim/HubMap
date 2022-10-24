@@ -45,8 +45,6 @@
 
     .resultMaps {
         position: relative;
-
-        grid-area: grid2;
         height: 100%;
         overflow: auto;
 
@@ -58,13 +56,4 @@
             justify-content: space-around;
         }
     }
-
-    // .resultContainer {
-    //     width: 100%;
-    //     max-height: stretch;
-    //     overflow: auto;
-    //     position: relative;
-    //     display: flex;
-    //     flex-wrap: wrap;
-    // }
 }
