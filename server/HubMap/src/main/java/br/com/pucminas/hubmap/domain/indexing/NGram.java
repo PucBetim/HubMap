@@ -8,8 +8,10 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Index;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 
 import lombok.EqualsAndHashCode;
@@ -19,6 +21,8 @@ import lombok.Setter;
 
 @SuppressWarnings("serial")
 @Entity
+@Table(indexes = {
+		@Index(name = "Gram", columnList = "GRAM")})
 @Getter
 @Setter
 @NoArgsConstructor
@@ -48,8 +52,8 @@ public class NGram implements Serializable, Comparable<NGram> {
 	}
 
 	@Override
-	public int compareTo(NGram o) {
-		return id.compareTo(o.getId());
+	public int compareTo(NGram o) {		
+		return gram.compareTo(o.getGram());
 	}
 	
 	@Override

@@ -31,6 +31,7 @@ import br.com.pucminas.hubmap.domain.indexing.NGramRepository;
 import br.com.pucminas.hubmap.domain.indexing.Vocabulary.StatusRetorno;
 import br.com.pucminas.hubmap.domain.indexing.search.Search;
 import br.com.pucminas.hubmap.domain.map.Block;
+import br.com.pucminas.hubmap.domain.map.BlockRepository;
 import br.com.pucminas.hubmap.domain.post.Post;
 import br.com.pucminas.hubmap.utils.PageableUtils;
 
@@ -49,15 +50,18 @@ public class HistogramService {
 
 	private ParameterRepository parameterRepository;
 
+	private BlockRepository blockRepository;
+	
 	public HistogramService(PythonService pythonService, HistogramItemRepository histogramItemRepository,
 			HistogramRepository histogramRepository, VocabularyService vocabularyService,
-			NGramRepository nGramRepository, ParameterRepository parameterRepository) {
+			NGramRepository nGramRepository, ParameterRepository parameterRepository, BlockRepository blockRepository) {
 		this.pythonService = pythonService;
 		this.histogramItemRepository = histogramItemRepository;
 		this.histogramRepository = histogramRepository;
 		this.vocabularyService = vocabularyService;
 		this.nGramRepository = nGramRepository;
 		this.parameterRepository = parameterRepository;
+		this.blockRepository = blockRepository;
 	}
 
 	public Histogram generateSearchHistogram(Search search) {
@@ -99,7 +103,7 @@ public class HistogramService {
 
 		StatusRetorno status;
 
-		status = recalculate(bOW, post.getHistogram(), isEdit);
+		status = recalculate(bOW, post.getHistogram(), isEdit, false);
 
 		Histogram hist = post.getHistogram();
 		hist.setInitialized(true);
@@ -133,7 +137,7 @@ public class HistogramService {
 			for (Histogram histogram : histograms) {
 				if (histogram.getNeedRecount()) {
 
-					Block root = histogram.getPost().getMapRoot();
+					Block root = blockRepository.findByPost(histogram.getId());
 
 					String sentence = getWordsInBlocks(root, null);
 
@@ -146,7 +150,7 @@ public class HistogramService {
 								"Não foi possível encontrar o caminho informado");
 					}
 
-					StatusRetorno status = recalculate(bOW, histogram, true);
+					StatusRetorno status = recalculate(bOW, histogram, true, true);
 
 					if (status != StatusRetorno.ALREADY_IN_VOCABULARY) {
 						histogram.setNeedRecount(true);
@@ -214,7 +218,7 @@ public class HistogramService {
 			if (nGramOpt.isPresent()) {
 				NGram nGram = nGramOpt.orElseThrow();
 
-				if (hist.isInHistogram(nGram)) {
+				if (hist.isInHistogram(nGram) >= 0) {
 					continue;
 				}
 				counter = hist.countWords(bagOfWords, nGram.getGram());
@@ -223,7 +227,7 @@ public class HistogramService {
 					item = buildHistogramItem(hist, counter, nGram);
 					item.setId(i);
 
-					hist.getHistogram().add(item);
+					hist.addItem(item);
 					i++;
 				}
 			}
@@ -241,7 +245,7 @@ public class HistogramService {
 		return item;
 	}
 
-	private StatusRetorno recalculate(List<String> bagOfWords, Histogram hist, boolean isEdit) {
+	private StatusRetorno recalculate(List<String> bagOfWords, Histogram hist, boolean isEdit, boolean isSchedule) {
 
 		StatusRetorno statusReturn = StatusRetorno.ALREADY_IN_VOCABULARY;
 
@@ -257,7 +261,7 @@ public class HistogramService {
 		int counter;
 		Set<String> words = new HashSet<>(bagOfWords);
 
-		if (isEdit) {
+		if (isEdit && !isSchedule) {
 			histogramItemRepository.updateAnalyzed(hist.getId(), false);
 		}
 
@@ -269,9 +273,9 @@ public class HistogramService {
 				counter = hist.countWords(bagOfWords, nGram.getGram());
 
 				if (counter > 0) {
-					if (isEdit && hist.isInHistogram(nGram)) {
+					if (isEdit && hist.isInHistogram(nGram) >= 0) {
 						item = histogramItemRepository.findByKeyAndOwner(nGram, hist);
-						hist.getHistogram().remove(item);
+						hist.removeItem(item);
 						item.setCount(counter);
 						item.setAnalyzed(true);
 					} else {
@@ -279,7 +283,7 @@ public class HistogramService {
 					}
 
 					item = histogramItemRepository.save(item);
-					hist.getHistogram().add(item);
+					hist.addItem(item);
 				}
 			}
 		}
@@ -287,7 +291,7 @@ public class HistogramService {
 
 		if (isEdit) {
 			oldItems = histogramItemRepository.findByOwnerAndAnalyzed(hist, false);
-			hist.getHistogram().removeAll(oldItems);
+			hist.removeAllItems(oldItems);
 		}
 
 		Histogram dbHistogram = calculateTfIdf(hist, histogramRepository.countByInitialized(true));

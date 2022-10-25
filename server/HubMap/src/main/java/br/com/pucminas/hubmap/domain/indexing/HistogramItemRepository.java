@@ -22,7 +22,7 @@ public interface HistogramItemRepository extends CrudRepository<HistogramItem, L
 	
 	@Modifying(flushAutomatically = true)
 	@Query("UPDATE FROM HistogramItem hi SET hi.analyzed = ?2 WHERE hi.owner.id = ?1 ")
-	void updateAnalyzed(Long ownerId, Boolean analyzed);
+	void updateAnalyzed(Integer ownerId, Boolean analyzed);
 	
 	List<HistogramItem> findByOwnerAndAnalyzed(Histogram owner, Boolean analyzed);
 }

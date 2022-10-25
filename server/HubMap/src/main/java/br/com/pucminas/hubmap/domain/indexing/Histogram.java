@@ -1,10 +1,11 @@
 package br.com.pucminas.hubmap.domain.indexing;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
-import java.util.HashSet;
+import java.util.Comparator;
 import java.util.List;
-import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -15,8 +16,10 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.OrderBy;
 
 import br.com.pucminas.hubmap.domain.post.Post;
+import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -30,19 +33,22 @@ import lombok.ToString;
 @NoArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Histogram implements Serializable {
-
+	
+	private static final HistogramItemComparator COMPARATOR = HistogramItemComparator.getInstance();
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@EqualsAndHashCode.Include
-	private Long id;
+	private Integer id;
 
-	@OneToOne(cascade = CascadeType.ALL)
+	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "POST_ID")
 	private Post post;
 
 	@OneToMany(mappedBy = "owner", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@ToString.Exclude
-	private Set<HistogramItem> histogram = new HashSet<>();
+	@OrderBy("key.id ASC")
+	private List<HistogramItem> histogram = new ArrayList<>();
 
 	private Boolean initialized;
 
@@ -54,37 +60,79 @@ public class Histogram implements Serializable {
 	}
 
 	public HistogramItem getItemFromHistogram(NGram ngram) {
-		for (HistogramItem item : histogram) {
-			if (item.getKey().equals(ngram)) {
-				return item;
-			}
-		}
 
-		return null;
+		HistogramItem item = new HistogramItem();
+		item.setKey(ngram);
+
+		int index = Collections.binarySearch(histogram, item, new Comparator<HistogramItem>() {
+			@Override
+			public int compare(HistogramItem o1, HistogramItem o2) {
+				return o1.getKey().compareTo(o2.getKey());
+			}
+		});
+
+		return index >= 0 ? histogram.get(index) : null;
 	}
 
-	public boolean isInHistogram(String term) {
-		for (HistogramItem item : histogram) {
-			if (item.getKey().getGram().equals(term)) {
-				return true;
-			}
-		}
+	public int isInHistogram(NGram ngram) {
 
-		return false;
-	}
+		HistogramItem item = new HistogramItem();
+		item.setKey(ngram);
 
-	public boolean isInHistogram(NGram nGram) {
-		for (HistogramItem item : histogram) {
-			if (item.getKey().equals(nGram)) {
-				return true;
-			}
-		}
+		int index = Collections.binarySearch(histogram, item, COMPARATOR);
 
-		return false;
+		return index;
 	}
 
 	public int countWords(List<String> bagOfWords, String term) {
 
 		return Collections.frequency(bagOfWords, term);
+	}
+	
+	public boolean addItem(HistogramItem item) {
+		
+		int itemIndex = isInHistogram(item.getKey());
+		boolean bool;
+		
+		if(itemIndex < 0) {
+			bool = histogram.add(item);
+			Collections.sort(histogram, COMPARATOR);
+		} else {
+			bool = false;
+			histogram.set(itemIndex, item);
+		}
+		
+		return bool;
+	}
+	
+	public boolean removeItem(HistogramItem item) {
+		boolean bool = histogram.remove(item);
+		Collections.sort(histogram, COMPARATOR);
+		return bool;
+	}
+	
+	public boolean removeAllItems(Collection<?> items) {
+		boolean bool = histogram.removeAll(items);
+		Collections.sort(histogram, COMPARATOR);
+		return bool;
+	}
+	
+	@NoArgsConstructor(access = AccessLevel.PRIVATE)
+	private static class HistogramItemComparator implements Comparator<HistogramItem> {
+		
+		private static HistogramItemComparator comparator;
+		
+		@Override
+		public int compare(HistogramItem o1, HistogramItem o2) {
+			return o1.getKey().compareTo(o2.getKey());
+		}
+
+		public static HistogramItemComparator getInstance() {
+			if(comparator == null) {
+				comparator = new HistogramItemComparator();
+			}
+				
+			return comparator;
+		}
 	}
 }

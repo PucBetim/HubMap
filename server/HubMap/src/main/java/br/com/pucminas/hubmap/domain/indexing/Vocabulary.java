@@ -28,79 +28,35 @@ import lombok.ToString;
 @Setter
 @NoArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-public class Vocabulary implements Serializable{
-	
+public class Vocabulary implements Serializable {
+
 	public enum StatusRetorno {
-		ALREADY_IN_VOCABULARY,
-		NOT_IN_VOCABULARY,
-		NOT_IN_NEW_VOCABULARY
+		ALREADY_IN_VOCABULARY, NOT_IN_VOCABULARY, NOT_IN_NEW_VOCABULARY
 	}
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@EqualsAndHashCode.Include
 	private Long id;
-	
+
 	@Column(name = "WHEN_UPDATED")
 	private LocalDateTime whenUpdated;
-	
+
 	@Column(name = "HAS_NEW_WORDS")
 	private Boolean hasNewWords;
-	
-	@OneToMany(mappedBy = "vocabulary", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+
+	@OneToMany(mappedBy = "vocabulary", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@ToString.Exclude
 	private Set<NGram> ngrams = new HashSet<>();
-	
+
 	@OneToMany(mappedBy = "newVocabulary", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@ToString.Exclude
-	private Set<NGram> newNGrams = new HashSet<NGram>();
-		
-	public StatusRetorno addNGrams(String gram) {
-		StatusRetorno result = StatusRetorno.ALREADY_IN_VOCABULARY;
-		
-		if(hasInVocabulary(gram) == null) {
-			result = StatusRetorno.NOT_IN_VOCABULARY;
-		}
-		
-		if(!hasInNewVocabulary(gram) && result == StatusRetorno.NOT_IN_VOCABULARY) {
-			result = StatusRetorno.NOT_IN_NEW_VOCABULARY;
-		}
-		
-		if(result != StatusRetorno.ALREADY_IN_VOCABULARY && result == StatusRetorno.NOT_IN_NEW_VOCABULARY) {
-			NGram item = new NGram(gram);
-			item.setNewVocabulary(this);
-			
-			setHasNewWords(true);			
-			newNGrams.add(item);
-		}
-		
-		return result;
-	}
-	
-	public NGram hasInVocabulary(String gram) {
-		for (NGram nGram : ngrams) {
-			if(nGram.getGram().equalsIgnoreCase(gram)) {
-				return nGram;
-			}
-		}
-		
-		return null;
-	}
-	
-	public boolean hasInNewVocabulary(String gram) {
-		for (NGram nGram : newNGrams) {
-			if(nGram.getGram().equalsIgnoreCase(gram)) {
-				return true;
-			}
-		}
-		
-		return false;
-	}
-	
+	private Set<NGram> newNGrams = new HashSet<>();
+
 	public void updateWhenUpdated() {
 		whenUpdated = LocalDateTime.now();
 	}
-	
+
 	public int getOficialSize() {
 		return ngrams.size();
 	}

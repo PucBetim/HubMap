@@ -131,7 +131,7 @@ public class SearchService {
 		for (NGram nGram : vocab) {
 			/*HistogramItem item1 = hist1.getItemFromHistogram(nGram);
 			HistogramItem item2 = hist2.getItemFromHistogram(nGram);*/
-			
+			//TODO change to get tfidf directly
 			HistogramItem item1 = hist1.getItemFromHistogram(nGram);
 			HistogramItem item2 = histogramItemRepository.findByKeyAndOwner(nGram, hist2);
 			double tfIdfH1 = item1 != null ? item1.getTfidf() : 0.0;

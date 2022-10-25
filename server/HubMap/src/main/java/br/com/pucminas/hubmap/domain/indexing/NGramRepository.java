@@ -16,4 +16,6 @@ public interface NGramRepository extends CrudRepository<NGram, Long>{
 	Set<NGram> findByNewVocabulary(Long vocab);
 	
 	Optional<NGram> findByGramAndNewVocabulary(String gram, Vocabulary newVocab);
+	
+	Optional<NGram> findByGramAndVocabulary(String gram, Vocabulary vocab);
 }
