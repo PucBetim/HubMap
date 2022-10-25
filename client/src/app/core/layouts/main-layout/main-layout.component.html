@@ -10,8 +10,8 @@
             </div>
             <div class="toolbar_user">
                 <div class="layoutDefaultStyle" #userNotLogged *ngIf="!user">
-                    <button routerLink="session/signin">Login</button>
-                    <button class="btn-light" routerLink="session/create-account">Criar Conta</button>
+                    <button (click)="goToLogin()">Login</button>
+                    <button (click)="goToCreateAccount()" class="btn-light">Criar Conta</button>
                 </div>
                 <div #userLogged class="userLoggedOptions" *ngIf="user">
                     <div class="grid1">

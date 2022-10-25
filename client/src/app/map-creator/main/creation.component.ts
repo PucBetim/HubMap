@@ -1,5 +1,5 @@
 import { Position } from './../../core/shared/posts/post';
-import { Component, ElementRef, HostListener, OnInit, ViewChild, EventEmitter, AfterContentInit, AfterViewInit } from '@angular/core';
+import { Component, ElementRef, HostListener, OnInit, ViewChild, EventEmitter, AfterContentInit, AfterViewInit, ViewChildren, QueryList } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatMenuTrigger } from '@angular/material/menu';
 
@@ -13,18 +13,16 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { CreatePostComponent } from '../create-post/create-post.component';
 import { VisualCanvasComponent } from 'src/app/core/shared/export-image/visual-canvas/visual-canvas.component';
 import { CanvasService } from 'src/app/core/services/canvas.service';
+import { BlockComponent } from '../block/block.component';
 
 @Component({
   selector: 'app-creation',
   templateUrl: './creation.component.html',
   styleUrls: ['./creation.component.scss']
 })
-export class CreationComponent implements OnInit, ComponentCanDeactivate {
+export class CreationComponent implements OnInit, ComponentCanDeactivate, AfterViewInit {
 
-  @ViewChild('main') main: ElementRef;
   @ViewChild('scrollLink') scrollLink: ElementRef;
-  @ViewChild('canvas') canvas: ElementRef;
-
   @HostListener('window:beforeunload')
   canDeactivate(): Observable<boolean> | boolean {
     return !this.unsavedChanges
@@ -56,9 +54,13 @@ export class CreationComponent implements OnInit, ComponentCanDeactivate {
     this.getPost();
   }
 
+  ngAfterViewInit() {
+    this.scrollToRoot();
+  }
+
   scrollToRoot() {
     if (!this.blockSelected)
-      this.scrollLink.nativeElement.scrollIntoView({
+      this.scrollLink?.nativeElement.scrollIntoView({
         behavior: 'auto',
         block: 'center',
         inline: 'center'
@@ -88,13 +90,16 @@ export class CreationComponent implements OnInit, ComponentCanDeactivate {
     }
     else {
       _post = JSON.parse(localStorage.getItem('post')!);
-      if (_post)
+      if (_post) {
         this.post = _post;
-      localStorage.removeItem('post');
-      this.loading = false;
+        localStorage.removeItem('post');
+        this.unsavedChanges = true;
+        this.loading = false;
+      }
+      else
+        this.loading = false;
     }
   }
-
 
   getBlocks(post: Post) {
     this.loading = true;
@@ -219,7 +224,7 @@ export class CreationComponent implements OnInit, ComponentCanDeactivate {
         if (result.link) { // Não logado
           this.save();
           this.unsavedChanges = false;
-          this.router.navigate([result.link, {savedRoute: window.location.href}]);
+          this.router.navigate([result.link, { savedRoute: this.router.url }]);
         }
         else {  //Logado
           this.snackBar.open(result.msg, "Ok", {

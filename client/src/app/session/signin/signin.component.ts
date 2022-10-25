@@ -16,6 +16,7 @@ export class SigninComponent implements OnInit {
   public errors: any[] = [];
   public loginForm: Login;
   public carregando: boolean = false;
+  public savedRoute: string = ""
 
   constructor(
     private fb: FormBuilder,
@@ -26,6 +27,7 @@ export class SigninComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.savedRoute = this.route.snapshot.params['savedRoute'];
     sessionStorage.clear();
     this.form = this.fb.group({
       email: ['', [Validators.required, Validators.email, Validators.maxLength(100)]],
@@ -57,12 +59,18 @@ export class SigninComponent implements OnInit {
       {
         next: result => {
           sessionStorage.setItem('hubmap.user', JSON.stringify(result.body));
-          this.router.navigate(['/']);
+          if (this.savedRoute)
+            this.router.navigate([this.savedRoute])
+          else
+            this.router.navigate(['/']);
         },
         error: error => {
           this.snackBar.open("Falha ao fazer login! Tente novamente mais tarde.", "Ok");
-
-      }
+        }
       })
-}
+  }
+
+  goToCreateAccount() {
+    this.router.navigate(['session/create-account', { savedRoute: this.savedRoute}]);
+  }
 }

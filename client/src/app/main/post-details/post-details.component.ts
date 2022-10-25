@@ -97,7 +97,8 @@ export class PostDetailsComponent implements OnInit {
           next: result => {
             this.post = result.body;
             this.loading = false;
-            this.viewPost();
+            if (this.loggedUser)
+              this.viewPost();
             this.getComments();
           },
           error: error => {
@@ -195,7 +196,7 @@ export class PostDetailsComponent implements OnInit {
 
   commentPost() {
     if (!this.loggedUser) {
-      this.router.navigate(['session/create-account']);
+      this.router.navigate(['session/create-account', { savedRoute: this.router.url }]);
       return;
     }
 
@@ -234,7 +235,7 @@ export class PostDetailsComponent implements OnInit {
 
   likePost() {
     if (!this.loggedUser) {
-      this.router.navigate(['session/create-account']);
+      this.router.navigate(['session/create-account', { savedRoute: this.router.url }]);
       return;
     }
 
@@ -255,7 +256,7 @@ export class PostDetailsComponent implements OnInit {
 
   dislikePost() {
     if (!ConfigService.getUser()) {
-      this.router.navigate(['session/create-account']);
+      this.router.navigate(['session/create-account', { savedRoute: this.router.url }]);
       return;
     }
 

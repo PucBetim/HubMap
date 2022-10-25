@@ -26,4 +26,12 @@ export class MainLayoutComponent implements OnInit {
     this.user = null;
     this.router.navigate(['']);
   }
+
+  goToLogin(){
+    this.router.navigate(['session/signin', { savedRoute: this.router.url }]);
+  }
+
+  goToCreateAccount(){
+    this.router.navigate(['session/create-account', { savedRoute: this.router.url }]);
+  }
 }

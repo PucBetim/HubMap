@@ -79,9 +79,6 @@ export class DisplayCanvasComponent implements OnInit {
 
   goToDetails() {
     if (this.showOptions) {
-      // var user = ConfigService.getUser()
-      // if (user && user.id != this.post.author.id)
-      //   this.postService.viewPost(this.post.id).subscribe()
       this.router.navigateByUrl(`/details/${this.post.id}/${this.post.author.id}`);
     }
   }

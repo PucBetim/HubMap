@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { EmailValidator } from 'src/app/core/shared/validators/email-validator.component';
 import { PasswordValidator } from 'src/app/core/shared/validators/password-validator.component';
 import { User } from '../models/user';
@@ -16,14 +16,17 @@ export class CreateAccountComponent implements OnInit {
   public form: FormGroup;
   public errors: any[] = [];
   public carregando: boolean = false;
+  public savedRoute: string = "";
 
   constructor(
     private fb: FormBuilder,
     private sessionService: SessionService,
     private router: Router,
+    private route: ActivatedRoute,
   ) { }
 
   ngOnInit(): void {
+    this.savedRoute = this.route.snapshot.params['savedRoute'];
     sessionStorage.clear();
     this.form = this.fb.group({
       name: ['', [Validators.required, Validators.maxLength(80)]],
@@ -45,12 +48,12 @@ export class CreateAccountComponent implements OnInit {
       p.nick = form.nick;
       p.email = form.email;
       p.password = form.password;
-      
+
       this.sessionService.createUser(p)
         .subscribe({
           next: result => {
-            this.onCreate(result);
             this.carregando = false;
+            this.router.navigate(['/session/signin', { savedRoute: this.savedRoute }]);
           },
           error: error => {
             this.carregando = false;
@@ -59,7 +62,7 @@ export class CreateAccountComponent implements OnInit {
     }
   }
 
-  onCreate(result: any) {
-    this.router.navigate(['/session/signin']);
+  goToLogin(){
+    this.router.navigate(['session/signin', { savedRoute: this.savedRoute }]);
   }
 }

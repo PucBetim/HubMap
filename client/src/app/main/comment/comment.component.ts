@@ -67,7 +67,7 @@ export class CommentComponent implements OnInit {
 
   openReply() {
     if (!ConfigService.getUser()) {
-      this.router.navigate(['session/create-account']);
+      this.router.navigate(['session/create-account', { savedRoute: this.router.url }]);
       return;
     }
     this.responseOpened = true
@@ -75,7 +75,7 @@ export class CommentComponent implements OnInit {
 
   replyComment() {
     if (!ConfigService.getUser()) {
-      this.router.navigate(['session/create-account']);
+      this.router.navigate(['session/create-account', { savedRoute: this.router.url }]);
       return;
     }
 
