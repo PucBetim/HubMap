@@ -32,6 +32,13 @@
             color: rgba(2, 2, 2, 0.4);
         }
     }
+
+    .title{
+        position: absolute;
+        bottom: 10px;
+        text-align: center;
+        z-index: 50;
+    }
 }
 
 .options {

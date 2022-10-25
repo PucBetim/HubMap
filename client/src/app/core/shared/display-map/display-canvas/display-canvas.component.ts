@@ -27,6 +27,7 @@ export class DisplayCanvasComponent implements OnInit {
   public zoomed: boolean = false;
   public result: boolean = false;
   public optionsClass: string[] = [];
+  public showTitle: boolean = true;
 
   constructor(
     private getLimitPoints: GetLimitPoints,
@@ -38,6 +39,15 @@ export class DisplayCanvasComponent implements OnInit {
     this.mapSize = this.size;
     if (this.showOptions) this.optionsClass = ['optionMode']
     this.loadCanvas();
+  }
+
+  onMouseEnter() {
+    //this.optionsStyle = ['hover']
+    //this.showTitle = false;
+  }
+  onMouseLeave() {
+    //this.optionsStyle = []
+    this.showTitle = true;
   }
 
   loadCanvas() {
