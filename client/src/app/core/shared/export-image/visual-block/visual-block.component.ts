@@ -14,9 +14,8 @@ export class VisualBlockComponent implements OnInit {
   @Input() block: Block;
   @Input() parentBlock: Block;
 
-  constructor(private eRef: ElementRef) { }
+  constructor() { }
 
   ngOnInit(): void {
   }
-
 }

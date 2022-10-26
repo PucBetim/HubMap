@@ -41,7 +41,7 @@
 
             .mat-icon {
                 height: fit-content;
-                font-size: large;
+                font-size:larger;
                 padding: 0 5px;
             }
         }
@@ -119,15 +119,27 @@
         'left middle right';
     grid-template-columns: 33% 33% 33%;
 
-    h3,h4{
-        mat-icon{
+    h3,
+    h4 {
+        mat-icon {
             height: fit-content;
             font-size: medium;
             vertical-align: middle;
         }
     }
+
     h4 {
         font-weight: 100;
+        text-align: justify;
+    }
+
+    .ft {
+        display: flex;
+        flex-direction: column;
+
+        .logo {
+            height: 75px;
+        }
     }
 
     .ft_left {

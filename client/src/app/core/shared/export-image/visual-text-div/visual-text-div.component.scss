@@ -1,28 +1,37 @@
 .textContainer {
-    overflow-wrap: break-word;
-    word-wrap: break-word;
-    hyphens: auto;
-    overflow: hidden;
-    resize: both;
-  }
-  
-  .textDiv {
-    max-width: 100%;
-    padding: 0;
-    text-align: center;
-    justify-content: center;
-    background: transparent;
-    border: none;
-    outline: none;
-    line-height: 1em;
-  
-    overflow-wrap: break-word;
-    word-wrap: break-word;
-    hyphens: auto;
-    white-space: normal;
-  
-    top: 50%;
-    transform: translateY(-50%);
-    position: relative;
-  }
-  
+  overflow: hidden;
+  resize: both;
+  min-height: 50px;
+  min-width: 50px;
+
+  position: relative;
+}
+
+.textPanel {
+  display: table;
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+}
+
+.textDiv {
+  min-height: 50px;
+  min-width: 50px;
+  overflow: hidden;
+  max-width: 100%;
+  padding: 0;
+  text-align: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  outline: none;
+  line-height: 1em;
+  white-space: pre-wrap;
+
+
+  display: table-cell;
+  vertical-align: middle;
+  position: relative;
+}

@@ -1,8 +1,8 @@
 <div (click)="goToDetails()" [ngClass]="optionsClass" class="container" (mouseenter)="onMouseEnter()"
-    (mouseleave)="onMouseLeave()" *ngIf="result" [style.max-width]="mapSize + 15 + 'px'"
-    [style.max-height]="mapSize + 15 + 'px'">
+    (mouseleave)="onMouseLeave()" *ngIf="result" [style.max-width.px]="mapSize + (margin * 2)"
+    [style.max-height.px]="mapSize + (margin * 2)">
 
-    <div class="canvas" #canvas [style.width]="mapSize + 'px'" [style.height]="mapSize + 'px'">
+    <div class="canvas" #canvas [style.width.px]="mapSize" [style.height.px]="mapSize" [style.border-width.px]="margin">
 
         <div class="zoomIcon" *ngIf="zoomSize > 0">
             <a *ngIf="!zoomed" (click)="zoom(true)">
@@ -17,11 +17,11 @@
             (unselectBlockEvent)="unselectBlock()" (saveProgressEvent)="saveProgress()"
             *ngFor="let block of visualPost.map" [block]="block">
         </display-block>
-
-        <div class="title title-deco" *ngIf="showOptions && showTitle">{{visualPost.title}}</div>
     </div>
 
-    <div class="options" *ngIf="showOptions" [style.width]="mapSize + 'px'" [style.height]="mapSize / 2 + 'px'"
+    <div class="title title-deco" *ngIf="showOptions && showTitle">{{visualPost.title}}</div>
+
+    <div class="options" *ngIf="showOptions" [style.width.px]="mapSize" [style.height.px]="mapSize / 2"
         [ngClass]="optionsStyle">
         <div class="title-deco">
             <h2>{{visualPost.title}}</h2>

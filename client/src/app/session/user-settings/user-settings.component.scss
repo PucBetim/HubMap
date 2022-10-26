@@ -113,5 +113,10 @@
         position: relative;
         display: flex;
         flex-wrap: wrap;
+        justify-content: space-around;
+
+        display-canvas{
+            margin-bottom: 20px;
+        }
     }
 }

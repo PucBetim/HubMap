@@ -1,3 +1,4 @@
+import { CanvasService } from 'src/app/core/services/canvas.service';
 import { PostService } from '../../posts/post-blocks.service';
 import { Component, Input, OnInit } from '@angular/core';
 import { GetLimitPoints } from 'src/app/map-creator/getLimitPoints';
@@ -28,25 +29,26 @@ export class DisplayCanvasComponent implements OnInit {
   public result: boolean = false;
   public optionsClass: string[] = [];
   public showTitle: boolean = true;
+  public margin = CanvasService.displayCanvasMargin;;
 
   constructor(
     private getLimitPoints: GetLimitPoints,
     private router: Router,
-    private postService: PostService
   ) { }
 
   ngOnInit(): void {
     this.mapSize = this.size;
+    console.log(this.margin)
     if (this.showOptions) this.optionsClass = ['optionMode']
     this.loadCanvas();
   }
 
   onMouseEnter() {
-    //this.optionsStyle = ['hover']
-    //this.showTitle = false;
+    this.optionsStyle = ['hover']
+    this.showTitle = false;
   }
   onMouseLeave() {
-    //this.optionsStyle = []
+    this.optionsStyle = []
     this.showTitle = true;
   }
 

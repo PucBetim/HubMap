@@ -5,7 +5,7 @@
             <div class="toolbar_search">
                 <a href="search" class="searchMap"
                     [ngClass]="{'disabled' : router.url == '/search', 'active' : router.url != '/search'}">
-                    Buscar Mapas <mat-icon>search</mat-icon>
+                    BUSCAR MAPAS <mat-icon>search</mat-icon>
                 </a>
             </div>
             <div class="toolbar_user">
@@ -29,21 +29,37 @@
         <router-outlet></router-outlet>
     </div>
 
-    <div class="footer">
+    <div class="footer layoutDefaultStyle">
         <div class="ft ft_left">
-            <h3> IDIOMAS <mat-icon>language</mat-icon>
-            </h3>
-            <h4> Português</h4>
+            <div>
+                <h3>SOBRE</h3>
+                <h4>
+                    HubMap é um sistema para criação e compartilhamento de mapas mentais desenvolvido como projeto de
+                    conclusão de curso apresentado à Pontifícia Universidade Católica de Minas Gerais.
+                </h4>
+            </div>
+            <a href="http://www.pucminas.br"><img class="logo" src="/assets/img/puc_minas_logo.png" alt=""></a>
         </div>
         <div class="ft ft_middle">
-            <h3>HUBMAP</h3>
-            <h3>2022</h3>
+            <div>
+                <h3>HUBMAP</h3>
+                <h3>2022</h3>
+            </div>
         </div>
         <div class="ft ft_right">
-            <h3>
-                <mat-icon> business</mat-icon> E-MAIL DE CONTATO
-            </h3>
-            <h4> carloseduardosesilva@gmail.com</h4>
+            <div>
+                <h3>
+                    E-MAIL DE CONTATO <mat-icon> business</mat-icon>
+                </h3>
+                <h4> carloseduardosesilva@gmail.com</h4>
+                <hr>
+            </div>
+            <div class="pushBottom">
+                <h3> IDIOMAS <mat-icon>language</mat-icon>
+                </h3>
+                <h4> Português</h4>
+                <br>
+            </div>
         </div>
     </div>
 </div>

@@ -1,11 +1,25 @@
 .textContainer {
   overflow: hidden;
   resize: both;
-  min-height: 75px;
-  min-width: 75px;
+  min-height: 50px;
+  min-width: 50px;
+
+  position: relative;
+}
+
+.textPanel {
+  display: table;
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
 }
 
 .textDiv {
+  min-height: 50px;
+  min-width: 50px;
+  overflow: hidden;
   max-width: 100%;
   padding: 0;
   text-align: center;
@@ -16,7 +30,7 @@
   line-height: 1em;
   white-space: pre-wrap;
 
-  top: 50%;
-  transform: translateY(-50%);
+  display: table-cell;
+  vertical-align: middle;
   position: relative;
 }

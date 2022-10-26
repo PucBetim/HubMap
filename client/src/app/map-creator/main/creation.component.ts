@@ -127,8 +127,8 @@ export class CreationComponent implements OnInit, ComponentCanDeactivate, AfterV
     _block.fontColor = "#ffffff"
     _block.fontSize = 18;
     _block.content = "Editar";
-    _block.size.width = 125;
-    _block.size.height = 50;
+    _block.size.width = 150;
+    _block.size.height = 75;
     _block.position.x = (this.canvasSize.width + _block.size.width) / 2;
     _block.position.y = (this.canvasSize.height + _block.size.height) / 2;
 
