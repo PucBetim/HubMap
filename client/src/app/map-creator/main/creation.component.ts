@@ -26,6 +26,30 @@ export class CreationComponent implements OnInit, ComponentCanDeactivate {
     return !this.unsavedChanges
   }
 
+  @HostListener('window:keydown', ['$event'])
+  keyEvent(event: KeyboardEvent) {
+    switch (event.key) {
+      case 'Delete': {
+        if (this.blockSelected)
+          this.onDeleteBlock(this.post.map);
+        break;
+      };
+      case 'z': {
+        if (event.ctrlKey && !this.blockSelected)
+          this.undo();
+        break;
+      };
+      case 's': {
+        if (event.ctrlKey) {
+          event.preventDefault()
+          this.createPost();
+        }
+        break;
+      }
+      default: break;
+    }
+  }
+
   public post = new Post;
   public canvasSize = CanvasService.canvasSize;
 
@@ -35,7 +59,7 @@ export class CreationComponent implements OnInit, ComponentCanDeactivate {
   public savedProgress: [Block[]] = [[]];
   public unsavedChanges: boolean = false;
   public loading: boolean = false;
-  
+
   public editorMode: boolean = false;
   public childrenLoaded: boolean = false;
 
@@ -208,7 +232,7 @@ export class CreationComponent implements OnInit, ComponentCanDeactivate {
   createPost() {
     var createPostConfig = {
       disableClose: false,
-      width: '300px',
+      width: '400px',
       height: 'auto',
       data: {
         post: this.post,

@@ -13,7 +13,7 @@
             </button>
 
             <button class="sidebarGrid option" matTooltipClass="tooltip" matTooltip="Deletar Bloco"
-                (mousedown)="onDeleteBlock(this.post.map)" mat-mini-fab [ngClass]="{'disabled' : !blockSelected}"
+                (click)="onDeleteBlock(this.post.map)" mat-mini-fab [ngClass]="{'disabled' : !blockSelected}"
                 [disabled]="!blockSelected">
                 <mat-icon>delete</mat-icon>
             </button>
