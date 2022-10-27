@@ -1,28 +1,26 @@
-import { Position } from './../../core/shared/posts/post';
-import { Component, ElementRef, HostListener, OnInit, ViewChild, EventEmitter, AfterContentInit, AfterViewInit, ViewChildren, QueryList } from '@angular/core';
+import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { MatMenuTrigger } from '@angular/material/menu';
+import { ActivatedRoute, Router } from '@angular/router';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { Observable, Subscription } from 'rxjs';
 
 import { Post, Block } from '../../core/shared/posts/post';
-import { Observable, Subscription } from 'rxjs';
 import { ComponentCanDeactivate } from 'src/app/core/services/guard.service';
 import { PostService } from '../../core/shared/posts/post-blocks.service';
 import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
-import { ActivatedRoute, Router } from '@angular/router';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { CreatePostComponent } from '../create-post/create-post.component';
 import { VisualCanvasComponent } from 'src/app/core/shared/export-image/visual-canvas/visual-canvas.component';
 import { CanvasService } from 'src/app/core/services/canvas.service';
-import { BlockComponent } from '../block/block.component';
 
 @Component({
   selector: 'app-creation',
   templateUrl: './creation.component.html',
   styleUrls: ['./creation.component.scss']
 })
-export class CreationComponent implements OnInit, ComponentCanDeactivate, AfterViewInit {
+export class CreationComponent implements OnInit, ComponentCanDeactivate {
 
   @ViewChild('scrollLink') scrollLink: ElementRef;
+
   @HostListener('window:beforeunload')
   canDeactivate(): Observable<boolean> | boolean {
     return !this.unsavedChanges
@@ -32,12 +30,14 @@ export class CreationComponent implements OnInit, ComponentCanDeactivate, AfterV
   public canvasSize = CanvasService.canvasSize;
 
   public selectedBlock: Block;
-  public savedProgress: [Block[]] = [[]];
+  public blockSelected: boolean = false;
 
+  public savedProgress: [Block[]] = [[]];
   public unsavedChanges: boolean = false;
   public loading: boolean = false;
-  public blockSelected: boolean = false;
+  
   public editorMode: boolean = false;
+  public childrenLoaded: boolean = false;
 
   public sub: Subscription;
   public id: string;
@@ -52,10 +52,6 @@ export class CreationComponent implements OnInit, ComponentCanDeactivate, AfterV
 
   ngOnInit(): void {
     this.getPost();
-  }
-
-  ngAfterViewInit() {
-    this.scrollToRoot();
   }
 
   scrollToRoot() {
@@ -127,8 +123,8 @@ export class CreationComponent implements OnInit, ComponentCanDeactivate, AfterV
     _block.fontColor = "#ffffff"
     _block.fontSize = 18;
     _block.content = "Editar";
-    _block.size.width = 150;
-    _block.size.height = 75;
+    _block.size.width = 125;
+    _block.size.height = 50;
     _block.position.x = (this.canvasSize.width + _block.size.width) / 2;
     _block.position.y = (this.canvasSize.height + _block.size.height) / 2;
 
@@ -137,7 +133,10 @@ export class CreationComponent implements OnInit, ComponentCanDeactivate, AfterV
   }
 
   finishedLoading() {
-    this.scrollToRoot();
+    if (!this.childrenLoaded) {
+      this.scrollToRoot();
+      this.childrenLoaded = true;
+    }
   }
 
   selectBlock(block: Block) {
