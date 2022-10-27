@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
@@ -90,14 +91,12 @@ public class SearchService {
 		}
 		measure.stop();
 		
-		if (!histogramsSimilarity.isEmpty()) {
-			Collections.sort(histogramsSimilarity, new Comparator<>() {
-				@Override
-				public int compare(HistogramSearch o1, HistogramSearch o2) {
-					return -1 * o1.getSimilarity().compareTo(o2.getSimilarity());
-				}
-			});
-		}
+		Collections.sort(histogramsSimilarity, new Comparator<>() {
+			@Override
+			public int compare(HistogramSearch o1, HistogramSearch o2) {
+				return -1 * o1.getSimilarity().compareTo(o2.getSimilarity());
+			}
+		});
 			
 		System.out.println(measure.prettyPrint());
 		return histogramsSimilarity.stream()
@@ -129,13 +128,10 @@ public class SearchService {
 		double s = 0;
 
 		for (NGram nGram : vocab) {
-			/*HistogramItem item1 = hist1.getItemFromHistogram(nGram);
-			HistogramItem item2 = hist2.getItemFromHistogram(nGram);*/
-			//TODO change to get tfidf directly
 			HistogramItem item1 = hist1.getItemFromHistogram(nGram);
-			HistogramItem item2 = histogramItemRepository.findByKeyAndOwner(nGram, hist2);
+			Optional<HistogramItem> item2 = histogramItemRepository.findByKeyAndOwner(nGram, hist2);
 			double tfIdfH1 = item1 != null ? item1.getTfidf() : 0.0;
-			double tfIdfH2 = item2 != null ? item2.getTfidf() : 0.0;
+			double tfIdfH2 = item2.isPresent() ? item2.get().getTfidf() : 0.0;
 
 			divisor += tfIdfH1 + tfIdfH2;
 			dividend += Math.abs(tfIdfH1 - tfIdfH2);

@@ -1,6 +1,7 @@
 package br.com.pucminas.hubmap.domain.indexing;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -12,7 +13,7 @@ public interface HistogramItemRepository extends CrudRepository<HistogramItem, L
 
 	List<HistogramItem> findByOwner(Histogram owner);
 
-	HistogramItem findByKeyAndOwner(NGram nGram, Histogram owner);
+	Optional<HistogramItem> findByKeyAndOwner(NGram nGram, Histogram owner);
 	
 	@Query("SELECT hi.tfidf FROM HistogramItem hi WHERE hi.owner.id = ?2 AND hi.key.id = ?1 ")
 	Double findTfIdfByKeyAndOwner(Long nGramId, Long ownerId);

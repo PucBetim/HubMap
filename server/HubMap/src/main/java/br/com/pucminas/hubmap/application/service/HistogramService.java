@@ -201,8 +201,7 @@ public class HistogramService {
 
 		counter = counter == 0 ? 1 : counter;
 
-		// TODO Check this formula with Professor
-		return 1.0 + Math.log(1.0 * totalElements / counter);
+		return Math.log(1.0 * totalElements / counter);
 	}
 
 	private Histogram initializeSearchHistogram(List<String> bagOfWords) {
@@ -274,7 +273,7 @@ public class HistogramService {
 
 				if (counter > 0) {
 					if (isEdit && hist.isInHistogram(nGram) >= 0) {
-						item = histogramItemRepository.findByKeyAndOwner(nGram, hist);
+						item = histogramItemRepository.findByKeyAndOwner(nGram, hist).orElseThrow();
 						hist.removeItem(item);
 						item.setCount(counter);
 						item.setAnalyzed(true);

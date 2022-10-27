@@ -33,9 +33,9 @@ import lombok.ToString;
 @NoArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Histogram implements Serializable {
-	
+
 	private static final HistogramItemComparator COMPARATOR = HistogramItemComparator.getInstance();
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@EqualsAndHashCode.Include
@@ -45,6 +45,8 @@ public class Histogram implements Serializable {
 	@JoinColumn(name = "POST_ID")
 	private Post post;
 
+	// TODO Rollback this for Set and change EAGER for LAZY. Fix problems with
+	// related methods
 	@OneToMany(mappedBy = "owner", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@ToString.Exclude
 	@OrderBy("key.id ASC")
@@ -88,50 +90,50 @@ public class Histogram implements Serializable {
 
 		return Collections.frequency(bagOfWords, term);
 	}
-	
+
 	public boolean addItem(HistogramItem item) {
-		
+
 		int itemIndex = isInHistogram(item.getKey());
 		boolean bool;
-		
-		if(itemIndex < 0) {
+
+		if (itemIndex < 0) {
 			bool = histogram.add(item);
 			Collections.sort(histogram, COMPARATOR);
 		} else {
 			bool = false;
 			histogram.set(itemIndex, item);
 		}
-		
+
 		return bool;
 	}
-	
+
 	public boolean removeItem(HistogramItem item) {
 		boolean bool = histogram.remove(item);
 		Collections.sort(histogram, COMPARATOR);
 		return bool;
 	}
-	
+
 	public boolean removeAllItems(Collection<?> items) {
 		boolean bool = histogram.removeAll(items);
 		Collections.sort(histogram, COMPARATOR);
 		return bool;
 	}
-	
+
 	@NoArgsConstructor(access = AccessLevel.PRIVATE)
 	private static class HistogramItemComparator implements Comparator<HistogramItem> {
-		
+
 		private static HistogramItemComparator comparator;
-		
+
 		@Override
 		public int compare(HistogramItem o1, HistogramItem o2) {
 			return o1.getKey().compareTo(o2.getKey());
 		}
 
 		public static HistogramItemComparator getInstance() {
-			if(comparator == null) {
+			if (comparator == null) {
 				comparator = new HistogramItemComparator();
 			}
-				
+
 			return comparator;
 		}
 	}
