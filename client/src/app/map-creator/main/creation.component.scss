@@ -3,7 +3,7 @@
     width: 100%;
     display: grid;
     grid-template: "sidebar gap canvas";
-    grid-template-columns: 75px 10px auto;
+    grid-template-columns: auto 10px auto;
     position: relative;
 
     -webkit-user-select: none;
@@ -16,6 +16,10 @@
     background-color: #316b83;
     position: relative;
     overflow: hidden;
+
+    max-width: 75px;
+    min-width: 50px;
+    width: 3vw;
 
     .containerSideBar {
         position: absolute;
@@ -37,11 +41,9 @@
             max-height: 40px;
         }
 
-        .sidebarTitle {
-            a {
-                text-decoration: none;
-                color: inherit;
-            }
+        .title {
+            margin: 5px;
+            width: fill;
         }
 
         .bottom {
@@ -96,7 +98,8 @@
             bottom: 20px;
             right: 20px;
             z-index: 20;
-            mat-icon{
+
+            mat-icon {
                 transform: scale(1.5);
             }
         }

@@ -16,17 +16,12 @@
         color: aliceblue;
         min-height: 10vh;
 
-        h1 {
-            grid-area: grid1;
-            font-size: 5vh;
-        }
-        a {
-            text-decoration: none;
-            color: inherit;
+        .logo {
+            height: 4em;
         }
     }
 
-    .content{
+    .content {
         height: 82vh;
     }
 }

@@ -19,15 +19,8 @@
         'grid1 grid2 grid3 grid4 grid5';
     grid-template-columns: min-content 15% auto auto 30%;
 
-    .toolbar_title {
-        grid-area: grid1;
-        font-size: 5vh;
-
-        a {
-            text-decoration: none;
-            color: inherit;
-            padding: 0 25px;
-        }
+    .logo {
+        height: 4em;
     }
 
     .toolbar_search {
@@ -41,7 +34,7 @@
 
             .mat-icon {
                 height: fit-content;
-                font-size:larger;
+                font-size: larger;
                 padding: 0 5px;
             }
         }
@@ -152,6 +145,12 @@
         text-align: center;
         margin: 50px;
         grid-area: middle;
+        display: grid;
+
+        .logo {
+            height: 2em;
+        }
+
     }
 
     .ft_right {
