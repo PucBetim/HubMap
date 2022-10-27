@@ -14,7 +14,7 @@
     [style.border-color]="this.block.backgroundColor | toneHexColor: -30" [cdkDragFreeDragPosition]="afterImagePosition"
     [style.width]="afterImageSize + 'px'" [style.height]="afterImageSize + 'px'"></div>
 
-<div class="block" cdkDrag cdkDragBoundary=".canvas" [cdkDragFreeDragPosition]="block.position"
+<div class="block"  #blockRef cdkDrag cdkDragBoundary=".canvas" [cdkDragFreeDragPosition]="block.position"
     (mousedown)="clickInside()" [style.background-color]="block.backgroundColor"
     [style.border-radius]="block.borderRadius + 'px'">
 

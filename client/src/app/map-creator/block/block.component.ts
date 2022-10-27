@@ -24,8 +24,13 @@ export class BlockComponent implements OnInit, AfterContentInit {
   @Output() saveProgressEvent = new EventEmitter<any>();
   @Output() finishedLoadingEvent = new EventEmitter<boolean>();
 
+  @ViewChild('blockRef') blockRef: ElementRef;
+
   @HostListener('document:click', ['$event'])
   clickout(event: any) {
+
+    if (this.blockSelected && (event.target == this.blockRef.nativeElement))
+      this.onDrag(event, true)
     if (!this.eRef.nativeElement.contains(event.target)) {
 
       if (this.blockSelected)
@@ -42,8 +47,8 @@ export class BlockComponent implements OnInit, AfterContentInit {
   constructor(private eRef: ElementRef, private snackBar: MatSnackBar) { }
 
   ngAfterContentInit(): void {
-    if(this.block.blocks.length == 0)
-    this.emitFinishedLoading();
+    if (this.block.blocks.length == 0)
+      this.emitFinishedLoading();
   }
 
   emitFinishedLoading() {
