@@ -65,7 +65,9 @@ export class SigninComponent implements OnInit {
             this.router.navigate(['/']);
         },
         error: error => {
-          this.snackBar.open("Falha ao fazer login! Tente novamente mais tarde.", "Ok");
+          this.snackBar.open("Falha ao fazer login! Tente novamente mais tarde.", "Ok", {
+            duration: 2000
+          });
         }
       })
   }

@@ -132,7 +132,9 @@ export class CreationComponent implements OnInit, ComponentCanDeactivate {
         this.savedProgress = [JSON.parse(JSON.stringify(this.post.map))];
         this.loading = false;
       }, error: error => {
-        this.snackBar.open(error.errors);
+        this.snackBar.open("Erro ao obter blocos do mapa mental! Tente novamente mais tarde.", "Ok", {
+          duration: 2000
+        });
         this.loading = false;
       }
     })

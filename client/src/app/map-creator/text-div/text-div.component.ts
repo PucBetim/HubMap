@@ -1,4 +1,5 @@
-import { Component, EventEmitter, HostListener, Input, Output, Renderer2, ViewChild } from "@angular/core";
+import { Size } from './../../core/shared/posts/post';
+import { Component, ElementRef, EventEmitter, HostListener, Input, Output, Renderer2, ViewChild } from "@angular/core";
 import { Block } from "../../core/shared/posts/post";
 
 @Component({
@@ -10,6 +11,8 @@ export class TextDivComponent {
   @Output() onResizeEvent = new EventEmitter();
   @Output() resizeFinishedEvent = new EventEmitter();
   @Input() block: Block;
+
+  @ViewChild('textContainer') textContainer: ElementRef;
 
   width: number;
   height: number;
@@ -26,12 +29,15 @@ export class TextDivComponent {
     });
   }
 
-  @HostListener('mouseup', ['$event.target'])
-  resizeFinished(el: any) {
-    if (this.width != el.offsetWidth
-      || this.height != el.offsetHeight) {
-      this.resizeFinishedEvent.emit({ width: el.offsetWidth, height: el.offsetHeight });
-    }
+  @HostListener('window:mouseup', ['$event.target'])
+  teste(el: any) {
+    if (this.width && this.height)
+      if (this.width != this.textContainer.nativeElement.offsetWidth
+        || this.height != this.textContainer.nativeElement.offsetHeight) {
+        this.width = this.textContainer.nativeElement.offsetWidth;
+        this.height = this.textContainer.nativeElement.offsetHeight;
+        this.resizeFinishedEvent.emit();
+      }
   }
 
   @HostListener('document:mouseup')

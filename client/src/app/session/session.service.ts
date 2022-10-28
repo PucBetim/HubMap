@@ -24,7 +24,6 @@ export class SessionService extends BaseService {
   };
 
   updateUser(user: User): Observable<User> {
-    console.log(user)
     return this.http.put<User>(ConfigService.getUrlApi() + this.userUrl, user, ConfigService.getOptions()).pipe(catchError(super.serviceError));
   };
 

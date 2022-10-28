@@ -1,4 +1,4 @@
-<div class="textContainer" [style.width.px]="block.size.width" [style.height.px]="block.size.height"
+<div class="textContainer" #textContainer [style.width.px]="block.size.width" [style.height.px]="block.size.height"
     [style.border-radius]="block.borderRadius + 'px'">
     <div class="textPanel">
         <div class="textDiv" contenteditable="true" [(contenteditableModel)]="block.content"

@@ -20,7 +20,7 @@ export class UserSettingsComponent implements OnInit {
 
   public form: FormGroup;
   public errors: any[] = [];
-  public carregando: boolean = false;
+  public loading: boolean = false;
   public user: User = new User;
   public posts: Post[];
   public results: boolean = false;
@@ -33,7 +33,7 @@ export class UserSettingsComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    var _user = JSON.parse(sessionStorage.getItem('hubmap.user')!);
+    var _user = ConfigService.getUser();
     if (_user) {
       this.user.name = _user.name;
       this.user.email = _user.email;
@@ -63,7 +63,9 @@ export class UserSettingsComponent implements OnInit {
           this.posts = result.body;
         },
         error: error => {
-          this.snackBar.open("Falha ao obter mapas! Tente novamente mais tarde.", "Ok");
+          this.snackBar.open("Falha ao obter mapas! Tente novamente mais tarde.", "Ok", {
+            duration: 2000
+          });
         }
       })
     this.results = true;
@@ -73,7 +75,7 @@ export class UserSettingsComponent implements OnInit {
     if (this.form.dirty && this.form.valid && this.form.dirty) {
       var user = JSON.parse(sessionStorage.getItem('hubmap.user')!)
       if (user) {
-        this.carregando = true;
+        this.loading = true;
         let form = Object.assign({}, new User, this.form.value);
         let p = new User;
         p.name = form.name;
@@ -82,15 +84,37 @@ export class UserSettingsComponent implements OnInit {
         this.sessionService.updateUser(p)
           .subscribe({
             next: result => {
-              this.carregando = false;
-              ConfigService.resetLogin();
+              this.loading = false;
+              this.getUser();
             },
             error: error => {
-              this.carregando = false;
+              this.snackBar.open("Falha ao salvar dados de usuário! Tente novamente mais tarde.", "Ok", {
+                duration: 2000
+              });
+              this.loading = false;
             }
           });
       }
     }
+  }
+
+  getUser() {
+    this.loading = true;
+    this.sessionService.getUserLogado().subscribe({
+      next: result => {
+        sessionStorage.setItem('hubmap.user', JSON.stringify(result.body));
+        this.snackBar.open("Usuário atualizado com sucesso!", "Ok", {
+          duration: 2000
+        });
+        this.loading = false;
+      },
+      error: erro => {
+        this.snackBar.open("Falha ao atualizar o usuário! Tente novamente mais tarde.", "Ok", {
+          duration: 2000
+        });
+        this.loading = false;
+      }
+    })
   }
 
   logout() {

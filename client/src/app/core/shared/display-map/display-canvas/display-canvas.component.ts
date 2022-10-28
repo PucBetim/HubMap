@@ -38,7 +38,6 @@ export class DisplayCanvasComponent implements OnInit {
 
   ngOnInit(): void {
     this.mapSize = this.size;
-    console.log(this.margin)
     if (this.showOptions) this.optionsClass = ['optionMode']
     this.loadCanvas();
   }
