@@ -18,6 +18,8 @@ export class TextDivComponent {
   height: number;
   mouseMoveListener: Function;
 
+  constructor(private renderer: Renderer2) { }
+
   @HostListener('mousedown', ['$event.target'])
   onMouseDown(el: any) {
     this.width = el.offsetWidth;
@@ -44,8 +46,6 @@ export class TextDivComponent {
   onMouseUp(el: any) {
     this.ngOnDestroy();
   }
-
-  constructor(private renderer: Renderer2) { }
 
   ngOnDestroy() {
     if (this.mouseMoveListener) {
