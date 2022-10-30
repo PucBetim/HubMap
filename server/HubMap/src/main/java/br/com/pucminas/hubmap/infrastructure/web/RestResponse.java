@@ -44,7 +44,9 @@ public class RestResponse {
 
 	public static RestResponse fromSearchResult(String msg, List<Integer> ids) {
 
-		String dataId = ids.toString().replace("[", "").replace("]", "");
+		String dataId = ids.toString().replace("[", "")
+					.replace("]", "")
+					.replace(" ", "");
 
 		RestResponse response = new RestResponse(msg, dataId);
 
