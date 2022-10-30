@@ -12,6 +12,7 @@ public class HubMapApplication extends SpringBootServletInitializer {
 
 	@Override
 	protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
+		getLoggerFromClass(HubMapApplication.class).info("HubMap is ready!");
 		return application.sources(HubMapApplication.class);
 	}
 	 
