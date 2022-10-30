@@ -37,7 +37,7 @@ public class VocabularyService {
 	}
 
 	@Transactional
-	@Scheduled(initialDelay = 5 * 5000, fixedDelay = 5 * 1000)
+	@Scheduled(initialDelay = 25 * 1000, fixedDelay = 15 * 60000)
 	protected void updateVocabulary() {
 
 		Set<NGram> nGrams = nGramRepository.findByNewVocabulary(VOCAB_ID);

@@ -51,7 +51,7 @@ public class HistogramService {
 	private ParameterRepository parameterRepository;
 
 	private BlockRepository blockRepository;
-	
+
 	public HistogramService(PythonService pythonService, HistogramItemRepository histogramItemRepository,
 			HistogramRepository histogramRepository, VocabularyService vocabularyService,
 			NGramRepository nGramRepository, ParameterRepository parameterRepository, BlockRepository blockRepository) {
@@ -115,56 +115,94 @@ public class HistogramService {
 		}
 
 		Histogram dbHistogram = histogramRepository.save(hist);
-
+		calculateTfIdf();
+		
 		CompletableFuture.completedFuture(dbHistogram);
 	}
 
 	@Transactional
-	@Scheduled(initialDelay = 10 * 1000, fixedDelay = 8 * 1000)
+	@Scheduled(initialDelay = 30 * 1000, fixedDelay = 20 * 60000)
 	protected void refreshHistograms() {
 		Parameter newWords = parameterRepository.findByTableName(ParametersTableContants.NEW_WORDS_IN_VOCABULARY)
 				.get(0);
 		boolean hasNewWords = Boolean.valueOf(newWords.getValueRegistry());
 
-		if (!hasNewWords) {
-			return;
+		if (hasNewWords) {
+			Pageable pageable = PageableUtils.getPageableFromParameters(0, 10);
+			Page<Histogram> histograms = histogramRepository.findByInitilized(true, pageable);
+
+			while (true) {
+				for (Histogram histogram : histograms) {
+					if (histogram.getNeedRecount()) {
+
+						Block root = blockRepository.findByPost(histogram.getId());
+
+						String sentence = getWordsInBlocks(root, null);
+
+						List<String> bOW;
+
+						try {
+							bOW = pythonService.getBagOfWords(sentence);
+						} catch (IOException e) {
+							throw new InvalidPropertyException(PythonService.class, "hubmap.scripts.python.path",
+									"Não foi possível encontrar o caminho informado");
+						}
+
+						StatusRetorno status = recalculate(bOW, histogram, true, true);
+
+						if (status != StatusRetorno.ALREADY_IN_VOCABULARY) {
+							histogram.setNeedRecount(true);
+						} else {
+							histogram.setNeedRecount(false);
+						}
+
+						getLoggerFromClass(getClass()).debug("Recount all items of histogram " + histogram.getId());
+					}
+
+					histogramRepository.save(histogram);
+				}
+
+				if (histograms.hasNext()) {
+					histograms = histogramRepository.findAll(pageable.next());
+				} else {
+					break;
+				}
+			}
+			
+			newWords.setValueRegistry("false");
+			parameterRepository.save(newWords);
 		}
+
+		calculateTfIdf();
+
+		getLoggerFromClass(getClass()).info("Histograms updated successfuly");
+	}
+
+	private Histogram calculateTfIdf(Histogram histogram, long totalElements) {
+		histogram.getHistogram().forEach(item -> {
+			double tf = calculateTf(item.getCount());
+			double idf = calculateIdf(item.getKey().getId(), totalElements);
+			item.setTfidf(tf * idf);
+		});
+
+		return histogram;
+	}
+	
+	private void calculateTfIdf() {
 
 		Pageable pageable = PageableUtils.getPageableFromParameters(0, 10);
 		Page<Histogram> histograms = histogramRepository.findByInitilized(true, pageable);
+		final long totalElements = histograms.getTotalElements();
 
 		while (true) {
-			for (Histogram histogram : histograms) {
-				if (histogram.getNeedRecount()) {
-
-					Block root = blockRepository.findByPost(histogram.getId());
-
-					String sentence = getWordsInBlocks(root, null);
-
-					List<String> bOW;
-
-					try {
-						bOW = pythonService.getBagOfWords(sentence);
-					} catch (IOException e) {
-						throw new InvalidPropertyException(PythonService.class, "hubmap.scripts.python.path",
-								"Não foi possível encontrar o caminho informado");
-					}
-
-					StatusRetorno status = recalculate(bOW, histogram, true, true);
-
-					if (status != StatusRetorno.ALREADY_IN_VOCABULARY) {
-						histogram.setNeedRecount(true);
-					} else {
-						histogram.setNeedRecount(false);
-					}
-
-					getLoggerFromClass(getClass()).debug("Recount all items of histogram " + histogram.getId());
-				}
-
-				Histogram dbHistogram = histogramRepository.save(histogram);
-				dbHistogram = calculateTfIdf(dbHistogram, histograms.getTotalElements());
-				histogramRepository.save(dbHistogram);
-			}
+			histograms.stream().parallel().forEach(hist -> {
+				hist.getHistogram().forEach(item -> {
+					double tf = calculateTf(item.getCount());
+					double idf = calculateIdf(item.getKey().getId(), totalElements);
+					item.setTfidf(tf * idf);
+				});
+				histogramRepository.save(hist);
+			});
 
 			if (histograms.hasNext()) {
 				histograms = histogramRepository.findAll(pageable.next());
@@ -172,22 +210,6 @@ public class HistogramService {
 				break;
 			}
 		}
-
-		newWords.setValueRegistry("false");
-		parameterRepository.save(newWords);
-
-		getLoggerFromClass(getClass()).info("Histograms updated successfuly");
-	}
-
-	public Histogram calculateTfIdf(Histogram histogram, long totalElements) {
-
-		histogram.getHistogram().parallelStream().forEach(item -> {
-			double tf = calculateTf(item.getCount());
-			double idf = calculateIdf(item.getKey().getId(), totalElements);
-			item.setTfidf(tf * idf);
-		});
-
-		return histogram;
 	}
 
 	private double calculateTf(int count) {
@@ -291,12 +313,6 @@ public class HistogramService {
 		if (isEdit) {
 			oldItems = histogramItemRepository.findByOwnerAndAnalyzed(hist, false);
 			hist.removeAllItems(oldItems);
-		}
-
-		Histogram dbHistogram = calculateTfIdf(hist, histogramRepository.countByInitialized(true));
-		histogramRepository.save(dbHistogram);
-
-		if (isEdit) {
 			histogramItemRepository.deleteAll(oldItems);
 		}
 
