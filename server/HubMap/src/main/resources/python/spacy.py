@@ -23,7 +23,7 @@ def getBagOfWords(sentence):
 def removeStopWords(sentence):
     all_stopwords = nlp.Defaults.stop_words
 
-    all_stopwords |= {".", ",", "+", "-", "/", "|",}
+    all_stopwords |= {".", ",", "+", "-", "/", "|", ":"}
     
     token_sentence = word_tokenize(sentence, "portuguese")
     token_sentence_without_sw = [word for word in token_sentence if not word in all_stopwords and not word.isdigit()]

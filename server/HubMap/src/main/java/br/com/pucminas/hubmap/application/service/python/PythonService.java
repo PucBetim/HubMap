@@ -33,7 +33,7 @@ public class PythonService {
 		List<String> tokens = null;
 		
 		try (Interpreter interp = new SharedInterpreter()) {
-
+			sentence = sentence.toLowerCase();
 			sentence = Normalizer.normalize(sentence, Normalizer.Form.NFKD).replaceAll("\\p{M}", "");
 
 			interp.set("sentence", sentence);
