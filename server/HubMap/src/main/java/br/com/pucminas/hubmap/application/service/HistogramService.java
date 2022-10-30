@@ -116,7 +116,7 @@ public class HistogramService {
 
 		Histogram dbHistogram = histogramRepository.save(hist);
 		calculateTfIdf();
-		
+
 		CompletableFuture.completedFuture(dbHistogram);
 	}
 
@@ -127,54 +127,56 @@ public class HistogramService {
 				.get(0);
 		boolean hasNewWords = Boolean.valueOf(newWords.getValueRegistry());
 
-		if (hasNewWords) {
-			Pageable pageable = PageableUtils.getPageableFromParameters(0, 10);
-			Page<Histogram> histograms = histogramRepository.findByInitilized(true, pageable);
-
-			while (true) {
-				for (Histogram histogram : histograms) {
-					if (histogram.getNeedRecount()) {
-
-						Block root = blockRepository.findByPost(histogram.getId());
-
-						String sentence = getWordsInBlocks(root, null);
-
-						List<String> bOW;
-
-						try {
-							bOW = pythonService.getBagOfWords(sentence);
-						} catch (IOException e) {
-							throw new InvalidPropertyException(PythonService.class, "hubmap.scripts.python.path",
-									"Não foi possível encontrar o caminho informado");
-						}
-
-						StatusRetorno status = recalculate(bOW, histogram, true, true);
-
-						if (status != StatusRetorno.ALREADY_IN_VOCABULARY) {
-							histogram.setNeedRecount(true);
-						} else {
-							histogram.setNeedRecount(false);
-						}
-
-						getLoggerFromClass(getClass()).debug("Recount all items of histogram " + histogram.getId());
-					}
-
-					histogramRepository.save(histogram);
-				}
-
-				if (histograms.hasNext()) {
-					histograms = histogramRepository.findAll(pageable.next());
-				} else {
-					break;
-				}
-			}
-			
-			newWords.setValueRegistry("false");
-			parameterRepository.save(newWords);
+		if (!hasNewWords) {
+			getLoggerFromClass(getClass()).debug("Histograms is already up-to-date");
+			return;
 		}
 
-		calculateTfIdf();
+		Pageable pageable = PageableUtils.getPageableFromParameters(0, 10);
+		Page<Histogram> histograms = histogramRepository.findByInitilized(true, pageable);
 
+		while (true) {
+			for (Histogram histogram : histograms) {
+				if (histogram.getNeedRecount()) {
+
+					Block root = blockRepository.findByPost(histogram.getId());
+
+					String sentence = getWordsInBlocks(root, null);
+
+					List<String> bOW;
+
+					try {
+						bOW = pythonService.getBagOfWords(sentence);
+					} catch (IOException e) {
+						throw new InvalidPropertyException(PythonService.class, "hubmap.scripts.python.path",
+								"Não foi possível encontrar o caminho informado");
+					}
+
+					StatusRetorno status = recalculate(bOW, histogram, true, true);
+
+					if (status != StatusRetorno.ALREADY_IN_VOCABULARY) {
+						histogram.setNeedRecount(true);
+					} else {
+						histogram.setNeedRecount(false);
+					}
+
+					getLoggerFromClass(getClass()).debug("Recount all items of histogram " + histogram.getId());
+				}
+
+				histogramRepository.save(histogram);
+			}
+
+			if (histograms.hasNext()) {
+				histograms = histogramRepository.findAll(pageable.next());
+			} else {
+				break;
+			}
+		}
+
+		newWords.setValueRegistry("false");
+		parameterRepository.save(newWords);
+
+		calculateTfIdf();
 		getLoggerFromClass(getClass()).info("Histograms updated successfuly");
 	}
 
@@ -187,7 +189,7 @@ public class HistogramService {
 
 		return histogram;
 	}
-	
+
 	private void calculateTfIdf() {
 
 		Pageable pageable = PageableUtils.getPageableFromParameters(0, 10);

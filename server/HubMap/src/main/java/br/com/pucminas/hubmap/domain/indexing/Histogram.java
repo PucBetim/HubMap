@@ -66,12 +66,7 @@ public class Histogram implements Serializable {
 		HistogramItem item = new HistogramItem();
 		item.setKey(ngram);
 
-		int index = Collections.binarySearch(histogram, item, new Comparator<HistogramItem>() {
-			@Override
-			public int compare(HistogramItem o1, HistogramItem o2) {
-				return o1.getKey().compareTo(o2.getKey());
-			}
-		});
+		int index = Collections.binarySearch(histogram, item, COMPARATOR);
 
 		return index >= 0 ? histogram.get(index) : null;
 	}
@@ -126,7 +121,7 @@ public class Histogram implements Serializable {
 
 		@Override
 		public int compare(HistogramItem o1, HistogramItem o2) {
-			return o1.getKey().compareTo(o2.getKey());
+			return o1.getKey().getId().compareTo(o2.getKey().getId());
 		}
 
 		public static HistogramItemComparator getInstance() {
