@@ -133,7 +133,7 @@
                 outline: solid #77aada 0;
                 padding: .5em;
                 transition: all 1s ease-in;
-                min-width: 30vw;
+                min-width: 50%;
                 z-index: 1;
 
                 &:focus {
@@ -148,18 +148,35 @@
             }
         }
 
-        .moreMaps {
-            display: flex;
+        .results {
+            display: grid;
+            grid-template-columns: 50% 50%;
+            width: 50%;
             align-content: center;
-            justify-content: center;
-            color: inherit;
-            color: #236099;
+            margin: 0 auto;
+            .resultCount {
+                color: #236099;
+                padding: 4px;
+                font-weight: 500;
+                text-align: left;
+            }
+
+            .moreMaps {
+                text-align: right;
+                color: inherit;
+                color: #236099;
+                padding: 4px;
+                font-weight: 500;
+                text-decoration: none;
+
+            }
+
+            .moreMaps:hover {
+                color: #77aada;
+                cursor: pointer;
+            }
         }
 
-        .moreMaps:hover {
-            color: #77aada;
-            cursor: pointer;
-        }
     }
 
     .resultBlock {

@@ -44,15 +44,22 @@
 <div class="search" [style.min-height]="(blocksSize + 250) + 'px'">
     <div class="searchBlock">
         <div [ngClass]="searchBarClass">
-            <form (ngSubmit)="searchMaps()">
-                <input placeholder="Pesquisar mapas..." [formControl]="form.controls['searchTerm']">
-                <button class="searchIcon" type="submit" mat-icon-button>
+            <form (ngSubmit)="search()">
+                <input placeholder="Pesquisar mapas..." [formControl]="form.controls['search']">
+                <button class="searchIcon" type="submit" [disabled]="!form.valid" mat-icon-button>
                     <mat-icon>search</mat-icon>
                 </button>
             </form>
-            <a class="moreMaps" *ngIf="results" href="/search">
-                Pesquisar mais mapas
-            </a>
+            <div class="results">
+                <a class="resultCount" *ngIf="results">
+                    {{postsResult?.length}}
+                    <a *ngIf="postsResult?.length == 1">RESULTADO</a>
+                    <a *ngIf="postsResult?.length != 1">RESULTADOS</a>
+                </a>
+                <a class="moreMaps" *ngIf="results" href="/search">
+                    PESQUISAR MAIS MAPAS
+                </a>
+            </div>
         </div>
     </div>
 

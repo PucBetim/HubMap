@@ -13,6 +13,7 @@ export class PostService extends BaseService {
   public userUrlPost = "hubmap/posts";
   public userUrlPublicPost = "hubmap/public/posts";
   public userUrlBlocks = "hubmap/blocks";
+  public userUrlSearch = "hubmap/public/search"
 
   constructor(private http: HttpClient,) { super(); }
 
@@ -76,6 +77,12 @@ export class PostService extends BaseService {
   // Post View
   viewPost(id: string): Observable<any> {
     return this.http.post<any>((ConfigService.getUrlApi() + this.userUrlPost + `/${id}/views`), null, ConfigService.getOptions()).pipe(catchError(super.serviceError));
+  };
+  //
+
+  // Search Posts
+  searchPosts(search: string): Observable<any> {
+    return this.http.post<any>((ConfigService.getUrlApi() + this.userUrlSearch), search, ConfigService.getOptions()).pipe(catchError(super.serviceError));
   };
   //
 }

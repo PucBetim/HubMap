@@ -3,14 +3,25 @@
     <div class="searchContainer ">
         <div class="titleBar layoutDefaultStyle">
             <a class="title-deco">Buscar Mapas Mentais</a>
+
         </div>
+
         <div class="searchBar">
-            <form (ngSubmit)="searchMaps()">
-                <input placeholder="Pesquisar mapas...">
-                <button class="searchIcon" type="submit" mat-icon-button>
-                    <mat-icon>search</mat-icon>
-                </button>
-            </form>
+            <div>
+                <form (ngSubmit)="search()">
+                    <input placeholder="Pesquisar mapas..." [formControl]="form.controls['search']">
+                    <button class="searchIcon" type="submit" [disabled]="!form.valid" mat-icon-button>
+                        <mat-icon>search</mat-icon>
+                    </button>
+                </form>
+            </div>
+            <div class="resultCount layoutDefaultStyle">
+                <a *ngIf="results">
+                    {{postsResult?.length}}
+                    <a *ngIf="postsResult?.length == 1">RESULTADO</a>
+                    <a *ngIf="postsResult?.length != 1">RESULTADOS</a>
+                </a>
+            </div>
         </div>
 
         <div class="resultMaps layoutDefaultStyle">

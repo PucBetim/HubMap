@@ -37,7 +37,7 @@ export class LandingComponent implements OnInit {
 
   ngOnInit(): void {
     this.form = this.fb.group({
-      searchTerm: ['', [Validators.required]],
+      search: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(80)]],
     });
 
     this.onResize();
@@ -51,25 +51,52 @@ export class LandingComponent implements OnInit {
     }, 1000)
   }
 
-  searchMaps() {
+  search() {
+    this.postsResult = [];
     this.loading = true;
     this.results = false;
+    let p = Object.assign({}, this.form.value);
 
-    this.postService.getPublicPosts().subscribe(
+    this.postService.searchPosts(p).subscribe(
       {
         next: result => {
-          this.postsResult = result.body;
-          if (this.postsResult.length > 0) {
-            this.searchBarClass.push("sbTop");
-            this.resultDivClass.push("rdTop");
+          console.log(result)
+          if (result.body?.dataId)
+            this.getPosts(result.body.dataId.split(','))
+          else {
+            this.loading = false;
             this.results = true;
+            this.snackBar.open("Nenhum mapa encontrado!", "Ok", {
+              duration: 2000
+            });
           }
-          this.loading = false;
         },
         error: error => {
-          this.snackBar.open("Falha ao obter mapas! Tente novamente mais tarde.", "Ok");
+          this.snackBar.open("Falha ao obter mapas! Tente novamente mais tarde.", "Ok", {
+            duration: 2000
+          });
           this.loading = false;
         }
       })
+  }
+
+  getPosts(postsIds: string[]) {
+    postsIds.forEach(p => {
+      this.postService.getPostById(p.trim()).subscribe(
+        {
+          next: result => {
+            this.postsResult.push(result.body);
+            this.results = true;
+          },
+          error: error => {
+            this.snackBar.open("Erro ao obter mapa! Tente novamente mais tarde.", "Ok", {
+              duration: 2000
+            });
+          }
+        })
+    });
+    this.searchBarClass.push("sbTop");
+    this.resultDivClass.push("rdTop");
+    this.loading = false;
   }
 }
