@@ -56,9 +56,11 @@
                     <a *ngIf="postsResult?.length == 1">RESULTADO</a>
                     <a *ngIf="postsResult?.length != 1">RESULTADOS</a>
                 </a>
-                <a class="moreMaps" *ngIf="results" href="/search">
-                    PESQUISAR MAIS MAPAS
-                </a>
+                <div class="moreMaps">
+                    <a class="link" *ngIf="results" href="/search">
+                        PESQUISAR MAIS MAPAS
+                    </a>
+                </div>
             </div>
         </div>
     </div>

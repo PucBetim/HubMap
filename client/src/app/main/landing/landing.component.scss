@@ -125,57 +125,65 @@
             transition-property: transform;
             vertical-align: middle;
 
-            input {
-                border: solid 3px #fff;
-                box-sizing: border-box;
-                font-size: 2em;
-                height: 6vh;
-                outline: solid #77aada 0;
-                padding: .5em;
-                transition: all 1s ease-in;
-                min-width: 50%;
-                z-index: 1;
+            form {
+                width: 100%;
+                margin: 0 auto;
+                input {
+                    border: solid 3px #fff;
+                    box-sizing: border-box;
+                    font-size: 2em;
+                    height: 6vh;
+                    outline: solid #77aada 0;
+                    padding: .5em;
+                    transition: all 1s ease-in;
+                    z-index: 1;
 
-                &:focus {
-                    outline: solid #77aada 2000px;
+                    &:focus {
+                        outline: solid #77aada 2000px;
+                    }
+                }
+
+                .searchIcon {
+                    transform: translate(-100%, -15%);
+                    vertical-align: middle;
+                    color: #272736;
                 }
             }
 
-            .searchIcon {
-                transform: translate(-100%, -15%);
-                vertical-align: middle;
-                color: #272736;
+            .results {
+                display: grid;
+                grid-template-columns: 50% 50%;
+                width: 50%;
+                align-content: center;
+                margin: 0 auto;
+
+                .resultCount {
+                    color: #236099;
+                    padding: 4px;
+                    font-weight: 500;
+                    text-align: left;
+                }
+
+                .moreMaps {
+                    text-align: right;
+                    padding: 4px;
+
+                    .link {
+                        color: inherit;
+                        color: #236099;
+                        font-weight: 500;
+                        text-decoration: none;
+                    }
+
+                    .link:hover {
+                        color: #7e96a1;
+                        cursor: pointer;
+                    }
+                }
             }
         }
 
-        .results {
-            display: grid;
-            grid-template-columns: 50% 50%;
-            width: 50%;
-            align-content: center;
-            margin: 0 auto;
-            .resultCount {
-                color: #236099;
-                padding: 4px;
-                font-weight: 500;
-                text-align: left;
-            }
 
-            .moreMaps {
-                text-align: right;
-                color: inherit;
-                color: #236099;
-                padding: 4px;
-                font-weight: 500;
-                text-decoration: none;
-
-            }
-
-            .moreMaps:hover {
-                color: #77aada;
-                cursor: pointer;
-            }
-        }
 
     }
 

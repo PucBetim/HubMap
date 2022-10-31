@@ -51,6 +51,28 @@ export class LandingComponent implements OnInit {
     }, 1000)
   }
 
+  // search() {
+  //   this.loading = true;
+  //   this.results = false;
+
+  //   this.postService.getPublicPosts().subscribe(
+  //     {
+  //       next: result => {
+  //         this.postsResult = result.body;
+  //         if (this.postsResult.length > 0) {
+  //           this.searchBarClass.push("sbTop");
+  //           this.resultDivClass.push("rdTop");
+  //           this.results = true;
+  //         }
+  //         this.loading = false;
+  //       },
+  //       error: error => {
+  //         this.snackBar.open("Falha ao obter mapas! Tente novamente mais tarde.", "Ok");
+  //         this.loading = false;
+  //       }
+  //     })
+  // }
+
   search() {
     this.postsResult = [];
     this.loading = true;

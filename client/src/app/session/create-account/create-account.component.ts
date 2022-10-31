@@ -39,6 +39,7 @@ export class CreateAccountComponent implements OnInit {
   }
 
   createUser() {
+    sessionStorage.clear();
     if (this.form.dirty && this.form.valid) {
       this.carregando = true;
       let form = Object.assign({}, new User, this.form.value);

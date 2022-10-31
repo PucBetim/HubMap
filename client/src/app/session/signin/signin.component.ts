@@ -28,7 +28,6 @@ export class SigninComponent implements OnInit {
 
   ngOnInit(): void {
     this.savedRoute = this.route.snapshot.params['savedRoute'];
-    sessionStorage.clear();
     this.form = this.fb.group({
       email: ['', [Validators.required, Validators.email, Validators.maxLength(100)]],
       password: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(80)]]
@@ -36,6 +35,7 @@ export class SigninComponent implements OnInit {
   }
 
   login() {
+    sessionStorage.clear();
     this.carregando = true;
     if (this.form.dirty && this.form.valid) {
       let p = Object.assign({}, this.loginForm, this.form.value);

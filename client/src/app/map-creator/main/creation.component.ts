@@ -126,25 +126,6 @@ export class CreationComponent implements OnInit, ComponentCanDeactivate {
     }
   }
 
-  // getBlocks(post: Post) {
-  //   this.loading = true;
-  //   this.postService.getPostBlocks(post.id).subscribe({
-  //     next: result => {
-  //       if (result.body != null)
-  //         post.map = [result.body]
-  //       this.post = post;
-  //       this.rootBlockId = this.post.map[0].id!;
-  //       this.savedProgress = [JSON.parse(JSON.stringify(this.post.map))];
-  //       this.loading = false;
-  //     }, error: error => {
-  //       this.snackBar.open("Erro ao obter blocos do mapa mental! Tente novamente mais tarde.", "Ok", {
-  //         duration: 2000
-  //       });
-  //       this.loading = false;
-  //     }
-  //   })
-  // }
-
   addNewBlock() {
     if (this.post.map?.length > 0)
       return;

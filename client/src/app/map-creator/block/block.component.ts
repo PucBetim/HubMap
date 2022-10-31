@@ -31,7 +31,7 @@ export class BlockComponent implements OnInit, AfterContentInit {
 
     if (this.blockSelected && (event.target == this.blockRef.nativeElement))
       this.onDrag(event, true)
-    if (!this.eRef.nativeElement.contains(event.target)) {
+    if (!this.blockRef.nativeElement.contains(event.target)) {
 
       if (this.blockSelected)
         this.onDrag(event, true)
@@ -44,7 +44,7 @@ export class BlockComponent implements OnInit, AfterContentInit {
     }
   }
 
-  constructor(private eRef: ElementRef, private snackBar: MatSnackBar) { }
+  constructor(private snackBar: MatSnackBar) { }
 
   ngAfterContentInit(): void {
     if (this.block.blocks.length == 0)

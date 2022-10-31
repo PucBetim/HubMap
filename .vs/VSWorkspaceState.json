@@ -1,12 +1,7 @@
 {
   "ExpandedNodes": [
-    "",
-    "\\client",
-    "\\client\\src",
-    "\\client\\src\\app",
-    "\\client\\src\\app\\map-creator",
-    "\\client\\src\\app\\map-creator\\main"
+    ""
   ],
-  "SelectedNode": "\\client\\src\\app\\map-creator\\main\\creation.component.ts",
+  "SelectedNode": "\\C:\\Dev\\HubMap",
   "PreviewInSolutionExplorer": false
 }
