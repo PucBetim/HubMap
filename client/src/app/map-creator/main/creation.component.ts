@@ -26,6 +26,7 @@ export class CreationComponent implements OnInit, ComponentCanDeactivate {
     return !this.unsavedChanges
   }
 
+
   @HostListener('window:keydown', ['$event'])
   keyEvent(event: KeyboardEvent) {
     switch (event.key) {
@@ -62,6 +63,7 @@ export class CreationComponent implements OnInit, ComponentCanDeactivate {
 
   public editorMode: boolean = false;
   public childrenLoaded: boolean = false;
+  public formatingBrushOpened: boolean = false;
 
   public sub: Subscription;
   public id: string;
@@ -264,5 +266,9 @@ export class CreationComponent implements OnInit, ComponentCanDeactivate {
 
     const dialogRef = this.dialog.open(VisualCanvasComponent, exportImageConfig);
     dialogRef.afterClosed().subscribe();
+  }
+
+  openFormatingBrush() {
+    this.formatingBrushOpened = true;
   }
 }

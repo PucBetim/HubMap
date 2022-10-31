@@ -23,6 +23,12 @@
                 <mat-icon>keyboard_backspace</mat-icon>
             </button>
 
+            <button class="sidebarGrid option" matTooltipClass="tooltip" matTooltip="Copiar Estilo"
+                (click)="openFormatingBrush()" mat-mini-fab [ngClass]="{'disabled' : this.post.map.length < 1}"
+                [disabled]="this.post.map.length < 1">
+                <mat-icon>brush</mat-icon>
+            </button>
+
             <div class="sidebarGrid">
                 <div class="bottom">
 
@@ -61,6 +67,12 @@
                 [disabled]="blockSelected || !post.map[0]">
                 <mat-icon>control_camera</mat-icon>
             </button>
+            <div class="formatingBrush">
+                <button mat-mini-fab>
+                    <mat-icon>format_paint</mat-icon>
+                </button>
+            </div>
         </div>
     </drag-scroll>
+
 </div>
