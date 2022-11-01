@@ -10,8 +10,6 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
@@ -37,7 +35,6 @@ public class Histogram implements Serializable {
 	private static final HistogramItemComparator COMPARATOR = HistogramItemComparator.getInstance();
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@EqualsAndHashCode.Include
 	private Integer id;
 
@@ -59,16 +56,19 @@ public class Histogram implements Serializable {
 	public Histogram(Post post) {
 		this.post = post;
 		initialized = false;
+		id = post.getId();
 	}
 
-	public HistogramItem getItemFromHistogram(NGram ngram) {
+	public double getTfIdfFromHistogram(Long nGramId) {
 
+		NGram nGram = new NGram();
+		nGram.setId(nGramId);
 		HistogramItem item = new HistogramItem();
-		item.setKey(ngram);
-
+		item.setKey(nGram);
+		
 		int index = Collections.binarySearch(histogram, item, COMPARATOR);
 
-		return index >= 0 ? histogram.get(index) : null;
+		return index >= 0 ? histogram.get(index).getTfidf() : 0;
 	}
 
 	public int isInHistogram(NGram ngram) {

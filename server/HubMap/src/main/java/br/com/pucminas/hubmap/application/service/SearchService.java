@@ -17,10 +17,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StopWatch;
 
 import br.com.pucminas.hubmap.domain.indexing.Histogram;
-import br.com.pucminas.hubmap.domain.indexing.HistogramItem;
 import br.com.pucminas.hubmap.domain.indexing.HistogramItemRepository;
 import br.com.pucminas.hubmap.domain.indexing.HistogramRepository;
-import br.com.pucminas.hubmap.domain.indexing.NGram;
 import br.com.pucminas.hubmap.domain.indexing.search.Search;
 import br.com.pucminas.hubmap.utils.PageableUtils;
 import lombok.EqualsAndHashCode;
@@ -30,7 +28,7 @@ import lombok.Setter;
 @Service
 public class SearchService {
 
-	private static final Integer PAGE_SIZE = 5;
+	private static final Integer PAGE_SIZE = 15;
 
 	private HistogramRepository histogramRepository;
 
@@ -61,7 +59,7 @@ public class SearchService {
 		measure.stop();
 
 		measure.start("CalculateSimilarity");
-		Page<Histogram> histograms = histogramRepository.findByInitilized(true, pageable);
+		Page<Integer> histograms = histogramRepository.findIdsByInitilized(true, pageable);
 
 		while (true) {
 			histograms.stream()
@@ -77,14 +75,14 @@ public class SearchService {
 
 					if (similarity > 0.0) {
 						HistogramSearch histSearch = new HistogramSearch();
-						histSearch.setPostId(histogram.getPost().getId());
+						histSearch.setPostId(histogram);
 						histSearch.setSimilarity(similarity);
 						histogramsSimilarity.add(histSearch);
 					}
 				});
 
 			if (histograms.hasNext()) {
-				histograms = histogramRepository.findAll(pageable.next());
+				histograms = histogramRepository.findIdsByInitilized(true, pageable.next());
 			} else {
 				break;
 			}
@@ -104,9 +102,9 @@ public class SearchService {
 				.collect(Collectors.toList());
 	}
 
-	private double compareHistograms(Histogram hist1, Histogram hist2) throws InterruptedException, ExecutionException {
+	private double compareHistograms(Histogram hist1, Integer hist2) throws InterruptedException, ExecutionException {
 
-		Set<NGram> vocab = joinHistograms(hist1, hist2);
+		Set<Long> vocab = joinHistograms(hist1, hist2);
 		Double[] dissimilarityCoefficient = calculateDissimilarityCoefficient(hist1, hist2, vocab);
 		
 		int n = vocab.size();
@@ -119,19 +117,18 @@ public class SearchService {
 		return similarity;
 	}
 	
-	private Double[] calculateDissimilarityCoefficient(Histogram hist1, Histogram hist2,
-			Set<NGram> vocab) {
+	private Double[] calculateDissimilarityCoefficient(Histogram hist1, Integer hist2,
+			Set<Long> vocab) {
 
 		double divisor = 0.0;
 		double dividend = 0.0;
 		double t = 0;
 		double s = 0;
 
-		for (NGram nGram : vocab) {
-			HistogramItem item1 = hist1.getItemFromHistogram(nGram);
-			Optional<HistogramItem> item2 = histogramItemRepository.findByKeyAndOwner(nGram, hist2);
-			double tfIdfH1 = item1 != null ? item1.getTfidf() : 0.0;
-			double tfIdfH2 = item2.isPresent() ? item2.get().getTfidf() : 0.0;
+		for (Long nGramId : vocab) {
+			Optional<Double> item2 = histogramItemRepository.findTfIdfByKeyAndOwner(nGramId, hist2);
+			double tfIdfH1 = hist1.getTfIdfFromHistogram(nGramId);
+			double tfIdfH2 = item2.isPresent() ? item2.get() : 0.0;
 
 			divisor += tfIdfH1 + tfIdfH2;
 			dividend += Math.abs(tfIdfH1 - tfIdfH2);
@@ -148,11 +145,11 @@ public class SearchService {
 		return new Double[] { divisor * 0.5, dividend, s, t };
 	}
 
-	private Set<NGram> joinHistograms(Histogram hist1, Histogram hist2) {
-		Set<NGram> nGrams = new HashSet<>();
+	private Set<Long> joinHistograms(Histogram hist1, Integer hist2) {
+		Set<Long> nGrams = new HashSet<>();
 
-		hist2.getHistogram().forEach(i -> nGrams.add(i.getKey()));
-		hist1.getHistogram().forEach(i -> nGrams.add(i.getKey()));
+		hist1.getHistogram().forEach(i -> nGrams.add(i.getKey().getId()));
+		nGrams.addAll(histogramItemRepository.findKeyIdsByOwner(hist2));
 
 		return nGrams;
 	}
