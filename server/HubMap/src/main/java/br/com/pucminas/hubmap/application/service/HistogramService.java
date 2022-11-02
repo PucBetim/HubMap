@@ -2,7 +2,6 @@ package br.com.pucminas.hubmap.application.service;
 
 import static br.com.pucminas.hubmap.utils.LoggerUtils.getLoggerFromClass;
 
-import java.io.IOException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -11,7 +10,6 @@ import java.util.concurrent.CompletableFuture;
 
 import javax.transaction.Transactional;
 
-import org.springframework.beans.InvalidPropertyException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Async;
@@ -52,29 +50,24 @@ public class HistogramService {
 
 	private BlockRepository blockRepository;
 
-	public HistogramService(PythonService pythonService, HistogramItemRepository histogramItemRepository,
+	public HistogramService(HistogramItemRepository histogramItemRepository,
 			HistogramRepository histogramRepository, VocabularyService vocabularyService,
 			NGramRepository nGramRepository, ParameterRepository parameterRepository, BlockRepository blockRepository) {
-		this.pythonService = pythonService;
 		this.histogramItemRepository = histogramItemRepository;
 		this.histogramRepository = histogramRepository;
 		this.vocabularyService = vocabularyService;
 		this.nGramRepository = nGramRepository;
 		this.parameterRepository = parameterRepository;
 		this.blockRepository = blockRepository;
+		
+		pythonService = PythonService.getInstance();
 	}
 
 	public Histogram generateSearchHistogram(Search search) {
 		String sentence = search.getSearch();
 
-		List<String> bOW;
-
-		try {
-			bOW = pythonService.getBagOfWords(sentence);
-		} catch (IOException e) {
-			throw new InvalidPropertyException(PythonService.class, "hubmap.scripts.python.path",
-					"Não foi possível encontrar o caminho informado");
-		}
+		pythonService.setSentence(sentence);
+		List<String> bOW = pythonService.getTokens();
 
 		Pageable pageable = PageableUtils.getPageableFromParameters(0, 10);
 		long totalElements = histogramRepository.findByInitilized(true, pageable).getTotalElements();
@@ -92,15 +85,9 @@ public class HistogramService {
 
 		String sentence = getWordsInBlocks(root, null);
 
-		List<String> bOW;
-
-		try {
-			bOW = pythonService.getBagOfWords(sentence);
-		} catch (IOException e) {
-			throw new InvalidPropertyException(PythonService.class, "hubmap.scripts.python.path",
-					"Não foi possível encontrar o caminho informado");
-		}
-
+		pythonService.setSentence(sentence);
+		List<String> bOW = pythonService.getTokens();
+		
 		StatusRetorno status;
 
 		status = recalculate(bOW, post.getHistogram(), isEdit, false);
@@ -142,15 +129,9 @@ public class HistogramService {
 					Block root = blockRepository.findByPost(histogram.getId());
 
 					String sentence = getWordsInBlocks(root, null);
-
-					List<String> bOW;
-
-					try {
-						bOW = pythonService.getBagOfWords(sentence);
-					} catch (IOException e) {
-						throw new InvalidPropertyException(PythonService.class, "hubmap.scripts.python.path",
-								"Não foi possível encontrar o caminho informado");
-					}
+					
+					pythonService.setSentence(sentence);
+					List<String> bOW = pythonService.getTokens();
 
 					StatusRetorno status = recalculate(bOW, histogram, true, true);
 

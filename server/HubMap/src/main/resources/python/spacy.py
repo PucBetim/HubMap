@@ -9,8 +9,6 @@ nlp = spacy.load("pt_core_news_lg")
 
 def getBagOfWords(sentence):   
     
-    sentence = sentence.lower()
-    
     cleanSentence = removeStopWords(sentence)
     
     doc = nlp(cleanSentence)
