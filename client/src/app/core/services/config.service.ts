@@ -3,7 +3,7 @@ import { HttpHeaders } from "@angular/common/http";
 export class ConfigService {
 
     //static urlBase: string = 'https://hub-map-server.herokuapp.com/';
-    static urlBase: string = 'http://hubmap-server.brazilsouth.cloudapp.azure.com:8080/';
+    static urlBase: string = 'https://hubmap-server.brazilsouth.cloudapp.azure.com:8080/';
 
     constructor() { }
 
