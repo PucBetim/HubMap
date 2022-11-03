@@ -24,8 +24,8 @@
             </button>
 
             <button class="sidebarGrid option" matTooltipClass="tooltip" matTooltip="Copiar Estilo"
-                (click)="openFormatingBrush()" mat-mini-fab [ngClass]="{'disabled' : this.post.map.length < 1}"
-                [disabled]="this.post.map.length < 1">
+                (click)="formatingBrushOpened = !formatingBrushOpened" mat-mini-fab
+                [ngClass]="{'disabled' : !blockSelected && !formatingBrushOpened}" [disabled]="!blockSelected && !formatingBrushOpened">
                 <mat-icon>brush</mat-icon>
             </button>
 
@@ -62,15 +62,28 @@
             <p style="position: absolute;" #scrollLink cdkDrag cdkDragBoundary=".canvas"
                 [cdkDragFreeDragPosition]="{x: post.map[0]?.position.x + post.map[0]?.size.width / 2 , y:post.map[0]?.position.y + post.map[0]?.size.height/ 2}">
             </p>
-            <button class="goToRootIcon" matTooltipClass="tooltip" matTooltip="IR PARA O BLOCO RAIZ"
-                (click)="scrollToRoot()" mat-fab [ngClass]="{'goToRootIconDisabled' : blockSelected || !post.map[0]}"
-                [disabled]="blockSelected || !post.map[0]">
-                <mat-icon>control_camera</mat-icon>
-            </button>
-            <div class="formatingBrush">
-                <button mat-mini-fab>
-                    <mat-icon>format_paint</mat-icon>
-                </button>
+            <div class="bottomIcons">
+                <div *ngIf="formatingBrushOpened" class="icon">
+                    <div class="formatingBrush" [style.background-color]="selectedBlock?.backgroundColor">
+                        <p class="layoutDefaultStyle" [style.font-style]="selectedBlock?.fontStyle"
+                            [style.font-weight]="selectedBlock?.fontWeight"
+                            [style.text-decoration]="selectedBlock?.textDecoration"
+                            [style.color]="selectedBlock?.fontColor">
+                            Txt
+                        </p>
+                        <button mat-mini-fab [style.background-color]="selectedBlock?.backgroundColor">
+                            <mat-icon [style.color]="selectedBlock?.fontColor">format_paint</mat-icon>
+                        </button>
+                    </div>
+                </div>
+                <div class="icon">
+                    <button class="goToRootIcon" matTooltipClass="tooltip" matTooltip="IR PARA O BLOCO RAIZ"
+                        (click)="scrollToRoot()" mat-fab
+                        [ngClass]="{'goToRootIconDisabled' : blockSelected || !post.map[0]}"
+                        [disabled]="blockSelected || !post.map[0]">
+                        <mat-icon>control_camera</mat-icon>
+                    </button>
+                </div>
             </div>
         </div>
     </drag-scroll>
