@@ -36,7 +36,6 @@ export class SearchMapsComponent implements OnInit {
     this.postService.searchPosts(p).subscribe(
       {
         next: result => {
-          console.log(result)
           if (result.body?.dataId)
             this.getPosts(result.body.dataId.split(','))
           else {
@@ -56,7 +55,7 @@ export class SearchMapsComponent implements OnInit {
 
   getPosts(postsIds: string[]) {
     postsIds.forEach(p => {
-      this.postService.getPostById(p.trim()).subscribe(
+      this.postService.getPublicPostsById(p.trim()).subscribe(
         {
           next: result => {
             this.postsResult.push(result.body);
