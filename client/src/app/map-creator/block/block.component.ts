@@ -26,6 +26,39 @@ export class BlockComponent implements OnInit, AfterContentInit {
 
   @ViewChild('blockRef') blockRef: ElementRef;
 
+  @HostListener('window:keydown', ['$event'])
+  keyEvent(event: KeyboardEvent) {
+    console.log(event)
+    switch (event.key) {
+      case 'ArrowUp': {
+        if (event.ctrlKey && this.blockSelected) {
+          event.preventDefault();
+          this.addBlock('above');
+        }
+        break;
+      } case 'ArrowLeft': {
+        if (event.ctrlKey && this.blockSelected) {
+          event.preventDefault();
+          this.addBlock('left');
+        }
+        break;
+      } case 'ArrowRight': {
+        if (event.ctrlKey && this.blockSelected) {
+          event.preventDefault();
+          this.addBlock('right');
+        }
+        break;
+      } case 'ArrowDown': {
+        if (event.ctrlKey && this.blockSelected) {
+          event.preventDefault();
+          this.addBlock('below');
+        }
+        break;
+      }
+      default: break;
+    }
+  }
+
   @HostListener('document:click', ['$event'])
   clickout(event: any) {
 

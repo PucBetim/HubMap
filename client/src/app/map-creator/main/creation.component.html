@@ -24,8 +24,8 @@
             </button>
 
             <button class="sidebarGrid option" matTooltipClass="tooltip" matTooltip="Copiar Estilo"
-                (click)="formatingBrushOpened = !formatingBrushOpened" mat-mini-fab
-                [ngClass]="{'disabled' : !blockSelected && !formatingBrushOpened}" [disabled]="!blockSelected && !formatingBrushOpened">
+                (click)="setFormatingStyle()" mat-mini-fab
+                [ngClass]="{'disabled' : !blockSelected}" [disabled]="!blockSelected">
                 <mat-icon>brush</mat-icon>
             </button>
 
@@ -62,17 +62,18 @@
             <p style="position: absolute;" #scrollLink cdkDrag cdkDragBoundary=".canvas"
                 [cdkDragFreeDragPosition]="{x: post.map[0]?.position.x + post.map[0]?.size.width / 2 , y:post.map[0]?.position.y + post.map[0]?.size.height/ 2}">
             </p>
+            <tips></tips>
             <div class="bottomIcons">
                 <div *ngIf="formatingBrushOpened" class="icon">
-                    <div class="formatingBrush" [style.background-color]="selectedBlock?.backgroundColor">
-                        <p class="layoutDefaultStyle" [style.font-style]="selectedBlock?.fontStyle"
-                            [style.font-weight]="selectedBlock?.fontWeight"
-                            [style.text-decoration]="selectedBlock?.textDecoration"
-                            [style.color]="selectedBlock?.fontColor">
+                    <div (click)="applyBrushStyle()" class="formatingBrush" [style.background-color]="formatingBrushBlockStyle?.backgroundColor">
+                        <p class="layoutDefaultStyle" [style.font-style]="formatingBrushBlockStyle?.fontStyle"
+                            [style.font-weight]="formatingBrushBlockStyle?.fontWeight"
+                            [style.text-decoration]="formatingBrushBlockStyle?.textDecoration"
+                            [style.color]="formatingBrushBlockStyle?.fontColor">
                             Txt
                         </p>
-                        <button mat-mini-fab [style.background-color]="selectedBlock?.backgroundColor">
-                            <mat-icon [style.color]="selectedBlock?.fontColor">format_paint</mat-icon>
+                        <button disabled mat-mini-fab [style.background-color]="formatingBrushBlockStyle?.backgroundColor">
+                            <mat-icon [style.color]="formatingBrushBlockStyle?.fontColor">format_paint</mat-icon>
                         </button>
                     </div>
                 </div>

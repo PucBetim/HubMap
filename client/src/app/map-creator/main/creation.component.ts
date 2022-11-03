@@ -46,6 +46,20 @@ export class CreationComponent implements OnInit, ComponentCanDeactivate {
           this.createPost();
         }
         break;
+      };
+      case 'e': {
+        if (event.ctrlKey && this.blockSelected) {
+          event.preventDefault();
+          this.setFormatingStyle();
+        }
+        break;
+      }
+      case 'r': {
+        if (event.ctrlKey && this.blockSelected) {
+          event.preventDefault();
+          this.applyBrushStyle();
+        }
+        break;
       }
       default: break;
     }
@@ -57,6 +71,7 @@ export class CreationComponent implements OnInit, ComponentCanDeactivate {
   public selectedBlock: Block;
   public blockSelected: boolean = false;
 
+  public formatingBrushBlockStyle: Block = new Block;
   public savedProgress: [Block[]] = [[]];
   public unsavedChanges: boolean = false;
   public loading: boolean = false;
@@ -268,7 +283,20 @@ export class CreationComponent implements OnInit, ComponentCanDeactivate {
     dialogRef.afterClosed().subscribe();
   }
 
-  openFormatingBrush() {
+
+  setFormatingStyle() {
     this.formatingBrushOpened = true;
+    this.formatingBrushBlockStyle = this.selectedBlock;
+  }
+
+  applyBrushStyle() {
+    this.selectedBlock.backgroundColor = this.formatingBrushBlockStyle.backgroundColor;
+    this.selectedBlock.fontColor = this.formatingBrushBlockStyle.fontColor;
+    this.selectedBlock.borderRadius = this.formatingBrushBlockStyle.borderRadius;
+    this.selectedBlock.fontSize = this.formatingBrushBlockStyle.fontSize;
+    this.selectedBlock.fontStyle = this.formatingBrushBlockStyle.fontStyle;
+    this.selectedBlock.fontWeight = this.formatingBrushBlockStyle.fontWeight;
+    this.selectedBlock.textAlign = this.formatingBrushBlockStyle.textAlign;
+    this.saveProgress();
   }
 }
