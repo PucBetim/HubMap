@@ -1,0 +1,20 @@
+<main class="main">
+  <div class="icon">
+    <button mat-mini-fab matTooltipClass="tooltip" matTooltip="ATALHOS" [matMenuTriggerFor]="shortcuts">
+      <mat-icon>help_outline</mat-icon>
+    </button>
+  </div>
+</main>
+
+<mat-menu class="shortcutsMenu layoutDefaultStyle" #shortcuts="matMenu">
+  <div class="shortcutsContainer">
+    <div class="shortcut" *ngFor="let shortcut of shortcutList">
+      <div class="keys">
+        {{shortcut.key}} <p class="condition" *ngIf="shortcut.condition">({{shortcut.condition}})</p>
+      </div>
+      <div class="desc">
+        {{shortcut.desc}}
+      </div>
+    </div>
+  </div>
+</mat-menu>

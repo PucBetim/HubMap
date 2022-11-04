@@ -16,7 +16,6 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { MatChipsModule } from '@angular/material/chips';
 import { DragScrollModule } from 'ngx-drag-scroll';
 
 import { CreationComponent } from './main/creation.component';
@@ -28,7 +27,7 @@ import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.componen
 import { SharedModule } from './../core/shared/shared.module';
 import { PendingChangesGuard } from '../core/services/guard.service';
 import { CreatePostComponent } from './create-post/create-post.component';
-import { TipsComponent } from './tips/tips.component';
+import { ShortcutsComponent } from './shortcuts/shortcuts.component';
 
 export const OtherOptions: MatTooltipDefaultOptions = {
   showDelay: 0,
@@ -47,7 +46,7 @@ export const OtherOptions: MatTooltipDefaultOptions = {
     TextDivComponent,
     ConfirmDialogComponent,
     CreatePostComponent,
-    TipsComponent,
+    ShortcutsComponent,
   ],
   imports: [
     CommonModule,
@@ -69,8 +68,7 @@ export const OtherOptions: MatTooltipDefaultOptions = {
     MatSliderModule,
     SharedModule,
     MatProgressSpinnerModule,
-    MatSlideToggleModule,
-    MatChipsModule
+    MatSlideToggleModule
   ],
   providers: [
     { provide: MAT_TOOLTIP_DEFAULT_OPTIONS, useValue: OtherOptions },

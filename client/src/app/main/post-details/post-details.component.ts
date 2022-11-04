@@ -11,6 +11,7 @@ import { CommentService } from 'src/app/core/shared/posts/comment.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { User } from 'src/app/session/models/user';
+import { CreatePostComponent } from 'src/app/map-creator/create-post/create-post.component';
 
 @Component({
   selector: 'post-map-details',
@@ -84,10 +85,11 @@ export class PostDetailsComponent implements OnInit {
             this.getComments();
           },
           error: error => {
-            this.snackBar.open("Falha ao obter post! Tente novamente mais tarde.", "Ok", {
-              duration: 2000
-            });
             this.loading = false;
+            this.router.navigate([""]);
+            this.snackBar.open("Falha ao obter post! Talvez você não tenha permissão para ver esse conteúdo.", "Ok", {
+              duration: 5000
+            });
             return;
           }
         })
@@ -103,10 +105,11 @@ export class PostDetailsComponent implements OnInit {
             this.getComments();
           },
           error: error => {
-            this.snackBar.open("Falha ao obter post! Tente novamente mais tarde.", "Ok", {
-              duration: 2000
-            });
             this.loading = false;
+            this.router.navigate([""]);
+            this.snackBar.open("Falha ao obter post! Talvez você não tenha permissão para ver esse conteúdo.", "Ok", {
+              duration: 5000
+            });
             return;
           }
         })
@@ -277,7 +280,7 @@ export class PostDetailsComponent implements OnInit {
       })
       return;
     }
-    
+
     if (!ConfigService.getUser()) {
       this.router.navigate(['session/create-account', { savedRoute: this.router.url }]);
       return;
@@ -334,6 +337,9 @@ export class PostDetailsComponent implements OnInit {
       this.loading = true;
       this.postService.postBlocks(b, id).subscribe({
         next: obj => {
+          this.snackBar.open("Mapa ramificado! Disponível em sua área de usuário.", "Ok", {
+            duration: 5000
+          })
           this.loading = false;
         }, error: error => {
           this.loading = false;
@@ -357,6 +363,29 @@ export class PostDetailsComponent implements OnInit {
     this.snackBar.open("Link copiado para a área de transferência!", "Ok", {
       duration: 2000
     })
+  }
 
+  updatePost() {
+    var createPostConfig = {
+      disableClose: false,
+      width: '400px',
+      height: 'auto',
+      data: {
+        post: this.post,
+        editorMode: true,
+      }
+    };
+
+    const dialogRef = this.dialog.open(CreatePostComponent, createPostConfig);
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.snackBar.open(result.msg, "Ok", {
+          duration: 2000
+        })
+        if (result.id) {
+          this.getPost(result.id);
+        }
+      }
+    });
   }
 }

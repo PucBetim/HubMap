@@ -52,7 +52,7 @@
             </div>
 
             <div class="options">
-                <div>
+                <div *ngIf="!post.private">
                     <button class="btn-icon btn-light" (click)="sharePost()">Compartilhar <mat-icon
                             style="color: white;">
                             share</mat-icon>
@@ -68,8 +68,12 @@
                     </button>
                 </div>
 
-                <button *ngIf="currentUserPost" class="pushRight" (click)="goToEdit()">
-                    Editar <mat-icon style="color: white;">edit</mat-icon>
+                <button *ngIf="currentUserPost" class="pushRight" (click)="updatePost()">
+                    Editar Informações <mat-icon style="color: white;">edit</mat-icon>
+                </button>
+
+                <button *ngIf="currentUserPost" (click)="goToEdit()">
+                    Editar Mapa <mat-icon style="color: white;">format_shapes</mat-icon>
                 </button>
                 <button *ngIf="currentUserPost" class="btnDelete btn-danger" (click)="deletePostConfirm()">
                     Excluir <mat-icon style="color: white;">delete</mat-icon>
