@@ -44,7 +44,7 @@
                         <mat-icon>edit</mat-icon>
                     </button>
 
-                    <button class="sidebarEndOption" matTooltipClass="tooltip" matTooltip="Exportar Para Imagem"
+                    <button *ngIf="this.editorMode" class="sidebarEndOption" matTooltipClass="tooltip" matTooltip="Exportar Para Imagem"
                         (click)="downloadImage()" mat-mini-fab [ngClass]="{'disabled': post.map[0] == null}"
                         [disabled]="post.map[0] == null">
                         <mat-icon>image</mat-icon>
