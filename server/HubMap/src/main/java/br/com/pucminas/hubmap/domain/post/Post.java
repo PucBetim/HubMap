@@ -110,7 +110,6 @@ public class Post implements Serializable {
 		views = 0;
 		created = LocalDateTime.now();
 		setModifiedNow();
-		histogram = new Histogram(this);
 	}
 
 	public void changeLikes(boolean positive) {

@@ -5,6 +5,7 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import br.com.pucminas.hubmap.domain.indexing.Histogram;
 import br.com.pucminas.hubmap.domain.post.Post;
 import br.com.pucminas.hubmap.domain.post.PostRepository;
 
@@ -17,6 +18,8 @@ public class PostService {
 	@Transactional
 	public Post save(Post newPost) {
 		
+		Post dbNewPost;
+		
 		if(newPost.getId() != null) {
 			
 			Post dbPost = postRepository.findByIdFromLoggedAuthor(newPost.getId()).orElseThrow();
@@ -27,11 +30,14 @@ public class PostService {
 			newPost.setViews(dbPost.getViews());
 			newPost.setCreated(dbPost.getCreated());
 			newPost.setModifiedNow();
+			dbNewPost = postRepository.save(newPost);
 		} else {
 			newPost.initializePost();
+			dbNewPost = postRepository.save(newPost);
+			dbNewPost.setHistogram(new Histogram(dbNewPost));
 		}
 		
-		return postRepository.save(newPost);
+		return dbNewPost;
 	}
 	
 	@Transactional

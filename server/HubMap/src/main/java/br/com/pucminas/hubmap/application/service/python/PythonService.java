@@ -12,7 +12,6 @@ import java.util.concurrent.locks.ReentrantLock;
 import jep.Interpreter;
 import jep.SharedInterpreter;
 
-//@Component
 public class PythonService implements Runnable {
 
 	private static PythonService obj;
@@ -122,8 +121,8 @@ public class PythonService implements Runnable {
 
 	public void destroy() {
 		threadUp = false;
-		condition.signalAll();
 		interp.close();
+		condition.signalAll();
 	}
 
 	public static PythonService getInstance() {
