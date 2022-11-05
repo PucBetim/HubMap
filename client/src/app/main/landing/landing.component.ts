@@ -104,7 +104,7 @@ export class LandingComponent implements OnInit {
 
   getPosts(postsIds: string[]) {
     postsIds.forEach(p => {
-      this.postService.getPostById(p.trim()).subscribe(
+      this.postService.getPublicPostsById(p.trim()).subscribe(
         {
           next: result => {
             this.postsResult.push(result.body);
