@@ -1,10 +1,8 @@
 package br.com.pucminas.hubmap.test;
 
 import org.springframework.context.event.ContextRefreshedEvent;
-import org.springframework.context.event.EventListener;
 import org.springframework.core.env.Environment;
 import org.springframework.core.env.Profiles;
-import org.springframework.stereotype.Component;
 
 import br.com.pucminas.hubmap.application.service.AppUserService;
 import br.com.pucminas.hubmap.application.service.DuplicatedEmailException;
@@ -14,7 +12,7 @@ import br.com.pucminas.hubmap.domain.post.Post;
 import br.com.pucminas.hubmap.domain.post.PostRepository;
 import br.com.pucminas.hubmap.domain.user.AppUser;
 
-@Component
+// @Component
 public class InsertDataForTesting {
 	
 	private AppUserService appUserService;
@@ -27,7 +25,7 @@ public class InsertDataForTesting {
 		this.commentRepository = commentRepository;
 	}
 
-	@EventListener
+	// @EventListener
 	public void onApplicationEvent(ContextRefreshedEvent event) throws DuplicatedEmailException {
 		
 		Environment env = event.getApplicationContext().getEnvironment();
