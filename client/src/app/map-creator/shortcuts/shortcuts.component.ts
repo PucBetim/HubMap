@@ -11,11 +11,11 @@ export class ShortcutsComponent implements OnInit {
 
   public shortcutList = [
     { key: 'Ctrl + Z', desc: 'Desfazer ação' },
-    { key: 'Delete', desc: 'Deletar Bloco', condition: 'Bloco Selecionado' },
+    { key: 'Ctrl + Delete', desc: 'Deletar Bloco', condition: 'Bloco Selecionado' },
     { key: 'Ctrl + S', desc: 'Salvar Mapa' },
     { key: 'Ctrl + E', desc: 'Copiar Estilo do Bloco', condition: 'Bloco Selecionado' },
     { key: 'Ctrl + R', desc: 'Aplicar Estilo ao Bloco', condition: 'Bloco Selecionado' },
-    { key: 'Ctrl + Seta', desc: 'Adiciona Bloco Filho', condition: 'Bloco Selecionado' },
+    { key: 'Shift + Seta', desc: 'Adiciona Bloco Filho', condition: 'Bloco Selecionado' },
   ]
   ngOnInit(): void {
   }

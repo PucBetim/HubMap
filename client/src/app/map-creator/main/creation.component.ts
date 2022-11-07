@@ -31,7 +31,7 @@ export class CreationComponent implements OnInit, ComponentCanDeactivate {
   keyEvent(event: KeyboardEvent) {
     switch (event.key) {
       case 'Delete': {
-        if (this.blockSelected)
+        if (event.ctrlKey && this.blockSelected)
           this.onDeleteBlock(this.post.map);
         break;
       };

@@ -37,7 +37,7 @@ export class LandingComponent implements OnInit {
 
   ngOnInit(): void {
     this.form = this.fb.group({
-      search: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(80)]],
+      search: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(80)]],
     });
 
     this.onResize();
@@ -102,6 +102,7 @@ export class LandingComponent implements OnInit {
   }
 
   getPosts(postsIds: string[]) {
+    console.log(postsIds)
     postsIds.forEach(p => {
       this.postService.getPublicPostsById(p.trim()).subscribe(
         {

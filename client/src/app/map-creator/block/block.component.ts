@@ -30,25 +30,25 @@ export class BlockComponent implements OnInit, AfterContentInit {
   keyEvent(event: KeyboardEvent) {
     switch (event.key) {
       case 'ArrowUp': {
-        if (event.ctrlKey && this.blockSelected) {
+        if (event.shiftKey && this.blockSelected) {
           event.preventDefault();
           this.addBlock('above');
         }
         break;
       } case 'ArrowLeft': {
-        if (event.ctrlKey && this.blockSelected) {
+        if (event.shiftKey && this.blockSelected) {
           event.preventDefault();
           this.addBlock('left');
         }
         break;
       } case 'ArrowRight': {
-        if (event.ctrlKey && this.blockSelected) {
+        if (event.shiftKey && this.blockSelected) {
           event.preventDefault();
           this.addBlock('right');
         }
         break;
       } case 'ArrowDown': {
-        if (event.ctrlKey && this.blockSelected) {
+        if (event.shiftKey && this.blockSelected) {
           event.preventDefault();
           this.addBlock('below');
         }

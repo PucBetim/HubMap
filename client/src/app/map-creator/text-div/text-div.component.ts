@@ -1,4 +1,3 @@
-import { Size } from './../../core/shared/posts/post';
 import { Component, ElementRef, EventEmitter, HostListener, Input, Output, Renderer2, ViewChild } from "@angular/core";
 import { Block } from "../../core/shared/posts/post";
 
