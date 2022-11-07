@@ -18,4 +18,7 @@ public interface NGramRepository extends CrudRepository<NGram, Long>{
 	Optional<NGram> findByGramAndNewVocabulary(String gram, Vocabulary newVocab);
 	
 	Optional<NGram> findByGramAndVocabulary(String gram, Vocabulary vocab);
+	
+	@Query("SELECT count(n) FROM NGram n WHERE n.vocabulary.id = ?1")
+	Integer countOfficialVocabularySize(Long id);
 }

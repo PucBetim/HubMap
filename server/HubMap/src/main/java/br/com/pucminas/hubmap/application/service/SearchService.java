@@ -35,13 +35,15 @@ public class SearchService {
 	private HistogramService histogramService;
 
 	private HistogramItemRepository histogramItemRepository;
-
+	
+	private VocabularyService vocabularyService;
+	
 	public SearchService(HistogramRepository histogramRepository, HistogramService histogramService,
-			HistogramItemRepository histogramItemRepository) {
-		super();
+			HistogramItemRepository histogramItemRepository, VocabularyService vocabularyService) {
 		this.histogramRepository = histogramRepository;
 		this.histogramService = histogramService;
 		this.histogramItemRepository = histogramItemRepository;
+		this.vocabularyService = vocabularyService;
 	}
 
 	@Transactional(readOnly = true)
@@ -55,23 +57,17 @@ public class SearchService {
 		measure.start("GenerateSearchHist");
 		Histogram searchHist = histogramService.generateSearchHistogram(search);
 		search.setHistogram(searchHist);
-		
 		measure.stop();
 
 		measure.start("CalculateSimilarity");
 		Page<Integer> histograms = histogramRepository.findIdsByInitilized(true, pageable);
-
+		final Integer vocabSize = vocabularyService.getOfficialSize();
+		
 		while (true) {
 			histograms.stream()
 				.parallel()
 				.forEach(histogram -> {
-					double similarity = 0.0;
-					
-					try {
-						similarity = compareHistograms(search.getHistogram(), histogram);
-					} catch (InterruptedException | ExecutionException e) {
-						throw new RuntimeException(e);
-					}
+					double similarity = compareHistograms(search.getHistogram(), histogram, vocabSize);
 
 					if (similarity > 0.0) {
 						HistogramSearch histSearch = new HistogramSearch();
@@ -102,22 +98,21 @@ public class SearchService {
 				.collect(Collectors.toList());
 	}
 
-	private double compareHistograms(Histogram hist1, Integer hist2) throws InterruptedException, ExecutionException {
+	private double compareHistograms(Histogram hist1, Integer hist2, int vocabSize){
 
 		Set<Long> vocab = joinHistograms(hist1, hist2);
-		Double[] dissimilarityCoefficient = calculateDissimilarityCoefficient(hist1, hist2, vocab);
+		double[] dissimilarityCoefficient = calculateDissimilarityCoefficient(hist1, hist2, vocab);
 		
-		int n = vocab.size();
 		double dc = dissimilarityCoefficient[0] / dissimilarityCoefficient[1];
 		double s = dissimilarityCoefficient[2];
 		double t = dissimilarityCoefficient[3];
 		
-		double similarity = 0.5 * ((s / n) + ((t * s) / (t * s + dc)));
+		double similarity = 0.5 * ((s / vocabSize) + ((t * s) / (t * s + dc)));
 		
 		return similarity;
 	}
 	
-	private Double[] calculateDissimilarityCoefficient(Histogram hist1, Integer hist2,
+	private double[] calculateDissimilarityCoefficient(Histogram hist1, Integer hist2,
 			Set<Long> vocab) {
 
 		double divisor = 0.0;
@@ -142,7 +137,7 @@ public class SearchService {
 			}
 		}
 
-		return new Double[] { divisor * 0.5, dividend, s, t };
+		return new double[] { divisor * 0.5, dividend, s, t };
 	}
 
 	private Set<Long> joinHistograms(Histogram hist1, Integer hist2) {

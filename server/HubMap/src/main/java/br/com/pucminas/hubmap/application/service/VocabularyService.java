@@ -121,4 +121,8 @@ public class VocabularyService {
 			return null;
 		}
 	}
+	
+	public Integer getOfficialSize() {
+		return nGramRepository.countOfficialVocabularySize(VOCAB_ID);
+	}
 }
