@@ -19,7 +19,7 @@ public class ServletContextListenerImpl implements ServletContextListener {
 		getLoggerFromClass(ServletContextListenerImpl.class).info("HubMap is shutdown...");
 		PythonService pyServ = PythonService.getInstance();
 		pyServ.destroy();
-		executor.shutdown();
+		executor.shutdownNow();
 	}
 	
 	@Override
