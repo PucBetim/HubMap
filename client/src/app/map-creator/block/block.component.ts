@@ -28,7 +28,6 @@ export class BlockComponent implements OnInit, AfterContentInit {
 
   @HostListener('window:keydown', ['$event'])
   keyEvent(event: KeyboardEvent) {
-    console.log(event)
     switch (event.key) {
       case 'ArrowUp': {
         if (event.ctrlKey && this.blockSelected) {

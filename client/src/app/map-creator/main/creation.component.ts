@@ -118,12 +118,10 @@ export class CreationComponent implements OnInit, ComponentCanDeactivate {
           next: result => {
             this.post = result.body;
 
-            //console.log(_post)
             this.editorMode = true;
             if(this.post.map[0])
             this.rootBlockId = this.post.map[0].id!;
             this.savedProgress = [JSON.parse(JSON.stringify(this.post.map))];
-            //this.getBlocks(_post);
             this.loading = false;
           },
           error: error => {

@@ -82,7 +82,6 @@ export class LandingComponent implements OnInit {
     this.postService.searchPosts(p).subscribe(
       {
         next: result => {
-          console.log(result)
           if (result.body?.dataId)
             this.getPosts(result.body.dataId.split(','))
           else {
