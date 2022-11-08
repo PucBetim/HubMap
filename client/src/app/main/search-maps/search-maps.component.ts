@@ -58,7 +58,7 @@ export class SearchMapsComponent implements OnInit {
       this.postService.getPublicPostsById(p.trim()).subscribe(
         {
           next: result => {
-            this.postsResult.push(result.body);
+            this.postsResult.unshift(result.body);
             this.results = true;
           },
           error: error => {
