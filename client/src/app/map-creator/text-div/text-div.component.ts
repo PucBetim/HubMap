@@ -9,6 +9,7 @@ import { Block } from "../../core/shared/posts/post";
 export class TextDivComponent {
   @Output() onResizeEvent = new EventEmitter();
   @Output() resizeFinishedEvent = new EventEmitter();
+  @Output() blockValidEvent = new EventEmitter<boolean>;
   @Input() block: Block;
 
   @ViewChild('textContainer') textContainer: ElementRef;
@@ -16,6 +17,7 @@ export class TextDivComponent {
   width: number;
   height: number;
   mouseMoveListener: Function;
+  public valid: boolean = true;
 
   constructor(private renderer: Renderer2) { }
 

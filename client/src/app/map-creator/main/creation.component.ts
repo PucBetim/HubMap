@@ -79,6 +79,7 @@ export class CreationComponent implements OnInit, ComponentCanDeactivate {
   public editorMode: boolean = false;
   public childrenLoaded: boolean = false;
   public formatingBrushOpened: boolean = false;
+  public validCheckedStatus: boolean = true;
 
   public sub: Subscription;
   public id: string;
@@ -119,8 +120,8 @@ export class CreationComponent implements OnInit, ComponentCanDeactivate {
             this.post = result.body;
 
             this.editorMode = true;
-            if(this.post.map[0])
-            this.rootBlockId = this.post.map[0].id!;
+            if (this.post.map[0])
+              this.rootBlockId = this.post.map[0].id!;
             this.savedProgress = [JSON.parse(JSON.stringify(this.post.map))];
             this.loading = false;
           },
@@ -233,7 +234,28 @@ export class CreationComponent implements OnInit, ComponentCanDeactivate {
     localStorage.setItem('post', JSON.stringify(this.post));
   }
 
+  checkValid(block: Block) {
+    if (block.content.length > 299)
+      this.validCheckedStatus = false;
+
+    if (block.blocks.length > 0) {
+      block.blocks.forEach(e => {
+        this.checkValid(e);
+      });
+    }
+    return;
+  }
+
   createPost() {
+    this.checkValid(this.post.map[0]);
+    if (!this.validCheckedStatus) {
+      this.snackBar.open("Há blocos acima do limite de caracteres!", "Ok", {
+        duration: 5000
+      })
+      this.validCheckedStatus = true;
+      return
+    }
+
     var createPostConfig = {
       disableClose: false,
       width: '400px',

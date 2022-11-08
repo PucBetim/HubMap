@@ -1,8 +1,9 @@
 <line-svg [block]="this.block" [parentBlock]="this.parentBlock" *ngIf="this.parentBlock"></line-svg>
 
 <block (selectBlockEvent)="emitSelect($event)" (saveProgressEvent)="emitSaveProgress()"
-    (finishedLoadingEvent)="emitFinishedLoading()" (click)="blockSelected = false"
-    *ngFor="let childBlock of this.block.blocks" [block]="childBlock" [parentBlock]="this.block">
+    (finishedLoadingEvent)="emitFinishedLoading()"
+    (click)="blockSelected = false" *ngFor="let childBlock of this.block.blocks" [block]="childBlock"
+    [parentBlock]="this.block">
 </block>
 
 <style-editor (styleAndSaveEvent)="onStyleAndSave($event)" [clickInside]="clickInside" [block]="block"
@@ -14,7 +15,7 @@
     [style.border-color]="this.block.backgroundColor | toneHexColor: -30" [cdkDragFreeDragPosition]="afterImagePosition"
     [style.width]="afterImageSize + 'px'" [style.height]="afterImageSize + 'px'"></div>
 
-<div class="block"  #blockRef cdkDrag cdkDragBoundary=".canvas" [cdkDragFreeDragPosition]="block.position"
+<div class="block" #blockRef cdkDrag cdkDragBoundary=".canvas" [cdkDragFreeDragPosition]="block.position"
     (mousedown)="clickInside()" [style.background-color]="block.backgroundColor"
     [style.border-radius]="block.borderRadius + 'px'">
 
@@ -42,6 +43,7 @@
             <mat-icon>keyboard_arrow_left</mat-icon>
         </button>
     </div>
+    <div class="highlighted alert" *ngIf="block.content.length > 299" [style.border-radius]="block.borderRadius + 'px'"></div>
 
     <text-div (resizeFinishedEvent)="blockSelected ? emitSaveProgress() : null" (onResizeEvent)="onResize($event)" [block]="block">
     </text-div>

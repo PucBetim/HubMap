@@ -56,7 +56,7 @@
     <drag-scroll [drag-scroll-disabled]="this.blockSelected" scrollbar-hidden="true" class="containerCanvas">
         <div class="canvas" [style.width.px]="canvasSize.width" [style.height.px]="canvasSize.height">
             <block (selectBlockEvent)="selectBlock($event)" (unselectBlockEvent)="unselectBlock()"
-                (finishedLoadingEvent)="finishedLoading()" (saveProgressEvent)="saveProgress()"
+                (finishedLoadingEvent)="finishedLoading()" (saveProgressEvent)="saveProgress()" (mapLimitEvent)="mapValid($event)"
                 *ngFor="let block of post.map" [block]="block">
             </block>
             <p style="position: absolute;" #scrollLink cdkDrag cdkDragBoundary=".canvas"

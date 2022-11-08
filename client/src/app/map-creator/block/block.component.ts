@@ -90,6 +90,7 @@ export class BlockComponent implements OnInit, AfterContentInit {
   ngOnInit(): void {
     this.initialContent = this.block.content;
     this.afterImagePosition = { x: (this.block.position.x + (this.block.size.width / 2) - this.afterImageSize / 2), y: (this.block.position.y + (this.block.size.height / 2) - this.afterImageSize / 2) };
+
   }
 
   clickInside() {
