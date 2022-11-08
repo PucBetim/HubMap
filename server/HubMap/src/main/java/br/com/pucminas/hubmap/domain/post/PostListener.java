@@ -1,5 +1,7 @@
 package br.com.pucminas.hubmap.domain.post;
 
+import java.util.Optional;
+
 import javax.persistence.PreRemove;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,18 +18,20 @@ public class PostListener {
 	@PreRemove
 	public void onPreRemove(Post post) {
 
-		Block block = post.getMap()
+		Optional<Block> blockOpt = post.getMap()
 				.stream()
 				.filter(b -> b.getIsRoot() == true)
-				.findFirst()
-				.orElseThrow();
+				.findFirst();
 
 		post.getComments().clear();
 
-		blockService.dismissParentRelation(block);
-		post.getMap().remove(block);
+		if (blockOpt.isPresent()) {
+			Block block = blockOpt.get();
+			blockService.dismissParentRelation(block);
+			post.getMap().remove(block);
+		}
 	}
-	
+
 	@Autowired
 	public void init(BlockService blockService) {
 		PostListener.blockService = blockService;
