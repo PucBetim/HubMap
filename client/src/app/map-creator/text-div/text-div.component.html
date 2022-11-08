@@ -5,7 +5,7 @@
             [style.font-style]="block.fontStyle" [style.font-weight]="block.fontWeight"
             [style.text-decoration]="block.textDecoration" [style.color]="block.fontColor"
             [style.font-size]="block.fontSize + 'px'" [style.text-align]="block.textAlign"
-            [style.border-radius]="block.borderRadius + 'px'">
+            [style.border-radius]="block.borderRadius + 'px'" onkeypress="return (this.innerText.length < 299)">
             {{block.content}}
         </div>
     </div>
