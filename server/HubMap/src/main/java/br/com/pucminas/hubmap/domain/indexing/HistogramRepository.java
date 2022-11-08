@@ -4,6 +4,7 @@ import java.util.Set;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
@@ -25,4 +26,8 @@ public interface HistogramRepository extends PagingAndSortingRepository<Histogra
 	
 	@Override
 	Set<Histogram> findAll();
+	
+	@Modifying
+	@Query("UPDATE FROM Histogram h SET h.initialized = ?2, h.needRecount = ?3 WHERE h.id = ?1")
+	void updateHistogramFlags(int histId, boolean initialized, boolean needRecount);
 }
