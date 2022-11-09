@@ -19,31 +19,30 @@
     (mousedown)="clickInside()" [style.background-color]="block.backgroundColor"
     [style.border-radius]="block.borderRadius + 'px'">
 
-    <div class="highlighted" *ngIf="blockSelected" [style.border-radius]="block.borderRadius + 'px'"
-        [style.border-color]="block.backgroundColor | toneHexColor: -30">
+    <div class="highlighted" [ngClass]="{'alert' : block.content.length > 300}" *ngIf="blockSelected || block.content.length > 300" [style.border-radius]="block.borderRadius + 'px'"
+        [style.border-color]="block.content.length > 300 ? '#b84949' : (block.backgroundColor | toneHexColor: -30)">
 
-        <button [style.color]="block.backgroundColor | toneHexColor: -30" matTooltip="Adicionar Bloco Acima"
+        <button *ngIf="blockSelected" [style.color]="block.backgroundColor | toneHexColor: -30" matTooltip="Adicionar Bloco Acima"
             [matTooltipPosition]="'above'" class="addBlockUpIcon" matTooltipClass="tooltip" mat-icon-button
             (click)="addBlock('above')">
             <mat-icon>keyboard_arrow_up</mat-icon>
         </button>
-        <button [style.color]="block.backgroundColor | toneHexColor: -30" matTooltip="Adicionar Bloco a Direita"
+        <button *ngIf="blockSelected" [style.color]="block.backgroundColor | toneHexColor: -30" matTooltip="Adicionar Bloco a Direita"
             [matTooltipPosition]="'right'" class="addBlockRightIcon" matTooltipClass="tooltip" mat-icon-button
             (click)="addBlock('right')">
             <mat-icon>keyboard_arrow_right</mat-icon>
         </button>
-        <button [style.color]="block.backgroundColor | toneHexColor: -30" matTooltip="Adicionar Bloco Abaixo"
+        <button *ngIf="blockSelected" [style.color]="block.backgroundColor | toneHexColor: -30" matTooltip="Adicionar Bloco Abaixo"
             [matTooltipPosition]="'below'" class="addBlockBelowIcon" matTooltipClass="tooltip" mat-icon-button
             (click)="addBlock('below')">
             <mat-icon>keyboard_arrow_down</mat-icon>
         </button>
-        <button [style.color]="block.backgroundColor | toneHexColor: -30" matTooltip="Adicionar Bloco a Esquerda"
+        <button *ngIf="blockSelected" [style.color]="block.backgroundColor | toneHexColor: -30" matTooltip="Adicionar Bloco a Esquerda"
             [matTooltipPosition]="'left'" class="addBlockLeftIcon" matTooltipClass="tooltip" mat-icon-button
             (click)="addBlock('left')">
             <mat-icon>keyboard_arrow_left</mat-icon>
         </button>
     </div>
-    <div class="highlighted alert" *ngIf="block.content.length > 299" [style.border-radius]="block.borderRadius + 'px'"></div>
 
     <text-div (resizeFinishedEvent)="blockSelected ? emitSaveProgress() : null" (onResizeEvent)="onResize($event)" [block]="block">
     </text-div>
@@ -51,4 +50,7 @@
         cdkDragHandle>
         <mat-icon>drag_indicator</mat-icon>
     </div>
+    <a class="overLimit layoutDefaultStyle" *ngIf="block.content.length > 300">
+        <mat-icon matTooltipClass="tooltip" [matTooltip]="'CARACTERES: ' + block.content.length + ' / 300'">block</mat-icon>
+    </a>
 </div>

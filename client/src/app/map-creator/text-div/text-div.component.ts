@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, HostListener, Input, Output, Renderer2, ViewChild } from "@angular/core";
+import { AfterViewInit, Component, ElementRef, EventEmitter, HostListener, Input, Output, Renderer2, ViewChild } from "@angular/core";
 import { Block } from "../../core/shared/posts/post";
 
 @Component({
@@ -6,13 +6,14 @@ import { Block } from "../../core/shared/posts/post";
   templateUrl: './text-div.component.html',
   styleUrls: ['./text-div.component.scss']
 })
-export class TextDivComponent {
+export class TextDivComponent implements AfterViewInit {
   @Output() onResizeEvent = new EventEmitter();
   @Output() resizeFinishedEvent = new EventEmitter();
   @Output() blockValidEvent = new EventEmitter<boolean>;
   @Input() block: Block;
 
   @ViewChild('textContainer') textContainer: ElementRef;
+  @ViewChild('textDiv') textDiv: ElementRef;
 
   width: number;
   height: number;
@@ -20,6 +21,23 @@ export class TextDivComponent {
   public valid: boolean = true;
 
   constructor(private renderer: Renderer2) { }
+
+  ngAfterViewInit(): void {
+    this.textDiv.nativeElement.addEventListener('paste', this.onPaste.bind(this))
+  }
+
+  onPaste(event: any) {
+    event.preventDefault();
+    var text = event.clipboardData.getData('text/plain');
+    document.execCommand('insertText', false, text)
+
+    //////////////// Não permitir colar mais de 300 
+    // var newText = this.textDiv.nativeElement.innerHTML;
+    // var length = newText.length;
+    // if (length > 299)
+    //   newText = newText.slice(0, -(length - 299));
+    // this.block.content = newText;
+  }
 
   @HostListener('mousedown', ['$event.target'])
   onMouseDown(el: any) {

@@ -36,6 +36,18 @@
   height: 24px;
 }
 
+.overLimit{
+  color: #b84949;
+  position: absolute;
+  bottom: 0%;
+  right: -33px;
+  width: 24px;
+  height: 24px;
+  
+}
+
+
+
 .darker {
   color: rgba(0, 0, 0, 0.2);
 }
@@ -86,5 +98,5 @@
 }
 
 .alert {
-  border: dashed 4px red;
+  border: dashed 4px #b84949;
 }
