@@ -75,6 +75,7 @@ export class CreationComponent implements OnInit, ComponentCanDeactivate {
   public savedProgress: [Block[]] = [[]];
   public unsavedChanges: boolean = false;
   public loading: boolean = false;
+  public contentEdited: boolean = false;
 
   public editorMode: boolean = false;
   public childrenLoaded: boolean = false;
@@ -222,6 +223,7 @@ export class CreationComponent implements OnInit, ComponentCanDeactivate {
   }
 
   saveProgress() {
+    this.contentEdited = true;
     this.unsavedChanges = true;
     if (this.savedProgress.length > 15)
       this.savedProgress.splice(0, 1);
@@ -263,7 +265,8 @@ export class CreationComponent implements OnInit, ComponentCanDeactivate {
       data: {
         post: this.post,
         editorMode: this.editorMode,
-        rootBlockId: this.rootBlockId
+        rootBlockId: this.rootBlockId,
+        updateMap: this.contentEdited,
       }
     };
 

@@ -3,7 +3,6 @@
   resize: both;
   min-height: 50px;
   min-width: 50px;
-
   position: relative;
 }
 
@@ -13,7 +12,8 @@
   top: 0;
   left: 0;
   height: 100%;
-  width: 100%;
+  min-width: 100%;
+  box-sizing: border-box;
 }
 
 .textDiv {
@@ -21,6 +21,7 @@
   min-width: 50px;
   overflow: hidden;
   max-width: 100%;
+  box-sizing: border-box;
   padding: 0;
   text-align: center;
   justify-content: center;
@@ -29,7 +30,6 @@
   outline: none;
   line-height: 1em;
   white-space: pre-wrap;
-
   display: table-cell;
   vertical-align: middle;
   position: relative;

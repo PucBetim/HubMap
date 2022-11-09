@@ -373,6 +373,7 @@ export class PostDetailsComponent implements OnInit {
       data: {
         post: this.post,
         editorMode: true,
+        updateMap: false,
       }
     };
 

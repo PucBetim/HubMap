@@ -18,6 +18,7 @@ export class CreatePostComponent implements OnInit {
   public errors: any[] = [];
   public editorMode: boolean = false;
   public userLogged: boolean = true;
+  public updateMap: boolean;
 
   public descMaxLength: number = 200;
   public rootBlockId: string;
@@ -35,6 +36,7 @@ export class CreatePostComponent implements OnInit {
     this.editorMode = this.data.editorMode;
     this.post = this.data.post;
     this.rootBlockId = this.data.rootBlockId;
+    this.updateMap = this.data.updateMap;
 
     this.form = this.fb.group({
       title: ['', [Validators.required, Validators.maxLength(30)]],
@@ -73,8 +75,14 @@ export class CreatePostComponent implements OnInit {
         let p = Object.assign({}, this.form.value);
         this.postService.updatePost(p, this.post.id).subscribe({
           next: obj => {
-            this.updateBlocks(obj.body.dataId)
-            this.loading = false;
+            if (this.updateMap) {
+              this.updateBlocks(obj.body.dataId)
+              this.loading = false;
+            }
+            else {
+              this.dialogRef.close({ id: obj.body.dataId, msg: "Mapa editado com sucesso!" });
+              this.loading = false;
+            }
           }, error: error => {
             this.errors = error.errors;
             this.loading = false;
