@@ -49,16 +49,16 @@ public class HistogramService {
 
 	private BlockRepository blockRepository;
 
-	public HistogramService(HistogramItemRepository histogramItemRepository,
-			HistogramRepository histogramRepository, VocabularyService vocabularyService,
-			NGramRepository nGramRepository, ParameterRepository parameterRepository, BlockRepository blockRepository) {
+	public HistogramService(HistogramItemRepository histogramItemRepository, HistogramRepository histogramRepository,
+			VocabularyService vocabularyService, NGramRepository nGramRepository,
+			ParameterRepository parameterRepository, BlockRepository blockRepository) {
 		this.histogramItemRepository = histogramItemRepository;
 		this.histogramRepository = histogramRepository;
 		this.vocabularyService = vocabularyService;
 		this.nGramRepository = nGramRepository;
 		this.parameterRepository = parameterRepository;
 		this.blockRepository = blockRepository;
-		
+
 		pythonService = PythonService.getInstance();
 	}
 
@@ -68,8 +68,7 @@ public class HistogramService {
 		pythonService.setSentence(sentence);
 		List<String> bOW = pythonService.getTokens();
 
-		Pageable pageable = PageableUtils.getPageableFromParameters(0, 10);
-		long totalElements = histogramRepository.findByInitilized(true, pageable).getTotalElements();
+		long totalElements = histogramRepository.countByInitialized(true);
 
 		Histogram hist = initializeSearchHistogram(bOW);
 		hist.setInitialized(true);
@@ -86,7 +85,7 @@ public class HistogramService {
 
 		pythonService.setSentence(sentence);
 		List<String> bOW = pythonService.getTokens();
-		
+
 		StatusRetorno status;
 
 		status = recalculate(bOW, post.getHistogram(), isEdit, false);
@@ -99,7 +98,7 @@ public class HistogramService {
 		} else {
 			hist.setNeedRecount(false);
 		}
-		
+
 		histogramRepository.updateHistogramFlags(hist.getId(), hist.getInitialized(), hist.getNeedRecount());
 		calculateTfIdf();
 
@@ -118,29 +117,26 @@ public class HistogramService {
 		}
 
 		Pageable pageable = PageableUtils.getPageableFromParameters(0, 10);
-		Page<Histogram> histograms = histogramRepository.findByInitilized(true, pageable);
+		Page<Histogram> histograms = histogramRepository.findByNeedRecount(true, pageable);
 
 		while (true) {
 			for (Histogram histogram : histograms) {
-				if (histogram.getNeedRecount()) {
+				Block root = blockRepository.findByPost(histogram.getId());
 
-					Block root = blockRepository.findByPost(histogram.getId());
+				String sentence = getWordsInBlocks(root, null);
 
-					String sentence = getWordsInBlocks(root, null);
-					
-					pythonService.setSentence(sentence);
-					List<String> bOW = pythonService.getTokens();
+				pythonService.setSentence(sentence);
+				List<String> bOW = pythonService.getTokens();
 
-					StatusRetorno status = recalculate(bOW, histogram, true, true);
+				StatusRetorno status = recalculate(bOW, histogram, true, true);
 
-					if (status != StatusRetorno.ALREADY_IN_VOCABULARY) {
-						histogram.setNeedRecount(true);
-					} else {
-						histogram.setNeedRecount(false);
-					}
-
-					getLoggerFromClass(getClass()).debug("Recount all items of histogram " + histogram.getId());
+				if (status != StatusRetorno.ALREADY_IN_VOCABULARY) {
+					histogram.setNeedRecount(true);
+				} else {
+					histogram.setNeedRecount(false);
 				}
+
+				getLoggerFromClass(getClass()).debug("Recount all items of histogram " + histogram.getId());
 
 				histogramRepository.save(histogram);
 			}
