@@ -59,7 +59,7 @@
         flex-direction: column;
         flex-wrap: nowrap;
         flex-grow: 1;
-        
+
         .innerFlex {
             display: flex;
             flex-direction: row;
@@ -120,27 +120,15 @@
     position: relative;
     text-align: center;
     overflow: hidden;
+    height: 22vh;
 
     .searchBlock {
-        position: absolute;
         width: 100%;
         height: 100%;
         display: table;
-        top: 0;
-        left: 0;
-
-        .sbTop {
-            transition-timing-function: ease-in-out;
-            transition-duration: 1s;
-            transition-property: transform;
-            transform: translateY(-40%);
-        }
 
         .searchBar {
             display: table-cell;
-            transition-timing-function: ease-in-out;
-            transition-duration: 1s;
-            transition-property: transform;
             vertical-align: middle;
 
             form {
@@ -150,7 +138,7 @@
                 input {
                     border: solid 3px #fff;
                     box-sizing: border-box;
-                    font-size: 2em;
+                    font-size: x-large;
                     height: 6vh;
                     outline: solid #77aada 0;
                     padding: .5em;
@@ -168,96 +156,6 @@
                     color: #272736;
                 }
             }
-
-            .results {
-                display: grid;
-                grid-template-columns: 50% 50%;
-                width: 50%;
-                align-content: center;
-                margin: 0 auto;
-
-                .resultCount {
-                    color: #236099;
-                    padding: 4px;
-                    font-weight: 500;
-                    text-align: left;
-                }
-
-                .moreMaps {
-                    text-align: right;
-                    padding: 4px;
-
-                    .link {
-                        color: inherit;
-                        color: #236099;
-                        font-weight: 500;
-                        text-decoration: none;
-                    }
-
-                    .link:hover {
-                        color: #7e96a1;
-                        cursor: pointer;
-                    }
-                }
-            }
-        }
-
-
-
-    }
-
-    .resultBlock {
-        background-color: #6D8299;
-
-        .rdTop {
-            transition-timing-function: ease-in-out;
-            transition-duration: 1s;
-            transition-property: transform;
-            transform: translateY(-105%);
-        }
-
-        .resultDiv {
-            position: absolute;
-            width: 98%;
-            min-height: fit-content;
-            margin: 1%;
-            transition-timing-function: ease-in-out;
-            transition-duration: 1s;
-            transition-property: transform;
-            top: 100%;
-            overflow-y: hidden;
-            overflow-x: scroll;
-            background-color: #6D8299;
-
-            .resultContainer {
-                min-width: 100%;
-                min-height: fit-content;
-                background-color: #6D8299;
-                display: inline-flex;
-            }
-        }
-
-        .spinnerContainer {
-            width: 100%;
-
-            mat-spinner {
-                margin: auto;
-                top: 50%;
-                transform: translateY(-50%);
-                height: 90%;
-            }
         }
     }
-}
-
-::-webkit-scrollbar-track {
-    background: #6D8299;
-}
-
-::-webkit-scrollbar-thumb {
-    background: #3b5069;
-}
-
-::-webkit-scrollbar-thumb:hover {
-    background: #263446;
 }

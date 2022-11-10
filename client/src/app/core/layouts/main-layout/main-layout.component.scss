@@ -13,11 +13,17 @@
 
 .toolbar {
     position: relative;
-    display: grid;
     min-height: 10vh;
-    grid-template-areas:
-        'grid1 grid2 grid3 grid4 grid5';
-    grid-template-columns: min-content 15% auto auto 30%;
+
+    // display: grid;
+    // grid-template-areas:
+    //     'grid1 grid2 grid3 grid4 grid5';
+    // grid-template-columns: min-content min-content auto auto 30%;
+
+    display: flex;
+    flex-wrap: wrap;
+    flex: min-content min-content stretch;
+
 
     .logo {
         height: 4em;
@@ -31,7 +37,7 @@
             justify-content: center;
             font-size: large;
             text-decoration: none;
-            padding: 10px;
+            padding: 20px;
 
             .mat-icon {
                 height: fit-content;
@@ -43,7 +49,9 @@
 
     .toolbar_user {
         grid-area: grid5;
+        flex: 1;
         text-align: right;
+        padding: 10px 0;
     }
 
     .link {
@@ -53,6 +61,12 @@
 
     .link:hover {
         color: #77aada;
+    }
+
+    .userNotLoggedOptions {
+        display: flex;
+        flex-wrap: nowrap;
+        justify-content: flex-end;
     }
 
     .userLoggedOptions {
@@ -111,11 +125,10 @@
     background-color: #1b1b20;
     position: relative;
     min-height: 30vh;
-    display: grid;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
     overflow: hidden;
-    grid-template-areas:
-        'left middle right';
-    grid-template-columns: 33% 33% 33%;
 
     h3,
     h4 {
@@ -134,21 +147,30 @@
     .ft {
         display: flex;
         flex-direction: column;
+        width: 33%;
+        min-width: 300px;
+        flex: 1;
 
         .logo {
             height: 75px;
+        }
+
+        .pd {
+            display: flex;
+            flex-direction: column;
+            padding: 50px;
+            width: stretch;
+            height: stretch;
         }
     }
 
     .ft_left {
         text-align: left;
-        margin: 50px;
         grid-area: left;
     }
 
     .ft_middle {
         text-align: center;
-        margin: 50px;
         grid-area: middle;
         display: grid;
 
@@ -160,7 +182,6 @@
 
     .ft_right {
         text-align: right;
-        margin: 50px;
         grid-area: right;
     }
 }

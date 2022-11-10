@@ -18,35 +18,72 @@
     overflow: hidden;
     display: flex;
     flex-direction: column;
+
     .titleBar {
         padding: 0 0 30px 0;
     }
 
 
-    .searchBar {
+    .headerDiv {
         vertical-align: middle;
-        padding: 0 0 30px 0;
+        padding: 0 0 7px 0;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
 
-        .resultCount{
+        .searchBar {
+            width: 50%;
+
+            input {
+                border: solid 3px #fff;
+                box-sizing: border-box;
+                font-size: 1.5em;
+                height: 6vh;
+                outline: solid #77aada 0;
+                padding: .5em;
+                width: 100%;
+            }
+
+            .searchIcon {
+                position: absolute;
+                transform: translate(-100%, 20%);
+                vertical-align: middle;
+                color: #272736;
+            }
+        }
+
+        .resultCount {
             color: #77aada;
             padding: 4px;
             font-weight: 500;
-        }
-    
-        input {
-            border: solid 3px #fff;
-            box-sizing: border-box;
-            font-size: 1.5em;
-            height: 6vh;
-            outline: solid #77aada 0;
-            padding: .5em;
-            width: 50%;
+            position: relative;
+            margin: 0 15px;
+            min-width: fit-content;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            a {
+                position: relative;
+                white-space: nowrap
+            }
         }
 
-        .searchIcon {
-            transform: translate(-100%, -15%);
-            vertical-align: middle;
-            color: #272736;
+        .loadMore {
+            color: #316b83;
+            padding: 4px;
+            font-weight: 500;
+            position: relative;
+            margin-left: auto;
+            width: fit-content;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .loadMore:hover {
+            color: #234f63;
         }
     }
 
@@ -60,7 +97,6 @@
             position: relative;
             display: flex;
             flex-wrap: wrap;
-            //justify-content: space-around;
         }
     }
 }

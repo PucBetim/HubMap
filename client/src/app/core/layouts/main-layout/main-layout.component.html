@@ -9,7 +9,7 @@
                 </a>
             </div>
             <div class="toolbar_user">
-                <div class="layoutDefaultStyle" #userNotLogged *ngIf="!user">
+                <div class="userNotLoggedOptions layoutDefaultStyle" #userNotLogged *ngIf="!user">
                     <button (click)="goToLogin()">Login</button>
                     <button (click)="goToCreateAccount()" class="btn-light">Criar Conta</button>
                 </div>
@@ -32,35 +32,40 @@
 
     <div class="footer layoutDefaultStyle">
         <div class="ft ft_left">
-            <div>
+            <div class="pd">
                 <h3>SOBRE</h3>
                 <h4>
                     HubMap é um sistema para criação e compartilhamento de mapas mentais desenvolvido como projeto de
                     conclusão de curso apresentado à Pontifícia Universidade Católica de Minas Gerais.
                 </h4>
-            </div>
             <a href="http://www.pucminas.br"><img class="logo" src="/assets/img/puc_minas_logo.png" alt=""></a>
         </div>
+
+        </div>
         <div class="ft ft_middle">
-            <div class="pushBottom">
-                <a href=""> <img class="logo" src="assets/img/hubmap_logo.png"></a>
-                <h3>2022</h3>
+            <div class="pd">
+                <div class="pushBottom">
+                    <a href=""> <img class="logo" src="assets/img/hubmap_logo.png"></a>
+                    <h3>2022</h3>
+                </div>
             </div>
         </div>
         <div class="ft ft_right">
-            <div>
-                <h3>
-                    E-MAIL DE CONTATO <mat-icon> business</mat-icon>
-                </h3>
-                <h4> carloseduardosesilva@gmail.com</h4>
-                <h4> junioferreiradealmeida2001@gmail.com</h4>
-                <hr>
-            </div>
-            <div class="pushBottom">
-                <h3> IDIOMAS <mat-icon>language</mat-icon>
-                </h3>
-                <h4> Português</h4>
-                <br>
+            <div class="pd">
+                <div>
+                    <h3>
+                        E-MAIL DE CONTATO <mat-icon> business</mat-icon>
+                    </h3>
+                    <h4> carloseduardosesilva@gmail.com</h4>
+                    <h4> junioferreiradealmeida2001@gmail.com</h4>
+                    <hr>
+                </div>
+                <div class="pushBottom">
+                    <h3> IDIOMAS <mat-icon>language</mat-icon>
+                    </h3>
+                    <h4> Português</h4>
+                    <br>
+                </div>
             </div>
         </div>
     </div>

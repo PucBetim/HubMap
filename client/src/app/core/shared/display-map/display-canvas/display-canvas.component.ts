@@ -88,7 +88,7 @@ export class DisplayCanvasComponent implements OnInit {
   }
 
   getDetails() {
-    return this.showOptions ? window.location.href + `/details/${this.post.id}/${this.post.author.id}` : '';
+    return this.showOptions ? window.location.origin + `/details/${this.post.id}/${this.post.author.id}` : '';
   }
 
   zoom(zoom: boolean) {

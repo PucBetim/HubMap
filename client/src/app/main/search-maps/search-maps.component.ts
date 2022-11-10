@@ -16,15 +16,36 @@ export class SearchMapsComponent implements OnInit {
   public loading: boolean = false;
   public postsResult: Post[];
   public results: boolean = false;
+  public currentIndex: number = 0;
   public sub: Subscription;
   public form: FormGroup;
+  public resultIndexes: string[];
 
-  constructor(private postService: PostService, private snackBar: MatSnackBar, private fb: FormBuilder) { }
+  constructor(
+    private postService: PostService,
+    private snackBar: MatSnackBar,
+    private fb: FormBuilder,
+    private route: ActivatedRoute,
+    private router: Router) { }
 
   ngOnInit(): void {
     this.form = this.fb.group({
       search: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(80)]],
     });
+
+    this.sub = this.route.params.subscribe(
+      params => {
+        var search = params['q'];
+        if (search) {
+          this.form.patchValue({ search: search })
+          this.search();
+        }
+      });
+  }
+
+  submit() {
+    let p = Object.assign({}, this.form.value);
+    this.router.navigate(['/search/', { q: p.search }]);
   }
 
   search() {
@@ -32,29 +53,39 @@ export class SearchMapsComponent implements OnInit {
     this.loading = true;
     this.results = false;
     let p = Object.assign({}, this.form.value);
-
     this.postService.searchPosts(p).subscribe(
       {
         next: result => {
-          if (result.body?.dataId)
-            this.getPosts(result.body.dataId.split(','))
+
+          if (result.body?.dataId) {
+            this.resultIndexes = result.body.dataId.split(',');
+            this.getPosts()
+          }
           else {
             this.loading = false;
             this.results = true;
-            this.snackBar.open("Nenhum mapa encontrado!", "Ok");
+            this.snackBar.open("Nenhum mapa encontrado!", "Ok", {
+              duration: 2000
+            });
           }
         },
         error: error => {
           this.snackBar.open("Falha ao obter mapas! Tente novamente mais tarde.", "Ok", {
-            duration: 2000
+            duration: 5000
           });
           this.loading = false;
         }
       })
   }
 
-  getPosts(postsIds: string[]) {
-    postsIds.forEach(p => {
+  loadMore() {
+    this.currentIndex += 10;
+    this.getPosts();
+  }
+
+  getPosts() {
+    var srcArr = this.resultIndexes.slice(this.currentIndex, this.currentIndex + 10)
+    srcArr.forEach(p => {
       this.postService.getPublicPostsById(p.trim()).subscribe(
         {
           next: result => {

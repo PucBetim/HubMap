@@ -6,9 +6,9 @@
 
         </div>
 
-        <div class="searchBar">
-            <div>
-                <form (ngSubmit)="search()">
+        <div class="headerDiv">
+            <div class="searchBar">
+                <form (ngSubmit)="submit()">
                     <input placeholder="Pesquisar mapas..." [formControl]="form.controls['search']">
                     <button class="searchIcon" type="submit" [disabled]="!form.valid" mat-icon-button>
                         <mat-icon>search</mat-icon>
@@ -17,16 +17,22 @@
             </div>
             <div class="resultCount layoutDefaultStyle">
                 <a *ngIf="results">
-                    {{postsResult?.length}}
-                    <a *ngIf="postsResult?.length == 1">RESULTADO</a>
-                    <a *ngIf="postsResult?.length != 1">RESULTADOS</a>
+                    <a *ngIf="postsResult?.length == 0"> NENHUM RESULTADO</a>
+                    <a *ngIf="postsResult?.length == 1">{{postsResult?.length}} RESULTADO</a>
+                    <a *ngIf="postsResult?.length > 1"> Mostrando {{postsResult?.length}} / {{resultIndexes?.length}}
+                        RESULTADOS</a>
                 </a>
+            </div>
+            <div *ngIf="(resultIndexes?.length > 10) && (postsResult?.length < resultIndexes?.length)"
+                class="loadMore layoutDefaultStyle">
+                <a (click)="loadMore()">CARREGAR MAIS MAPAS</a>
             </div>
         </div>
 
         <div class="resultMaps layoutDefaultStyle">
             <div class="resultContainer" *ngIf="results">
-                <display-canvas *ngFor="let post of postsResult" [size]="300" [post]="post"></display-canvas>
+                <display-canvas [style.min-width]="300" *ngFor="let post of postsResult" [size]="300" [post]="post">
+                </display-canvas>
             </div>
         </div>
     </div>
