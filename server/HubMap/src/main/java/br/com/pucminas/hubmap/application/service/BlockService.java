@@ -52,8 +52,10 @@ public class BlockService {
 			blockRepository.deleteAllByPostWhereIsNotRoot(postId);
 		}
 		
-		histogramService.generateHistogram(blockToReturn, dbPost, isEdit);
-		
+		if(!dbPost.getIsPrivate()) {
+			histogramService.generateHistogram(blockToReturn, dbPost, isEdit);
+		}
+				
 		return blockToReturn;
 	}
 

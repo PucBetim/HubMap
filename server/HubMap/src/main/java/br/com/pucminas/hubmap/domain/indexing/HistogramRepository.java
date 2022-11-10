@@ -14,10 +14,10 @@ public interface HistogramRepository extends PagingAndSortingRepository<Histogra
 	
 	Page<Histogram> findByNeedRecount(Boolean needRecount, Pageable pageable);
 	
-	@Query("SELECT h FROM Histogram h WHERE h.post.isPrivate = false AND h.initialized = ?1")
+	@Query("SELECT h FROM Histogram h WHERE h.initialized = ?1 AND h.post.isPrivate = false")
 	Page<Histogram> findByInitilized(Boolean initilized, Pageable pageable);
 	
-	@Query("SELECT h.id FROM Histogram h WHERE h.post.isPrivate = false AND h.initialized = ?1")
+	@Query("SELECT h.id FROM Histogram h WHERE h.initialized = ?1 AND h.post.isPrivate = false")
 	Page<Integer> findIdsByInitilized(Boolean initilized, Pageable pageable);
 	
 	@Query("SELECT count(h) FROM Histogram h WHERE h.initialized = ?1")
