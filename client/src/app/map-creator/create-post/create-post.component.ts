@@ -19,6 +19,7 @@ export class CreatePostComponent implements OnInit {
   public editorMode: boolean = false;
   public userLogged: boolean = true;
   public updateMap: boolean;
+  public mapInitialPrivacy: boolean;
 
   public descMaxLength: number = 200;
   public rootBlockId: string;
@@ -37,7 +38,7 @@ export class CreatePostComponent implements OnInit {
     this.post = this.data.post;
     this.rootBlockId = this.data.rootBlockId;
     this.updateMap = this.data.updateMap;
-
+    this.mapInitialPrivacy = this.data.mapInitialPrivacy;
     this.form = this.fb.group({
       title: ['', [Validators.required, Validators.maxLength(30)]],
       description: ['', [Validators.minLength(3), Validators.maxLength(this.descMaxLength)]],
@@ -75,7 +76,7 @@ export class CreatePostComponent implements OnInit {
         let p = Object.assign({}, this.form.value);
         this.postService.updatePost(p, this.post.id).subscribe({
           next: obj => {
-            if (this.updateMap) {
+            if (this.updateMap || this.mapInitialPrivacy != p.private) {
               this.updateBlocks(obj.body.dataId)
               this.loading = false;
             }

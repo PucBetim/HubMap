@@ -12,7 +12,7 @@
     </div>
 
     <mat-dialog-actions align="center">
-        <button class="btn-light" cdkFocusInitial (click)="dialogRef.close()">Cancelar</button>
-        <button [ngClass]="btnClass" (click)="dialogRef.close(true)">Sim</button>
+        <button class="btn-light" (click)="dialogRef.close()">Cancelar</button>
+        <button [ngClass]="btnClass" cdkFocusInitial (click)="dialogRef.close(true)">Sim</button>
     </mat-dialog-actions>
 </div>

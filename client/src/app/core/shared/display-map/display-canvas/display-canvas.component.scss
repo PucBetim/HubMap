@@ -5,6 +5,10 @@
     box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2),
         0 2px 2px 0 rgba(0, 0, 0, 0.14),
         0 1px 5px 0 rgba(0, 0, 0, 0.12);
+
+    a {
+        text-decoration: none
+    }
 }
 
 .optionMode {
@@ -20,18 +24,18 @@
     box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2),
         0 2px 2px 0 rgba(0, 0, 0, 0.14),
         0 1px 5px 0 rgba(0, 0, 0, 0.12);
+}
 
-    .zoomIcon {
-        position: absolute;
-        bottom: 5px;
-        right: 15px;
-        z-index: 10;
-        cursor: pointer;
+.zoomIcon {
+    position: absolute;
+    bottom: 5px;
+    right: 15px;
+    z-index: 10;
+    cursor: pointer;
 
-        mat-icon {
-            transform: scale(2);
-            color: rgba(2, 2, 2, 0.4);
-        }
+    mat-icon {
+        transform: scale(2);
+        color: rgba(2, 2, 2, 0.4);
     }
 }
 

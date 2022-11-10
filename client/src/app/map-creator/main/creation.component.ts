@@ -76,6 +76,7 @@ export class CreationComponent implements OnInit, ComponentCanDeactivate {
   public unsavedChanges: boolean = false;
   public loading: boolean = false;
   public contentEdited: boolean = false;
+  public mapInitialPrivacy: boolean;
 
   public editorMode: boolean = false;
   public childrenLoaded: boolean = false;
@@ -119,7 +120,7 @@ export class CreationComponent implements OnInit, ComponentCanDeactivate {
         {
           next: result => {
             this.post = result.body;
-
+            this.mapInitialPrivacy = this.post.private;
             this.editorMode = true;
             if (this.post.map[0])
               this.rootBlockId = this.post.map[0].id!;
@@ -267,6 +268,7 @@ export class CreationComponent implements OnInit, ComponentCanDeactivate {
         editorMode: this.editorMode,
         rootBlockId: this.rootBlockId,
         updateMap: this.contentEdited,
+        mapInitialPrivacy: this.mapInitialPrivacy,
       }
     };
 
@@ -288,6 +290,7 @@ export class CreationComponent implements OnInit, ComponentCanDeactivate {
             this.getPost();
           }
           this.unsavedChanges = false;
+          this.contentEdited = false;
         }
       }
     });

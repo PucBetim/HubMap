@@ -4,8 +4,8 @@
 
 export const environment = {
   production: false,
-  //apiUrl:'http://hubmap-server.brazilsouth.cloudapp.azure.com:8080/',
-  apiUrl: 'https://hub-map-server.herokuapp.com/',
+  apiUrl:'http://hubmap-server.brazilsouth.cloudapp.azure.com:8080/',
+  //apiUrl: 'https://hub-map-server.herokuapp.com/',
 };
 
 /*

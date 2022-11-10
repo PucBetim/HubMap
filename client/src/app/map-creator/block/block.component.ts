@@ -53,6 +53,10 @@ export class BlockComponent implements OnInit, AfterContentInit {
           this.addBlock('below');
         }
         break;
+      } case 'Escape': {
+        this.blockSelected = false;
+        this.emitUnselect();
+        break;
       }
       default: break;
     }
@@ -60,7 +64,6 @@ export class BlockComponent implements OnInit, AfterContentInit {
 
   @HostListener('document:click', ['$event'])
   clickout(event: any) {
-
     if (this.blockSelected && (event.target == this.blockRef.nativeElement))
       this.onDrag(event, true)
     if (!this.eRef.nativeElement.contains(event.target)) {

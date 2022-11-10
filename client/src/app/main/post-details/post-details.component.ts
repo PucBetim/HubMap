@@ -47,6 +47,7 @@ export class PostDetailsComponent implements OnInit {
   public dislikeClass: string[];
   public lastLikeValue: boolean;
   public lastDislikeValue: boolean;
+  public mapInitialPrivacy: boolean;
 
   constructor(
     private postService: PostService,
@@ -81,6 +82,7 @@ export class PostDetailsComponent implements OnInit {
         {
           next: result => {
             this.post = result.body;
+            this.mapInitialPrivacy = this.post.private;
             this.loading = false;
             this.getComments();
           },
@@ -374,6 +376,7 @@ export class PostDetailsComponent implements OnInit {
         post: this.post,
         editorMode: true,
         updateMap: false,
+        mapInitialPrivacy: this.mapInitialPrivacy,
       }
     };
 

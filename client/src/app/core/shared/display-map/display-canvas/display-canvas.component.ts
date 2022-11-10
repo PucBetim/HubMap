@@ -1,10 +1,8 @@
 import { CanvasService } from 'src/app/core/services/canvas.service';
-import { PostService } from '../../posts/post-blocks.service';
 import { Component, Input, OnInit } from '@angular/core';
 import { GetLimitPoints } from 'src/app/map-creator/getLimitPoints';
 import { Block, Position, Post } from '../../posts/post';
-import { Router } from '@angular/router';
-import { ConfigService } from 'src/app/core/services/config.service';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'display-canvas',
@@ -34,6 +32,7 @@ export class DisplayCanvasComponent implements OnInit {
   constructor(
     private getLimitPoints: GetLimitPoints,
     private router: Router,
+    private route: ActivatedRoute,
   ) { }
 
   ngOnInit(): void {
@@ -88,10 +87,8 @@ export class DisplayCanvasComponent implements OnInit {
     });
   }
 
-  goToDetails() {
-    if (this.showOptions) {
-      this.router.navigateByUrl(`/details/${this.post.id}/${this.post.author.id}`);
-    }
+  getDetails() {
+    return this.showOptions ? window.location.href + `/details/${this.post.id}/${this.post.author.id}` : '';
   }
 
   zoom(zoom: boolean) {
@@ -107,6 +104,3 @@ export class DisplayCanvasComponent implements OnInit {
     this.loadCanvas();
   }
 }
-
-
-
