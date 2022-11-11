@@ -1,6 +1,7 @@
 package br.com.pucminas.hubmap;
 
-import java.text.Normalizer;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
@@ -12,35 +13,30 @@ public class PythonTests {
 
 	@SuppressWarnings("unchecked")
 	@Test
-	public void testSth() {
+	public void testSth() throws IOException {
 
-		String sentence = "Com os nossos métodos conseguimos ensinar, sobretudo alunos iniciantes, por meio de textos práticos, que favorecem a boa leitura e consequente compreensão do que é ensinado.";
-		//sentence = "Com os métodos 100% consagração, avô, avó";
+		String sentence = "Com os nossos métodos conseguimos ensinar, sobretudo alunos iniciantes, por meio de textos práticos, que favorecem a boa leitura e consequente compreensão do que é ensinado para as crianças.";
 
 		try (Interpreter interp = new SharedInterpreter()) {
-			
-			sentence = Normalizer.normalize(sentence, Normalizer.Form.NFKD).replaceAll("\\p{M}", "");
 			
 			interp.set("sentence", sentence);
 			interp.runScript("D:\\Workspace\\TCC\\HubMap\\server\\HubMap\\src\\test\\resources\\spacyTest.py");
 			
 			List<String> tokens = interp.getValue("bagOfWords", List.class);
+			String tokensStr = interp.getValue("bagOfWordsString", String.class);
 			
+			System.out.println("=== Palavras na lista ===");
 			for (int i = 0; i < tokens.size(); i++) {
 				System.out.println(tokens.get(i) + " ");
 			}
 			
-			/*
-			 * interp.set("sentence", sentence); interp.runScript(
-			 * "D:\\Workspace\\TCC\\HubMap\\server\\HubMap\\src\\test\\resources\\spacyTest.py"
-			 * ); String[] tokens = interp.getValue("tokens", String[].class);
-			 * 
-			 * for(int i = 0; i < tokens.length; i++) { System.out.println(tokens[i]); }
-			 * 
-			 * //TODO Add java.library.path the path of jep directory (Native Library
-			 * location) //TODO Try to deploy with spacy modules and portuguese trained
-			 * model. assertEquals(tokens.length, 10);
-			 */
+			System.out.println("=== Palavras na string ===\n\n" + tokensStr);
+			
+			FileOutputStream outputStream = new FileOutputStream("D:\\tmp\\java_out.txt");
+		    byte[] strToBytes = tokensStr.getBytes();
+		    outputStream.write(strToBytes);
+
+		    outputStream.close();
 		}
 	}
 
