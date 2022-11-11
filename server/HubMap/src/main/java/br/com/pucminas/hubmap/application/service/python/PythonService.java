@@ -4,7 +4,6 @@ import java.io.File;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Paths;
-import java.text.Normalizer;
 import java.util.List;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
@@ -48,12 +47,7 @@ public class PythonService implements Runnable {
 	public void setSentence(String sentence) {
 		if (sentence == null || sentence.isBlank())
 			return;
-
-		sentence = Normalizer
-					.normalize(sentence, Normalizer.Form.NFKD)
-					.replaceAll("\\p{M}", "")
-					.toLowerCase();
-
+		
 		lock.lock();
 		try {
 			while (setted || !finished)
