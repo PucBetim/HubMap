@@ -66,7 +66,6 @@ public class Comment implements Serializable {
 
 	private Boolean edited;
 	
-	//TODO Remove all constructors
 	public Comment(Post post, String content, AppUser author, Comment repliedTo) {
 		this.post = post;
 		this.content = content;

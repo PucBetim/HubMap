@@ -1,5 +1,6 @@
 package br.com.pucminas.hubmap.application.service;
 
+import static br.com.pucminas.hubmap.utils.LoggerUtils.getLoggerFromClass;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -35,9 +36,9 @@ public class SearchService {
 	private HistogramService histogramService;
 
 	private HistogramItemRepository histogramItemRepository;
-	
+
 	private VocabularyService vocabularyService;
-	
+
 	public SearchService(HistogramRepository histogramRepository, HistogramService histogramService,
 			HistogramItemRepository histogramItemRepository, VocabularyService vocabularyService) {
 		this.histogramRepository = histogramRepository;
@@ -51,31 +52,30 @@ public class SearchService {
 
 		Pageable pageable = PageableUtils.getPageableFromParameters(0, PAGE_SIZE);
 		List<HistogramSearch> histogramsSimilarity = new ArrayList<>();
-		
+
 		StopWatch measure = new StopWatch();
-		
+
 		measure.start("GenerateSearchHist");
 		Histogram searchHist = histogramService.generateSearchHistogram(search);
 		search.setHistogram(searchHist);
 		measure.stop();
 
 		measure.start("CalculateSimilarity");
+		// TODO Think a way to just search in maps that have the ngrams from search
 		Page<Integer> histograms = histogramRepository.findIdsByInitilized(true, pageable);
 		final Integer vocabSize = vocabularyService.getOfficialSize();
-		
-		while (true) {
-			histograms.stream()
-				.parallel()
-				.forEach(histogram -> {
-					double similarity = compareHistograms(search.getHistogram(), histogram, vocabSize);
 
-					if (similarity > 0.0) {
-						HistogramSearch histSearch = new HistogramSearch();
-						histSearch.setPostId(histogram);
-						histSearch.setSimilarity(similarity);
-						histogramsSimilarity.add(histSearch);
-					}
-				});
+		while (true) {
+			histograms.stream().parallel().forEach(histogram -> {
+				double similarity = compareHistograms(search.getHistogram(), histogram, vocabSize);
+
+				if (similarity > 0.0) {
+					HistogramSearch histSearch = new HistogramSearch();
+					histSearch.setPostId(histogram);
+					histSearch.setSimilarity(similarity);
+					histogramsSimilarity.add(histSearch);
+				}
+			});
 
 			if (histograms.hasNext()) {
 				histograms = histogramRepository.findIdsByInitilized(true, pageable.next());
@@ -84,36 +84,36 @@ public class SearchService {
 			}
 		}
 		measure.stop();
-		
+
 		Collections.sort(histogramsSimilarity, new Comparator<>() {
 			@Override
 			public int compare(HistogramSearch o1, HistogramSearch o2) {
 				return -1 * o1.getSimilarity().compareTo(o2.getSimilarity());
 			}
 		});
-			
+
+		getLoggerFromClass(getClass()).info("Search performed successfully");
 		System.out.println(measure.prettyPrint());
 		return histogramsSimilarity.stream()
 				.map(h -> h.getPostId())
 				.collect(Collectors.toList());
 	}
 
-	private double compareHistograms(Histogram hist1, Integer hist2, int vocabSize){
+	private double compareHistograms(Histogram hist1, Integer hist2, int vocabSize) {
 
 		Set<Long> vocab = joinHistograms(hist1, hist2);
 		double[] dissimilarityCoefficient = calculateDissimilarityCoefficient(hist1, hist2, vocab);
-		
-		double dc = dissimilarityCoefficient[0] / dissimilarityCoefficient[1];
+
+		double dc = dissimilarityCoefficient[1] / dissimilarityCoefficient[0];
 		double s = dissimilarityCoefficient[2];
 		double t = dissimilarityCoefficient[3];
-		
+
 		double similarity = 0.5 * ((s / vocabSize) + ((t * s) / (t * s + dc)));
-		
+
 		return similarity;
 	}
-	
-	private double[] calculateDissimilarityCoefficient(Histogram hist1, Integer hist2,
-			Set<Long> vocab) {
+
+	private double[] calculateDissimilarityCoefficient(Histogram hist1, Integer hist2, Set<Long> vocab) {
 
 		double divisor = 0.0;
 		double dividend = 0.0;
@@ -127,11 +127,10 @@ public class SearchService {
 
 			divisor += tfIdfH1 + tfIdfH2;
 			dividend += Math.abs(tfIdfH1 - tfIdfH2);
-			
+
 			if (tfIdfH1 != 0.0 && tfIdfH2 != 0.0) {
 				s++;
 			}
-			
 			if (tfIdfH1 != 0.0 || tfIdfH2 != 0.0) {
 				t++;
 			}
