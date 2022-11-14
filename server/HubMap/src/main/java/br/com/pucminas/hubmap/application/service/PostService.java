@@ -1,11 +1,13 @@
 package br.com.pucminas.hubmap.application.service;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import br.com.pucminas.hubmap.domain.indexing.Histogram;
 import br.com.pucminas.hubmap.domain.post.Post;
 import br.com.pucminas.hubmap.domain.post.PostRepository;
-import br.com.pucminas.hubmap.utils.StringUtils;
 
 @Service
 public class PostService {
@@ -13,31 +15,57 @@ public class PostService {
 	@Autowired
 	private PostRepository postRepository;
 	
-	public Post save(Post dbPost, Post newPost) {
-		dbPost = postRepository.findById(dbPost.getId()).orElseThrow();
+	@Transactional
+	public Post save(Post newPost) {
 		
-		if(!StringUtils.isBlank(newPost.getDescription())){
-			dbPost.setDescription(newPost.getDescription());
-			dbPost.setModifiedNow();
+		Post dbNewPost;
+		
+		if(newPost.getId() != null) {
+			
+			Post dbPost = postRepository.findByIdFromLoggedAuthor(newPost.getId()).orElseThrow();
+			
+			newPost.setAuthor(dbPost.getAuthor());
+			newPost.setLikes(dbPost.getLikes());
+			newPost.setDislikes(dbPost.getDislikes());
+			newPost.setViews(dbPost.getViews());
+			newPost.setCreated(dbPost.getCreated());
+			newPost.setModifiedNow();
+			dbNewPost = postRepository.save(newPost);
+		} else {
+			newPost.initializePost();
+			dbNewPost = postRepository.save(newPost);
+			dbNewPost.setHistogram(new Histogram(dbNewPost));
 		}
 		
-		if(!StringUtils.isBlank(newPost.getTitle())){
-			dbPost.setTitle(newPost.getTitle());
-			dbPost.setModifiedNow();
-		}
+		return dbNewPost;
+	}
+	
+	@Transactional
+	public boolean delete(Integer postId) {
+		boolean isPresent = postRepository.findByIdFromLoggedAuthor(postId).isPresent();
 		
-		if(newPost.getLikes() != 0) {
-			dbPost.changeLikes(newPost.getLikes() > 0);
+		if(isPresent) {
+			postRepository.deleteById(postId);
+			return true;
 		}
-		
-		if(newPost.getDislikes() != 0) {
-			dbPost.changeDislikes(newPost.getDislikes() > 0);
-		}
-		
-		if(newPost.getViews() != 0) {
-			dbPost.addViews();
-		}
-		
-		return postRepository.save(dbPost);
+		return false;
+	}
+	
+	@Transactional
+	public void changeLike(Integer postId, boolean positive) {
+		Post dbPost = postRepository.findByIdWhereIsPrivateFalse(postId).orElseThrow();
+		dbPost.changeLikes(positive);
+	}
+	
+	@Transactional
+	public void changeDislike(Integer postId, boolean positive) {
+		Post dbPost = postRepository.findByIdWhereIsPrivateFalse(postId).orElseThrow();
+		dbPost.changeDislikes(positive);
+	}
+
+	@Transactional
+	public void addView(Integer postId) {
+		Post dbPost = postRepository.findByIdWhereIsPrivateFalse(postId).orElseThrow();
+		dbPost.addViews();
 	}
 }

@@ -1,7 +1,7 @@
 package br.com.pucminas.hubmap.infrastructure.web;
 
-import org.springframework.data.rest.core.RepositoryConstraintViolationException;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -9,9 +9,9 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class WebRequestExceptionHandler {
 	
-	@ExceptionHandler
+	@ExceptionHandler(MethodArgumentNotValidException.class)
 	@ResponseStatus(code = HttpStatus.BAD_REQUEST)
-	public RestResponseError handleException(RepositoryConstraintViolationException e) {
-		return RestResponseError.fromValidationError(e.getErrors());
+	public RestResponse handleException(MethodArgumentNotValidException e) {
+		return RestResponse.fromValidationError(e.getBindingResult());
 	}
 }

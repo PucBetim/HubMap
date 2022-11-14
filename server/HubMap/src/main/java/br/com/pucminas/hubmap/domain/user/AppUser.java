@@ -8,29 +8,34 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonProperty.Access;
 
 import br.com.pucminas.hubmap.utils.StringUtils;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @SuppressWarnings("serial")
 @Entity
-//@EntityListeners(AppUserListener.class)
 @Table(name = "APP_USER")
-@JsonIgnoreProperties({"profilePicture", "id"})
+@JsonIgnoreProperties({"profilePicture"})
 @Getter
+@Setter
 @NoArgsConstructor
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class AppUser implements Serializable {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id;
+	@EqualsAndHashCode.Include
+	private Integer id;
 	
 	@NotBlank(message = "Por favor, informe seu nome.")
 	@Column(length = 80, nullable = false)
@@ -46,11 +51,13 @@ public class AppUser implements Serializable {
 	@NotBlank(message = "Por favor, informe seu e-mail.")
 	@Column(length = 100, nullable = false)
 	@Size(max = 100, message = "O e-mail é muito grande.")
+	@Email(message = "O e-mail não está em um formato válido.")
 	private String email;
 	
 	@NotBlank(message = "Por favor, informe sua senha.")
 	@Column(length = 80, nullable = false)
 	@Size(max = 80, message = "A senha deve conter até 80 caracteres.")
+	@JsonProperty(access = Access.WRITE_ONLY)
 	private String password;
 
 	public AppUser(String name, String nick, String profilePicture, String email, String password) {
@@ -80,38 +87,13 @@ public class AppUser implements Serializable {
 		
 		this.nick = sb.toString();
 	}
-	
-	@JsonIgnore
-	public String getPassword() {
-		return this.password;
-	}
-	
-	public void setId(int id) {
-		this.id = id;
-	}
-	
-	public void setNick(String nick) {
-		this.nick = nick;
-	}
-
-	public void setProfilePicture(String profilePicture) {
-		this.profilePicture = profilePicture;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
-	@JsonProperty
-	public void setPassword(String password) {
-		this.password = password;
-	}
-	
-	public void setName(String name) {
-		this.name = name;
-	}
-	
+		
 	public void encryptPassword() {	
 		this.password = StringUtils.encrypt(password);
+	}
+	
+	public void setAuthorForPublicAccess() {
+		email = null;
+		name = null;
 	}
 }

@@ -17,8 +17,7 @@ import br.com.pucminas.hubmap.HubMapApplication;
 
 @Configuration
 public class WebSecurityConfigurer implements WebMvcConfigurer{
-	
-	
+		
 	@Bean
 	AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
 		return authConfig.getAuthenticationManager();
@@ -38,6 +37,7 @@ public class WebSecurityConfigurer implements WebMvcConfigurer{
 			.authorizeRequests()
 				.antMatchers("/h2-console/**").permitAll()
 				.antMatchers(HttpMethod.POST, "/hubmap/appUsers").permitAll()
+				.antMatchers("/hubmap/public/**").permitAll()			
 				.anyRequest().authenticated()
 		.and()
 			.addFilter(new JWTAuthenticationFilter(authManager))

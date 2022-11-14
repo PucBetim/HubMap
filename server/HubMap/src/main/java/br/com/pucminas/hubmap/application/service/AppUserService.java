@@ -19,15 +19,17 @@ public class AppUserService {
 			throw new DuplicatedEmailException("O email informado já está sendo utilizado");
 		}
 
-		if(appUser.getId() == 0) {
-			
-			appUser.encryptPassword();
-			
-			if(StringUtils.isBlank(appUser.getNick())) {
-				appUser.createNickFromName();
-			}
+		if(appUser.getId() == null) {
+			appUser.encryptPassword();	
+		} else {
+			AppUser dbAppUser = appUserRepository.findById(appUser.getId()).orElseThrow();
+			appUser.setPassword(dbAppUser.getPassword());
 		}
-	
+		
+		if(StringUtils.isBlank(appUser.getNick())) {
+			appUser.createNickFromName();
+		}
+		
 		appUserRepository.save(appUser);
 		
 		return appUser;

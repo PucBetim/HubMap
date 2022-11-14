@@ -1,39 +1,39 @@
 package br.com.pucminas.hubmap.domain.post;
 
-import javax.persistence.PrePersist;
+import java.util.Optional;
+
+import javax.persistence.PreRemove;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
-import br.com.pucminas.hubmap.domain.user.AppUser;
-import br.com.pucminas.hubmap.domain.user.AppUserRepository;
+import br.com.pucminas.hubmap.application.service.BlockService;
+import br.com.pucminas.hubmap.domain.map.Block;
 
 @Component
 public class PostListener {
-	
-	private static AppUserRepository appUserRepository;
-	
-	@PrePersist
-	public void onPrePersistPost(Post post) {
-		
-		if(post.getAuthor() == null) {
-			post.initializePost();
-			
-			String email = SecurityContextHolder.getContext().getAuthentication().getName();
-			AppUser appUser = appUserRepository.findByEmail(email);
-			
-			if(appUser == null) {
-				throw new UsernameNotFoundException("O usuário com e-mail '" + email + "' não foi encontrado.");
-			}
-			
-			post.setAuthor(appUser);
+
+	private static BlockService blockService;
+
+	@PreRemove
+	public void onPreRemove(Post post) {
+
+		Optional<Block> blockOpt = post.getMap()
+				.stream()
+				.filter(b -> b.getIsRoot() == true)
+				.findFirst();
+
+		post.getComments().clear();
+
+		if (blockOpt.isPresent()) {
+			Block block = blockOpt.get();
+			blockService.dismissParentRelation(block);
+			post.getMap().remove(block);
 		}
 	}
-	
+
 	@Autowired
-	public void init(AppUserRepository appUserRepository) {
-		PostListener.appUserRepository = appUserRepository;
+	public void init(BlockService blockService) {
+		PostListener.blockService = blockService;
 	}
 }
