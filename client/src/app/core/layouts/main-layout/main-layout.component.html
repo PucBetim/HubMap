@@ -9,11 +9,11 @@
                 </a>
             </div>
             <div class="toolbar_user">
-                <div class="userNotLoggedOptions layoutDefaultStyle" #userNotLogged *ngIf="!user">
+                <div #userNotLogged class="userLoginInfo layoutDefaultStyle"  *ngIf="!user">
                     <button (click)="goToLogin()">Login</button>
                     <button (click)="goToCreateAccount()" class="btn-light">Criar Conta</button>
                 </div>
-                <div #userLogged class="userLoggedOptions" *ngIf="user">
+                <div #userLogged class="userLoginInfo" *ngIf="user">
                     <div class="grid1">
                         <h2> Bem vindo(a) {{user.nick}}</h2>
                     </div>
