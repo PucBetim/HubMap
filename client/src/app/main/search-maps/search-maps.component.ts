@@ -30,7 +30,7 @@ export class SearchMapsComponent implements OnInit {
 
   ngOnInit(): void {
     this.form = this.fb.group({
-      search: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(80)]],
+      search: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(255)]],
     });
 
     this.sub = this.route.params.subscribe(
