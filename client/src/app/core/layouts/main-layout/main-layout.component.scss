@@ -15,11 +15,6 @@
     position: relative;
     min-height: 10vh;
 
-    // display: grid;
-    // grid-template-areas:
-    //     'grid1 grid2 grid3 grid4 grid5';
-    // grid-template-columns: min-content min-content auto auto 30%;
-
     display: flex;
     flex-wrap: wrap;
     flex: min-content min-content stretch;
@@ -63,19 +58,10 @@
         color: #77aada;
     }
 
-    .userNotLoggedOptions {
+    .userLoginInfo {
         display: flex;
         flex-wrap: nowrap;
         justify-content: flex-end;
-    }
-
-    .userLoggedOptions {
-        position: relative;
-        display: grid;
-        grid-template-areas:
-            'grid1 grid2';
-        grid-template-columns: 90% 10%;
-        width: 100%;
     }
 
     .grid1 {

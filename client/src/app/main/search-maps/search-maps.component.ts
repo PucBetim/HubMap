@@ -30,7 +30,7 @@ export class SearchMapsComponent implements OnInit {
 
   ngOnInit(): void {
     this.form = this.fb.group({
-      search: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(80)]],
+      search: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(255)]],
     });
 
     this.sub = this.route.params.subscribe(
@@ -50,6 +50,7 @@ export class SearchMapsComponent implements OnInit {
 
   search() {
     this.postsResult = [];
+    this.resultIndexes = [];
     this.loading = true;
     this.results = false;
     let p = Object.assign({}, this.form.value);
@@ -85,11 +86,12 @@ export class SearchMapsComponent implements OnInit {
 
   getPosts() {
     var srcArr = this.resultIndexes.slice(this.currentIndex, this.currentIndex + 10)
+    var resultArray: Post[] = [];
     srcArr.forEach(p => {
       this.postService.getPublicPostsById(p.trim()).subscribe(
         {
           next: result => {
-            this.postsResult.unshift(result.body);
+            resultArray.unshift(result.body);
             this.results = true;
           },
           error: error => {
@@ -99,6 +101,16 @@ export class SearchMapsComponent implements OnInit {
           }
         })
     });
+    this.postsResult = this.orderArray(resultArray, this.resultIndexes)
     this.loading = false;
   }
+
+  orderArray(array: Post[], order: string[]) {
+    array.sort(function (a, b) {
+      var A = a['id'], B = b['id'];
+      return order.indexOf(A) > order.indexOf(B) ? 1 : -1
+    });
+    return array;
+  };
 }
+
