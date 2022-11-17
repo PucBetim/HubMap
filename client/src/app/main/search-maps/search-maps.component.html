@@ -9,7 +9,7 @@
         <div class="headerDiv">
             <div class="searchBar">
                 <form (ngSubmit)="submit()">
-                    <input placeholder="Pesquisar mapas..." [formControl]="form.controls['search']">
+                    <input class="input" placeholder="Pesquisar mapas..." [formControl]="form.controls['search']">
                     <button class="searchIcon" type="submit" [disabled]="!form.valid" mat-icon-button>
                         <mat-icon>search</mat-icon>
                     </button>

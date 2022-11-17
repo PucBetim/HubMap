@@ -60,6 +60,7 @@ export class SearchMapsComponent implements OnInit {
 
           if (result.body?.dataId) {
             this.resultIndexes = result.body.dataId.split(',');
+            console.log('Indexes: ' + this.resultIndexes)
             this.getPosts()
           }
           else {
@@ -84,33 +85,24 @@ export class SearchMapsComponent implements OnInit {
     this.getPosts();
   }
 
-  getPosts() {
+  async getPosts() {
     var srcArr = this.resultIndexes.slice(this.currentIndex, this.currentIndex + 10)
     var resultArray: Post[] = [];
-    srcArr.forEach(p => {
-      this.postService.getPublicPostsById(p.trim()).subscribe(
-        {
-          next: result => {
-            resultArray.unshift(result.body);
-            this.results = true;
-          },
-          error: error => {
-            this.snackBar.open("Erro ao obter mapa! Tente novamente mais tarde.", "Ok", {
-              duration: 2000
-            });
-          }
-        })
-    });
-    this.postsResult = this.orderArray(resultArray, this.resultIndexes)
+
+    for await (const post of srcArr.map(async p => {
+      const post = await this.postService.getPublicPostsById(p.trim()).toPromise();
+      resultArray.push(post.body)
+    }));
+
+    this.postsResult = this.postsResult.concat(this.orderArray(resultArray, this.resultIndexes));
     this.loading = false;
+    this.results = true;
   }
 
   orderArray(array: Post[], order: string[]) {
-    array.sort(function (a, b) {
-      var A = a['id'], B = b['id'];
-      return order.indexOf(A) > order.indexOf(B) ? 1 : -1
-    });
+    array = array.sort((a, b) => order.indexOf(a.id) - order.indexOf(b.id));
     return array;
+    // TODO: consertar a ordenação
   };
 }
 
