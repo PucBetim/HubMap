@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Observable, Subscription } from 'rxjs';
 
-import { Post, Block } from '../../core/shared/posts/post';
+import { Post, Block, Position } from '../../core/shared/posts/post';
 import { ComponentCanDeactivate } from 'src/app/core/services/guard.service';
 import { PostService } from '../../core/shared/posts/post-blocks.service';
 import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
@@ -98,6 +98,7 @@ export class CreationComponent implements OnInit, ComponentCanDeactivate {
     this.getPost();
   }
 
+
   scrollToRoot() {
     if (!this.blockSelected)
       this.scrollLink?.nativeElement.scrollIntoView({
@@ -139,6 +140,10 @@ export class CreationComponent implements OnInit, ComponentCanDeactivate {
         localStorage.removeItem('post');
         this.unsavedChanges = true;
         this.loading = false;
+
+        setTimeout(() => {
+          this.scrollToRoot();
+        }, 500)
       }
       else
         this.loading = false;

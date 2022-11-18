@@ -1,6 +1,6 @@
 import { CanvasService } from './../../core/services/canvas.service';
 import { Position, Block, Post } from '../../core/shared/posts/post';
-import { Component, ElementRef, EventEmitter, HostListener, Input, OnInit, Output, ViewChild, AfterContentInit } from '@angular/core';
+import { Component, ElementRef, EventEmitter, HostListener, Input, OnInit, Output, ViewChild, AfterViewInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
@@ -8,7 +8,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   templateUrl: './block.component.html',
   styleUrls: ['./block.component.scss']
 })
-export class BlockComponent implements OnInit, AfterContentInit {
+export class BlockComponent implements OnInit, AfterViewInit {
 
   public blockSelected: boolean = false;
   public afterImagePosition: Position = { x: 0, y: 0 };
@@ -81,7 +81,7 @@ export class BlockComponent implements OnInit, AfterContentInit {
 
   constructor(private eRef: ElementRef, private snackBar: MatSnackBar) { }
 
-  ngAfterContentInit(): void {
+  ngAfterViewInit(): void {
     if (this.block.blocks.length == 0)
       this.emitFinishedLoading();
   }

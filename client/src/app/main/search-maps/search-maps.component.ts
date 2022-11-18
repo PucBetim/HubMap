@@ -60,7 +60,6 @@ export class SearchMapsComponent implements OnInit {
 
           if (result.body?.dataId) {
             this.resultIndexes = result.body.dataId.split(',');
-            console.log('Indexes: ' + this.resultIndexes)
             this.getPosts()
           }
           else {
@@ -94,15 +93,19 @@ export class SearchMapsComponent implements OnInit {
       resultArray.push(post.body)
     }));
 
-    this.postsResult = this.postsResult.concat(this.orderArray(resultArray, this.resultIndexes));
+    this.postsResult = this.postsResult.concat(this.orderArray(resultArray, this.resultIndexes))
     this.loading = false;
     this.results = true;
   }
 
   orderArray(array: Post[], order: string[]) {
-    array = array.sort((a, b) => order.indexOf(a.id) - order.indexOf(b.id));
-    return array;
-    // TODO: consertar a ordenação
+    var newArray: Post[] = [];
+    order.forEach(e => {
+      array.forEach(a => {
+        if (a.id.toString() == e) newArray.push(a)
+      })
+    });
+    return newArray;
   };
 }
 

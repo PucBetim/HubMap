@@ -24,8 +24,8 @@
             </button>
 
             <button class="sidebarGrid option" matTooltipClass="tooltip" matTooltip="Copiar Estilo"
-                (click)="setFormatingStyle()" mat-mini-fab
-                [ngClass]="{'disabled' : !blockSelected}" [disabled]="!blockSelected">
+                (click)="setFormatingStyle()" mat-mini-fab [ngClass]="{'disabled' : !blockSelected}"
+                [disabled]="!blockSelected">
                 <mat-icon>brush</mat-icon>
             </button>
 
@@ -44,9 +44,9 @@
                         <mat-icon>edit</mat-icon>
                     </button>
 
-                    <button *ngIf="this.editorMode" class="sidebarEndOption" matTooltipClass="tooltip" matTooltip="Exportar Para Imagem"
-                        (click)="downloadImage()" mat-mini-fab [ngClass]="{'disabled': post.map[0] == null}"
-                        [disabled]="post.map[0] == null">
+                    <button *ngIf="this.editorMode" class="sidebarEndOption" matTooltipClass="tooltip"
+                        matTooltip="Exportar Para Imagem" (click)="downloadImage()" mat-mini-fab
+                        [ngClass]="{'disabled': post.map[0] == null}" [disabled]="post.map[0] == null">
                         <mat-icon>image</mat-icon>
                     </button>
                 </div>
@@ -56,8 +56,8 @@
     <drag-scroll [drag-scroll-disabled]="this.blockSelected" scrollbar-hidden="true" class="containerCanvas">
         <div class="canvas" [style.width.px]="canvasSize.width" [style.height.px]="canvasSize.height">
             <block (selectBlockEvent)="selectBlock($event)" (unselectBlockEvent)="unselectBlock()"
-                (finishedLoadingEvent)="finishedLoading()" (saveProgressEvent)="saveProgress()" (mapLimitEvent)="mapValid($event)"
-                *ngFor="let block of post.map" [block]="block">
+                (finishedLoadingEvent)="finishedLoading()" (saveProgressEvent)="saveProgress()"
+                (mapLimitEvent)="mapValid($event)" *ngFor="let block of post.map" [block]="block">
             </block>
             <p style="position: absolute;" #scrollLink cdkDrag cdkDragBoundary=".canvas"
                 [cdkDragFreeDragPosition]="{x: post.map[0]?.position.x + post.map[0]?.size.width / 2 , y:post.map[0]?.position.y + post.map[0]?.size.height/ 2}">
@@ -65,14 +65,16 @@
             <shortcuts></shortcuts>
             <div class="bottomIcons">
                 <div *ngIf="formatingBrushOpened" class="icon">
-                    <div (click)="applyBrushStyle()" class="formatingBrush" [style.background-color]="formatingBrushBlockStyle?.backgroundColor">
+                    <div (click)="applyBrushStyle()" class="formatingBrush"
+                        [style.background-color]="formatingBrushBlockStyle?.backgroundColor">
                         <p class="layoutDefaultStyle" [style.font-style]="formatingBrushBlockStyle?.fontStyle"
                             [style.font-weight]="formatingBrushBlockStyle?.fontWeight"
                             [style.text-decoration]="formatingBrushBlockStyle?.textDecoration"
                             [style.color]="formatingBrushBlockStyle?.fontColor">
                             Txt
                         </p>
-                        <button disabled mat-mini-fab [style.background-color]="formatingBrushBlockStyle?.backgroundColor">
+                        <button disabled mat-mini-fab
+                            [style.background-color]="formatingBrushBlockStyle?.backgroundColor">
                             <mat-icon [style.color]="formatingBrushBlockStyle?.fontColor">format_paint</mat-icon>
                         </button>
                     </div>
