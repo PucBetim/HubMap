@@ -182,7 +182,8 @@ public class HistogramService {
 			});
 
 			if (histograms.hasNext()) {
-				histograms = histogramRepository.findAll(pageable.next());
+				pageable = pageable.next();
+				histograms = histogramRepository.findAll(pageable);
 			} else {
 				break;
 			}
