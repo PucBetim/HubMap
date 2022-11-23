@@ -36,6 +36,10 @@ export class CreationComponent implements OnInit, ComponentCanDeactivate {
         break;
       };
       case 'z': {
+        if (event.ctrlKey && this.blockSelected)
+          this.snackBar.open("Clique fora do bloco para desfazer ações!", "Ok", {
+            duration: 1500
+          })
         if (event.ctrlKey && !this.blockSelected)
           this.undo();
         break;
