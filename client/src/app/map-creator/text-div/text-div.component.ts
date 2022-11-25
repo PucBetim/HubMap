@@ -30,13 +30,6 @@ export class TextDivComponent implements AfterViewInit {
     event.preventDefault();
     var text = event.clipboardData.getData('text/plain');
     document.execCommand('insertText', false, text)
-
-    //////////////// Não permitir colar mais de 300 
-    // var newText = this.textDiv.nativeElement.innerHTML;
-    // var length = newText.length;
-    // if (length > 299)
-    //   newText = newText.slice(0, -(length - 299));
-    // this.block.content = newText;
   }
 
   @HostListener('mousedown', ['$event.target'])
@@ -51,7 +44,7 @@ export class TextDivComponent implements AfterViewInit {
   }
 
   @HostListener('window:mouseup', ['$event.target'])
-  teste(el: any) {
+  resizeFinished(el: any) {
     if (this.width && this.height)
       if (this.width != this.textContainer.nativeElement.offsetWidth
         || this.height != this.textContainer.nativeElement.offsetHeight) {

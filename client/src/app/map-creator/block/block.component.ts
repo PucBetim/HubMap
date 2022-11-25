@@ -121,10 +121,12 @@ export class BlockComponent implements OnInit, AfterViewInit {
       this.block.position = lastPosition;
     }
     else {
+      var prevPosition = JSON.parse(JSON.stringify(this.block.position))
       this.block.position.x = event.layerX - event.offsetX;
       this.block.position.y = event.layerY - event.offsetY;
       this.afterImagePosition = { x: (this.block.position.x + (this.block.size.width / 2) - this.afterImageSize / 2), y: (this.block.position.y + (this.block.size.height / 2) - this.afterImageSize / 2) };
-      this.emitSaveProgress();
+      if (this.block.position.x != prevPosition.x && this.block.position.y != prevPosition.y) 
+        this.emitSaveProgress();
     }
   }
 
