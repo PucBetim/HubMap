@@ -62,7 +62,7 @@ export class PostDetailsComponent implements OnInit {
 
   ngOnInit(): void {
     this.loggedUser = ConfigService.getUser()
-
+    
     this.sub = this.route.params.subscribe(
       params => {
         if (this.loggedUser)

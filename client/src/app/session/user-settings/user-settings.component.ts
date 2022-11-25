@@ -73,7 +73,7 @@ export class UserSettingsComponent implements OnInit {
 
   editUser() {
     if (this.form.dirty && this.form.valid && this.form.dirty) {
-      var user = JSON.parse(sessionStorage.getItem('hubmap.user')!)
+      var user = JSON.parse(localStorage.getItem('hubmap.user')!)
       if (user) {
         this.loading = true;
         let form = Object.assign({}, new User, this.form.value);
@@ -102,7 +102,7 @@ export class UserSettingsComponent implements OnInit {
     this.loading = true;
     this.sessionService.getUserLogado().subscribe({
       next: result => {
-        sessionStorage.setItem('hubmap.user', JSON.stringify(result.body));
+        localStorage.setItem('hubmap.user', JSON.stringify(result.body));
         this.snackBar.open("Usuário atualizado com sucesso!", "Ok", {
           duration: 2000
         });
@@ -130,7 +130,7 @@ export class UserSettingsComponent implements OnInit {
     const dialogRef = this.dialog.open(ConfirmDialogComponent, confirmDeleteConfig);
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        sessionStorage.clear();
+        localStorage.clear();
         this.router.navigate(['']);
       }
     });

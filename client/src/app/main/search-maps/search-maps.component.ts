@@ -15,6 +15,7 @@ export class SearchMapsComponent implements OnInit {
 
   public loading: boolean = false;
   public postsResult: Post[];
+  public otherResults: Post[];
   public results: boolean = false;
   public currentIndex: number = 0;
   public sub: Subscription;
@@ -50,6 +51,7 @@ export class SearchMapsComponent implements OnInit {
 
   search() {
     this.postsResult = [];
+    this.otherResults = [];
     this.resultIndexes = [];
     this.loading = true;
     this.results = false;
@@ -57,17 +59,12 @@ export class SearchMapsComponent implements OnInit {
     this.postService.searchPosts(p).subscribe(
       {
         next: result => {
-
           if (result.body?.dataId) {
             this.resultIndexes = result.body.dataId.split(',');
-            this.getPosts()
+            this.getPosts();
           }
           else {
-            this.loading = false;
-            this.results = true;
-            this.snackBar.open("Nenhum mapa encontrado!", "Ok", {
-              duration: 2000
-            });
+            this.getPublicPosts();
           }
         },
         error: error => {
@@ -106,6 +103,22 @@ export class SearchMapsComponent implements OnInit {
       })
     });
     return newArray;
+  };
+
+  getPublicPosts() {
+    this.postService.getPublicPosts("views").subscribe({
+      next: result => {
+        this.otherResults = result.body;
+        this.loading = false;
+        this.results = true;
+      },
+      error: error => {
+        this.snackBar.open("Falha ao obter mapas! Tente novamente mais tarde.", "Ok", {
+          duration: 5000
+        });
+        this.loading = false;
+      }
+    })
   };
 }
 

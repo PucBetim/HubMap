@@ -27,7 +27,7 @@ export class CreateAccountComponent implements OnInit {
 
   ngOnInit(): void {
     this.savedRoute = this.route.snapshot.params['savedRoute'];
-    sessionStorage.clear();
+    localStorage.clear();
     this.form = this.fb.group({
       name: ['', [Validators.required, Validators.maxLength(80)]],
       nick: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(15)]],
@@ -39,7 +39,7 @@ export class CreateAccountComponent implements OnInit {
   }
 
   createUser() {
-    sessionStorage.clear();
+    localStorage.clear();
     if (this.form.dirty && this.form.valid) {
       this.carregando = true;
       let form = Object.assign({}, new User, this.form.value);

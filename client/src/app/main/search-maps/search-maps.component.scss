@@ -88,6 +88,23 @@
         }
     }
 
+    .noResults {
+        h1 {
+            color: #77aada;
+            padding: 40px;
+            font-weight: 500;
+
+            a {
+                color: #316b83;
+                text-decoration: none;
+            }
+
+            a :hover {
+                color: #234f63;
+            }
+        }
+    }
+
     .resultMaps {
         position: relative;
         height: 100%;
@@ -98,6 +115,11 @@
             position: relative;
             display: flex;
             flex-wrap: wrap;
+        }
+
+        .public {
+            display: flex;
+            flex-direction: row;
         }
     }
 }

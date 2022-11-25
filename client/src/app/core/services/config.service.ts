@@ -22,18 +22,18 @@ export class ConfigService {
     }
 
     public static getToken() {
-        let token = sessionStorage.getItem('hubmap.token');
+        let token = localStorage.getItem('hubmap.token');
         if (token) return token;
         return "";
     }
 
     public static getUser() {
-        let user = JSON.parse(sessionStorage.getItem('hubmap.user')!);
+        let user = JSON.parse(localStorage.getItem('hubmap.user')!);
         if (user) return user;
         return;
     }
     public static resetLogin() {
-        sessionStorage.clear();
+        localStorage.clear();
         window.location.href = "/session/signin";
     }
 }

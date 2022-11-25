@@ -22,7 +22,7 @@ export class MainLayoutComponent implements OnInit {
   }
 
   logout() {
-    sessionStorage.clear();
+    localStorage.clear();
     this.user = null;
     this.router.navigate(['']);
   }

@@ -8,7 +8,7 @@ export interface ComponentCanDeactivate {
 
 @Injectable()
 export class PendingChangesGuard implements CanDeactivate<ComponentCanDeactivate> {
-  public user = sessionStorage.getItem('hubmap.user');
+  public user = localStorage.getItem('hubmap.user');
   canDeactivate(component: ComponentCanDeactivate): boolean | Observable<boolean> {
     return component.canDeactivate() ?
       true : confirm('É possível que as alterações feitas não sejam salvas.');

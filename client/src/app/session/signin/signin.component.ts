@@ -35,7 +35,7 @@ export class SigninComponent implements OnInit {
   }
 
   login() {
-    sessionStorage.clear();
+    localStorage.clear();
     this.carregando = true;
     if (this.form.dirty && this.form.valid) {
       let p = Object.assign({}, this.loginForm, this.form.value);
@@ -54,11 +54,11 @@ export class SigninComponent implements OnInit {
   }
 
   onLogin(result: any) {
-    sessionStorage.setItem('hubmap.token', result.headers.get('Authorization'));
+    localStorage.setItem('hubmap.token', result.headers.get('Authorization'));
     this.sessionService.getUserLogado().subscribe(
       {
         next: result => {
-          sessionStorage.setItem('hubmap.user', JSON.stringify(result.body));
+          localStorage.setItem('hubmap.user', JSON.stringify(result.body));
           if (this.savedRoute)
             this.router.navigate([this.savedRoute])
           else
