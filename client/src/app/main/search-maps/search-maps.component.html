@@ -22,16 +22,22 @@
                         RESULTADOS</a>
                 </a>
             </div>
-            <div *ngIf="(resultIndexes?.length > 10) && (postsResult?.length < resultIndexes?.length)"
-                class="loadMore layoutDefaultStyle">
+            <div class="loadMore layoutDefaultStyle"
+                *ngIf="(resultIndexes?.length > 10) && (postsResult?.length < resultIndexes?.length)">
                 <a (click)="loadMore()">CARREGAR MAIS MAPAS</a>
             </div>
         </div>
 
         <div class="noResults" *ngIf="results && otherResults?.length > 0">
-            <h1>NENHUM MAPA ENCONTRADO! VOCÊ PODE <a href="/creator">CRIAR SEU PRÓPRIO MAPA</a>, OU TALVEZ TENHA
-                INTERESSE EM OUTROS MAPAS:</h1>
+            <div class="text">
+                <h1>NENHUM MAPA ENCONTRADO! VOCÊ PODE <a href="/creator">CRIAR SEU PRÓPRIO MAPA</a>, OU TALVEZ TENHA
+                    INTERESSE EM OUTROS MAPAS:</h1>
+                <div class="loadMore layoutDefaultStyle" (click)="loadMorePublic()">
+                    Carregar Mais
+                </div>
+            </div>
         </div>
+
 
         <div class="resultMaps layoutDefaultStyle">
             <div class="resultContainer" *ngIf="results">
@@ -39,7 +45,7 @@
                 </display-canvas>
             </div>
             <div class="resultContainer public" *ngIf="results && otherResults?.length > 0">
-                <display-canvas [style.min-width]="300" *ngFor="let post of otherResults" [size]="200" [post]="post">
+                <display-canvas [style.min-width]="300" *ngFor="let post of otherResults" [size]="250" [post]="post">
                 </display-canvas>
             </div>
         </div>

@@ -44,8 +44,8 @@ export class PostService extends BaseService {
     return this.http.get<any>((ConfigService.getUrlApi() + this.userUrlPublicPost + `/${id}`), ConfigService.getOptions()).pipe(catchError(super.serviceError));
   };
 
-  getPublicPosts(sort: string = "views"): Observable<any> {
-    return this.http.get<any>((ConfigService.getUrlApi() + this.userUrlPublicPost + `?sort=${sort}`), ConfigService.getOptions()).pipe(catchError(super.serviceError));
+  getPublicPosts(size: number = 10, page: number = 0, descending:boolean = true, sort: string = "views, likes"): Observable<any> {
+    return this.http.get<any>((ConfigService.getUrlApi() + this.userUrlPublicPost + `?size=${size}&page=${page}&descending=${descending}&sort=${sort}`), ConfigService.getOptions()).pipe(catchError(super.serviceError));
   };
   //
 

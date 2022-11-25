@@ -21,6 +21,7 @@ export class SearchMapsComponent implements OnInit {
   public sub: Subscription;
   public form: FormGroup;
   public resultIndexes: string[];
+  public publicPage: number = 0;
 
   constructor(
     private postService: PostService,
@@ -50,6 +51,7 @@ export class SearchMapsComponent implements OnInit {
   }
 
   search() {
+    this.publicPage = 0;
     this.postsResult = [];
     this.otherResults = [];
     this.resultIndexes = [];
@@ -105,10 +107,17 @@ export class SearchMapsComponent implements OnInit {
     return newArray;
   };
 
+  loadMorePublic() {
+    this.publicPage++;
+    this.getPublicPosts();
+  }
+
   getPublicPosts() {
-    this.postService.getPublicPosts("views").subscribe({
+    this.loading = true;
+    this.postService.getPublicPosts(10, this.publicPage, true, "views, likes").subscribe({
       next: result => {
-        this.otherResults = result.body;
+        if (result.body)
+        this.otherResults = this.otherResults.concat(result.body);
         this.loading = false;
         this.results = true;
       },

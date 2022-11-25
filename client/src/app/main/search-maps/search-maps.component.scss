@@ -72,35 +72,46 @@
         }
 
         .loadMore {
-            color: #316b83;
-            padding: 4px;
-            font-weight: 500;
-            position: relative;
             margin-left: auto;
-            width: fit-content;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .loadMore:hover {
-            color: #234f63;
         }
     }
 
+    .loadMore {
+        color: #316b83;
+        padding: 4px;
+        font-weight: 500;
+        position: relative;
+        width: fit-content;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .loadMore:hover {
+        color: #234f63;
+    }
+
     .noResults {
-        h1 {
-            color: #77aada;
+        .text {
+            display: flex;
+            flex-direction: column;
             padding: 40px;
-            font-weight: 500;
 
-            a {
-                color: #316b83;
-                text-decoration: none;
+            h1 {
+                color: #77aada;
+                font-weight: 500;
+
+                a {
+                    color: #316b83;
+                    text-decoration: none;
+                }
+
+                a :hover {
+                    color: #234f63;
+                }
             }
-
-            a :hover {
-                color: #234f63;
+            .loadMore{
+                font-size: larger;
             }
         }
     }
