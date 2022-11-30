@@ -9,7 +9,6 @@ import { MatInputModule } from '@angular/material/input';
 
 import { SessionRoutes } from './session.routing';
 import { CreateAccountComponent } from './create-account/create-account.component';
-import { PasswordResetComponent } from './password-reset/password-reset.component';
 import { SessionService } from './session.service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from '../core/shared/shared.module';
@@ -18,7 +17,6 @@ import { AuthService } from '../core/services/auth.service';
 @NgModule({
   declarations: [
     CreateAccountComponent,
-    PasswordResetComponent,
     SigninComponent,
     UserSettingsComponent
   ],

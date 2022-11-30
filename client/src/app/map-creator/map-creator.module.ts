@@ -27,6 +27,7 @@ import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.componen
 import { SharedModule } from './../core/shared/shared.module';
 import { PendingChangesGuard } from '../core/services/guard.service';
 import { CreatePostComponent } from './create-post/create-post.component';
+import { ShortcutsComponent } from './shortcuts/shortcuts.component';
 
 export const OtherOptions: MatTooltipDefaultOptions = {
   showDelay: 0,
@@ -45,6 +46,7 @@ export const OtherOptions: MatTooltipDefaultOptions = {
     TextDivComponent,
     ConfirmDialogComponent,
     CreatePostComponent,
+    ShortcutsComponent,
   ],
   imports: [
     CommonModule,

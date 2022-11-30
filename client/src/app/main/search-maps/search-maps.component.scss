@@ -1,6 +1,6 @@
 .main {
     min-width: 100%;
-    height: 80vh;
+    height: 82vh;
     background-image: linear-gradient(rgba(#272736, 0.3), rgba(#272736, 0.3)), url("/assets/img/search_component_bkg.jpg");
     background-size: cover;
     overflow: hidden;
@@ -18,35 +18,106 @@
     overflow: hidden;
     display: flex;
     flex-direction: column;
+
     .titleBar {
         padding: 0 0 30px 0;
     }
 
-    .searchBar {
-        vertical-align: middle;
-        padding: 0 0 30px 0;
 
-        input {
-            border: solid 3px #fff;
-            box-sizing: border-box;
-            font-size: 1.5em;
-            height: 6vh;
-            outline: solid #77aada 0;
-            padding: .5em;
+    .headerDiv {
+        vertical-align: middle;
+        padding: 0 0 7px 0;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+
+        .searchBar {
             width: 50%;
+
+            input {
+                border: solid 3px #fff;
+                box-sizing: border-box;
+                font-size: 1.5em;
+                height: 6vh;
+                outline: solid #77aada 0;
+                padding: .5em;
+                width: 100%;
+                padding-right: 40px;
+            }
+
+            .searchIcon {
+                position: absolute;
+                transform: translate(-100%, 20%);
+                vertical-align: middle;
+                color: #272736;
+            }
         }
 
-        .searchIcon {
-            transform: translate(-100%, -15%);
-            vertical-align: middle;
-            color: #272736;
+        .resultCount {
+            color: #77aada;
+            padding: 4px;
+            font-weight: 500;
+            position: relative;
+            margin: 0 15px;
+            min-width: fit-content;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            a {
+                position: relative;
+                white-space: nowrap
+            }
+        }
+
+        .loadMore {
+            margin-left: auto;
+        }
+    }
+
+    .loadMore {
+        color: #316b83;
+        padding: 4px;
+        font-weight: 500;
+        position: relative;
+        width: fit-content;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .loadMore:hover {
+        color: #234f63;
+    }
+
+    .noResults {
+        .text {
+            display: flex;
+            flex-direction: column;
+            padding: 40px;
+
+            h1 {
+                color: #77aada;
+                font-weight: 500;
+
+                a {
+                    color: #316b83;
+                    text-decoration: none;
+                }
+
+                a :hover {
+                    color: #234f63;
+                }
+            }
+            .loadMore{
+                font-size: larger;
+            }
         }
     }
 
     .resultMaps {
         position: relative;
-
-        grid-area: grid2;
         height: 100%;
         overflow: auto;
 
@@ -55,16 +126,11 @@
             position: relative;
             display: flex;
             flex-wrap: wrap;
-            justify-content: space-around;
+        }
+
+        .public {
+            display: flex;
+            flex-direction: row;
         }
     }
-
-    // .resultContainer {
-    //     width: 100%;
-    //     max-height: stretch;
-    //     overflow: auto;
-    //     position: relative;
-    //     display: flex;
-    //     flex-wrap: wrap;
-    // }
 }

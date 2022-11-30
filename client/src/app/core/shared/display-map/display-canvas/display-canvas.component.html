@@ -1,8 +1,7 @@
-<div (click)="goToDetails()" [ngClass]="optionsClass" class="container" (mouseenter)="optionsStyle=['hover']"
-    (mouseleave)="optionsStyle=[]" *ngIf="result" [style.max-width]="mapSize + 15 + 'px'"
-    [style.max-height]="mapSize + 15 + 'px'">
+<div [ngClass]="optionsClass" class="container" (mouseenter)="onMouseEnter()" (mouseleave)="onMouseLeave()"
+    *ngIf="result" [style.max-width.px]="mapSize + (margin * 2)" [style.max-height.px]="mapSize + (margin * 2)">
 
-    <div class="canvas" #canvas [style.width]="mapSize + 'px'" [style.height]="mapSize + 'px'">
+    <div style="position: relative;">
 
         <div class="zoomIcon" *ngIf="zoomSize > 0">
             <a *ngIf="!zoomed" (click)="zoom(true)">
@@ -13,43 +12,51 @@
             </a>
         </div>
 
-        <display-block (setDragEvent)="setDrag($event)" (selectBlockEvent)="selectBlock($event)"
-            (unselectBlockEvent)="unselectBlock()" (saveProgressEvent)="saveProgress()"
-            *ngFor="let block of visualPost.map" [block]="block">
-        </display-block>
-    </div>
+        <a [href]="showOptions ? getDetails() : break" [style.pointer-events]="!showOptions ? 'none' : ''">
 
-    <div class="options" *ngIf="showOptions" [style.width]="mapSize + 'px'" [style.height]="mapSize / 2 + 'px'"
-        [ngClass]="optionsStyle">
-        <div class="title-deco">
-            <h2>{{visualPost.title}}</h2>
-        </div>
-        <h4>{{visualPost.description}}</h4>
-        <div>
-            <div class="opt">
-                <div style="grid-area: grid1;">
-                    <mat-icon>thumb_up</mat-icon>
+            <div class="canvas" #canvas [style.width.px]="mapSize" [style.height.px]="mapSize"
+                [style.border-width.px]="margin">
+                <display-block (setDragEvent)="setDrag($event)" (selectBlockEvent)="selectBlock($event)"
+                    (unselectBlockEvent)="unselectBlock()" (saveProgressEvent)="saveProgress()"
+                    *ngFor="let block of visualPost.map" [block]="block">
+                </display-block>
+            </div>
 
+            <div class="title title-deco" *ngIf="showOptions && showTitle">{{visualPost.title}}</div>
+
+            <div class="options" *ngIf="showOptions" [style.width.px]="mapSize" [style.height.px]="mapSize / 2"
+                [ngClass]="optionsStyle">
+                <div class="title-deco">
+                    <h2>{{visualPost.title}}</h2>
                 </div>
-                <div style="grid-area: grid2;"> {{visualPost.likes}}
+                <h4>{{visualPost.description}}</h4>
+                <div>
+                    <div class="opt">
+                        <div style="grid-area: grid1;">
+                            <mat-icon>thumb_up</mat-icon>
 
-                </div>
-                <div style="grid-area: grid4;">
-                    <mat-icon>thumb_down</mat-icon>
-                </div>
-                <div style="grid-area: grid5;">
-                    {{visualPost.dislikes}}
+                        </div>
+                        <div style="grid-area: grid2;"> {{visualPost.likes}}
 
-                </div>
+                        </div>
+                        <div style="grid-area: grid4;">
+                            <mat-icon>thumb_down</mat-icon>
+                        </div>
+                        <div style="grid-area: grid5;">
+                            {{visualPost.dislikes}}
 
-                <div style="grid-area: grid7;">
-                    <mat-icon>visibility</mat-icon>
-                </div>
-                <div style="grid-area: grid8;">
-                    {{visualPost.views}}
+                        </div>
 
+                        <div style="grid-area: grid7;">
+                            <mat-icon>visibility</mat-icon>
+                        </div>
+                        <div style="grid-area: grid8;">
+                            {{visualPost.views}}
+
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
+        </a>
     </div>
 </div>

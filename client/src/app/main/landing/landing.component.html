@@ -2,72 +2,59 @@
 <div class="create layoutDefaultStyle">
     <div class="leftSide">
         <div class="inner_block">
-
-            <div class="square">
-                <div class="deco">
-                    SEJA BEM VINDO(A) AO HUBMAP!
-                    <div class="dc1"></div>
-                </div>
+            <div class="deco">
+                SEJA BEM VINDO(A) AO HUBMAP!
+                <div class="dc1"></div>
+            </div>
+            <div style="margin: 0 auto,">
                 <button class="btn" routerLink="/creator">CRIE UM MAPA MENTAL</button>
             </div>
         </div>
     </div>
-    <div class="block1">
-        <div class="inner_block">
-            <div class="square">
-                Crie e compartilhe mapas mentais.
+    <div class="rightSide">
+        <div class="innerFlex">
+            <div class="block1">
+                <div class="inner_block">
+                    <div class="square">
+                        Crie e compartilhe mapas mentais.
+                    </div>
+                </div>
+            </div>
+            <div class="block2">
+                <div class="inner_block">
+                    <div class="square">
+                        Descubra mapas mentais de outros usuários.
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
-    <div class="block2">
-        <div class="inner_block">
-            <div class="square">
-                Contamos com mais de 5000 diagramas.
-
+        <div class="innerFlex">
+            <div class="block3">
+                <div class="inner_block">
+                    <div class="square">
+                        Dê um visual a suas ideias.
+                    </div>
+                </div>
             </div>
-        </div>
-    </div>
-    <div class="block3">
-        <div class="inner_block">
-            <div class="square">
-                Dê um visual a suas ideias.
-            </div>
-        </div>
-    </div>
-    <div class="block4">
-        <div class="inner_block">
-            <div class="square">
-                Fácil e prático.
-            </div>
-        </div>
-    </div>
-</div>
-<div class="search" [style.min-height]="(blocksSize + 250) + 'px'">
-    <div class="searchBlock">
-        <div [ngClass]="searchBarClass">
-            <form (ngSubmit)="searchMaps()">
-                <input placeholder="Pesquisar mapas..." [formControl]="form.controls['searchTerm']">
-                <button class="searchIcon" type="submit" mat-icon-button>
-                    <mat-icon>search</mat-icon>
-                </button>
-            </form>
-            <a class="moreMaps" *ngIf="results" href="/search">
-                Pesquisar mais mapas
-            </a>
-        </div>
-    </div>
-
-    <div class="resultBlock layoutDefaultStyle">
-        <div [ngClass]="resultDivClass">
-            <div class="spinnerContainer" *ngIf="loading" [style.height.px]="blocksSize">
-                <mat-spinner></mat-spinner>
-            </div>
-            <div *ngIf="!loading && results" class="resultContainer">
-                <display-canvas [size]="blocksSize" [post]="post" *ngFor="let post of postsResult">
-                </display-canvas>
-                <div *ngIf="postsResult?.length == 0" class="resultContainer">
-                    Não foi encontrado nenhum mapa!
+            <div class="block4">
+                <div class="inner_block">
+                    <div class="square">
+                        Fácil e prático.
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+</div>
+<div class="search" >
+    <div class="searchBlock">
+        <div class="searchBar">
+            <form (ngSubmit)="search()">
+                <input placeholder="Pesquisar mapas..." [formControl]="form.controls['search']">
+                <button class="searchIcon" type="submit" [disabled]="!form.valid" mat-icon-button>
+                    <mat-icon>search</mat-icon>
+                </button>
+            </form>
+        </div>
+    </div>
+</div>

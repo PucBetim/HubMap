@@ -1,8 +1,10 @@
 import { HttpHeaders } from "@angular/common/http";
+import { environment } from "src/environments/environment";
+import jwt_decode from "jwt-decode";
 
 export class ConfigService {
 
-    static urlBase: string = 'https://hub-map-server.herokuapp.com/';
+    static urlBase: string = environment.apiUrl;
 
     constructor() { }
 
@@ -21,18 +23,21 @@ export class ConfigService {
     }
 
     public static getToken() {
-        let token = sessionStorage.getItem('hubmap.token');
+        let token = localStorage.getItem('hubmap.token');
         if (token) return token;
         return "";
     }
 
     public static getUser() {
-        let user = JSON.parse(sessionStorage.getItem('hubmap.user')!);
-        if (user) return user;
+        let user = JSON.parse(localStorage.getItem('hubmap.user')!);
+        const decoded = JSON.parse(JSON.stringify(jwt_decode(this.getToken())));
+        if (decoded.exp * 1000 < Date.now())
+            this.resetLogin();
+        else if (user) return user;
         return;
     }
     public static resetLogin() {
-        sessionStorage.clear();
+        localStorage.clear();
         window.location.href = "/session/signin";
     }
 }

@@ -13,21 +13,15 @@
 
 .toolbar {
     position: relative;
-    display: grid;
     min-height: 10vh;
-    grid-template-areas:
-        'grid1 grid2 grid3 grid4 grid5';
-    grid-template-columns: min-content 15% auto auto 30%;
 
-    .toolbar_title {
-        grid-area: grid1;
-        font-size: 5vh;
+    display: flex;
+    flex-wrap: wrap;
+    flex: min-content min-content stretch;
 
-        a {
-            text-decoration: none;
-            color: inherit;
-            padding: 0 25px;
-        }
+
+    .logo {
+        height: 4em;
     }
 
     .toolbar_search {
@@ -38,10 +32,11 @@
             justify-content: center;
             font-size: large;
             text-decoration: none;
+            padding: 20px;
 
             .mat-icon {
                 height: fit-content;
-                font-size: large;
+                font-size: larger;
                 padding: 0 5px;
             }
         }
@@ -49,7 +44,9 @@
 
     .toolbar_user {
         grid-area: grid5;
+        flex: 1;
         text-align: right;
+        padding: 10px 0;
     }
 
     .link {
@@ -61,13 +58,10 @@
         color: #77aada;
     }
 
-    .userLoggedOptions {
-        position: relative;
-        display: grid;
-        grid-template-areas:
-            'grid1 grid2';
-        grid-template-columns: 90% 10%;
-        width: 100%;
+    .userLoginInfo {
+        display: flex;
+        flex-wrap: nowrap;
+        justify-content: flex-end;
     }
 
     .grid1 {
@@ -97,6 +91,10 @@
     }
 }
 
+.content {
+    min-height: 82vh;
+}
+
 ::ng-deep .userMenu {
     background-color: #272736;
 
@@ -113,25 +111,68 @@
     background-color: #1b1b20;
     position: relative;
     min-height: 30vh;
-    display: grid;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
     overflow: hidden;
-    grid-template-areas:
-        'left middle right';
+
+    h3,
+    h4 {
+        mat-icon {
+            height: fit-content;
+            font-size: medium;
+            vertical-align: middle;
+        }
+    }
+
+    h4 {
+        font-weight: 100;
+        text-align: justify;
+
+        a {
+            color: inherit;
+
+        }
+    }
 
     .ft {
-        text-align: center;
-        margin: 50px;
+        display: flex;
+        flex-direction: column;
+        width: 33%;
+        min-width: 300px;
+        flex: 1;
+
+        .logo {
+            height: 75px;
+        }
+
+        .pd {
+            display: flex;
+            flex-direction: column;
+            padding: 50px;
+            width: stretch;
+            height: stretch;
+        }
     }
 
     .ft_left {
+        text-align: left;
         grid-area: left;
     }
 
     .ft_middle {
+        text-align: center;
         grid-area: middle;
+        display: grid;
+
+        .logo {
+            height: 2em;
+        }
+
     }
 
     .ft_right {
+        text-align: right;
         grid-area: right;
     }
 }

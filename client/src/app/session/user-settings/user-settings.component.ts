@@ -8,6 +8,8 @@ import { SessionService } from '../session.service';
 import { ConfigService } from 'src/app/core/services/config.service';
 import { Post } from 'src/app/core/shared/posts/post';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { ConfirmDialogComponent } from 'src/app/map-creator/confirm-dialog/confirm-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-user-settings',
@@ -18,7 +20,7 @@ export class UserSettingsComponent implements OnInit {
 
   public form: FormGroup;
   public errors: any[] = [];
-  public carregando: boolean = false;
+  public loading: boolean = false;
   public user: User = new User;
   public posts: Post[];
   public results: boolean = false;
@@ -26,11 +28,12 @@ export class UserSettingsComponent implements OnInit {
   constructor(private fb: FormBuilder,
     private sessionService: SessionService, private postService: PostService,
     public router: Router,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private dialog: MatDialog,
   ) { }
 
   ngOnInit(): void {
-    var _user = JSON.parse(sessionStorage.getItem('hubmap.user')!);
+    var _user = ConfigService.getUser();
     if (_user) {
       this.user.name = _user.name;
       this.user.email = _user.email;
@@ -38,8 +41,8 @@ export class UserSettingsComponent implements OnInit {
     }
 
     this.form = this.fb.group({
-      name: ['', [Validators.required]],
-      nick: ['', [Validators.required]],
+      name: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(80)]],
+      nick: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(15)]],
     });
 
     this.fillFormEvent()
@@ -54,13 +57,18 @@ export class UserSettingsComponent implements OnInit {
   }
 
   getUserMaps() {
+    this.loading = true;
     this.postService.getUserPosts().subscribe(
       {
         next: result => {
           this.posts = result.body;
+          this.loading = false;
         },
         error: error => {
-          this.snackBar.open("Falha ao obter mapas! Tente novamente mais tarde.", "Ok");
+          this.snackBar.open("Falha ao obter mapas! Tente novamente mais tarde.", "Ok", {
+            duration: 2000
+          });
+          this.loading = false;
         }
       })
     this.results = true;
@@ -68,9 +76,9 @@ export class UserSettingsComponent implements OnInit {
 
   editUser() {
     if (this.form.dirty && this.form.valid && this.form.dirty) {
-      var user = JSON.parse(sessionStorage.getItem('hubmap.user')!)
+      var user = JSON.parse(localStorage.getItem('hubmap.user')!)
       if (user) {
-        this.carregando = true;
+        this.loading = true;
         let form = Object.assign({}, new User, this.form.value);
         let p = new User;
         p.name = form.name;
@@ -79,14 +87,56 @@ export class UserSettingsComponent implements OnInit {
         this.sessionService.updateUser(p)
           .subscribe({
             next: result => {
-              this.carregando = false;
-              ConfigService.resetLogin();
+              this.loading = false;
+              this.getUser();
             },
             error: error => {
-              this.carregando = false;
+              this.snackBar.open("Falha ao salvar dados de usuário! Tente novamente mais tarde.", "Ok", {
+                duration: 2000
+              });
+              this.loading = false;
             }
           });
       }
     }
+  }
+
+  getUser() {
+    this.loading = true;
+    this.sessionService.getUserLogado().subscribe({
+      next: result => {
+        localStorage.setItem('hubmap.user', JSON.stringify(result.body));
+        this.snackBar.open("Usuário atualizado com sucesso!", "Ok", {
+          duration: 2000
+        });
+        this.loading = false;
+      },
+      error: erro => {
+        this.snackBar.open("Falha ao atualizar o usuário! Tente novamente mais tarde.", "Ok", {
+          duration: 2000
+        });
+        this.loading = false;
+      }
+    })
+  }
+
+  logout() {
+    var confirmDeleteConfig = {
+      disableClose: false,
+      width: 'auto',
+      data: {
+        titulo: "Sair",
+        texto: "Tem certeza que deseja sair?"
+      }
+    };
+
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, confirmDeleteConfig);
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        localStorage.clear();
+        this.router.navigate(['']);
+      }
+    });
+
   }
 }

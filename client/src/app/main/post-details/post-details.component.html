@@ -28,21 +28,12 @@
                 </div>
             </div>
 
-            <div class="description">
+            <div class="description ">
                 <hr style="height: 1px ;background-color: #316b83;">
                 {{post.description}}
             </div>
 
-            <div class="options pushBottom">
-                <div>
-                    <button class="btn-icon" (click)="downloadImage()">Baixar Mapa <mat-icon style="color: white;">
-                            download</mat-icon></button>
-                </div>
-                <div *ngIf="!currentUserPost">
-                    <button class="btn-icon" (click)="forkPost()">Fork <mat-icon style="color: white;"> call_split
-                        </mat-icon>
-                    </button>
-                </div>
+            <div class="ratings pushBottom">
                 <div class="action">
                     <a>
                         <mat-icon [ngClass]="likeClass" (click)="likePost()">thumb_up</mat-icon> {{post.likes}}
@@ -58,14 +49,38 @@
                     <mat-icon class="viewIcon">remove_red_eye</mat-icon>
                     {{post.views}}
                 </div>
+            </div>
 
-                <button *ngIf="currentUserPost" class="pushRight" (click)="goToEdit()">
-                    Editar <mat-icon style="color: white;">edit</mat-icon>
+            <div class="options">
+                <div *ngIf="!post.private">
+                    <button class="btn-icon btn-light" (click)="sharePost()">Compartilhar <mat-icon
+                            style="color: white;">
+                            share</mat-icon>
+                    </button>
+                </div>
+                <div>
+                    <button class="btn-icon" (click)="downloadImage()">Baixar Mapa <mat-icon style="color: white;">
+                            download</mat-icon></button>
+                </div>
+                <div *ngIf="!currentUserPost">
+                    <button class="btn-icon" (click)="forkPost()">Fork <mat-icon style="color: white;"> call_split
+                        </mat-icon>
+                    </button>
+                </div>
+
+                <button *ngIf="currentUserPost" class="pushRight" (click)="updatePost()">
+                    Editar Informações <mat-icon style="color: white;">edit</mat-icon>
+                </button>
+
+                <button *ngIf="currentUserPost" (click)="goToEdit()">
+                    Editar Mapa <mat-icon style="color: white;">format_shapes</mat-icon>
                 </button>
                 <button *ngIf="currentUserPost" class="btnDelete btn-danger" (click)="deletePostConfirm()">
                     Excluir <mat-icon style="color: white;">delete</mat-icon>
                 </button>
             </div>
+
+
 
         </div>
 
@@ -73,7 +88,7 @@
 </div>
 <div class="comments layoutDefaultStyle">
     <div class="commentsContainer">
-        <div class="deco">
+        <div class="title-deco">
             <p>Comentários</p>
         </div>
         <br>
@@ -90,8 +105,8 @@
         </div>
         <br>
         <div class="comment" *ngIf="!loading">
-            <comment [order]="1" [comment]="comment" [post]="post"
-                *ngFor="let comment of getPrimaryComments()"></comment>
+            <comment [order]="1" [comment]="comment" [post]="post" *ngFor="let comment of getPrimaryComments()">
+            </comment>
         </div>
     </div>
 </div>

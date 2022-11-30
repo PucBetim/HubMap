@@ -17,7 +17,7 @@ export class Post {
 export class Block {
     id?: string;
     blocks: Block[] = [];
-    content: string = "Default";
+    content: string = "";
     position: Position = new Position;
     size: Size = new Size;
 

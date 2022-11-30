@@ -1,4 +1,3 @@
-
 .block {
   min-height: fit-content;
   width: fit-content;
@@ -17,12 +16,12 @@
     0 2px 2px 0 rgba(0, 0, 0, 0.14),
     0 1px 5px 0 rgba(0, 0, 0, 0.12);
 
-    overflow-wrap: break-word;
+  overflow-wrap: break-word;
   word-wrap: break-word;
   hyphens: auto;
 }
 
-.afterImage{
+.afterImage {
   position: absolute;
   border-radius: 50%;
   border: solid 5px;
@@ -36,6 +35,18 @@
   width: 24px;
   height: 24px;
 }
+
+.overLimit{
+  color: #b84949;
+  position: absolute;
+  bottom: 0%;
+  right: -33px;
+  width: 24px;
+  height: 24px;
+  
+}
+
+
 
 .darker {
   color: rgba(0, 0, 0, 0.2);
@@ -84,4 +95,8 @@
     -ms-transform: translate(-50%, 50%);
     transform: translate(-80%, 50%);
   }
+}
+
+.alert {
+  border: dashed 4px #b84949;
 }

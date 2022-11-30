@@ -1,8 +1,8 @@
-import { PostService } from '../../posts/post-blocks.service';
+import { CanvasService } from 'src/app/core/services/canvas.service';
 import { Component, Input, OnInit } from '@angular/core';
 import { GetLimitPoints } from 'src/app/map-creator/getLimitPoints';
 import { Block, Position, Post } from '../../posts/post';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'display-canvas',
@@ -26,16 +26,28 @@ export class DisplayCanvasComponent implements OnInit {
   public zoomed: boolean = false;
   public result: boolean = false;
   public optionsClass: string[] = [];
+  public showTitle: boolean = true;
+  public margin = CanvasService.displayCanvasMargin;;
 
   constructor(
     private getLimitPoints: GetLimitPoints,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute,
   ) { }
 
   ngOnInit(): void {
     this.mapSize = this.size;
     if (this.showOptions) this.optionsClass = ['optionMode']
     this.loadCanvas();
+  }
+
+  onMouseEnter() {
+    this.optionsStyle = ['hover']
+    this.showTitle = false;
+  }
+  onMouseLeave() {
+    this.optionsStyle = []
+    this.showTitle = true;
   }
 
   loadCanvas() {
@@ -75,9 +87,8 @@ export class DisplayCanvasComponent implements OnInit {
     });
   }
 
-  goToDetails() {
-    if (this.showOptions)
-      this.router.navigateByUrl(`/details/${this.post.id}/${this.post.author.id}`);
+  getDetails() {
+    return this.showOptions ? window.location.origin + `/details/${this.post.id}/${this.post.author.id}` : '';
   }
 
   zoom(zoom: boolean) {
@@ -93,6 +104,3 @@ export class DisplayCanvasComponent implements OnInit {
     this.loadCanvas();
   }
 }
-
-
-

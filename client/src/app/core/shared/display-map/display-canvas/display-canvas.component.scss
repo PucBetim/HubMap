@@ -1,10 +1,14 @@
 .container {
-    margin: 1rem;
+    margin: 0.5rem;
     overflow: hidden;
     transition: box-shadow 200ms cubic-bezier(0, 0, 0.2, 1);
     box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2),
         0 2px 2px 0 rgba(0, 0, 0, 0.14),
         0 1px 5px 0 rgba(0, 0, 0, 0.12);
+
+    a {
+        text-decoration: none
+    }
 }
 
 .optionMode {
@@ -12,26 +16,37 @@
 }
 
 .canvas {
-    border: solid #ffffff 15px;
+    border-style: solid;
+    border-color: #ffffff;
     position: relative;
     background-color: #ffffff;
     transition: box-shadow 200ms cubic-bezier(0, 0, 0.2, 1);
     box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2),
         0 2px 2px 0 rgba(0, 0, 0, 0.14),
         0 1px 5px 0 rgba(0, 0, 0, 0.12);
+}
 
-    .zoomIcon {
-        position: absolute;
-        bottom: 5px;
-        right: 15px;
-        z-index: 10;
-        cursor: pointer;
+.zoomIcon {
+    position: absolute;
+    bottom: 5px;
+    right: 15px;
+    z-index: 10;
+    cursor: pointer;
 
-        mat-icon {
-            transform: scale(2);
-            color: rgba(2, 2, 2, 0.4);
-        }
+    mat-icon {
+        transform: scale(2);
+        color: rgba(2, 2, 2, 0.4);
     }
+}
+
+.title {
+    position: relative;
+    text-align: center;
+    z-index: 50;
+    transform: translateY(-100%);
+    padding: 10px;
+    width: stretch;
+    background-color: rgba(0, 0, 0, 0.7);
 }
 
 .options {

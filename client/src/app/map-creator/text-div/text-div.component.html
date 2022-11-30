@@ -1,10 +1,12 @@
-<div class="textContainer" [style.width.px]="block.size.width" [style.height.px]="block.size.height"
+<div class="textContainer" #textContainer [style.width.px]="block.size.width" [style.height.px]="block.size.height"
     [style.border-radius]="block.borderRadius + 'px'">
-    <div class="textDiv" contenteditable="true" [(contenteditableModel)]="block.content"
-        [style.font-style]="block.fontStyle" [style.font-weight]="block.fontWeight"
-        [style.text-decoration]="block.textDecoration" [style.color]="block.fontColor"
-        [style.font-size]="block.fontSize + 'px'" [style.text-align]="block.textAlign"
-        [style.border-radius]="block.borderRadius + 'px'">
-        {{block.content}}
+    <div class="textPanel">
+        <div class="textDiv" #textDiv contenteditable="true" [(contenteditableModel)]="block.content"
+            [style.font-style]="block.fontStyle" [style.font-weight]="block.fontWeight"
+            [style.text-decoration]="block.textDecoration" [style.color]="block.fontColor"
+            [style.font-size]="block.fontSize + 'px'" [style.text-align]="block.textAlign"
+            [style.border-radius]="block.borderRadius + 'px'" onkeypress="return (this.innerText.length < 300)">
+            {{block.content}}
+        </div>
     </div>
 </div>

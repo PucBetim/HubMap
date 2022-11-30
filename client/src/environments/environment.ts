@@ -3,7 +3,9 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  //apiUrl:'http://hubmap-server2.brazilsouth.cloudapp.azure.com:8080/',
+  apiUrl: 'https://hub-map-server.herokuapp.com/',
 };
 
 /*

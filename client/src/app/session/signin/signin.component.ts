@@ -2,7 +2,7 @@ import { Login } from '../models/login';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SessionService } from '../session.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
@@ -16,23 +16,26 @@ export class SigninComponent implements OnInit {
   public errors: any[] = [];
   public loginForm: Login;
   public carregando: boolean = false;
+  public savedRoute: string = ""
 
   constructor(
     private fb: FormBuilder,
     private sessionService: SessionService,
     private router: Router,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private route: ActivatedRoute,
   ) { }
 
   ngOnInit(): void {
-    sessionStorage.clear();
+    this.savedRoute = this.route.snapshot.params['savedRoute'];
     this.form = this.fb.group({
-      email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(100)]]
+      email: ['', [Validators.required, Validators.email, Validators.maxLength(100)]],
+      password: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(80)]]
     });
   }
 
   login() {
+    localStorage.clear();
     this.carregando = true;
     if (this.form.dirty && this.form.valid) {
       let p = Object.assign({}, this.loginForm, this.form.value);
@@ -51,17 +54,25 @@ export class SigninComponent implements OnInit {
   }
 
   onLogin(result: any) {
-    sessionStorage.setItem('hubmap.token', result.headers.get('Authorization'));
+    localStorage.setItem('hubmap.token', result.headers.get('Authorization'));
     this.sessionService.getUserLogado().subscribe(
       {
         next: result => {
-          sessionStorage.setItem('hubmap.user', JSON.stringify(result.body));
-          this.router.navigate(['/']);
+          localStorage.setItem('hubmap.user', JSON.stringify(result.body));
+          if (this.savedRoute)
+            this.router.navigate([this.savedRoute])
+          else
+            this.router.navigate(['/']);
         },
         error: error => {
-          this.snackBar.open("Falha ao fazer login! Tente novamente mais tarde.", "Ok");
-
-      }
+          this.snackBar.open("Falha ao fazer login! Tente novamente mais tarde.", "Ok", {
+            duration: 2000
+          });
+        }
       })
-}
+  }
+
+  goToCreateAccount() {
+    this.router.navigate(['session/create-account', { savedRoute: this.savedRoute}]);
+  }
 }

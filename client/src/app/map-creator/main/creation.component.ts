@@ -1,16 +1,16 @@
-import { Component, ElementRef, HostListener, OnInit, ViewChild, EventEmitter } from '@angular/core';
+import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { MatMenuTrigger } from '@angular/material/menu';
-
-import { Post, Block } from '../../core/shared/posts/post';
+import { ActivatedRoute, Router } from '@angular/router';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Observable, Subscription } from 'rxjs';
+
+import { Post, Block, Position } from '../../core/shared/posts/post';
 import { ComponentCanDeactivate } from 'src/app/core/services/guard.service';
 import { PostService } from '../../core/shared/posts/post-blocks.service';
 import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
-import { ActivatedRoute, Router } from '@angular/router';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { CreatePostComponent } from '../create-post/create-post.component';
 import { VisualCanvasComponent } from 'src/app/core/shared/export-image/visual-canvas/visual-canvas.component';
+import { CanvasService } from 'src/app/core/services/canvas.service';
 
 @Component({
   selector: 'app-creation',
@@ -19,27 +19,77 @@ import { VisualCanvasComponent } from 'src/app/core/shared/export-image/visual-c
 })
 export class CreationComponent implements OnInit, ComponentCanDeactivate {
 
-  @ViewChild('editTrigger') editTrigger: MatMenuTrigger;
-  @ViewChild('main') main: ElementRef;
-  @ViewChild('canvas') canvas: ElementRef;
+  @ViewChild('scrollLink') scrollLink: ElementRef;
 
   @HostListener('window:beforeunload')
   canDeactivate(): Observable<boolean> | boolean {
     return !this.unsavedChanges
   }
 
+
+  @HostListener('window:keydown', ['$event'])
+  keyEvent(event: KeyboardEvent) {
+    switch (event.key) {
+      case 'Delete': {
+        if (event.ctrlKey && this.blockSelected)
+          this.onDeleteBlock(this.post.map);
+        break;
+      };
+      case 'z': {
+        if (event.ctrlKey && this.blockSelected)
+          this.snackBar.open("Clique fora do bloco para desfazer ações!", "Ok", {
+            duration: 1500
+          })
+        if (event.ctrlKey && !this.blockSelected)
+          this.undo();
+        break;
+      };
+      case 's': {
+        if (event.ctrlKey) {
+          event.preventDefault()
+          this.createPost();
+        }
+        break;
+      };
+      case 'e': {
+        if (event.ctrlKey && this.blockSelected) {
+          event.preventDefault();
+          this.setFormatingStyle();
+        }
+        break;
+      }
+      case 'r': {
+        if (event.ctrlKey && this.blockSelected) {
+          event.preventDefault();
+          this.applyBrushStyle();
+        }
+        break;
+      }
+      default: break;
+    }
+  }
+
   public post = new Post;
+  public canvasSize = CanvasService.canvasSize;
 
   public selectedBlock: Block;
-  public savedProgress: [Block[]] = [[]];
-
-  public unsavedChanges: boolean = false;
-  public carregando: boolean = false;
   public blockSelected: boolean = false;
+
+  public formatingBrushBlockStyle: Block = new Block;
+  public savedProgress: [Block[]] = [[]];
+  public unsavedChanges: boolean = false;
+  public loading: boolean = false;
+  public contentEdited: boolean = false;
+  public mapInitialPrivacy: boolean;
+
   public editorMode: boolean = false;
+  public childrenLoaded: boolean = false;
+  public formatingBrushOpened: boolean = false;
+  public validCheckedStatus: boolean = true;
 
   public sub: Subscription;
   public id: string;
+  public rootBlockId: string;
 
   constructor(private route: ActivatedRoute,
     private dialog: MatDialog,
@@ -52,8 +102,18 @@ export class CreationComponent implements OnInit, ComponentCanDeactivate {
     this.getPost();
   }
 
+
+  scrollToRoot() {
+    if (!this.blockSelected)
+      this.scrollLink?.nativeElement.scrollIntoView({
+        behavior: 'auto',
+        block: 'center',
+        inline: 'center'
+      });
+  }
+
   getPost() {
-    this.carregando = true;
+    this.loading = true;
     var _post = new Post;
     this.sub = this.route.params.subscribe(
       params => {
@@ -64,9 +124,13 @@ export class CreationComponent implements OnInit, ComponentCanDeactivate {
       this.postService.getPostById(this.id).subscribe(
         {
           next: result => {
-            _post = result.body;
+            this.post = result.body;
+            this.mapInitialPrivacy = this.post.private;
             this.editorMode = true;
-            this.getBlocks(_post);
+            if (this.post.map[0])
+              this.rootBlockId = this.post.map[0].id!;
+            this.savedProgress = [JSON.parse(JSON.stringify(this.post.map))];
+            this.loading = false;
           },
           error: error => {
             this.router.navigate(['/creator'])
@@ -75,29 +139,19 @@ export class CreationComponent implements OnInit, ComponentCanDeactivate {
     }
     else {
       _post = JSON.parse(localStorage.getItem('post')!);
-      if (_post)
+      if (_post) {
         this.post = _post;
-      localStorage.removeItem('post');
+        localStorage.removeItem('post');
+        this.unsavedChanges = true;
+        this.loading = false;
 
-      this.carregando = false;
-    }
-  }
-
-
-  getBlocks(post: Post) {
-    this.carregando = true;
-    this.postService.getPostBlocks(post.id).subscribe({
-      next: result => {
-        if (result.body != null)
-          post.map = [result.body]
-        this.post = post;
-        this.savedProgress = [JSON.parse(JSON.stringify(this.post.map))];
-        this.carregando = false;
-      }, error: error => {
-        this.snackBar.open(error.errors);
-        this.carregando = false;
+        setTimeout(() => {
+          this.scrollToRoot();
+        }, 500)
       }
-    })
+      else
+        this.loading = false;
+    }
   }
 
   addNewBlock() {
@@ -107,24 +161,23 @@ export class CreationComponent implements OnInit, ComponentCanDeactivate {
     let _block = new Block;
     _block.backgroundColor = "#64b5f6"
     _block.fontColor = "#ffffff"
-    _block.fontSize = 24;
+    _block.fontSize = 18;
     _block.content = "Editar";
-    _block.size.width = 250;
-    _block.size.height = 100;
-    _block.position.x = (this.main.nativeElement.clientWidth / 2) - (_block.size.width / 2);
-    _block.position.y = (this.main.nativeElement.clientHeight / 2) - (_block.size.height / 2);
+    _block.size.width = 125;
+    _block.size.height = 50;
+    _block.position.x = (this.canvasSize.width + _block.size.width) / 2;
+    _block.position.y = (this.canvasSize.height + _block.size.height) / 2;
 
-
-    if (this.post.map == null) {
-      let _post = new Post;
-      _post.map[0] = _block;
-      this.post = _post
-      return
-    }
     this.post.map.push(_block);
     this.saveProgress();
   }
 
+  finishedLoading() {
+    if (!this.childrenLoaded) {
+      this.scrollToRoot();
+      this.childrenLoaded = true;
+    }
+  }
 
   selectBlock(block: Block) {
     this.selectedBlock = block;
@@ -180,6 +233,7 @@ export class CreationComponent implements OnInit, ComponentCanDeactivate {
   }
 
   saveProgress() {
+    this.contentEdited = true;
     this.unsavedChanges = true;
     if (this.savedProgress.length > 15)
       this.savedProgress.splice(0, 1);
@@ -192,14 +246,38 @@ export class CreationComponent implements OnInit, ComponentCanDeactivate {
     localStorage.setItem('post', JSON.stringify(this.post));
   }
 
+  checkValid(block: Block) {
+    if (block.content.length > 299)
+      this.validCheckedStatus = false;
+
+    if (block.blocks.length > 0) {
+      block.blocks.forEach(e => {
+        this.checkValid(e);
+      });
+    }
+    return;
+  }
+
   createPost() {
+    this.checkValid(this.post.map[0]);
+    if (!this.validCheckedStatus) {
+      this.snackBar.open("Há blocos acima do limite de caracteres!", "Ok", {
+        duration: 5000
+      })
+      this.validCheckedStatus = true;
+      return
+    }
+
     var createPostConfig = {
       disableClose: false,
-      width: '300px',
+      width: '400px',
       height: 'auto',
       data: {
         post: this.post,
-        editorMode: this.editorMode
+        editorMode: this.editorMode,
+        rootBlockId: this.rootBlockId,
+        updateMap: this.contentEdited,
+        mapInitialPrivacy: this.mapInitialPrivacy,
       }
     };
 
@@ -209,7 +287,7 @@ export class CreationComponent implements OnInit, ComponentCanDeactivate {
         if (result.link) { // Não logado
           this.save();
           this.unsavedChanges = false;
-          this.router.navigate([result.link]);
+          this.router.navigate([result.link, { savedRoute: this.router.url }]);
         }
         else {  //Logado
           this.snackBar.open(result.msg, "Ok", {
@@ -221,6 +299,7 @@ export class CreationComponent implements OnInit, ComponentCanDeactivate {
             this.getPost();
           }
           this.unsavedChanges = false;
+          this.contentEdited = false;
         }
       }
     });
@@ -238,5 +317,22 @@ export class CreationComponent implements OnInit, ComponentCanDeactivate {
 
     const dialogRef = this.dialog.open(VisualCanvasComponent, exportImageConfig);
     dialogRef.afterClosed().subscribe();
+  }
+
+
+  setFormatingStyle() {
+    this.formatingBrushOpened = true;
+    this.formatingBrushBlockStyle = this.selectedBlock;
+  }
+
+  applyBrushStyle() {
+    this.selectedBlock.backgroundColor = this.formatingBrushBlockStyle.backgroundColor;
+    this.selectedBlock.fontColor = this.formatingBrushBlockStyle.fontColor;
+    this.selectedBlock.borderRadius = this.formatingBrushBlockStyle.borderRadius;
+    this.selectedBlock.fontSize = this.formatingBrushBlockStyle.fontSize;
+    this.selectedBlock.fontStyle = this.formatingBrushBlockStyle.fontStyle;
+    this.selectedBlock.fontWeight = this.formatingBrushBlockStyle.fontWeight;
+    this.selectedBlock.textAlign = this.formatingBrushBlockStyle.textAlign;
+    this.saveProgress();
   }
 }

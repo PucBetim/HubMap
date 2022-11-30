@@ -11,6 +11,7 @@ import { CommentService } from 'src/app/core/shared/posts/comment.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { User } from 'src/app/session/models/user';
+import { CreatePostComponent } from 'src/app/map-creator/create-post/create-post.component';
 
 @Component({
   selector: 'post-map-details',
@@ -46,6 +47,7 @@ export class PostDetailsComponent implements OnInit {
   public dislikeClass: string[];
   public lastLikeValue: boolean;
   public lastDislikeValue: boolean;
+  public mapInitialPrivacy: boolean;
 
   constructor(
     private postService: PostService,
@@ -60,7 +62,7 @@ export class PostDetailsComponent implements OnInit {
 
   ngOnInit(): void {
     this.loggedUser = ConfigService.getUser()
-
+    
     this.sub = this.route.params.subscribe(
       params => {
         if (this.loggedUser)
@@ -80,13 +82,15 @@ export class PostDetailsComponent implements OnInit {
         {
           next: result => {
             this.post = result.body;
-            this.loading = false;
-            this.viewPost();
+            this.mapInitialPrivacy = this.post.private;
             this.getComments();
           },
           error: error => {
-            this.snackBar.open("Falha ao obter post! Tente novamente mais tarde.", "Ok");
             this.loading = false;
+            this.router.navigate([""]);
+            this.snackBar.open("Falha ao obter post! Talvez você não tenha permissão para ver esse conteúdo.", "Ok", {
+              duration: 5000
+            });
             return;
           }
         })
@@ -96,13 +100,16 @@ export class PostDetailsComponent implements OnInit {
         {
           next: result => {
             this.post = result.body;
-            this.loading = false;
-            this.viewPost();
+            if (this.loggedUser)
+              this.postService.viewPost(this.post.id).subscribe()
             this.getComments();
           },
           error: error => {
-            this.snackBar.open("Falha ao obter post! Tente novamente mais tarde.", "Ok");
             this.loading = false;
+            this.router.navigate([""]);
+            this.snackBar.open("Falha ao obter post! Talvez você não tenha permissão para ver esse conteúdo.", "Ok", {
+              duration: 5000
+            });
             return;
           }
         })
@@ -164,7 +171,6 @@ export class PostDetailsComponent implements OnInit {
   }
 
   getComments() {
-    this.loading = true;
     if (this.currentUserPost) {
       this.commentService.getPostComments(this.post.id).subscribe(
         {
@@ -173,7 +179,9 @@ export class PostDetailsComponent implements OnInit {
             this.loading = false;
           },
           error: error => {
-            this.snackBar.open("Erro ao obter comentários! Tente novamente mais tarde.", "Ok");
+            this.snackBar.open("Erro ao obter comentários! Tente novamente mais tarde.", "Ok", {
+              duration: 2000
+            });
             this.loading = false;
           }
         })
@@ -186,7 +194,9 @@ export class PostDetailsComponent implements OnInit {
             this.loading = false;
           },
           error: error => {
-            this.snackBar.open("Erro ao obter comentários! Tente novamente mais tarde.", "Ok");
+            this.snackBar.open("Erro ao obter comentários! Tente novamente mais tarde.", "Ok", {
+              duration: 2000
+            });
             this.loading = false;
           }
         })
@@ -195,7 +205,7 @@ export class PostDetailsComponent implements OnInit {
 
   commentPost() {
     if (!this.loggedUser) {
-      this.router.navigate(['session/create-account']);
+      this.router.navigate(['session/create-account', { savedRoute: this.router.url }]);
       return;
     }
 
@@ -233,8 +243,15 @@ export class PostDetailsComponent implements OnInit {
   }
 
   likePost() {
+    if (this.currentUserPost) {
+      this.snackBar.open("Não é possível avaliar o próprio post!", "Ok", {
+        duration: 2000
+      })
+      return;
+    }
+
     if (!this.loggedUser) {
-      this.router.navigate(['session/create-account']);
+      this.router.navigate(['session/create-account', { savedRoute: this.router.url }]);
       return;
     }
 
@@ -248,14 +265,23 @@ export class PostDetailsComponent implements OnInit {
         else this.getPost(this.post.id)
       },
       error: error => {
-        this.snackBar.open("Erro ao avaliar comentário! Tente novamente mais tarde.")
+        this.snackBar.open("Erro ao avaliar comentário! Tente novamente mais tarde.", "Ok", {
+          duration: 2000
+        })
       }
     })
   }
 
   dislikePost() {
+    if (this.currentUserPost) {
+      this.snackBar.open("Não é possível avaliar o próprio post!", "Ok", {
+        duration: 2000
+      })
+      return;
+    }
+
     if (!ConfigService.getUser()) {
-      this.router.navigate(['session/create-account']);
+      this.router.navigate(['session/create-account', { savedRoute: this.router.url }]);
       return;
     }
 
@@ -270,52 +296,97 @@ export class PostDetailsComponent implements OnInit {
           else this.getPost(this.post.id)
         },
         error: error => {
-          this.snackBar.open("Erro ao avaliar comentário! Tente novamente mais tarde.")
+          this.snackBar.open("Erro ao avaliar comentário! Tente novamente mais tarde.", "Ok", {
+            duration: 2000
+          })
         }
       })
   }
 
-  // forkPost() {
-  //   if (!this.currentUserPost) {
-  //     this.loading = true;
-  //     let p = new Post;
-  //     p.title = this.post.title += ' (cópia)';
-  //     p.description = this.post.description;
-  //     p.private = true;
-  //     this.postService.postPost(p).subscribe({
-  //       next: obj => {
-  //         this.forkBlocks(obj.body.dataId)
-  //         this.loading = false;
-  //       }, error: error => {
-  //         this.loading = false;
-  //       }
-  //     })
-  //   }
-  // }
-  // forkBlocks(id: string) {
-  //   var blocks = this.removeId(this.post.map);
-  //   blocks.forEach(b => {
-  //     this.loading = true;
-  //     this.postService.postBlocks(b, id).subscribe({
-  //       next: obj => {
-  //         this.loading = false;
-  //       }, error: error => {
-  //         this.loading = false;
-  //       }
-  //     })
-  //   });
-  // }
+  forkPost() {
+    if (!this.loggedUser) {
+      this.router.navigate(['session/create-account', { savedRoute: this.router.url }]);
+      return;
+    }
 
-  // removeId(block: Block[]){
-  //   block.forEach(b => {
-  //     delete b.id;
-  //     this.removeId(b.blocks);
-  //     return;
-  //   });
-  //   return block;
-  // }
+    if (!this.currentUserPost) {
+      this.loading = true;
+      let p = new Post;
+      var titleLenght = this.post.title.length;
+      if (titleLenght > 19) {
+        p.title = this.post.title.slice(0, -(titleLenght - 19)) + '... (cópia)'
+      }
+      else
+        p.title = this.post.title += ' (cópia)';
+      p.description = this.post.description;
+      p.private = true;
+      this.postService.postPost(p).subscribe({
+        next: obj => {
+          this.forkBlocks(obj.body.dataId)
+          this.loading = false;
+        }, error: error => {
+          this.loading = false;
+        }
+      })
+    }
+  }
+  forkBlocks(id: string) {
+    var blocks = this.removeId(this.post.map);
+    blocks.forEach(b => {
+      this.loading = true;
+      this.postService.postBlocks(b, id).subscribe({
+        next: obj => {
+          this.snackBar.open("Mapa ramificado! Disponível em sua área de usuário.", "Ok", {
+            duration: 5000
+          })
+          this.loading = false;
+        }, error: error => {
+          this.loading = false;
+        }
+      })
+    });
+  }
 
-  viewPost() {
-    this.postService.viewPost(this.post.id).subscribe()
+  removeId(block: Block[]) {
+    block.forEach(b => {
+      delete b.id;
+      this.removeId(b.blocks);
+      return;
+    });
+    return block;
+  }
+
+
+  sharePost() {
+    navigator.clipboard.writeText(window.location.href)
+    this.snackBar.open("Link copiado para a área de transferência!", "Ok", {
+      duration: 2000
+    })
+  }
+
+  updatePost() {
+    var createPostConfig = {
+      disableClose: false,
+      width: '400px',
+      height: 'auto',
+      data: {
+        post: this.post,
+        editorMode: true,
+        updateMap: false,
+        mapInitialPrivacy: this.mapInitialPrivacy,
+      }
+    };
+
+    const dialogRef = this.dialog.open(CreatePostComponent, createPostConfig);
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.snackBar.open(result.msg, "Ok", {
+          duration: 2000
+        })
+        if (result.id) {
+          this.getPost(result.id);
+        }
+      }
+    });
   }
 }

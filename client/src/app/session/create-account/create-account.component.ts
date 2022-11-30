@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { EmailValidator } from 'src/app/core/shared/validators/email-validator.component';
 import { PasswordValidator } from 'src/app/core/shared/validators/password-validator.component';
 import { User } from '../models/user';
@@ -16,26 +16,30 @@ export class CreateAccountComponent implements OnInit {
   public form: FormGroup;
   public errors: any[] = [];
   public carregando: boolean = false;
+  public savedRoute: string = "";
 
   constructor(
     private fb: FormBuilder,
     private sessionService: SessionService,
     private router: Router,
+    private route: ActivatedRoute,
   ) { }
 
   ngOnInit(): void {
-    sessionStorage.clear();
+    this.savedRoute = this.route.snapshot.params['savedRoute'];
+    localStorage.clear();
     this.form = this.fb.group({
-      name: ['', [Validators.required]],
-      nick: ['', [Validators.required]],
-      email: ['', [Validators.required, Validators.email]],
-      confirmEmail: ['', [Validators.required, Validators.email, EmailValidator('email')]],
-      password: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(100)]],
-      confirmPassword: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(100), PasswordValidator('password')]]
+      name: ['', [Validators.required, Validators.maxLength(80)]],
+      nick: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(15)]],
+      email: ['', [Validators.required, Validators.email, Validators.maxLength(100),]],
+      confirmEmail: ['', [Validators.required, Validators.email, Validators.maxLength(100), EmailValidator('email')]],
+      password: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(80)]],
+      confirmPassword: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(80), PasswordValidator('password')]]
     });
   }
 
   createUser() {
+    localStorage.clear();
     if (this.form.dirty && this.form.valid) {
       this.carregando = true;
       let form = Object.assign({}, new User, this.form.value);
@@ -45,12 +49,12 @@ export class CreateAccountComponent implements OnInit {
       p.nick = form.nick;
       p.email = form.email;
       p.password = form.password;
-      
+
       this.sessionService.createUser(p)
         .subscribe({
           next: result => {
-            this.onCreate(result);
             this.carregando = false;
+            this.router.navigate(['/session/signin', { savedRoute: this.savedRoute }]);
           },
           error: error => {
             this.carregando = false;
@@ -59,7 +63,7 @@ export class CreateAccountComponent implements OnInit {
     }
   }
 
-  onCreate(result: any) {
-    this.router.navigate(['/session/signin']);
+  goToLogin(){
+    this.router.navigate(['session/signin', { savedRoute: this.savedRoute }]);
   }
 }

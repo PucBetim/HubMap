@@ -1,5 +1,6 @@
+import { CanvasService } from './../../core/services/canvas.service';
 import { Position, Block, Post } from '../../core/shared/posts/post';
-import { Component, ElementRef, EventEmitter, HostListener, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, HostListener, Input, OnInit, Output, ViewChild, AfterViewInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
@@ -7,7 +8,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   templateUrl: './block.component.html',
   styleUrls: ['./block.component.scss']
 })
-export class BlockComponent implements OnInit {
+export class BlockComponent implements OnInit, AfterViewInit {
 
   public blockSelected: boolean = false;
   public afterImagePosition: Position = { x: 0, y: 0 };
@@ -21,27 +22,78 @@ export class BlockComponent implements OnInit {
   @Output() selectBlockEvent = new EventEmitter<Block>();
   @Output() unselectBlockEvent = new EventEmitter<any>();
   @Output() saveProgressEvent = new EventEmitter<any>();
+  @Output() finishedLoadingEvent = new EventEmitter<boolean>();
+
+  @ViewChild('blockRef') blockRef: ElementRef;
+
+  @HostListener('window:keydown', ['$event'])
+  keyEvent(event: KeyboardEvent) {
+    switch (event.key) {
+      case 'ArrowUp': {
+        if (event.shiftKey && this.blockSelected) {
+          event.preventDefault();
+          this.addBlock('above');
+        }
+        break;
+      } case 'ArrowLeft': {
+        if (event.shiftKey && this.blockSelected) {
+          event.preventDefault();
+          this.addBlock('left');
+        }
+        break;
+      } case 'ArrowRight': {
+        if (event.shiftKey && this.blockSelected) {
+          event.preventDefault();
+          this.addBlock('right');
+        }
+        break;
+      } case 'ArrowDown': {
+        if (event.shiftKey && this.blockSelected) {
+          event.preventDefault();
+          this.addBlock('below');
+        }
+        break;
+      } case 'Escape': {
+        this.blockSelected = false;
+        this.emitUnselect();
+        break;
+      }
+      default: break;
+    }
+  }
 
   @HostListener('document:click', ['$event'])
   clickout(event: any) {
+    if (this.blockSelected && (event.target == this.blockRef.nativeElement))
+      this.onDrag(event, true)
     if (!this.eRef.nativeElement.contains(event.target)) {
 
       if (this.blockSelected)
         this.onDrag(event, true)
 
+      if (this.initialContent != this.block.content && this.blockSelected)
+        this.emitSaveProgress();
+
       this.blockSelected = false;
       this.emitUnselect();
-
-      if (this.initialContent != this.block.content)
-        this.emitSaveProgress();
     }
   }
 
   constructor(private eRef: ElementRef, private snackBar: MatSnackBar) { }
 
+  ngAfterViewInit(): void {
+    if (this.block.blocks.length == 0)
+      this.emitFinishedLoading();
+  }
+
+  emitFinishedLoading() {
+    this.finishedLoadingEvent.emit(true)
+  }
+
   ngOnInit(): void {
     this.initialContent = this.block.content;
     this.afterImagePosition = { x: (this.block.position.x + (this.block.size.width / 2) - this.afterImageSize / 2), y: (this.block.position.y + (this.block.size.height / 2) - this.afterImageSize / 2) };
+
   }
 
   clickInside() {
@@ -69,10 +121,12 @@ export class BlockComponent implements OnInit {
       this.block.position = lastPosition;
     }
     else {
+      var prevPosition = JSON.parse(JSON.stringify(this.block.position))
       this.block.position.x = event.layerX - event.offsetX;
       this.block.position.y = event.layerY - event.offsetY;
       this.afterImagePosition = { x: (this.block.position.x + (this.block.size.width / 2) - this.afterImageSize / 2), y: (this.block.position.y + (this.block.size.height / 2) - this.afterImageSize / 2) };
-      this.emitSaveProgress();
+      if (this.block.position.x != prevPosition.x && this.block.position.y != prevPosition.y)
+        this.emitSaveProgress();
     }
   }
 
@@ -83,12 +137,10 @@ export class BlockComponent implements OnInit {
     this.afterImagePosition = { x: (this.block.position.x + (this.block.size.width / 2) - this.afterImageSize / 2), y: (this.block.position.y + (this.block.size.height / 2) - this.afterImageSize / 2) };
   }
 
-
   onStyleAndSave(block: Block) {
     this.block = block;
     this.emitSaveProgress();
   }
-
 
   addBlock(location: string) {
     let dislocation = 50;
@@ -98,7 +150,7 @@ export class BlockComponent implements OnInit {
     newBlock.content = "Clique para editar";
 
     var closestGap: Position = { x: this.block.position.x, y: this.block.position.y }
-    var farestGap: Position = { x: 3840 - (this.block.position.x + this.block.size.width + 10), y: 2160 - (this.block.position.y + this.block.size.height + 10) }
+    var farestGap: Position = { x: CanvasService.canvasSize.width - (this.block.position.x + this.block.size.width + 10), y: CanvasService.canvasSize.height - (this.block.position.y + this.block.size.height + 10) }
 
     switch (location) {
       case 'above':

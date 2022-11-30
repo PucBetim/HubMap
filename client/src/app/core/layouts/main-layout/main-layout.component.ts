@@ -1,3 +1,4 @@
+import { ConfigService } from './../../services/config.service';
 import { Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 
@@ -13,7 +14,7 @@ export class MainLayoutComponent implements OnInit {
   constructor(public router: Router) { }
 
   ngOnInit(): void {
-    this.user = JSON.parse(sessionStorage.getItem('hubmap.user')!);
+    this.user = ConfigService.getUser();
   }
 
   configUser() {
@@ -21,8 +22,16 @@ export class MainLayoutComponent implements OnInit {
   }
 
   logout() {
-    sessionStorage.clear();
+    localStorage.clear();
     this.user = null;
     this.router.navigate(['']);
+  }
+
+  goToLogin(){
+    this.router.navigate(['session/signin', { savedRoute: this.router.url }]);
+  }
+
+  goToCreateAccount(){
+    this.router.navigate(['session/create-account', { savedRoute: this.router.url }]);
   }
 }
