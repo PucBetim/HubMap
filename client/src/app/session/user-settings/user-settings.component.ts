@@ -57,15 +57,18 @@ export class UserSettingsComponent implements OnInit {
   }
 
   getUserMaps() {
+    this.loading = true;
     this.postService.getUserPosts().subscribe(
       {
         next: result => {
           this.posts = result.body;
+          this.loading = false;
         },
         error: error => {
           this.snackBar.open("Falha ao obter mapas! Tente novamente mais tarde.", "Ok", {
             duration: 2000
           });
+          this.loading = false;
         }
       })
     this.results = true;

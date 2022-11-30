@@ -30,11 +30,10 @@ export class ConfigService {
 
     public static getUser() {
         let user = JSON.parse(localStorage.getItem('hubmap.user')!);
-
-        //const decoded = jwt_decode(this.getToken());
-        //var current_time = Date.now() / 1000;
-
-        if (user) return user;
+        const decoded = JSON.parse(JSON.stringify(jwt_decode(this.getToken())));
+        if (decoded.exp * 1000 < Date.now())
+            this.resetLogin();
+        else if (user) return user;
         return;
     }
     public static resetLogin() {

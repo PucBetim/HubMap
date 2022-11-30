@@ -83,7 +83,6 @@ export class PostDetailsComponent implements OnInit {
           next: result => {
             this.post = result.body;
             this.mapInitialPrivacy = this.post.private;
-            this.loading = false;
             this.getComments();
           },
           error: error => {
@@ -101,7 +100,6 @@ export class PostDetailsComponent implements OnInit {
         {
           next: result => {
             this.post = result.body;
-            this.loading = false;
             if (this.loggedUser)
               this.postService.viewPost(this.post.id).subscribe()
             this.getComments();
@@ -173,7 +171,6 @@ export class PostDetailsComponent implements OnInit {
   }
 
   getComments() {
-    this.loading = true;
     if (this.currentUserPost) {
       this.commentService.getPostComments(this.post.id).subscribe(
         {

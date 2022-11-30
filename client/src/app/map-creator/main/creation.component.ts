@@ -233,7 +233,6 @@ export class CreationComponent implements OnInit, ComponentCanDeactivate {
   }
 
   saveProgress() {
-    console.log('save')
     this.contentEdited = true;
     this.unsavedChanges = true;
     if (this.savedProgress.length > 15)
