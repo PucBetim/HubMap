@@ -130,4 +130,3 @@ export class SearchMapsComponent implements OnInit {
     })
   };
 }
-

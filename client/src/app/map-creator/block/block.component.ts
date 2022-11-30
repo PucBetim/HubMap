@@ -71,11 +71,11 @@ export class BlockComponent implements OnInit, AfterViewInit {
       if (this.blockSelected)
         this.onDrag(event, true)
 
+      if (this.initialContent != this.block.content && this.blockSelected)
+        this.emitSaveProgress();
+
       this.blockSelected = false;
       this.emitUnselect();
-
-      if (this.initialContent != this.block.content)
-        this.emitSaveProgress();
     }
   }
 
@@ -125,7 +125,7 @@ export class BlockComponent implements OnInit, AfterViewInit {
       this.block.position.x = event.layerX - event.offsetX;
       this.block.position.y = event.layerY - event.offsetY;
       this.afterImagePosition = { x: (this.block.position.x + (this.block.size.width / 2) - this.afterImageSize / 2), y: (this.block.position.y + (this.block.size.height / 2) - this.afterImageSize / 2) };
-      if (this.block.position.x != prevPosition.x && this.block.position.y != prevPosition.y) 
+      if (this.block.position.x != prevPosition.x && this.block.position.y != prevPosition.y)
         this.emitSaveProgress();
     }
   }

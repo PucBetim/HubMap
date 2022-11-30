@@ -1,5 +1,6 @@
 import { HttpHeaders } from "@angular/common/http";
 import { environment } from "src/environments/environment";
+import jwt_decode from "jwt-decode";
 
 export class ConfigService {
 
@@ -29,6 +30,10 @@ export class ConfigService {
 
     public static getUser() {
         let user = JSON.parse(localStorage.getItem('hubmap.user')!);
+
+        //const decoded = jwt_decode(this.getToken());
+        //var current_time = Date.now() / 1000;
+
         if (user) return user;
         return;
     }
