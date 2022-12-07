@@ -54,7 +54,8 @@ public class PostController {
 			List<Post> posts = new ArrayList<>();
 
 			if (sort == null) {
-				sort = new String[] { "title", "id" };
+				sort = new String[] { "modified" };
+				descending = true;
 			}
 			Pageable pageable = PageableUtils.getPageableFromParameters(page, size, descending, sort);
 
@@ -110,7 +111,9 @@ public class PostController {
 	}
 
 	@PutMapping(path = "/{id}")
-	public ResponseEntity<RestResponse> putPost(@PathVariable("id") Integer id, @RequestBody @Valid Post newPost) {
+	public ResponseEntity<RestResponse> putPost(
+			@PathVariable("id") Integer id, 
+			@RequestBody @Valid Post newPost) {
 		
 		String msg = null;
 		HttpStatus status;
@@ -132,7 +135,8 @@ public class PostController {
 	}
 
 	@PostMapping("/{id}/likes")
-	public ResponseEntity<RestResponse> changeLike(@PathVariable("id") Integer id,
+	public ResponseEntity<RestResponse> changeLike(
+			@PathVariable("id") Integer id,
 			@RequestParam(name = "add", required = true) Boolean positive) {
 
 		String msg = null;
@@ -154,7 +158,8 @@ public class PostController {
 	}
 
 	@PostMapping("/{id}/dislikes")
-	public ResponseEntity<RestResponse> changeDislike(@PathVariable("id") Integer id,
+	public ResponseEntity<RestResponse> changeDislike(
+			@PathVariable("id") Integer id,
 			@RequestParam(name = "add", required = true) Boolean positive) {
 
 		String msg = null;
@@ -183,7 +188,7 @@ public class PostController {
 
 		try {
 			postService.addView(id);
-			
+
 			msg = "Views incrementadas com sucesso.";
 			status = HttpStatus.OK;
 		} catch (NoSuchElementException e) {

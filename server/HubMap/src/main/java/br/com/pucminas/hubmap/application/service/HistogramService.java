@@ -9,6 +9,7 @@ import java.util.Set;
 
 import javax.transaction.Transactional;
 
+import org.slf4j.Logger;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Async;
@@ -107,12 +108,14 @@ public class HistogramService {
 	@Transactional
 	@Scheduled(initialDelay = 30 * 1000, fixedDelay = 20 * 60000)
 	protected void refreshHistograms() {
+		Logger logger = getLoggerFromClass(getClass());
 		Parameter newWords = parameterRepository.findByTableName(ParametersTableContants.NEW_WORDS_IN_VOCABULARY)
 				.get(0);
 		boolean hasNewWords = Boolean.valueOf(newWords.getValueRegistry());
 
 		if (!hasNewWords) {
-			getLoggerFromClass(getClass()).debug("Histograms is already up-to-date");
+			if(logger.isDebugEnabled())
+				logger.debug("Histograms is already up-to-date");
 			return;
 		}
 
@@ -135,14 +138,16 @@ public class HistogramService {
 				} else {
 					histogram.setNeedRecount(false);
 				}
-
-				getLoggerFromClass(getClass()).debug("Recount all items of histogram " + histogram.getId());
+				
+				if(logger.isDebugEnabled())
+					logger.debug("Recount all items of histogram " + histogram.getId());
 
 				histogramRepository.save(histogram);
 			}
 
 			if (histograms.hasNext()) {
-				histograms = histogramRepository.findAll(pageable.next());
+				pageable = pageable.next();
+				histograms = histogramRepository.findAll(pageable);
 			} else {
 				break;
 			}
@@ -152,7 +157,9 @@ public class HistogramService {
 		parameterRepository.save(newWords);
 
 		calculateTfIdf();
-		getLoggerFromClass(getClass()).info("Histograms updated successfuly");
+		
+		if(logger.isInfoEnabled())
+			logger.info("Histograms updated successfuly");
 	}
 
 	private Histogram calculateTfIdf(Histogram histogram, long totalElements) {
@@ -182,7 +189,8 @@ public class HistogramService {
 			});
 
 			if (histograms.hasNext()) {
-				histograms = histogramRepository.findAll(pageable.next());
+				pageable = pageable.next();
+				histograms = histogramRepository.findAll(pageable);
 			} else {
 				break;
 			}

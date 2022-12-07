@@ -78,7 +78,8 @@ public class SearchService {
 			});
 
 			if (histograms.hasNext()) {
-				histograms = histogramRepository.findIdsByInitilized(true, pageable.next());
+				pageable = pageable.next();
+				histograms = histogramRepository.findIdsByInitilized(true, pageable);
 			} else {
 				break;
 			}

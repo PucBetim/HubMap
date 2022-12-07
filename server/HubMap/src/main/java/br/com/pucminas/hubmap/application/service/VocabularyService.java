@@ -5,6 +5,7 @@ import static br.com.pucminas.hubmap.utils.LoggerUtils.getLoggerFromClass;
 import java.util.Optional;
 import java.util.Set;
 
+import org.slf4j.Logger;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -39,7 +40,8 @@ public class VocabularyService {
 	@Transactional
 	@Scheduled(initialDelay = 25 * 1000, fixedDelay = 15 * 60000)
 	protected void updateVocabulary() {
-
+		
+		Logger logger = getLoggerFromClass(getClass());
 		Set<NGram> nGrams = nGramRepository.findByNewVocabulary(VOCAB_ID);
 		Vocabulary vocab = getVocabulary();
 
@@ -65,11 +67,13 @@ public class VocabularyService {
 
 			vocabularyRepository.save(vocab);
 
-			getLoggerFromClass(getClass()).info("Vocabulary updated successfuly");
+			if(logger.isInfoEnabled())
+				logger.info("Vocabulary updated successfuly");
 			return;
 		}
-
-		getLoggerFromClass(getClass()).debug("Vocabulary is already up-to-date");
+		
+		if(logger.isDebugEnabled())
+			logger.debug("Vocabulary is already up-to-date");
 	}
 
 	@Transactional
